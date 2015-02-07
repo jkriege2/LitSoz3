@@ -1,5 +1,10 @@
 #include "qfilenameslistedit.h"
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <QtCore>
 
 
@@ -43,7 +48,12 @@ Qt::ItemFlags QFilenamesListEditModel::flags(const QModelIndex &index) const {
 
 void QFilenamesListEditModel::setBaseDir(const QString &baseDir) {
     m_baseDir=baseDir;
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void QFilenamesListEditModel::addNewFile(const QString &filename) {
@@ -54,6 +64,11 @@ void QFilenamesListEditModel::addNewFile(const QString &filename) {
 
 Qt::DropActions QFilenamesListEditModel::supportedDropActions() const {
     return Qt::MoveAction;
+}
+
+Qt::DropActions QFilenamesListEditModel::supportedDragActions() const
+{
+    return Qt::CopyAction;
 }
 
 

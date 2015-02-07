@@ -63,12 +63,22 @@ void LS3ReferenceTreeModel::writeToXML(QXmlStreamWriter& writer) {
 void LS3ReferenceTreeModel::readFromXML(QDomNode& n) {
     clear();
     itemFolderRoot->insertChildren(n);
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void LS3ReferenceTreeModel::clear() {
     removeRows(0, itemFolderRoot->childCount(), index(rootItem->childCount()-1, 0));
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 LS3ReferenceTreeModel::~LS3ReferenceTreeModel() {

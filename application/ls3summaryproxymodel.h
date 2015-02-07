@@ -3,7 +3,7 @@
 
 #include <QAbstractProxyModel>
 #include <QItemDelegate>
-
+#include <QMimeData>
 #define LS3SUMMARYPROXYMODEL_COLUMN_SELECTION 0
 #define LS3SUMMARYPROXYMODEL_COLUMN_ID        1
 #define LS3SUMMARYPROXYMODEL_COLUMN_TYPE      2

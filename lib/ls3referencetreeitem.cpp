@@ -12,7 +12,7 @@ LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString uuid, QString name, LS3Refere
     m_datastore=datastore;
     if ((m_datastore==NULL) && parent) m_datastore=parent->m_datastore;
     m_uuid=uuid;
-    if (m_uuid.isEmpty()) m_uuid=QUuid::createUuid();
+    if (m_uuid.isEmpty()) m_uuid=QUuid::createUuid().toString();
     m_name=name;
     m_filterField="";
     m_filter="";
@@ -28,7 +28,7 @@ LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString name, QString filterField, QS
     m_parent=parent;
     m_datastore=datastore;
     if ((m_datastore==NULL) && parent) m_datastore=parent->m_datastore;
-    m_uuid=QUuid::createUuid();
+    m_uuid=QUuid::createUuid().toString();
     m_name=name;
     m_filterField=filterField;
     m_filter=filter;
@@ -41,7 +41,7 @@ LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString name, LS3ReferenceTreeItem* p
     m_datastore=datastore;
     if ((m_datastore==NULL) && parent) m_datastore=parent->m_datastore;
     m_name=name;
-    m_uuid=QUuid::createUuid();
+    m_uuid=QUuid::createUuid().toString();
     m_filterField="";
     m_filter="";
     if (type==LS3ReferenceTreeItem::FolderUser) {

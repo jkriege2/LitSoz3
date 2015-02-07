@@ -2,7 +2,12 @@
 #define FILEVIEWPANE_H
 
 #include <QWidget>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include "programoptions.h"
 #include "../lib/bibtools.h"
 #include "../lib/ls3datastore.h"

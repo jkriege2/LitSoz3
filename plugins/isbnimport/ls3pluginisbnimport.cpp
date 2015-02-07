@@ -1,6 +1,11 @@
 #include "ls3pluginisbnimport.h"
 
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <iostream>
 #include <QtXml>
 
@@ -198,5 +203,6 @@ void LS3PluginISBNImport::storeInRecord(QString record, QMap<QString, QVariant> 
     m_currentDatastore->setField(recN, "id", m_currentDatastore->createID(recN, m_pluginServices->GetIDType()));
 }
 
-
-Q_EXPORT_PLUGIN2(isbnimport, LS3PluginISBNImport)
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 0, 0))
+    Q_EXPORT_PLUGIN2(isbnimport, LS3PluginISBNImport)
+#endif

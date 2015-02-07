@@ -1,6 +1,11 @@
 #include "ls3pluginlatextools.h"
 
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <iostream>
 #include <QtXml>
 
@@ -137,4 +142,7 @@ void LS3PluginLatexTools::copySelectedBibTex() {
     }
 }
 
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 0, 0))
 Q_EXPORT_PLUGIN2(latextools, LS3PluginLatexTools)
+#endif
+

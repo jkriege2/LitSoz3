@@ -4,7 +4,6 @@
 #include "ls3pluginbase.h"
 #include <QWidget>
 #include <QComboBox>
-#include <QHttp>
 #include <QProgressDialog>
 #include <QLineEdit>
 #include <QToolbar>
@@ -21,6 +20,9 @@
 */
 class LS3PluginLatexTools : public LS3PluginBase {
         Q_OBJECT
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+        Q_PLUGIN_METADATA(IID "www.jkrieger.de.LitSoz3.Plugins.LS3PluginLatexTools")
+#endif
     public:
         LS3PluginLatexTools();
         virtual ~LS3PluginLatexTools();
@@ -36,7 +38,7 @@ class LS3PluginLatexTools : public LS3PluginBase {
         virtual QString getAuthor() { return tr("J. Krieger"); }
 
         /** \brief copyright information the plugin */
-        virtual QString getCopyright() { return tr("(c) 2011-2012 by J. Krieger"); }
+        virtual QString getCopyright() { return tr("(c) 2011-2015 by J. Krieger"); }
 
         /** \brief weblink for the plugin */
         virtual QString getWeblink() { return tr("http://www.jkrieger.de/"); }

@@ -2,7 +2,7 @@
 #define LS3PLUGINBASE_H
 
 
-
+#include <QtGlobal>
 #include "ls3plugin.h"
 #include "lib_imexport.h"
 

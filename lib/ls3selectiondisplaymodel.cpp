@@ -26,7 +26,12 @@ LS3SelectionDisplayModel::~LS3SelectionDisplayModel()
 
 void LS3SelectionDisplayModel::resetModel() {
     loadData();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 LS3Datastore* LS3SelectionDisplayModel::datastore() const {
@@ -62,7 +67,12 @@ QVariant LS3SelectionDisplayModel::headerData(int section, Qt::Orientation orien
 void LS3SelectionDisplayModel::setSortingOrder(int order) {
     m_sortingOrder=order;
     loadData();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void LS3SelectionDisplayModel::loadData() {

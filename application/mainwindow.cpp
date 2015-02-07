@@ -193,8 +193,8 @@ void MainWindow::about() {
     QDialog *widget = new QDialog(this);
     Ui::About ui;
     ui.setupUi(widget);
-    QTextEdit* ui_textEdit = qFindChild<QTextEdit*>(widget, "edtInfo");
-    QLabel* ui_label = qFindChild<QLabel*>(widget, "labSplash");
+    QTextEdit* ui_textEdit =widget->findChild<QTextEdit*>("edtInfo");
+    QLabel* ui_label = widget->findChild<QLabel*>( "labSplash");
     ui_label->setPixmap(splashPix);
     ui_textEdit->setText(tr("<b>Copyright:</b><blockquote>%2</blockquote><b>external libraries, used by %3:</b><ul>"
                             "<li>Qt %1</li>"
@@ -213,7 +213,7 @@ void MainWindow::aboutPlugins() {
     QDialog *widget = new QDialog(this);
     Ui::AboutPlugins ui;
     ui.setupUi(widget);
-    QTextEdit* ui_textEdit = qFindChild<QTextEdit*>(widget, "edtInfo");
+    QTextEdit* ui_textEdit = widget->findChild<QTextEdit*>( "edtInfo");
 
     QString text="<ul>";
 
@@ -374,9 +374,13 @@ void MainWindow::connectWidgets() {
         tvMain->setColumnHidden(i, i>LS3SUMMARYPROXYMODEL_MAX_COLUMN_VISIBLE);
     }
     tvMain->resizeColumnsToContents();
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    tvMain->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    tvMain->horizontalHeader()->setSectionResizeMode(LS3SUMMARYPROXYMODEL_COLUMN_SUMMARY, QHeaderView::Stretch);
+    #else
     tvMain->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     tvMain->horizontalHeader()->setResizeMode(LS3SUMMARYPROXYMODEL_COLUMN_SUMMARY, QHeaderView::Stretch);
-    //tvMain->horizontalHeader()->setResizeMode(LS3SUMMARYPROXYMODEL_COLUMN_SUMMARY, QHeaderView::Stretch);
+    #endif
 
 
     QFontMetrics fm(tvMain->font());

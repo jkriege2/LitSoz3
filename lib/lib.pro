@@ -4,13 +4,11 @@ DEPENDPATH += .
 
 include(../litsoz3.pri)
 include(../autoversioning.pri)
-
-release {
-    message("building $$TARGET $$TEMPLATE in RELEASE mode, output is in $$LS3OUTPUT")
+CONFIG(debug, debug|release) {
+    message("building $$TARGET $$TEMPLATE in DEBUG mode, output is in $$LS3OUTPUT ")
 } else {
-    message("building $$TARGET $$TEMPLATE in DEBUG mode, output is in $$LS3OUTPUT")
+    message("building $$TARGET $$TEMPLATE in RELEASE mode, output is in $$LS3OUTPUT ")
 }
-
 QT += xml gui network
 
 message("Qt Version: $$QT_MAJOR_VERSION . $$QT_MINOR_VERSION")

@@ -482,7 +482,7 @@ void LS3DatastoreXML::addMapping(QWidget* widget, QString field) {
 
 void LS3DatastoreXML::addMapping(QWidget* widget, QString field, QString property) {
     if (dbIsLoaded()) {
-        mapper->addMapping(widget, fieldColumn(field), property.toAscii());
+        mapper->addMapping(widget, fieldColumn(field), property.toLatin1());
     }
 }
 

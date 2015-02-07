@@ -11,6 +11,7 @@
 #include <QAbstractButton>
 #include "lib_imexport.h"
 #include <QVBoxLayout>
+#include <QMimeData>
 
 class QFilenamesListEdit;
 
@@ -28,6 +29,7 @@ class LS3LIBWIDGETS_EXPORT QFilenamesListEditModel: public QStringListModel {
         void setBaseDir(const QString& baseDir);
         void addNewFile(const QString& filename);
         virtual Qt::DropActions supportedDropActions() const;
+        virtual Qt::DropActions supportedDragActions() const;
         Qt::ItemFlags flags(const QModelIndex &index) const;
 protected:
         QFileIconProvider* iconProvider;

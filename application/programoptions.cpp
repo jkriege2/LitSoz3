@@ -1,4 +1,4 @@
-#include "programoptions.h"
+ï»¿#include "programoptions.h"
 #include <iostream>
 #include "fdf.h"
 #include <QNetworkProxy>
@@ -7,11 +7,17 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
     QObject(parent)
 {
     this->app=app;
+    QFileInfo fi(QCoreApplication::applicationFilePath());
+    configDirectory=QDir::homePath()+"/."+fi.completeBaseName()+"/";
+
+    QDir d=fi.absoluteDir();
+    d.mkpath(configDirectory);
+    d.mkpath(configDirectory+"/completers/");
+
     readConfig=true;
     iniFilename=ini;
     if (iniFilename.isEmpty()) {
-        QFileInfo fi(QCoreApplication::applicationFilePath());
-        iniFilename= fi.absolutePath()+"/"+fi.completeBaseName()+".ini";
+        iniFilename= configDirectory+"/"+fi.completeBaseName()+".ini";
     }
     //std::cout<<"config file is: "<<iniFilename.toStdString()<<std::endl;
     settings=NULL;
@@ -25,7 +31,29 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
     currentFile="";
     lastOpenDBDirectory="";
     lastNewDBDirectory="";
-    configDirectory=QCoreApplication::applicationDirPath()+"/config/";
+    configDirectory=QDir::homePath()+"/."+fi.completeBaseName()+"/";
+
+
+
+    assetsDirectory=QCoreApplication::applicationDirPath()+"/assets/";
+
+    // copy initial assets files
+    {
+        QDir dass(assetsDirectory);
+        QStringList assfiles=dass.entryList(QDir::Files);
+        for (int i=0; i<assfiles.size(); i++) {
+            if (!QFile::exists(configDirectory+assfiles[i])) QFile::copy(dass.absoluteFilePath(assfiles[i]), configDirectory+assfiles[i]);
+        }
+
+    }
+    {
+        QDir dass(assetsDirectory+"/completers/");
+        QStringList assfiles=dass.entryList(QDir::Files);
+        for (int i=0; i<assfiles.size(); i++) {
+            if (!QFile::exists(configDirectory+"/completers/"+assfiles[i])) QFile::copy(dass.absoluteFilePath(assfiles[i]), configDirectory+"/completers/"+assfiles[i]);
+        }
+
+    }
     username="unknown";
     tableFontName="Arial";
     tableFontSize=8;
@@ -35,7 +63,7 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
     defaultCurrency="EUR";
     defaultStatus=tr("present");
     startupFile="";
-    specialCharacters="ÀàÁáÂâÃãÄäÅåÆæÇçÈèÉéÊêËëÌìÍíÎîÏïÐðÑñÒòÓóÔôÕõÖöØøÙùÚúÛûÜüÝýÞþßÿµ¿¡`^€¢£¤¥«»‘’·×÷¶±";
+    specialCharacters=QString::fromUtf8("Ã€Ã ÃÃ¡Ã‚Ã¢ÃƒÃ£Ã„Ã¤Ã…Ã¥Ã†Ã¦Ã‡Ã§ÃˆÃ¨Ã‰Ã©ÃŠÃªÃ‹Ã«ÃŒÃ¬ÃÃ­ÃŽÃ®ÃÃ¯ÃÃ°Ã‘Ã±Ã’Ã²Ã“Ã³Ã”Ã´Ã•ÃµÃ–Ã¶Ã˜Ã¸Ã™Ã¹ÃšÃºÃ›Ã»ÃœÃ¼ÃÃ½ÃžÃ¾ÃŸÃ¿ÂµÂ¿Â¡`^Â€Â¢Â£Â¤Â¥Â«Â»Â‘Â’Â·Ã—Ã·Â¶Â±");
     currentPreviewStyle=0;
     proxyHost=QNetworkProxy::applicationProxy().hostName();
     proxyType=QNetworkProxy::applicationProxy().type();
@@ -47,6 +75,16 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
 ProgramOptions::~ProgramOptions()
 {
     writeSettings();
+}
+
+QString ProgramOptions::GetConfigDirectory()
+{
+    return QDir(configDirectory).absolutePath ()+"/";
+}
+
+QString ProgramOptions::GetAssetsDirectory()
+{
+    return QDir(assetsDirectory).absolutePath ()+"/";
 }
 
 void ProgramOptions::openSettingsDialog() {
@@ -140,7 +178,7 @@ void ProgramOptions::openSettingsDialog() {
         languageID=settingsDlg->cmbLanguage->currentText();
         stylesheet=settingsDlg->cmbStylesheet->currentText();
         style=settingsDlg->cmbStyle->currentText();
-        configDirectory=settingsDlg->edtConfigDir->text();
+        //configDirectory=settingsDlg->edtConfigDir->text();
         tableFontName=settingsDlg->cmbTableFont->currentText();
         tableFontSize=settingsDlg->spnTableFont->value();
         defaultCurrency=settingsDlg->cmbDefaultCurrency->currentText();
@@ -342,7 +380,7 @@ void ProgramOptions::initConfig() {
     readConfig=false;
     // search all .fdf files and load them into the (previously cleared) fdfManager
     fdf->clear();
-    QDir dir(configDirectory);
+    QDir dir(assetsDirectory);
     dir.cd("fdf");
     QStringList filters;
     filters << "*.fdf";

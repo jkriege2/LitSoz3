@@ -7,6 +7,7 @@
 #include <QPair>
 #include <QStyledItemDelegate>
 #include "ls3datastore.h"
+#include <QMimeData>
 
 /*! \brief list model to manage a list of search results
 */

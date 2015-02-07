@@ -3,7 +3,7 @@
 
 QString chartoprintablestr(QChar data){
   QString ost;
-  switch(data.toAscii()) {
+  switch(data.toLatin1()) {
     case 0: ost="[NUL]"; break;
     case 1: ost="[SOH]"; break;
     case 2: ost="[STX]"; break;
@@ -185,9 +185,9 @@ void BiBTeXParser::parseProperty(Record* record, bool getFull, QString name) {
             lastc=c;
             c=input[pos];
             if (endc=='\0') {
-                if (c=='"') { endc='"'; add=false; } //std::cout<<"endc='"<<endc.toAscii()<<"'\n"; }
-                else if ((c=='{')&&(lastc!='\\')) { endc='}'; add=false; } //std::cout<<"endc='"<<endc.toAscii()<<"'\n"; }
-                //else if (!c.isSpace()) { endc=','; } //std::cout<<"endc='"<<endc.toAscii()<<"'\n"; }
+                if (c=='"') { endc='"'; add=false; } //std::cout<<"endc='"<<endc.toLatin1()<<"'\n"; }
+                else if ((c=='{')&&(lastc!='\\')) { endc='}'; add=false; } //std::cout<<"endc='"<<endc.toLatin1()<<"'\n"; }
+                //else if (!c.isSpace()) { endc=','; } //std::cout<<"endc='"<<endc.toLatin1()<<"'\n"; }
             } else {
                 if ((c=='{')&&(lastc!='\\')) {
                     obcount++;
@@ -376,7 +376,7 @@ BiBTeXParser::TokenType BiBTeXParser::getNextToken() {
         //std::cout<<"TOKEN: NAME '"<<currentToken.value.toStdString()<<"'\n";
         return currentToken.type;
     }
-    //std::cout<<"TOKEN: unknown  c='"<<c.toAscii()<<"'\n";
+    //std::cout<<"TOKEN: unknown  c='"<<c.toLatin1()<<"'\n";
 
     currentToken.type=BiBTeXParser::ttUnknown;
     return currentToken.type;

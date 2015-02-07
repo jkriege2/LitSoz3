@@ -140,7 +140,7 @@
         <enum>QFrame::Box</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="stackUserNames">
         <layout class="QFormLayout" name="formLayout_3">
@@ -525,10 +525,17 @@ p, li { white-space: pre-wrap; }
          <item row="3" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QLineEdit" name="edtConfigDir"/>
+            <widget class="QLineEdit" name="edtConfigDir">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QToolButton" name="tbutConfigDir">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="focusPolicy">
               <enum>Qt::ClickFocus</enum>
              </property>

@@ -7,11 +7,10 @@
   9783630620946
 
   */
-
+#include <QtGlobal>
 #include "ls3pluginbase.h"
 #include <QWidget>
 #include <QComboBox>
-#include <QHttp>
 #include <QProgressDialog>
 #include <QLineEdit>
 #include "jkstyledbutton.h"
@@ -27,6 +26,9 @@
 */
 class LS3PluginISBNImport : public LS3PluginBase {
         Q_OBJECT
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+        Q_PLUGIN_METADATA(IID "www.jkrieger.de.LitSoz3.Plugins.LS3PluginISBNImport")
+#endif
     public:
         LS3PluginISBNImport();
         virtual ~LS3PluginISBNImport();

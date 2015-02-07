@@ -1,7 +1,7 @@
 #ifndef POPPLERPDFWIDGET_H
 #define POPPLERPDFWIDGET_H
 
-#include <poppler-qt4.h>
+#include <poppler-qt5.h>
 #include <QApplication>
 #include <QLabel>
 #include <QRectF>

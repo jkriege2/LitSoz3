@@ -3,7 +3,12 @@
 #include "mainwindow.h"
 #include "../version.h"
 
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <QSplashScreen>
 #include <QPainter>
 int main(int argc, char * argv[])
@@ -16,6 +21,7 @@ int main(int argc, char * argv[])
     app.setOrganizationDomain(QString(LS3_WEBLINK));
     app.setApplicationVersion(QString("%1 (DATE %2)").arg(VERSION_FULL).arg(COMPILEDATE));
     app.setWindowIcon(QIcon(":/ls3icon.png"));
+
 
     QPixmap pixmap(":/splash.png");
     QPainter* painter=new QPainter(&pixmap);
@@ -31,9 +37,15 @@ int main(int argc, char * argv[])
     app.processEvents();
 
 
-    app.addLibraryPath(QCoreApplication::applicationDirPath()+"/qtplugins");
+    app.processEvents();
+    app.processEvents();
+    app.processEvents();
 
-    /** \brief this object manages program settings */
+    #ifdef __WINDOWS__
+      app.addLibraryPath(QCoreApplication::applicationDirPath()+"/qtplugins");
+    #endif
+    app.processEvents();
+
     ProgramOptions* settings=new ProgramOptions("", &app, &app);
 
     MainWindow win(settings, &splash);

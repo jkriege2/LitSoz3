@@ -9,10 +9,10 @@ include(../libls3widgets.pri)
 include(../autoversioning.pri)
 include(../extlibs/poppler.pri)
 
-release {
-    message("building $$TARGET $$TEMPLATE in RELEASE mode, output is in $$LS3OUTPUT ")
-} else {
+CONFIG(debug, debug|release) {
     message("building $$TARGET $$TEMPLATE in DEBUG mode, output is in $$LS3OUTPUT ")
+} else {
+    message("building $$TARGET $$TEMPLATE in RELEASE mode, output is in $$LS3OUTPUT ")
 }
 macx {
     message("build system is macx")
@@ -100,6 +100,15 @@ TRANSLATIONS= $$LS3OUTPUT/translations/de.litsoz3.ts
 
 QT += xml gui network
 
+message("Qt Version: $$QT_MAJOR_VERSION . $$QT_MINOR_VERSION")
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets printsupport
+    message("Qt Major Version >5, using special Qt5.x include syntax for widgets")
+#    win32{
+#        !contains(LIBS, -lopengl32): LIBS += -lopengl32
+#        !contains(LIBS, -lglu32): LIBS += -lglu32
+#    }
+}
 win32 {
     RC_FILE = litsoz3.rc
 }
@@ -113,5 +122,22 @@ macx{
     ICON = ls3icon.icns
   }
 }
+
+
+
+
+ASSETSSTYLESHEET_FILES.files = ./assets/stylesheets/*.*
+ASSETSSTYLESHEET_FILES.path = $${LS3OUTPUT}/assets/stylesheets/
+
+ASSETS_FILES.files = ./assets/*.*
+ASSETS_FILES.path = $${LS3OUTPUT}/assets/
+
+ASSETSCOMPLETERS_FILES.files = ./assets/completers/*.*
+ASSETSCOMPLETERS_FILES.path = $${LS3OUTPUT}/assets/completers/
+
+ASSETSFDF_FILES.files = ./assets/fdf/*.*
+ASSETSFDF_FILES.path = $${LS3OUTPUT}/assets/fdf/
+
+INSTALLS += ASSETSSTYLESHEET_FILES ASSETS_FILES ASSETSCOMPLETERS_FILES ASSETSFDF_FILES
 
 

@@ -12,7 +12,7 @@
 #include <QUuid>
 #include <QXmlStreamWriter>
 #include <QProgressBar>
-
+#include <QMimeData>
 
 class LS3DatastoreXML; // forward
 
@@ -69,6 +69,8 @@ class LS3DSStringTableModel: public QAbstractTableModel {
 
         virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
         virtual Qt::ItemFlags flags(const QModelIndex& index ) const;
+
+        Qt::DropActions supportedDragActions() const;
 
         QStringList mimeTypes() const;
         QMimeData* mimeData(const QModelIndexList &indexes) const;

@@ -9,7 +9,7 @@ LS3DSStringTableModel::LS3DSStringTableModel(LS3DatastoreXML* parent):
     m_data.clear();
     indexUUID.clear();
     largestNum=-1;
-    setSupportedDragActions(Qt::CopyAction);
+    //setSupportedDragActions(Qt::CopyAction);
     m_wasChanged=false;
     doEmitSignal=true;
 }
@@ -23,7 +23,12 @@ void LS3DSStringTableModel::clear(){
     m_data.clear();
     indexUUID.clear();
     largestNum=-1;
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void LS3DSStringTableModel::newFile() {
@@ -91,7 +96,12 @@ void LS3DSStringTableModel::loadFromXML(QDomElement n, QProgressBar* progress) {
             }
         }
     }
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
     if (progress) progress->setValue(0);
     m_wasChanged=false;
     if (doEmitSignal) emit wasChangedChanged(m_wasChanged);
@@ -198,6 +208,11 @@ Qt::ItemFlags LS3DSStringTableModel::flags(const QModelIndex& index ) const {
     if ((fn!="num") && (fn!="uuid")) f=f|Qt::ItemIsEditable;
     if (index.isValid()) return Qt::ItemIsDragEnabled | f;
     else return f;
+}
+
+Qt::DropActions LS3DSStringTableModel::supportedDragActions() const
+{
+    return Qt::CopyAction;
 }
 
 QStringList LS3DSStringTableModel::mimeTypes() const {

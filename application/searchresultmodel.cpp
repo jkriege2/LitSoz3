@@ -24,7 +24,12 @@ SearchResultModel::~SearchResultModel()
 
 void SearchResultModel::resetModel() {
     loadData();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 LS3Datastore* SearchResultModel::datastore() const {
@@ -60,12 +65,22 @@ QVariant SearchResultModel::headerData(int section, Qt::Orientation orientation,
 void SearchResultModel::setSortingOrder(int order) {
     m_sortingOrder=order;
     loadData();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void SearchResultModel::clearResults() {
     datalist.clear();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void SearchResultModel::addResult(const QString& uuid) {
@@ -76,7 +91,12 @@ void SearchResultModel::addResult(const QString& uuid) {
     it.uuid=uuid;
     datalist.append(it);
     loadData();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void SearchResultModel::addResults(const QStringList& uuids) {
@@ -95,7 +115,12 @@ void SearchResultModel::addResults(const QStringList& uuids) {
         }
     }
     loadData();
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void SearchResultModel::setResults(const QStringList& uuids) {

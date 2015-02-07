@@ -68,3 +68,6 @@ qtplugins
 *.user
 /test_poppler/ui_window.h
 /output/config
+Makefile
+*.db
+*.o

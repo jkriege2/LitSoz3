@@ -1,6 +1,11 @@
 #include "popplerpdfwidget.h"
 #include <QPainter>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <QtCore>
 
 PopplerPDFWidget::PopplerPDFWidget(QWidget *parent) :
@@ -320,15 +325,26 @@ QRectF PopplerPDFWidget::searchBackwards(const QString &text)
         QList<QRectF> locations;
         searchLocation = QRectF();
 
-        while (doc->page(page)->search(text, searchLocation,
-            Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+        double l=searchLocation.left();
+        double t=searchLocation.top();
+        double r=searchLocation.right();
+        double b=searchLocation.bottom();
 
+        while (doc->page(page)->search(text, l,t,r,b,
+            Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            searchLocation.setLeft(l);
+            searchLocation.setRight(r);
+            searchLocation.setBottom(b);
+            searchLocation.setTop(t);
             if (searchLocation != oldLocation)
                 locations.append(searchLocation);
             else
                 break;
         }
-
+        searchLocation.setLeft(l);
+        searchLocation.setRight(r);
+        searchLocation.setBottom(b);
+        searchLocation.setTop(t);
         int index = locations.indexOf(oldLocation);
         if (index == -1 && !locations.isEmpty()) {
             searchLocation = locations.last();
@@ -354,13 +370,23 @@ QRectF PopplerPDFWidget::searchBackwards(const QString &text)
 
         QList<QRectF> locations;
         searchLocation = QRectF();
+        double l=searchLocation.left();
+        double t=searchLocation.top();
+        double r=searchLocation.right();
+        double b=searchLocation.bottom();
 
-        while (doc->page(page)->search(text, searchLocation,
+        while (doc->page(page)->search(text, l,t,r,b,
             Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
-
+            searchLocation.setLeft(l);
+            searchLocation.setRight(r);
+            searchLocation.setBottom(b);
+            searchLocation.setTop(t);
             locations.append(searchLocation);
         }
-
+        searchLocation.setLeft(l);
+        searchLocation.setRight(r);
+        searchLocation.setBottom(b);
+        searchLocation.setTop(t);
         if (!locations.isEmpty()) {
             searchLocation = locations.last();
             showPage(page + 1);
@@ -376,9 +402,17 @@ QRectF PopplerPDFWidget::searchForwards(const QString &text)
 {
     int page = currentPage;
     while (page < doc->numPages()) {
+        double l=searchLocation.left();
+        double t=searchLocation.top();
+        double r=searchLocation.right();
+        double b=searchLocation.bottom();
 
-        if (doc->page(page)->search(text, searchLocation,
+        if (doc->page(page)->search(text, l,t,r,b,
             Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            searchLocation.setLeft(l);
+            searchLocation.setRight(r);
+            searchLocation.setBottom(b);
+            searchLocation.setTop(t);
             if (!searchLocation.isNull()) {
                 showPage(page + 1);
                 return searchLocation;
@@ -393,9 +427,17 @@ QRectF PopplerPDFWidget::searchForwards(const QString &text)
     while (page < currentPage) {
 
         searchLocation = QRectF();
+        double l=searchLocation.left();
+        double t=searchLocation.top();
+        double r=searchLocation.right();
+        double b=searchLocation.bottom();
 
-        if (doc->page(page)->search(text, searchLocation,
+        if (doc->page(page)->search(text, l,t,r,b,
             Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            searchLocation.setLeft(l);
+            searchLocation.setRight(r);
+            searchLocation.setBottom(b);
+            searchLocation.setTop(t);
             if (!searchLocation.isNull()) {
                 showPage(page + 1);
                 return searchLocation;

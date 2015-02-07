@@ -42,8 +42,8 @@ echo -e "=======================================================================
 "don't interfere with your system-libraries. The .pri-files in this di-\n"\
 "rectory include the libraries in a way that preferences these libraries \n"\
 "here!\n\nBefore running, please make sure that QTDIR points to Qt!!! using\n"\
-"  export QTDIR=/c/development/Qt5/5.3/mingw482_32/"\
-"  export PATH=$PATH:/c/development/Qt5/5.3/mingw482_32/bin/ "\
+"  export QTDIR=/c/development/Qt5/5.3/mingw482_32/\n"\
+"  export PATH=\$PATH:/c/development/Qt5/5.3/mingw482_32/bin/ \n"\
 "\n\nFinally this script will copy all generated dynamic link libraries into\n"\
 "the LitSoz output folder, so they are found by the program at runtime."\
 "\n\nFirst we need to set some basics for the builds:"\
@@ -61,9 +61,9 @@ QT_INFO_BIN=`${QTDIR}/bin/qmake -query QT_INSTALL_BINS`
 QT_INFO_PLUGINS=`${QTDIR}/bin/qmake -query QT_INSTALL_PLUGINS`
 QT_INFO_INSTALLDIR=`${QTDIR}/bin/qmake -query QT_INSTALL_PREFIX`
 QT_INFO_VERSION=`${QTDIR}/bin/qmake -query QT_VERSION`
-echo -e "\n\nbuilding for\n    Qt version ${QT_INFO_VERSION}\n       in ${QT_INFO_INSTALLDIR}\n\n"
+echo -e "\n\nbuilding for\n    Qt version ${QT_INFO_VERSION}\n       in ${QT_INFO_INSTALLDIR}\n       libs ${QT_INFO_LIBS}\n\n"
 
-PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${QT_INFO_LIBS}/pkgconfig"
+PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${QT_INFO_LIBS}/pkgconfig/"
 export PKG_CONFIG_PATH 
 
 zlibOK=-1
@@ -410,22 +410,22 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	"------------------------------------------------------------------------\n\n"\
 
 	cd poppler
-	mkdir build2
+	mkdir build3
 	
 	
 	
-	tar xvf poppler-0.31.0.tar.gz -C ./build2/
-	cd build2/poppler-0.31.0
+	tar xvf poppler-0.31.0.tar.gz -C ./build3/
+	cd build3/poppler-0.31.0
 	
 	
 	#POPPLER_QT4_CFLAGS="-c -g -frtti -fexceptions -mthreads -Wall -I${QTDIR}/include/QtCore -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtXml -I${QTDIR}/include -I${QTDIR}/mkspecs/default"
 	#POPPLER_QT4_LIBS="-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,console -mthreads -Wl -L${QTDIR}/lib -lQtXml4 -lQtGui4 -lQtCore4"
 	#POPPLER_QT4_TEST_CFLAGS="-c -g -frtti -fexceptions -mthreads -Wall -I${QTDIR}/include/QtTest -I${QTDIR}/include  -I${QTDIR}/include/QtCore -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtXml -I${QTDIR}/include -I${QTDIR}/mkspecs/default"
 	#POPPLER_QT4_TEST_LIBS="-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,console -mthreads -Wl -L${QTDIR}/lib -lQtTest4 -lQtXml4 -lQtGui4 -lQtCore4"
-	POPPLER_QT5_CFLAGS="-c -pipe -fno-keep-inline-dllexport -frtti -fexceptions -mthreads -Wall -Wextra -DUNICODE -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I${QTDIR}/include/QtWidgets -I${QTDIR}/include/QtXml -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtCore -I${QTDIR}/mkspecs/win32-g++"
-	POPPLER_QT5_LIBS="-shared -mthreads  -lgdi32 -luser32  -lopengl32 -lglu32 -L${QTDIR}/lib  -lQt5Widgets -lQt5Gui -lQt5Core -lQt5Xml"
-	POPPLER_QT5_TEST_CFLAGS="-c -pipe -fno-keep-inline-dllexport -frtti -fexceptions -mthreads -Wall -Wextra -DUNICODE -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I${QTDIR}/include/QtWidgets -I${QTDIR}/include/QtXml -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtCore -I${QTDIR}/mkspecs/win32-g++"
-	POPPLER_QT5_TEST_LIBS="-shared -mthreads  -lgdi32 -luser32  -lopengl32 -lglu32 -L${QTDIR}/lib  -lQt5Widgets -lQt5Gui -lQt5Core -lQt5Xml"
+	POPPLER_QT5_CFLAGS="-c -pipe -fno-keep-inline-dllexport -frtti -fexceptions -mthreads -Wall -Wextra -DUNICODE -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I${QTDIR}/include/ -I${QTDIR}/include/QtWidgets -I${QTDIR}/include/QtXml -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtCore -I${QTDIR}/mkspecs/win32-g++"
+	POPPLER_QT5_LIBS="-shared -mthreads  -lgdi32 -luser32  -lopengl32 -lglu32 -L${QTDIR} -L${QTDIR}/lib  -lQt5Widgets -lQt5Gui -lQt5Core -lQt5Xml"
+	POPPLER_QT5_TEST_CFLAGS="-c -pipe -fno-keep-inline-dllexport -frtti -fexceptions -mthreads -Wall -Wextra -DUNICODE -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I${QTDIR}/include/ -I${QTDIR}/include/QtWidgets -I${QTDIR}/include/QtXml -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtCore -I${QTDIR}/mkspecs/win32-g++"
+	POPPLER_QT5_TEST_LIBS="-shared -mthreads  -lgdi32 -luser32  -lopengl32 -lglu32 -L${QTDIR} -L${QTDIR}/lib  -lQt5Widgets -lQt5Gui -lQt5Core -lQt5Xml"
 	#ISMSYS=`uname -o`
 	#echo $ISMSYS
 	#if [ "$ISMSYS" != "${string/Msys/}" ] ; then
@@ -444,12 +444,16 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	export POPPLER_QT5_TEST_LIBS
 	PATH="${PATH}:${CURRENTDIR}/pkg_config/bin/"
 	export PATH
+	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${QT_INFO_LIBS}/pkgconfig/"
+	export PKG_CONFIG_PATH 
+	
 	
 
 	echo ${C_INCLUDE_PATH}
 	echo ${CPLUS_INCLUDE_PATH}
 	echo ${LIBRARY_PATH}
 	echo ${PKG_CONFIG_PATH}
+	echo "${PKG_CONFIG_PATH}"
 	pkg-config --list-all
 
 	./configure --disable-libopenjpeg --disable-silent-rules --enable-shared --disable-static --enable-poppler-cpp --disable-poppler-glib --disable-gtk-test --disable-poppler-qt4 --enable-poppler-qt5 --disable-cms --enable-zlib --prefix=${CURRENTDIR}/poppler CFLAGS=" -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/  -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " CXXFLAGS=" -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/ -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " LDFLAGS=" -L${CURRENTDIR}/libtiff/lib/ -L${CURRENTDIR}/libjpeg/lib/ -L${CURRENTDIR}/libpng/lib/ -L${CURRENTDIR}/freetype/lib/ -L${CURRENTDIR}/zlib/lib/ " LIBS="-lz -ltiff -ljpeg -lpng -lfreetype"
@@ -476,7 +480,7 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 
 	cd ../../
 	if [ $KEEP_BUILD_DIR == "n" ] ; then
-		rm -rf build2
+		rm -rf build3
 	fi
 	cd ${CURRENTDIR}
 	

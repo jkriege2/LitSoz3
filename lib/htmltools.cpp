@@ -164,14 +164,14 @@ QList<QMap<QString, QVariant> > extractCoins(const QString& data, const QSet<QSt
                 //qDebug()<<t.getProperty("class");
                 if (t.getProperty("class")=="Z3988") {
                     QMap<QString, QVariant> coins;
-                    QString coinsdata=t.getProperty("title").replace("&amp;", "&");//QUrl::fromPercentEncoding(t.getProperty("title").replace("&amp;", "&").toAscii());
+                    QString coinsdata=t.getProperty("title").replace("&amp;", "&");//QUrl::fromPercentEncoding(t.getProperty("title").replace("&amp;", "&").toLatin1());
                     QStringList sl=coinsdata.split("&");
                     //qDebug()<<"\n\n\n---------------------------------------------------------------------------------------------\n"<<sl;
                     bool isBook=false;
                     bool isArticle=false;
                     QString ausuffix="", auinitm="", auinit1="", auinit="", aufirst="", aulast="";
                     for (int i=0; i<sl.size(); i++) {
-                        QString item=QUrl::fromPercentEncoding(sl[i].toAscii()).trimmed().replace('+', ' ');
+                        QString item=QUrl::fromPercentEncoding(sl[i].toLatin1()).trimmed().replace('+', ' ');
                         QString value=item.mid(item.indexOf('=')+1);
                         if (item.startsWith("rft_val_fmt")) {
                             if (value=="info:ofi/fmt:kev:mtx:journal") {

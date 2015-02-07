@@ -6,7 +6,12 @@
 #include <QString>
 #include <QObject>
 #include <QWidget>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <QtXml>
 
 #include "../lib/ls3datastore.h"

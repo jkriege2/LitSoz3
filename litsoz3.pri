@@ -7,3 +7,8 @@ RCC_DIR = ./.rccs/
 OBJECTS_DIR = ./.objs/
 LS3OUTPUT = ../output
 
+CONFIG(debug, debug|release) {
+    message("DEBUG mode.")
+    linux:QMAKE_CXXFLAGS += -fsanitize=address
+
+}

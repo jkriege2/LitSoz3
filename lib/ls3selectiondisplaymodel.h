@@ -8,7 +8,7 @@
 #include <QStyledItemDelegate>
 #include "ls3datastore.h"
 #include "lib_imexport.h"
-
+#include <QMimeData>
 /*! \brief list model to access a list of all currently selected database records
 
     Simply instanciate this model with a given datastore and it will automatically be synchronized with the given datastore in future.

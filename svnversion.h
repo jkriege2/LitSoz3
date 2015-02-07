@@ -1,1 +1,1 @@
-# define SVNVERSION "exportiert" 
+# define SVNVERSION "Unversioned directory" 

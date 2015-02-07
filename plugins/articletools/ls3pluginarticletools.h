@@ -1,6 +1,6 @@
 #ifndef LS3PLUGINARTICLETOOLS_H
 #define LS3PLUGINARTICLETOOLS_H
-
+#include <QtGlobal>
 #include "ls3pluginbase.h"
 #include <QWidget>
 #include <QComboBox>
@@ -21,7 +21,9 @@
 */
 class LS3PluginArticleTools : public LS3PluginBase {
         Q_OBJECT
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+        Q_PLUGIN_METADATA(IID "www.jkrieger.de.LitSoz3.Plugins.LS3PluginArticleTools")
+#endif
     public:
         LS3PluginArticleTools();
         virtual ~LS3PluginArticleTools();
@@ -37,7 +39,7 @@ class LS3PluginArticleTools : public LS3PluginBase {
         virtual QString getAuthor() { return tr("J. Krieger"); }
 
         /** \brief copyright information the plugin */
-        virtual QString getCopyright() { return tr("(c) 2011-2012 by J. W. Krieger"); }
+        virtual QString getCopyright() { return tr("(c) 2011-2015 by J. W. Krieger"); }
 
         /** \brief weblink for the plugin */
         virtual QString getWeblink() { return tr("http://www.jkrieger.de/"); }

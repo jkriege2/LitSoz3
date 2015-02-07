@@ -16,7 +16,12 @@
 #include "pubmedsearchdialog.h"
 
 #include <QDebug>
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 #include <iostream>
 #include <QtXml>
 #include "bibtools.h"
@@ -1136,4 +1141,7 @@ void LS3PluginArticleTools::actionChanged(int item) {
 }
 
 
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 0, 0))
 Q_EXPORT_PLUGIN2(articletools, LS3PluginArticleTools)
+
+#endif

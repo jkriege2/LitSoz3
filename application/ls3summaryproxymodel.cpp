@@ -34,7 +34,12 @@ LS3SummaryProxyModel::~LS3SummaryProxyModel()
 }
 
 void LS3SummaryProxyModel::invalidate() {
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 QModelIndex LS3SummaryProxyModel::mapFromSource ( const QModelIndex & sourceIndex ) const{
@@ -313,26 +318,51 @@ void LS3SummaryProxyModel::setSourceModel(QAbstractItemModel *sourceModel) {
         connect(this->sourceModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(_rowsInserted( const QModelIndex &, int, int)));
         connect(this->sourceModel(), SIGNAL(rowsMoved(const QModelIndex & , int, int, const QModelIndex &, int)), this, SLOT(_rowsMoved( const QModelIndex & , int, int, const QModelIndex &, int)));
         connect(this->sourceModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(_rowsRemoved(const QModelIndex &, int, int)));
-        reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
     }
 }
 
 void  LS3SummaryProxyModel::_modelReset(){
     //std::cout<<">>>>   LS3SummaryProxyModel::_modelReset()\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void LS3SummaryProxyModel::_columnsInserted ( const QModelIndex & parent, int start, int end ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_columnsInserted\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 void LS3SummaryProxyModel::_columnsMoved ( const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_columnsMoved\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 void LS3SummaryProxyModel::_columnsRemoved ( const QModelIndex & parent, int start, int end ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_columnsRemoved\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 void LS3SummaryProxyModel::_dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_dataChanged\n";
@@ -341,7 +371,12 @@ void LS3SummaryProxyModel::_dataChanged ( const QModelIndex & topLeft, const QMo
 }
 void LS3SummaryProxyModel::_headerDataChanged ( Qt::Orientation orientation, int first, int last ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_headerDataChanged\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 void LS3SummaryProxyModel::_layoutChanged () {
     //reset();
@@ -350,18 +385,33 @@ void LS3SummaryProxyModel::_layoutChanged () {
 }
 void LS3SummaryProxyModel::_rowsInserted ( const QModelIndex & parent, int start, int end ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsInserted\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
     //emit rowsInserted(mapFromSource(parent), start, end);
     //beginInsertRows(mapFromSource(parent), start, end);
     //endInsertRows();
 }
 void LS3SummaryProxyModel::_rowsMoved ( const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationRow ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsMoved\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 void LS3SummaryProxyModel::_rowsRemoved ( const QModelIndex & parent, int start, int end ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsRemoved\n";
-    reset();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+beginResetModel();
+endResetModel();
+#else
+reset();
+#endif
 }
 
 void LS3SummaryProxyModel::selectionChanged(int recordNum, bool newSelectionState) {

@@ -1,7 +1,12 @@
 #ifndef PROGRAMOPTIONS_H
 #define PROGRAMOPTIONS_H
 
+#include <QtGlobal>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 
 #include "optionsdialog.h"
 #include "previewstylemanager.h"
@@ -55,8 +60,10 @@ public:
     }
 
 
-    /** \brief Access configDirectory (the directory which contains the additional config files (*.fdf ...)) */
-    inline QString GetConfigDirectory() { return QDir(configDirectory).absolutePath ()+"/"; }
+    /** \brief Access configDirectory (the directory which contains the user config files */
+    inline QString GetConfigDirectory();
+    /** \brief Access configDirectory (the directory which contains the assets files (*.fdf ...)) */
+    inline QString GetAssetsDirectory();
 
 
     /** \brief Access currentFile ( the currently opened file) */
@@ -230,6 +237,8 @@ protected:
     QString lastNewDBDirectory;
     /** \brief root of the "config" directory tree */
     QString configDirectory;
+    /** \brief root of the "assets" directory tree */
+    QString assetsDirectory;
     /** \brief name of the user */
     QString username;
     /** \brief font name for the table */
