@@ -1,0 +1,14 @@
+/litsoz3.pro.user.3.0-pre1
+/Makefile
+/litsoz3.pro.user
+/litsoz3.pro.user.2.5pre1
+/libwidgets/*.Debug
+/libwidgets/*.Release
+/libwidgets/Makefile
+/test_poppler/debug
+/test_poppler/release
+/extlibs/poppler/include
+/extlibs/poppler/lib
+/extlibs/poppler/share
+/extlibs/poppler/bin
+/extlibs/poppler/build

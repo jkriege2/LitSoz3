@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16"
+   height="16"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="bibtexexporter.svg"
+   inkscape:export-filename="bibtexexporter.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="15.839192"
+     inkscape:cx="33.739519"
+     inkscape:cy="-6.3981351"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1036.3622)">
+    <path
+       sodipodi:type="star"
+       style="fill:#ff2a2a;fill-opacity:1;stroke:none"
+       id="path3039"
+       sodipodi:sides="3"
+       sodipodi:cx="-9.8489876"
+       sodipodi:cy="9.8128157"
+       sodipodi:r1="5.5558391"
+       sodipodi:r2="2.7779195"
+       sodipodi:arg1="1.5707963"
+       sodipodi:arg2="2.6179939"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m -9.8489874,15.368655 -2.4057486,-4.16688 -2.405749,-4.1668787 4.8114975,-2e-7 4.8114976,-1e-7 -2.4057488,4.166879 z"
+       transform="matrix(0,-1.1365822,1.1365822,0,-1.6191505,1035.7011)"
+       inkscape:transform-center-y="-0.00012988699"
+       inkscape:transform-center-x="-1.5786663" />
+    <text
+       xml:space="preserve"
+       style="font-size:8.91465187px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="0.15070635"
+       y="1042.7109"
+       id="text2985"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2987"
+         x="0.15070635"
+         y="1042.7109"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Serif;-inkscape-font-specification:Serif">BiB</tspan><tspan
+         sodipodi:role="line"
+         x="0.15070635"
+         y="1053.8542"
+         id="tspan2989"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Serif;-inkscape-font-specification:Serif" /></text>
+    <g
+       id="g3032"
+       transform="matrix(1.0508706,0,0,1.0508706,-0.89523967,-53.3256)">
+      <text
+         sodipodi:linespacing="125%"
+         id="text2985-1"
+         y="1049.5519"
+         x="0.87726277"
+         style="font-size:8.48311043px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000080;font-family:Serif;-inkscape-font-specification:Serif"
+           y="1049.5519"
+           x="0.87726277"
+           id="tspan2987-7"
+           sodipodi:role="line">T X</tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000080;font-family:Serif;-inkscape-font-specification:Serif"
+           id="tspan2989-4"
+           y="1060.1558"
+           x="0.87726277"
+           sodipodi:role="line" /></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text2985-0"
+         y="1051.9823"
+         x="3.9619725"
+         style="font-size:8.29850101px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000080;font-family:Serif;-inkscape-font-specification:Serif"
+           id="tspan2989-48"
+           y="1051.9823"
+           x="3.9619725"
+           sodipodi:role="line">E</tspan></text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>article</ID>
+	<name language="en">article</name>
+	<name language="de">Zeitschriftenaufsatz</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>article.png</icon>
+  </options>
+  <authors caption="authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <edit caption="title" caption.de="Titel" datafield="title" />
+  <memo caption="subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <edit caption="journal" caption.de="Zeitschrift" datafield="journal" completer="journal" />
+  <edit caption="volume" caption.de="Band" datafield="volume" widgetwidth="100" />
+  <edit caption="number" caption.de="Nummer" datafield="number" widgetwidth="100" />
+  <edit caption="pages" caption.de="Seiten" datafield="pages" widgetwidth="150" />
+  <combobox caption="article type" caption.de="Art des Artikels" datafield="subtype" completer="articletype" widgetwidth="250" />
+</fdf>

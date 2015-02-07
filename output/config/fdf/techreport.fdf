@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>techreport</ID>
+	<name language="en">technical report</name>
+	<name language="de">Bericht</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>techreport.png</icon>
+  </options>
+  <authors caption="authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <edit caption="title" caption.de="Titel" datafield="title" />
+  <memo caption="subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="Edition/Version" caption.de="Auflage/Version" datafield="number" widgetwidth="100"/>
+  <intedit caption="year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <edit caption="Institution" caption.de="Institution" datafield="institution" completer="institution" />
+  <memo caption="Places" caption.de="Verlagsort" datafield="places" completer="places" />
+</fdf>

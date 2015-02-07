@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RenameFilesDialog</class>
+ <widget class="QDialog" name="RenameFilesDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>701</width>
+    <height>731</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Rename Files</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../application/litsoz3.qrc">
+    <normaloff>:/ls3icon.png</normaloff>:/ls3icon.png</iconset>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="grpWhich">
+     <property name="title">
+      <string> records </string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QRadioButton" name="radAll">
+        <property name="text">
+         <string>&amp;all records</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radSelected">
+        <property name="text">
+         <string>&amp;selected records</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radCurrent">
+        <property name="text">
+         <string>c&amp;urrent record only</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string> actions </string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>re&amp;name scheme</string>
+        </property>
+        <property name="buddy">
+         <cstring>cmbRenameScheme</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QComboBox" name="cmbRenameScheme">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>%authors%__%title%__%journal%_%volume%(%number%)_%pages%__%year%.%extension%</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>%authors%__%title%__%year%.%extension%</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>%original_name%.%extension%</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>directory &amp;scheme</string>
+        </property>
+        <property name="buddy">
+         <cstring>cmbDirScheme</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QComboBox" name="cmbDirScheme">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string>./%topic%</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>./%year%</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>./%topic%/%year%</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QCheckBox" name="chkMove">
+        <property name="text">
+         <string>&amp;move files</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="chkRename">
+        <property name="text">
+         <string>&amp;rename files</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;you may use one of these variable to create the output filename:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  *&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt; %original_name%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - original filename/directory name&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%extension%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - original file extension (for rename scheme only)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%topic%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - topic&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%authors%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - authors/editors (max 3 names + possibly etal)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%title%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - title of the publication&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%year%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - year of publication&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%publisher%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - publisher&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%places%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - places&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%journal%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - journal&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%number%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - issue/number&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%pages%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;: pages&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%volume%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - volume&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%booktitle%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - book title&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%series%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - series&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%isbn%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - ISBN&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%pmid%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - PubMedID&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%doi%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - DOI&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%type%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - type&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%topic%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - topic&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%language%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - language&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  * &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%uuid%&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; - uuid&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;The resulting filename will be limited to at most 255 characters and&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; all characters not suitable for filenames will be removed. Each field &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;may not be longer than 128 characters. Use slash (/) as directory&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;separator.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If a filename is not valid, the filename defaults to &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;   %original_name%.%ext%&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>max. filename length:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QSpinBox" name="spinFNLength">
+          <property name="suffix">
+           <string> characters</string>
+          </property>
+          <property name="minimum">
+           <number>10</number>
+          </property>
+          <property name="maximum">
+           <number>1024</number>
+          </property>
+          <property name="singleStep">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>200</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="chkDeleteOld">
+        <property name="text">
+         <string>&amp;delete old file (if not checked the old file will remain on the disk and a new file will be created as a copy)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chkSimulate">
+       <property name="text">
+        <string>simulate</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>radAll</tabstop>
+  <tabstop>radSelected</tabstop>
+  <tabstop>radCurrent</tabstop>
+  <tabstop>chkRename</tabstop>
+  <tabstop>cmbRenameScheme</tabstop>
+  <tabstop>chkMove</tabstop>
+  <tabstop>cmbDirScheme</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../application/litsoz3.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>RenameFilesDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>693</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>RenameFilesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>325</x>
+     <y>693</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chkRename</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cmbRenameScheme</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>72</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chkMove</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>cmbDirScheme</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>230</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chkRename</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spinFNLength</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>88</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>210</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

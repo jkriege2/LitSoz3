@@ -1,0 +1,12 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file alias="isbnimport/logo.png">images/logo.png</file>
+        <file alias="isbnimport/insert.png">images/insert.png</file>
+        <file alias="isbnimport/search.png">images/search.png</file>
+        <file alias="isbnimport/search_active.png">images/search_active.png</file>
+        <file alias="isbnimport/search_disabled.png">images/search_disabled.png</file>
+        <file alias="isbnimport/search_hover.png">images/search_hover.png</file>
+    </qresource>
+</RCC>
+

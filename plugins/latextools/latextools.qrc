@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="latextools/logo.png">images/logo.png</file>
+        <file alias="latextools/insertcite.png">images/insertcite.png</file>
+        <file alias="latextools/insertids.png">images/insertids.png</file>
+        <file alias="latextools/bibteximporter.png">images/bibteximporter.png</file>
+        <file alias="latextools/bibtexexporter.png">images/bibtexexporter.png</file>
+        <file alias="latextools/pastebibtex.png">images/pastebibtex.png</file>
+        <file alias="latextools/copybibtex.png">images/copybibtex.png</file>
+        <file alias="latextools/copyselectedbibtex.png">images/copybibtex_all.png</file>
+    </qresource>
+</RCC>

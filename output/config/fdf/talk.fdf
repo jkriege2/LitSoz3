@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>talk</ID>
+	<name language="en">talk</name>
+	<name language="de">Vortrag</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>talk.png</icon>
+  </options>
+  <authors caption="Authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <edit caption="Title" caption.de="Titel" datafield="title" />
+  <memo caption="Subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <edit caption="Conference" caption.de="Konferenz" datafield="booktitle" completer="conference" />
+  <intedit caption="Year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <memo caption="Places" caption.de="Ort" datafield="places" completer="places" />
+  <edit caption="Organization" caption.de="Organisation" datafield="institution" completer="institution" />
+</fdf>

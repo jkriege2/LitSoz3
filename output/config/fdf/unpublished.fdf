@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>unpublished</ID>
+	<name language="en">unpublished</name>
+	<name language="de">unveröffentlicht</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>txt.png</icon>
+  </options>
+  <authors caption="authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <edit caption="title" caption.de="Titel" datafield="title" />
+  <memo caption="subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <combobox caption="type" caption.de="Typ" datafield="subtype" completer="unpubtype" widgetwidth="250" />
+</fdf>

@@ -1,0 +1,27 @@
+https://en.wikipedia.org/wiki/Copac
+http://copac.ac.uk/developers/webapi/
+http://copac.ac.uk/developers/openurl/
+http://copac.ac.uk/search?isn=9783527403103&format=XML+-+MODS
+
+
+https://en.wikipedia.org/wiki/OpenURL
+
+
+http://ocoins.info/
+http://ocoins.info/cobg.html
+http://ocoins.info/cobgbook.html
+
+
+
+DOI Book:
+http://onlinelibrary.wiley.com/doi/10.1002/3527600809.fmatter_indsub/summary
+
+
+http://www.loc.gov/standards/sru/index.html
+http://www.loc.gov/standards/sru/resources/lcServers.html
+
+
+
+https://en.wikipedia.org/wiki/Open_Archives_Initiative_Protocol_for_Metadata_Harvesting
+http://www.openarchives.org/Register/BrowseSites
+http://gita.grainger.uiuc.edu/registry/Info.asp

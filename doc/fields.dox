@@ -1,0 +1,54 @@
+/*! \page ls3_database LitSoz 3.0 Databases
+
+    Every LitSoz 3.0 database is stored as an XML file using.  Each databases consists of several fields:
+     - \c num (integer, primary key):  unique dataset number inside table
+     - \c uuid (varchar):  uuid, guaranteed to be unique within this table (nd should be unique within the world), used to specify a record within this database
+     - \c id (varchar):  item identifier, used to cite this item (i.e. BibTeX ID)
+     - \c type (varchar):  type of publication (book, manula, article ...)
+     - \c title (varchar):  title of publication
+     - \c subtitle (varchar):  subtitles
+     - \c authors (varchar):  authors as "surname, first name; surname, first name; ..."
+     - \c editors (varchar):  editors as "surname, first name; surname, first name; ..."
+     - \c year integer):  year of publication
+     - \c viewdate (varchar):  when has a webpage been viewed the last time
+     - \c isbn (varchar):  ISBN
+     - \c issn (varchar):  ISSN
+     - \c publisher (varchar):  publisher
+     - \c places (varchar):  where is the publisher situated
+     - \c institution (varchar):  institution of the reference (i.e. university for theses, company for technical reports ...)
+     - \c journal (varchar):  journal where an article appeared
+     - \c volume (varchar):  volume of the journal, in a book series, ...
+     - \c number (varchar):  issue of journal inside a volume
+     - \c booktitle (varchar):  title of the book the reference appeared in
+     - \c series (varchar):  series, a book appeared in
+     - \c chapter (varchar):  referenced chapter inside a book
+     - \c howpublished (varchar):  how has the reference been published
+     - \c subtype (varchar):  a more detailed type description
+     - \c edition integer):  edition of the book
+     - \c price float):  price of the reference
+     - \c currency (varchar):  currency of the price of the reference
+     - \c source (varchar):  where is the reference from
+     - \c abstract (varchar):  abstract, content, ... of the reference
+     - \c comments (varchar):  comments on the reference
+     - \c rating integer):  rate the reference 1..5
+     - \c doi (varchar):  doi of an article
+     - \c citeseer (varchar):  citeseer URL
+     - \c pubmed (varchar):  PubmedID of an artice
+     - \c files (varchar):  file associated with this reference as "file\nfile\n..."
+     - \c url (varchar):  url asoociated with this reference
+     - \c urls (varchar):  additional urls asoociated with this reference as "URL\nURL\n..."
+     - \c status (varchar):  current status "to be ordered", "has been ordered", ...
+     - \c statuscomment (varchar):  comment on the current status (e.g. "return on feb 21st" ...)
+     - \c statussince (varchar):  date o last status change
+     - \c origin (varchar):  where did I get the reference from?
+     - \c librarynum (varchar):  number of reference within a library
+     - \c owner (varchar):  who added this reference to the database?
+     - \c keywords (varchar):  keywords for this reference
+     - \c addeddate (varchar):  date when this reference has been added
+     - \c language (varchar):  language of the publication
+     - \c topic (varchar):  topic/subject of the publication
+  .
+
+  Additional fields may be defined and used as needed, but these are guaranteed and have a guaranteed interpretation (see above).
+
+*/

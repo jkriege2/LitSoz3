@@ -1,0 +1,203 @@
+#include "bibtools.h"
+#include <QVariant>
+
+
+void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* familyNames) {
+    QStringList al=authors.split(';');
+    givenNames->clear();
+    familyNames->clear();
+    for (int i=0; i<al.size(); i++ ) {
+        QStringList a=al[i].split(',');
+        if (a.size()==1) { // author is just a name
+            givenNames->append("");
+            familyNames->append(a[0].trimmed());
+        } else if (a.size()==2) { // author is "familyname, givenname"
+            givenNames->append(a[1].trimmed());
+            familyNames->append(a[0].trimmed());
+        } else if (a.size()==2) { // author is "familyname, suffix, givenname" -> familyname+" "+suffix and givenName
+            givenNames->append(a[2].trimmed());
+            familyNames->append(a[0].trimmed()+" "+a[1].trimmed());
+        }
+    }
+}
+
+QString intToLetterCode(unsigned int n) {
+    if (n==0) return "";
+    if (n<=26) return QString('a'+n-1);
+    return QString('a'+(n/26)-1)+QString('a'+(n%26)-1);
+}
+
+QString reformatAuthors(QString auth) {
+    if (auth.contains(',') && auth.contains(';')) {
+        int pc=auth.indexOf(',');
+        int ps=auth.indexOf(';');
+        if (pc<ps) return auth;
+        QString a="";
+        for (int k=0; k<auth.size(); k++) {
+            if (auth[k]==',') {
+                a=a+';';
+            } else if (auth[k]==';') {
+                a=a+',';
+            } else {
+                a=a+auth[k];
+            }
+        }
+        return a;
+    } else if (auth.contains(',') && auth.contains('/')) {
+        QString a="";
+        for (int k=0; k<auth.size(); k++) {
+            if (auth[k]=='/') {
+                a=a+';';
+            } else {
+                a=a+auth[k];
+            }
+        }
+        return a;
+    } else if (auth.contains(',') && auth.contains('\\')) {
+        QString a="";
+        for (int k=0; k<auth.size(); k++) {
+            if (auth[k]=='\\') {
+                a=a+';';
+            } else {
+                a=a+auth[k];
+            }
+        }
+        return a;
+    } else if (auth.contains(',')) {
+        QStringList authors=auth.split(',');
+        QString authorsText="";
+        for (int i=0; i<authors.size(); i++) {
+            QString gn="";
+            QString fn="";
+            QStringList al=authors[i].split(' ');
+            if (al.size()==1) {
+                gn=al[0];
+                if (!authorsText.isEmpty()) authorsText=authorsText+"; ";
+                authorsText=authorsText+gn;
+            } else if (al.size()==2) {
+                gn=al[1];
+                fn=al[0];
+                if (!authorsText.isEmpty()) authorsText=authorsText+"; ";
+                authorsText=authorsText+gn+", "+fn;
+            } else if (al.size()>2) {
+                bool islast=false;
+                for (int j=0; j<al.size(); j++) {
+                    if (!islast && ((al[j]=="von")
+                        || (al[j]=="van")
+                        || (al[j]=="der")
+                        || (al[j]=="jr"))) {
+                        islast=true;
+                    }
+                    if (j==al.size()-1) islast=true;
+                    if (islast) {
+                        if (!gn.isEmpty()) gn=gn+" ";
+                        gn=gn+al[j];
+                    } else {
+                        if (!fn.isEmpty()) fn=fn+" ";
+                        fn=fn+al[j];
+                    }
+                }
+                if (!authorsText.isEmpty()) authorsText=authorsText+"; ";
+                authorsText=authorsText+gn+", "+fn;
+            }
+
+        }
+        return authorsText;
+    }
+
+    return auth;
+}
+
+#define FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, item) QString item=""; if (data.contains(#item)) item=data[#item].toString();
+
+QString formatReferenceSummary(QMap<QString, QVariant> data) {
+    //QString type=""; if (data.contains("type")) type=data["type"];
+    //QString title=""; if (data.contains("title")) title=data["title"];
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, title)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, type); type=type.toLower();
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, authors)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, editors)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, year)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, journal)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, number)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, volume)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, booktitle)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, publisher)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, places)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, edition)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, pages)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, institution)
+    FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, subtype)
+
+
+    QString result="";
+    if (type=="article") {
+        QString a=authors;
+        if (a.isEmpty()) a=editors;
+        if (a.isEmpty()) a="NA";
+        QString y=year;
+        if (y.isEmpty()) y="?";
+        QString j=journal;
+        if (!j.isEmpty()) j="?";
+        QString w="";
+        if (!volume.isEmpty()) {
+            w=w+volume;
+        }
+        if (!number.isEmpty()) {
+            w=w+"("+number+")";
+        }
+        if (!pages.isEmpty()) {
+            w=w+", "+pages;
+        }
+        result=QString("%1 (%2): <b>%3</b>, in: <i>%4</i>, %5").arg(a).arg(y).arg(title).arg(j).arg(w);
+    } else if ((type=="inbook")||(type=="incollection")||(type=="inproceedings")) {
+        QString a=authors;
+        if (a.isEmpty()) a="NA";
+        QString ed=editors;
+        if (!ed.isEmpty()) ed=ed+", ";
+        QString y=year;
+        if (y.isEmpty()) y="?";
+        QString b=booktitle;
+        if (!b.isEmpty()) b="?";
+        QString p="";
+        if (!pages.isEmpty()) {
+            p=p+", "+pages;
+        }
+        result=QString("%1 (%2): <b>%3</b>, in: %6<i>'%4'</i>%5").arg(a).arg(y).arg(title).arg(b).arg(p).arg(ed);
+    } else if ((type=="thesis")) {
+        QString a=authors;
+        if (a.isEmpty()) a=editors;
+        if (a.isEmpty()) a="NA";
+        QString y=year;
+        if (y.isEmpty()) y="?";
+        QString org=institution;
+        if (!org.isEmpty()) org=", "+org;
+        QString typ=subtype;
+        if (!typ.isEmpty()) typ=", "+typ;
+        QString pl=places;
+        
+        result=QString("%1 (%2): <b>%3</b>%4%5%6").arg(a).arg(y).arg(title).arg(org).org(pl).arg(typ);
+    } else if ((type=="book")||(type=="anthology")||(type=="compendium")||(type=="collection")||(type=="proceedings")||(type=="textbook")) {
+        QString a=authors;
+        if (a.isEmpty()) a=editors;
+        if (a.isEmpty()) a="NA";
+        QString y=year;
+        if (y.isEmpty()) y="?";
+        QString ed="";
+        if (!edition.isEmpty()) ed=edition+". edition";
+        QString pub="";
+        if (!publisher.isEmpty()) {
+            pub=", "+publisher;
+            if (!places.isEmpty()) pub=pub+", "+places;
+        }
+        result=QString("%1 (%2): <b>%3</b>%4%5").arg(a).arg(y).arg(title).arg(ed).arg(pub);
+    } else {
+        QString a=authors;
+        if (a.isEmpty()) a=editors;
+        if (a.isEmpty()) a="NA";
+        QString y=year;
+        if (y.isEmpty()) y="?";
+        result=QString("%1 (%2): <b>%3</b>").arg(a).arg(y).arg(title);
+    }
+    return result;
+}

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>booklet</ID>
+	<name language="en">booklet</name>
+	<name language="de">Gebundenes Druckwerk</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>booklet.png</icon>
+  </options>
+  <authors caption="authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <edit caption="title" caption.de="Titel" datafield="title" />
+  <memo caption="subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <memo caption="Places" caption.de="Verlagsort" datafield="places" completer="places" />
+  <combobox caption="publication type" caption.de="Art der Publikation" datafield="howpublished" completer="booklettype" widgetwidth="250" />
+</fdf>

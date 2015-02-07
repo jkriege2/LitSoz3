@@ -1,0 +1,13 @@
+/*! \page ls3_database LitSoz 3.0 Databases
+
+    Every LitSoz 3.0 database is stored as a SQlite database file using the Qt database wrapper classes (QSqlTableModel) to acess it.
+    Each databases consists of several tables:
+      -# \c lit stored the reference data:
+         -
+      .   
+      -# \c metadata stores additional data in <code>[key, value]</code> format:
+         - \c name name of the prope
+      .   
+    .
+    
+*/

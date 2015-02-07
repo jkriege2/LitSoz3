@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="executetoolbutton.png">images/flash.png</file>
+        <file alias="fileselecttoolbutton.png">images/folder_open.png</file>
+        <file alias="wwwtoolbutton.png">images/network.png</file>
+        <file alias="jkstarratingwidget/star.png">images/star.png</file>
+        <file alias="jkstarratingwidget/nostar.png">images/nostar.png</file>
+        <file alias="jkstarratingwidget/darkstar.png">images/darkstar.png</file>
+        <file alias="jkstarratingwidget/smallstar.png">images/smallstar.png</file>
+        <file alias="jkstarratingwidget/smalldarkstar.png">images/smalldarkstar.png</file>
+        <file alias="jkstyledbutton/network.png">images/network.png</file>
+        <file alias="jkstyledbutton/network_disabled.png">images/network_disabled.png</file>
+        <file alias="jkstyledbutton/network_hover.png">images/network_hover.png</file>
+        <file alias="jkstyledbutton/network_pressed.png">images/network_active.png</file>
+        <file alias="jkstyledbutton/execute.png">images/execute.png</file>
+        <file alias="jkstyledbutton/execute_disabled.png">images/execute_disabled.png</file>
+        <file alias="jkstyledbutton/execute_hover.png">images/execute_hover.png</file>
+        <file alias="jkstyledbutton/execute_pressed.png">images/execute_active.png</file>
+        <file alias="jkstyledbutton/openfile.png">images/fileopen.png</file>
+        <file alias="jkstyledbutton/openfile_disabled.png">images/fileopen_disabled.png</file>
+        <file alias="jkstyledbutton/openfile_hover.png">images/fileopen_hover.png</file>
+        <file alias="jkstyledbutton/openfile_pressed.png">images/fileopen_active.png</file>
+        <file alias="jkstyledbutton/clear_edt.png">images/clear_edt.png</file>
+        <file alias="jkstyledbutton/clear_edt_disabled.png">images/clear_edt_disabled.png</file>
+        <file alias="jkstyledbutton/clear_edt_hover.png">images/clear_edt_hover.png</file>
+        <file alias="jkstyledbutton/clear_edt_pressed.png">images/clear_edt_pressed.png</file>
+        <file alias="QFilenamesListEdit/openfile.png">images/fileopen.png</file>
+        <file alias="QFilenamesListEdit/execute.png">images/execute.png</file>
+        <file alias="QFilenamesListEdit/add.png">images/edit_add.png</file>
+        <file alias="QFilenamesListEdit/delete.png">images/edit_delete.png</file>
+        <file alias="QFilenamesListEdit/www.png">images/network.png</file>
+        <file alias="QFilenamesListEdit/down.png">images/down.png</file>
+        <file alias="QFilenamesListEdit/up.png">images/up.png</file>
+    </qresource>
+</RCC>

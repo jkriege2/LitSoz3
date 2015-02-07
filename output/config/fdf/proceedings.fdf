@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>proceedings</ID>
+	<name language="en">conference proceedings</name>
+	<name language="de">Konferenz-Sammelband</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>book.png</icon>
+  </options>
+  <authors caption="Editors" caption.de="Herausgeber" completer="authors" datafield="editors" />
+  <edit caption="Book title" caption.de="Titel des Konferenzberichts" datafield="booktitle" completer="booktitle" />
+  <intedit caption="Year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <edit caption="Series" caption.de="Reihe" datafield="series" completer="series" />
+  <edit caption="Volume" caption.de="Band" datafield="volume" />
+  <edit caption="Publisher" caption.de="Verlag" datafield="publisher" completer="publisher" />
+  <memo caption="Places" caption.de="Verlagsort" datafield="places" completer="places" />
+  <edit caption="Organization" caption.de="Organisation" datafield="institution" completer="institution" />
+  <edit caption="ISBN" datafield="isbn" />
+  <edit caption="Pages" caption.de="Seiten" datafield="pages" />
+</fdf>

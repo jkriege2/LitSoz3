@@ -1,0 +1,31 @@
+ISBN-Widget:
+https://forgesvn1.novell.com/svn/tellico/tags/tellico-1.3pre3/src/
+https://forgesvn1.novell.com/svn/tellico/tags/tellico-1.3pre3/src/isbnvalidator.cpp
+https://forgesvn1.novell.com/svn/tellico/tags/tellico-1.3pre3/src/isbnvalidator.h
+
+
+Poppler: PDF-Engine für Qt:
+http://doc.trolltech.com/qq/qq27-poppler.html
+
+
+Zotero:
+https://www.zotero.org/trac/browser/extension/branches/1.0/system.sql
+http://www.zotero.org/support/dev/csl_syntax_summary
+http://www.zotero.org/styles/nature
+
+
+OpenOffice Bibliographic:
+http://bibliographic.openoffice.org/files/documents/124/1516/biblio-specs-v0.4.pdf
+http://bibliographic.openoffice.org/files/documents/124/3898/csl-schema.pdf
+
+
+Google DataAPI:
+http://code.google.com/intl/de-DE/apis/books/docs/gdata/developers_guide_protocol.html#GettingStarted
+
+
+ISBNdb.com:
+http://isbndb.com/docs/api/51-books.html
+
+
+Flag icons:
+http://www.famfamfam.com/lab/icons/flags/

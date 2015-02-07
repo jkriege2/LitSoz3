@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="pdftools/menuicon.png">images/menuicon.png</file>
+        <file alias="pdftools/inserticon.png">images/insertpdf.png</file>
+        <file alias="filetools/files_targetlogo.png">images/files_targetlogo.png</file>
+        <file alias="pdftools/targetlogo.png">images/pdf_targetlogo.png</file>
+        <file alias="filetools/menu_logo.png">images/files_logo.png</file>
+        <file alias="filetools/insertfiles.png">images/insertfiles.png</file>
+        <file alias="filetools/logo.png">images/files_logo.png</file>
+    </qresource>
+</RCC>

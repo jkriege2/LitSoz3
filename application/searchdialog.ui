@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SearchDialog</class>
+ <widget class="QDialog" name="SearchDialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>586</width>
+    <height>346</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Database Search</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="litsoz3.qrc">
+    <normaloff>:/find.png</normaloff>:/find.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>&amp;search for:</string>
+       </property>
+       <property name="buddy">
+        <cstring>edtPhrase1</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>search &amp;mode:</string>
+       </property>
+       <property name="buddy">
+        <cstring>radSimple</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="edtPhrase1"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>  &amp;in:  </string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbFields1</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QComboBox" name="cmbFields1"/>
+     </item>
+     <item row="3" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QRadioButton" name="radSimple">
+         <property name="text">
+          <string>&amp;simple</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radWildcards">
+         <property name="text">
+          <string>&amp;wildcards</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radRegExp">
+         <property name="text">
+          <string>regular expressions</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="2" colspan="3">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="labHelpWildcard">
+         <property name="text">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;wildcard search:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;   ?&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches a single character&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;*&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches a sequence of arbitrary characters&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="labHelpRegExp">
+         <property name="text">
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;regular expression search &lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;(excerpt)&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;   .&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches any character   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;[...]&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches any character in the braces&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;[a-z]&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches any character from a to z   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;[^...]&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches any character not on braces&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;\d&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches a digit   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;\D&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches a non-digit  &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;\s&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches a whitespace&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;   &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;\S&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches a non-whitespace  &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;\w&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matchesword character&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;A&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;*&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches any number of occurences of &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;A&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;A&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;+&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches at least occurences of &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;A&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;  &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;A&lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;?&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; matches zero or one occurences of &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;A&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="edtPhrase2"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="cmbLogic12">
+       <item>
+        <property name="text">
+         <string>and</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>and not</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>  &amp;in:  </string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbFields2</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QComboBox" name="cmbFields2"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="cmbLogic23">
+       <item>
+        <property name="text">
+         <string>and</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>and not</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="edtPhrase3"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>  &amp;in:  </string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbFields3</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
+      <widget class="QComboBox" name="cmbFields3"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>edtPhrase1</tabstop>
+  <tabstop>cmbFields1</tabstop>
+  <tabstop>cmbLogic12</tabstop>
+  <tabstop>edtPhrase2</tabstop>
+  <tabstop>cmbFields2</tabstop>
+  <tabstop>cmbLogic23</tabstop>
+  <tabstop>edtPhrase3</tabstop>
+  <tabstop>cmbFields3</tabstop>
+  <tabstop>radSimple</tabstop>
+  <tabstop>radWildcards</tabstop>
+  <tabstop>radRegExp</tabstop>
+  <tabstop>buttonBox</tabstop>
+ </tabstops>
+ <resources>
+  <include location="litsoz3.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SearchDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>283</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>SearchDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>304</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radWildcards</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>labHelpWildcard</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>346</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radRegExp</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>labHelpRegExp</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>165</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radWildcards</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>labHelpWildcard</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>281</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radRegExp</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>labHelpRegExp</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>106</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>172</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

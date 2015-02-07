@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/ls3lib">
+        <file alias="reftree_reference.png">images/reftree_reference.png</file>
+        <file alias="reftree_folder.png">images/reftree_folder.png</file>
+        <file alias="reftree_folderrecent.png">images/reftree_folderrecent.png</file>
+        <file alias="reftree_folderall.png">images/reftree_folderall.png</file>
+        <file alias="reftree_folderfilter.png">images/reftree_folderfilter.png</file>
+    </qresource>
+</RCC>

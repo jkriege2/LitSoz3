@@ -1,0 +1,89 @@
+#ifndef LS3PLUGINSERVICES_H
+#define LS3PLUGINSERVICES_H
+
+#include <QWidget>
+#include <QString>
+#include <QSettings>
+#include <QVector>
+#include <QMap>
+#include <QVariant>
+
+/*! \brief this class provides some services for plugins that allow them to access certain features of the main application
+
+
+*/
+class LS3PluginServices {
+    public:
+        /** Default destructor */
+        virtual ~LS3PluginServices() {};
+
+        /** \brief return a QWidget to use as parent for new widgets */
+        virtual QWidget* GetParentWidget()=0;
+
+        /** \brief return the applications QSettings object */
+        virtual QSettings* GetQSettings()=0;
+
+        /** \brief Access languageID (which language to use for display) */
+        virtual QString GetLanguageID()=0;
+
+        /** \brief Access default currency */
+        virtual QString GetDefaultCurrency()=0;
+
+        /** \brief Access default status */
+        virtual QString GetDefaultStatus()=0;
+
+        /** \brief Access languageID (which language to use for display) */
+        virtual QString GetIniFilename()=0;
+
+        /** \brief return the currently used stylesheet */
+        virtual QString GetStylesheet()=0;
+
+        /** \brief return the currently used style */
+        virtual QString GetStyle()=0;
+
+        /** \brief returns the current username */
+        virtual QString GetUsername()=0;
+
+        /** \brief font name for the main table */
+        virtual QString GetTableFontName()=0;
+
+        /** \brief font size for the main table */
+        virtual int GetTableFontSize()=0;
+
+        /** \brief returns \c true if a database is currently opened */
+        virtual bool isDBOpened();
+        
+        /*! \brief add a set of records to the current database
+
+            \return \c true on sucess and \c false else
+            \param data the data to add to database. The data is stored as QMap<QString, QVariant> , where each
+                        <code>[QString, QVariant]</code> pair is a field in the record. For valid field
+                        names see \link ls3_database LitSoz 3.0 Databases \endlink
+
+        */
+        virtual bool addRecord(QMap<QString, QVariant>& data)=0;
+        
+        /*! \brief set data of the current record
+
+            \return \c true on sucess and \c false else
+            \param data the data to store. The data is stored as QMap<QString, QVariant> , where each
+                        <code>[QString, QVariant]</code> pair is a field in the record. For valid field
+                        names see \link ls3_database LitSoz 3.0 Databases \endlink
+
+        */
+        virtual bool setCurrentRecord(QMap<QString, QVariant>& data)=0;    
+        
+        /*! \brief get the data of the current record
+
+            \return the data of the current record. The data is stored as QMap<QString, QVariant> , where each
+                    <code>[QString, QVariant]</code> pair is a field in the record. For valid field
+                    names see \link ls3_database LitSoz 3.0 Databases \endlink
+
+        */
+        virtual QMap<QString, QVariant> getCurrentRecord()=0;    
+    
+    protected:
+    private:
+};
+
+#endif // LS3PLUGINSERVICES_H

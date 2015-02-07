@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>webpage</ID>
+	<name language="en">webpage</name>
+	<name language="de">Internetseite</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>www.png</icon>
+  </options>
+  <authors caption="Authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <edit caption="Title" caption.de="Titel" datafield="title" />
+  <memo caption="Subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="Year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <dateedit caption="Last viewed" caption.de="zuletzt besucht" datafield="viewdate" widgetwidth="100" />
+  <wwwedit caption="URL" datafield="url" />
+</fdf>

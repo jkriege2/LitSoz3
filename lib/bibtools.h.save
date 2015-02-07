@@ -1,0 +1,21 @@
+#ifndef BIBTOOLS_H
+#define BIBTOOLS_H
+
+#include <QString>
+#include <QStringList>
+
+/** \brief parse the given author string and return two list, one with the given and one with the family name */
+void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* familyNames);
+
+/** \brief converts an integer into a letter code 0: "", 1: a, 2: b, ..., 26: z, 27: aa, 28: ab, ... */
+QString intToLetterCode(unsigned int n);
+
+/** \brief reformats lists of authors to the default LitSoz format */
+QString reformatAuthors(QString auth);
+
+/*! \brief output the reference stored in database format in data, as short reference with HTML markup
+
+
+
+
+#endif // BIBTOOLS_H

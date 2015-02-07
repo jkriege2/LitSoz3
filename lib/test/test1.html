@@ -1,0 +1,380 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+        <html><head><title>OpenURL ContextObject in SPAN (COinS)</title>
+<link rel="stylesheet" type="text/css" href="draft.css" >
+        <style type="text/css" title="text/css">
+<!--
+.Z3988
+{
+	background-color: #CFF;
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 80%;
+}
+h1
+{
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 18pt;
+}
+h2
+{
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 16pt;
+}
+h3
+{
+	font-family: Arial, Helvetica, Verdana;
+	font-size: 12pt;
+}
+.note
+{
+	font-size: 9pt;
+}
+.code
+{
+	font-size: 9pt;
+}
+
+-->
+</style>
+        </head>
+        <body>
+<h1>OpenURL COinS: A Convention to Embed Bibliographic Metadata in HTML</h1>
+<p><i>stable version 1.0</i></p>
+<h2><a id="id3205609410" name="id3205609410">Abstract</a></h2>
+
+COinS (ContextObjects in Spans) is a simple, ad hoc community specification for publishing OpenURL references in HTML. 
+<h2><a id="id3205609411" name="id3205609411">Contents</a></h2>
+<ul>
+<li>Main Page <ol>
+	<li><a href="#id3205609412">Introduction</a></li>
+	<li><a href="#id3205609413">Specification :  OpenURL ContextObject in SPAN (COinS)- Embedding Citation Metadata in HTML</a></li>
+	<li><a href="#id3205609414">Discussion :  How to use COinS in HTML</a></li>
+	<li><a href="#id3205609415">Details</a>
+
+	<ol>
+		<li><a href="#id3205609416">
+	Empty SPANs.
+	</a></li>
+		<li><a href="#id3205609419">
+	Why "Z3988"?
+	</a></li>
+		<li><a href="#id3205609420">What is a ContextObject?</a></li>
+		<li><a href="#id3205609421">Choosing the type of ContextObject for Compatibility.</a></li>
+
+		<li><a href="#id3205609422">XHTML</a></li>
+		<li><a href="#id3205609417"> why the span element?
+	</a></li>
+		<li><a href="#id3205609418"> why class and title attributes?
+	
+	</a></li>
+	</ol></li>
+	<li><a href="#id3205609423"> Implementations </a>
+
+	<ol>
+		<li><a href="#id3205609424"> Embedding Sites </a></li>
+		<li><a href="#id3205609425"> COinS Processors </a></li>
+		<li><a href="#id3205609426"> Other Software support for COinS  </a></li>
+	</ol></li>
+	<li><a href="#id3205609427"> Links </a></li>
+
+	<li><a href="#id3205609428"> Notes</a></li>
+</ol>
+</li>
+<li><a href="latent.html">Using COinS to Provide OpenURL links</a></li>
+<li><a href="http://generator.ocoins.info/">COinS Generator</a></li>
+<li><a href="cobg.html">Brief Guide to Implementing ContextObjects for Journal Articles</a></li>
+<li><a href="cobgbook.html">Brief Guide to Implementing ContextObjects for Books</a></li>
+</ul>
+<h2 id="intro"><a id="id3205609412" name="id3205609412">Introduction</a></h2>
+
+<p>Recently, there has been very compelling work by thought leaders in the library information community focusing on the possibilities of embedding citation metadata in html web pages using OpenURL. (for example, see the <a href="http://cipolo.med.yale.edu/pipermail/gcs-pcs-list/">GCS-PCS list</a> )</p>
+
+<p>
+Citations to other works are familiar to any scholar- they ground a work of scholarship to a field of study, put new research into context, and often give credit where credit is due. The essence of citation is to identify the previous work with a set of metadata- author, title, and particulars of publication. The idea behind OpenURL is to provide a web-based mechanism to package and transport this type of citation metadata so that users in libraries can more easily access the cited works. Most typically, OpenURL is used by subscription-based abstracting and indexing databases to provide linking from abstracts to fulltext in libraries. A institutional subscription profile is used together with a dynamic customization system to target links at a user's OpenURL linking service. 
+</p>
+<p>
+Although the institutional profile method of providing links works very well in many circumstances, there are many situations in which citation metadata embedded in static documents would be very useful. For example, Open Access, public domain, and pay-per-use publishers typically do not have "subscribers" and have difficulty discovering a user's institutional affiliation which is needed to make an OpenURL. Embedded metadata can be used by client-side software to add links to non-subscription based content. This method of providing OpenURL links to users by combining embedded metadata with client side link activation  has been called "latent OpenURL".
+</p>
+<p>
+Embedded citation metadata in web content may be useful in many other ways. It's not hard to imagine specialized indexing and search systems which make use of the embedded information to deliver new types of information retrieval services. "Semantic Web" systems could use embedded metadata to extract knowledge from large collections of documents. 
+</p>
+<p>
+The possibility to embed OpenURL citation metadata in conventional, static HTML documents has been around for a while, but implementation has been almost nonexistent. For a number of reasons,  this situation may be rapidly changing.
+
+</p>
+<ol>
+	<li> A large number of institutions have implemented OpenURL resolvers to manage linking to electronic resources.</li>
+	<li> An increasing number of free or open-access internet resources need a simple and cost-effective way to provide OpenURL services to readers with access to full-text resources in libraries.</li>
+	<li> New forms of publishing, such as blogs, syndicated news feeds and collaborative bookmarking environments, need ways to provide localized linking services to libraries.</li>
+
+	<li> Barriers to client-side implementations have fallen, as javascript-based browser plugins and bookmarking techniques are becoming popular. Institutional agents such as rewriting proxy-servers that are widely deployed to facilitate web access could also act to implement localized linking.</li>
+
+	<li> NISO (the National Information Standards Organization) has approved and published <a href="http://www.niso.org/standards/standard_detail.cfm?std_id=783">OpenURL 1.0 </a>(formally known as Z39.88-2004) as an international standard. As part of the standard, a citation metadata package called the "ContextObject" was defined.
+	</li>
+</ol>
+<p>
+What has been missing so far is agreement (or even awareness) among the diverse actors on the best way to embed OpenURL citation metadata in conventional HTML. Example implementations have been reported by Van de Sompel <a name="vds" href="http://www.dlib.org/dlib/july01/vandesompel/07vandesompel.html"> (DLIB) </a> <span  class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft.title=D-LIB&amp;rft.aulast=Van+de+Sompel&amp;rft.atitle=Generalizing+the+OpenURL+Framework+beyond+References+to+Scholarly+Works+The+Bison-Fut%C3%A9+Model&amp;rft.volume=7&amp;rft.issue=7/8&amp;rft.date=2001-07&amp;rft_id=http://www.dlib.org/dlib/july01/vandesompel/07vandesompel.html"></span> and by Chudnov et al. <a href="http://www.ariadne.ac.uk/issue43/chudnov/"> (Ariadne)</a> <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft.title=Ariadne&amp;rft.aulast=Chudnov&amp;rft.atitle=Opening+up+OpenURLs+with+Autodiscovery&amp;rft.issue=43&amp;rft.issn=1361-3200&amp;rft.date=2005-04&amp;rft_id=http://www.ariadne.ac.uk/issue43/chudnov/"></span>. The intent of the current document is to distill the essence of previous proposals into the <i>simplest</i> convention necessary for the majority of applications to make use of an OpenURL embedded in HTML. 
+
+</p>
+
+<h2><a id="id3205609413" name="id3205609413">Specification :  OpenURL ContextObject in SPAN (COinS)- Embedding Citation Metadata in HTML</a></h2>
+<p>The goal is to embed citation metadata into html in such a way that processing agents can discover, process and make use of the metadata. Since an important use of this metadata will be to allow processing agents to make OpenURL hyperlinks for users in libraries (latent OpenURL), the method must allow the metadata to be placed any where in HTML that a link might appear.  In the absence of some metadata-aware agent, the embedded metadata must be invisible to the user and innocuous with respect to HTML markup. To meet these requirements, the <code>span</code> element was selected. The NISO OpenURL ContextObject is selected as the specific metadata package. The resulting specification is named "ContextObject in SPAN" or COinS for short.
+</p>
+<p>To add a COinS to an HTML document, put a <a href="http://www.niso.org/standards/standard_detail.cfm?std_id=783">NISO 1.0 "ContextObject"</a> into the "<code>title</code>" attribute of an HTML <code>span</code> element with <code>class</code> attribute set to "<code>Z3988</code>". A <a href="cobg.html">brief guide to the OpenURL 1.0 ContextObject</a> is available. 
+
+</p>
+
+<h3>Example</h3>
+<p>OpenURL COinS:</p>
+
+<table border="1"  cellspacing="0" cellpadding="4" align="center" bgcolor="#FFFF99">
+<tr><td class="code">
+<code>&lt;span class="Z3988" title="ctx_ver=Z39.88-2004&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;amp;rft.issn=1045-4438"&gt;&lt;/span&gt;
+</code>
+</td></tr>
+</table><p>
+
+This COinS is placed directly below this line:<br>
+<span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&amp;rft.issn=1045-4438"></span>
+<br> A COinS processing agent might use the embedded metadata to place a link here, otherwise, the line above should be empty.
+</p>
+<h2><a id="id3205609414" name="id3205609414">Discussion :  How to use COinS in HTML</a></h2>
+
+<p>There may be many ways that embedded metadata may be used, but in general, the recommended procedure is as follows:
+</p>
+<ol>
+<li>select all <code>span</code> elements with class 'Z3988'. </li>
+
+<li> for each selected  <code>span</code> extract the value of the <code>title</code> attribute.</li>
+<li> operate on that value, which is the OpenURL ContextObject, as you
+   wish, but *do not* overwrite the original <code>class</code> and <code>title</code> values of
+   the <code>span</code> element.  This allows for different actions to be taken
+   on the same element in a variety of potential scenarios.</li>
+
+</ol>
+<p> A <a href="http://generator.ocoins.info/">COinS Generator</a> site is available. A discussion of how COinS in HTML should be processed in the latent OpenURL  application is <a href="latent.html">here</a>.
+
+</p>
+
+<h2><a id="id3205609415" name="id3205609415">Details</a></h2>
+<h3><a id="id3205609416" name="id3205609416">
+Empty SPANs.
+</a></h3>
+
+<p>
+
+The example above shows an empty <code>span</code> tag. In the absence of further processing, nothing will be visible to the user. The page is designed to gracefully accommodate a bit of added text or a button image to anchor an added link. Alternatively, the web page might have default text inside the <code>span</code> for users without access to activating agents. Some HTML checkers (such as HTML Tidy)  strip out empty <code>span</code> elements, causing the loss of COinS data. A comment or hard space in the <code>span</code> will prevent this from happening.
+</p>
+<h3><a id="id3205609419" name="id3205609419">
+Why "Z3988"?
+</a></h3>
+
+<p>
+The official designator for the NISO OpenURL standard is Z39.88-2004; the year and punctuation are removed in the present specification. This is because web browser software does not recognize css classes with punctuation in the class names. If processing agents require version information they can look inside the ContextObject.  The "Z" MUST be capitalized. Browser software seems to  distinguish  the lower case version. "<code>OpenURL</code>" as an alternative to "<code>Z3988</code>" was considered, but "<code>Z3988</code>" was considered to be extremely unlikely to be chosen for any other application, and compatibility was judged to trump other considerations.</p>
+
+<h3><a id="id3205609420" name="id3205609420">What is a ContextObject?</a></h3>
+<p>
+During the standardization of OpenURL, a separation was made between the data package, called the ContextObject, and the "transport". In its simplest form, which is use here, the ContextObject is just a series of key-value pairs. When joined to an http baseURL and version information is added, a usable OpenURL is created. 
+</p>
+
+<h3><a id="id3205609421" name="id3205609421">Choosing the type of ContextObject for Compatibility.</a></h3>
+
+<p>
+The OpenURL Standard defines the ContextObject with a great deal of flexibility in the ways that entities can be represented. For example,metadata objects to be transported "by-reference" using a network pointer and "by-value" in an encoded blob. This flexibility can introduce complexities for processing agents.</p>
+<p>To make it easier for processing agents to deal with the complexities of having to deal with multiple OpenURL data formats, this convention STRONGLY RECOMMENDS the following guidelines for ContextObjects in Span:
+</p>
+<ol>
+<li>the Key/Encoded-Value Format only should be used for the ContextObject</li>
+<li>the Referent and Referrer should be described using only identifiers and By-Value Metadata</li>
+</ol>
+<p> By following these guidelines, the OpenURL metadata packages can be be easily adapted for use with ANY resolver system, including those which understand only the older version. 
+</p>
+<ul>
+<li><a href="cobg.html">Brief Guide to Implementing ContextObjects for Journal Articles</a></li>
+
+<li><a href="cobgbook.html">Brief Guide to Implementing ContextObjects for Books</a></li>
+</ul>
+<h3><a id="id3205609422" name="id3205609422">XHTML</a></h3>
+<p>
+This specification can also be applied to XHTML. For compatibility with HTML browsers, empty span elements should NOT be minimized. (see the <a href="http://www.w3.org/TR/xhtml1/#C_3"> XHTML Compatibility Note C3</a>)
+</p>
+<h3><a id="id3205609417" name="id3205609417">
+Why the <code>span</code> element?
+</a></h3>
+
+<p>
+A draft of this proposal used the HTML Anchor element instead of <code>span</code>. The Anchor element proved to be problematic in certain situations, and the use of <code>span</code> made it easier for processors to leave the ContextObject in place for subsequent processors to use.</p>
+<p>
+Another approach to this problem would have been to use namespaced xml embedded in xhtml, for example &lt;dc:creator&gt;Shakespeare&lt;/dc:creator&gt;. The biggest drawback to namespaced xml was uncertainty about being able to access data from javascript. Data in namespaced xml IS NOT available to javascript in at least one version of Internet Explorer. There was also the concern about strict conformance with HTML (as opposed to XHTML). So using SPAN buys us the prospect that  COinS processing can be  available in a wider variety of  HTML processors, which seemed worthwhile.
+
+</p>
+<h3><a id="id3205609418" name="id3205609418">
+Why <code>class</code> and <code>title</code> attributes?
+
+
+</a></h3>
+<p>
+Only a limited number of attributes can be attached to <code>span</code> in valid HTML Documents. <code>ID</code> cannot be used for OpenURL data because it is required to be unique in a document.
+</p>
+<p>The <code>class</code> attribute can contain a space separated list of class names, so a COinS laden <code>span</code> element will contain  <code>class="Z3988"</code> or perhaps <code>class="Z3988 anotherclass athirdclass etc"</code>.
+
+</p>
+<h2><a id="id3205609423" name="id3205609423"> Implementations </a></h2>
+<p>In this section we list COinS implementations </p>
+<h3><a id="id3205609424" name="id3205609424"> Embedding Sites </a></h3>
+<ol>
+<li> <a href="http://researchblogging.org">Research Blogging</a> hosts a number of blogs about various fields of scholarly research, each of which supports COinS.</li>
+<li> the <a href="http://prola.aps.org/">Physical Review Online Archive</a> (PROLA)</li>
+
+<li> Wikipedia <ol>
+	<li><a href="http://en.wikipedia.org/wiki/Wikipedia:Book_sources">Wikipedia Book Sources Page</a></li>
+	<li> Cite this article / article bibliographic details pages
+	<li> References that use citation templates
+	</ol>
+</li>
+<li> <a href="http://nsr.mij.mrs.org/">MRS Internet Journal of Nitride Semiconductor Research</a> 4000+ page Reference Database Pages</li>
+
+<li> <a href="http://www.researchgate.net/">ResearchGATE</a> - ResearchGATE is the leading professional network for scientists.</li>
+<li> <a href="http://www.citebase.org">Citebase</a> - Citebase Search is a search and citation analysis tool for the free, online research literature.</li>
+<li> <a href="http://www.citeulike.org">CiteULike</a> - CiteULike is a free service for managing and discovering scholarly references. </li>
+<li><a href="http://www.hubmed.org/">Hubmed</a> - An alternative interface to the PubMed medical literature database.</li>
+
+<li>The law journal index <a href="http://law.wlu.edu/library/CLJC">Current Law Journal Content</a> has added COinS into
+its Table of Contents records</li>
+<li><a href="http://zetoc.mimas.ac.uk/">Zetoc</a> provides access to the British Library's Electronic Table of Contents of around 20,000 current journals and around 16,000 conference proceedings published per year. </li>
+<li>The <a href="http://copac.ac.uk/">Copac</a> V3 Experimental Interface now has COinS (ContextObjects in Spans) in the Full Record display. </li>
+<li> OCLC's <a href="http://www.oclc.org/worldcat/open/tryit/default.htm">Open WorldCat</a></li>
+
+<li>The Lunar and Planetary Institute is now using COinS. For example, see the <a href="http://www.lpi.usra.edu/library/new_additions.html">New additions page</a></li>
+<li> The West Midland Bird Club is  <a href="http://www.westmidlandbirdclub.com/biblio/NBotWM.htm"> using COinS</a>.</li>
+<li> <a href="http://www.opencontext.org/search.html">Open Context</a> is a free, open access resource for the electronic publication of primary field research from archaeology and related disciplines.</li>
+<li>Blogs<ul>
+<li><a href="http://www.rawbrick.net/book/"> RAWBRICK Book List</a></li>
+
+<li><a href="http://figoblog.org/document1131.php"> figoblog </a></li>
+<li><a href="http://www.familymanlibrarian.com/?p=1042"> Family Man Librarian</a> </li>
+<li><a href="http://catalogablog.blogspot.com/2006_01_01_catalogablog_archive.html"> Catalogablog </a></li>
+<li><a href="http://digilib.weblog.ub.rug.nl/node/23"> -=( In Between )=-</a></li>
+</ul>
+</ol>
+
+<h3><a id="id3205609425" name="id3205609425"> COinS Processors </a></h3>
+
+<ol>
+<li> OCLC's <a href="http://nj.oclc.org/openurlref/">OpenURL Referrer</a> FireFox Extension adds OpenURL (either version 1.0 or 0.1) links to COinS enabled pages.</li>
+
+ <li> Hundreds of  <a href="http://curtis.med.yale.edu/dchud/resolvable/">COinS Browser Extensions for Your Library</a> are available, thanks to some cooperation with the OCLC OpenURL Resolver Registry.</li>
+ 
+<li> Alf Eaton's <a href="http://alf.hubmed.org/openurlcoins.user.js"> Greasemonkey script for processing COinS</a></li>
+
+<li> <a href="http://www.citavi.com/en/">Citavi</a> is a reference manager which supports COinS through its Firefox and Internet Explorer extensions. </li>
+<li> <a href="http://www.mendeley.com/">Mendeley</a> is a research management tool for desktop & web. </li>
+
+<li> Virginia Tech's <a href="http://libx.org/">LibX</a>  is a Firefox extension that provides direct access to your library's resources. It includes a toolbar and a right-click context menu. It support searches against the library catalog (OPAC) as well as against an OpenURL linking server (which provides copies of works to which your library has access.)</li>
+
+<li> The Center for History and New Media is developing <a href="http://www.zotero.org/">Zotero</a>, is described as a next-generation research tool.
+</ol>
+<h3><a id="id3205609426" name="id3205609426"> Other Software support for COinS  </a></h3>
+<ol>
+<li><a href="http://vufind.org/">VuFind Open Source OPAC</a> system. Here's an <a href="http://vufind.org/demo/Search/Home?lookfor=open+source&type=all&submit=Find">example link</a>
+<li>a <a href="http://curtis.med.yale.edu/dchud/log/project/groupware/coins">simple pyblosxom plugin</a> now renders COinS</li>
+
+<li> Peter Binkley has written a <a href="http://www.wallandbinkley.com/quaedam/images/openurl_button.zip">WordPress Plugin</a> to help bloggers use COinS</li>
+
+<li>John Miedema has also written a <a href="http://wordpress.org/extend/plugins/openbook-book-data/">WordPress Plugin</a>. The plugin lets users show book covers and
+other data from Open Library in WordPress pages. Now it also insert the
+COinS HTML so that the bibliographic data for the book can get picked up
+by apps like Zotero.</a>
+
+<li> <a href="http://www.vtls.com/">VTLS</a> has a COinS script for <a href="<http://figaro.vtlseurope.com:8000/cgi-bin/gw/chameleon?>http://figaro.vtlseurope.com:8000/cgi-bin/gw/chameleon">iPortal</a>.</li>
+
+<li> Eric Lease Morgan's <a href="http://infomotions.com/books/?cmd=about">Really Rudimentary Catalog</a> has implemented COinS for items with ISBN numbers. Try <a href="http://infomotions.com/books/?cmd=search&amp;query=origami">an example page.</a>
+<li><a href="http://refbase.sourceforge.net/">  refbase</a> is a web-based, platform-independent,
+multi-user interface for managing
+scientific literature &amp; citations.
+</ol>
+
+<h2><a id="id3205609427" name="id3205609427"> Links </a></h2>
+
+<ol>
+<li><a href="http://www.niso.org/standards/standard_detail.cfm?std_id=783">NISO OpenURL Standard</a></li>
+<li>Van de Sompel <a href="http://www.dlib.org/dlib/july01/vandesompel/07vandesompel.html"> DLIB article</a> <span  class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft.title=D-LIB&amp;rft.aulast=Van+de+Sompel&amp;rft.atitle=Generalizing+the+OpenURL+Framework+beyond+References+to+Scholarly+Works+The+Bison-Fut%C3%A9+Model&amp;rft.volume=7&amp;rft.issue=7/8&amp;rft.date=2001-07&amp;rft_id=http://www.dlib.org/dlib/july01/vandesompel/07vandesompel.html"></span> talking abount embedding ContextObjects in HTML.</li>
+<li> In <a  href="http://www.ariadne.ac.uk/issue43/chudnov/"> a paper in  Ariadne</a> <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info:ofi/fmt:kev:mtx:journal&amp;rft.title=Ariadne&amp;rft.aulast=Chudnov&amp;rft.atitle=Opening+up+OpenURLs+with+Autodiscovery&amp;rft.issue=43&amp;rft.issn=1361-3200&amp;rft.date=2005-04&amp;rft_id=http://www.ariadne.ac.uk/issue43/chudnov/"></span> Dan Chudnov and co-workers do a good job explaining why COinS (in a previous incarnation) is a Good Thing.</li>
+
+<li> Dan Chudnov has a <a href="http://curtis.med.yale.edu/dchud/log/project/groupware/introducing-coins">web page introducing COinS</a>.</li>
+<li>The <a href="http://www.dublincore.org/documents/dc-citation-guidelines/">DCMI Bibliographic Citations recommendation</a> is a complementatry mechanism for embedding metadata in XHTML documents. The
+difference is that within
+an (X)HTML document, the DCMI recommendation would put all the ContextObjects within the &lt;head&gt; element, and is more general than just for Web pages. In contrast, COinS allows you to embed a ContextObject next
+to a reference within a Web document. </li>
+<li> Dan Chudnov is working on a related specification linking <a href="  http://curtis.med.yale.edu/dchud/log/project/rogue/rogue-no.1-coins-pmh">COinS and OAI-PMH</a>.</li>
+
+<li> Figoblog has an explanation of COinS <a href="http://www.figoblog.org/document1131.php">en Fran&ccedil;ais</a>.</li>
+</ol>
+
+
+<h3><a id="id3205609428" name="id3205609428"> Notes</a></h3>
+
+<p id="note" class="note">Note that, for clarity, our displayed examples have not converted ampersand to "&amp;amp;" as they should.
+</p>
+
+<ul class="note">
+<li>March 22, 2005. <a href="latent-class.html">first version</a>- Eric Hellman.</li>
+<li>April 23, 2005. <a href="latent-rel.html">new version</a> based on comments on GCS-PCS list, switched from "CLASS" to "REL". Expanded on 1.0 to 0.1 conversion. Previous version is <a href="latent-class.html">here</a>.</li>
+<li>June 4, 2005. New 3rd draft using SPAN in stead of A.</li>
+<li>July 6, 2005. added a bunch of introductory discussion; changed recommendation so that the <code>span</code> element remains after activation.</li>
+
+<li>July 21, 2005. new name: COinS (Ross Singer's idea). moved latent-specific discussion to a separate page.</li>
+<li>July 26, 2005. added style sheet, clarified discussion on "choosing ContextObject format" using suggestion from Herbert vdS.</li>
+<li>July 29, 2005. Clarified motivation for <code>span</code>, and syntax for <code>class</code>, made capitalized Z a MUST. Fixed other nits noted by Alf Eaton. added links, including citebase. lifted abstract from Dan Chudnov's introducing coins page. Added index</li>
+<li>August 8, 2005. Added DCMI link.</li>
+<li>December 12, 2006. Corrected percent encoding in examples.</li>
+<li>June 16, 2009. This page is intentionally left as a stable version, for any broken links, you may try <a href="http://www.archive.org/web/web.php">WayBackMachine</a>.</li>
+
+</ul>
+
+<h3>Credits</h3>
+<p class="note">
+This document has been written and edited by Eric Hellman, <a href="http://nj.oclc.org/">OCLC New Jersey</a>. It is based on the ideas, suggestions and comments of a number of people, including Peter Binkley, Dan Chudnov, Matthew Cockerill, Karen Coyle, Leigh Dodds, Thomas Dukleth, Alf Eaton, Jeremy Frumkin, Tony Hammond, Peter Murray, Ross Singer, Steve Toub, Herbert van de Sompel, Tom Ventimiglia and Chris Zagar, none of whom should be blamed for any shortcomings of this document.</p>
+<p class="note">
+This website is hosted by <a href="http://nj.oclc.org/">OCLC New Jersey</a>. </p>
+<p>
+<!-- Creative Commons License -->
+<a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/"><img alt="Creative Commons License" border="0" src="http://creativecommons.org/images/public/somerights20.gif" ></a><br>
+
+This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/">Creative Commons Attribution-NoDerivs 2.5 License</a>.
+<!-- /Creative Commons License -->
+
+
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:title>OpenURL COinS</dc:title>
+   <dc:date>2005</dc:date>
+   <dc:description>a specification for NISO OpenURL ContextObject in HTML SPAN elements</dc:description>
+   <dc:creator><Agent>
+      <dc:title>Eric Hellman</dc:title>
+   </Agent></dc:creator>
+   <dc:rights><Agent>
+      <dc:title>Openly Informatics, Inc</dc:title>
+   </Agent></dc:rights>
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   <dc:source rdf:resource="http://ocoins.info/"/>
+   <license rdf:resource="http://creativecommons.org/licenses/by-nd/2.5/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-nd/2.5/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+</License>
+
+</rdf:RDF>
+
+-->
+</p>
+</body>
+</html>

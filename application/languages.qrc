@@ -1,0 +1,29 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file alias="language_icons/english.png">images/flags/gb.png</file>
+        <file alias="language_icons/german.png">images/flags/de.png</file>
+        <file alias="language_icons/french.png">images/flags/fr.png</file>
+        <file alias="language_icons/spanish.png">images/flags/es.png</file>
+        <file alias="language_icons/chinese.png">images/flags/cn.png</file>
+        <file alias="language_icons/japanese.png">images/flags/jp.png</file>
+        <file alias="language_icons/hebrew.png">images/flags/il.png</file>
+        <file alias="language_icons/portugese.png">images/flags/pt.png</file>
+        <file alias="language_icons/romanian.png">images/flags/ro.png</file>
+        <file alias="language_icons/hindi.png">images/flags/in.png</file>
+        <file alias="language_icons/korean.png">images/flags/kr.png</file>
+        <file alias="language_icons/lebanese.png">images/flags/lb.png</file>
+        <file alias="language_icons/dutch.png">images/flags/nl.png</file>
+        <file alias="language_icons/italian.png">images/flags/it.png</file>
+        <file alias="language_icons/polish.png">images/flags/pl.png</file>
+        <file alias="language_icons/finnish.png">images/flags/fi.png</file>
+        <file alias="language_icons/saami.png">images/flags/fi.png</file>
+        <file alias="language_icons/swedish.png">images/flags/se.png</file>
+        <file alias="language_icons/mandarin.png">images/flags/cn.png</file>
+        <file alias="language_icons/russian.png">images/flags/ru.png</file>
+        <file alias="language_icons/turkish.png">images/flags/tr.png</file>
+        <!--<file alias="language_icons/.png">images/flags/.png</file>-->
+
+
+    </qresource>
+</RCC>

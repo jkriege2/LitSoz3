@@ -1,0 +1,28 @@
+/*! \page ls3_import LitSoz 3.0 Import Plugins
+
+    There are different possibilities when importing data:
+      - import data from an arbitrary datasource using the LS3Importer::execute() method
+      - importing from a given text (e.g. from the clipboard) using the methdo LS3Importer::importText() which is only
+        used when LS3Importer::importsText() returns \c true
+    .
+
+    Each of these importer classes returns a list of data. Afterwards the main application may display dialog to select only a subset of the
+    imported data for import, or exclude doublettes ...
+
+    LS3Importer objects are no direct LS3Plugin descendents, but plugins may contain them. Each plugin consists of a class inheriting from
+    LS3Plugin and QObject (both public). In the init() method you may use LS3PluginServices::registerImporter() to register the importer.
+    Give an instance of the importer to this method which will then be used by the main application.
+*/
+
+
+/*! \page ls3_export LitSoz 3.0 Export Plugins
+
+    An export plugin is implemented in a LS3Exporter descendent. The main functionality (including displaying a window to select export options
+    such as filenames, has to be implemented in LS3Exporter::execute(), which will get a list of the data to be exported.
+
+
+    LS3Exporter objects are no direct LS3Plugin descendents, but plugins may contain them. Each plugin consists of a class inheriting from
+    LS3Plugin and QObject (both public). In the init() method you may use LS3PluginServices::registerExporter() to register the exporter.
+    Give an instance of the exporter to this method which will then be used by the main application.
+
+*/

@@ -1,0 +1,15 @@
+
+
+#include <QtCore/QtGlobal>
+
+#if defined(LS3LIBWIDGETS_LIBRARY)
+#  define LS3LIBWIDGETS_EXPORT Q_DECL_EXPORT
+#  define LIB_EXPORT Q_DECL_EXPORT
+#  define QFLIB_EXPORT Q_DECL_EXPORT
+#else
+#  define LS3LIBWIDGETS_EXPORT Q_DECL_IMPORT
+#  define LIB_EXPORT Q_DECL_IMPORT
+#  define QFLIB_EXPORT Q_DECL_IMPORT
+#endif
+
+

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>book</ID>
+	<name language="en">book</name>
+	<name language="de">Buch/Monographie</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>book.png</icon>
+  </options>
+  <authors caption="Authors" caption.de="Autoren" completer="authors" datafield="authors" />
+  <authors caption="Editors" caption.de="Herausgeber" completer="authors" datafield="editors" />
+  <edit caption="Title" caption.de="Titel" datafield="title" />
+  <memo caption="Subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="Year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <intedit caption="Edition" caption.de="Auflage" datafield="edition" widgetwidth="100"/>
+  <edit caption="Series" caption.de="Reihe" datafield="series" completer="series" />
+  <edit caption="Volume" caption.de="Band" datafield="volume" />
+  <edit caption="Publisher" caption.de="Verlag" datafield="publisher" completer="publisher" />
+  <memo caption="Places" caption.de="Verlagsort" datafield="places" completer="places" />
+  <edit caption="ISBN" datafield="isbn" />
+</fdf>

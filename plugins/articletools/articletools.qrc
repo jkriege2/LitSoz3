@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="articletools/logo.png">images/logo.png</file>
+        <file alias="articletools/insert.png">images/insert.png</file>
+        <file alias="articletools/search.png">images/search.png</file>
+        <file alias="articletools/search_active.png">images/search_active.png</file>
+        <file alias="articletools/search_disabled.png">images/search_disabled.png</file>
+        <file alias="articletools/search_hover.png">images/search_hover.png</file>
+        <file alias="articletools/menu.png">images/menu.png</file>
+        <file alias="articletools/insertwebpage.png">images/insertwebpage.png</file>
+        <file alias="articletools/pdf.png">images/pdf_logo.png</file>
+    </qresource>
+    <qresource prefix="/articletools">
+        <file alias="paste.png">images/paste.png</file>
+        <file alias="pastewebpage.png">images/pastewebpage.png</file>
+        <file alias="doilogo.png">images/doilogo.png</file>
+        <file alias="pubmedlogo.png">images/pubmedlogo.png</file>
+        <file alias="pubmedsearch.png">images/pubmedsearch.png</file>
+    </qresource>
+</RCC>

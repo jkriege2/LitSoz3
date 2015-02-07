@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>patent</ID>
+	<name language="en">patent</name>
+	<name language="de">Patent</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>patent.png</icon>
+  </options>
+  <authors caption="Authors/organizations" caption.de="Autoren/Organisation" completer="authors" datafield="authors" />
+  <edit caption="Title" caption.de="Titel" datafield="title" />
+  <memo caption="Subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="Year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <combobox caption="Publishing organization" caption.de="Patentamt" datafield="publisher" completer="patentorganization" widgetwidth="250" />
+  <edit caption="Number" caption.de="Nummer" datafield="number" widgetwidth="250" />
+</fdf>

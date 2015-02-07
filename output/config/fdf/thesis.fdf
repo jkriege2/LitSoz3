@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<fdf>
+  <options>
+    <ID>thesis</ID>
+	<name language="en">thesis</name>
+	<name language="de">wissenschaftliche Arbeit</name>
+	<description language="en"></description>
+	<description language="de"></description>
+	<icon>thesis.png</icon>
+  </options>
+  <authors caption="authors" caption.de="Autor" completer="authors" datafield="authors" />
+  <edit caption="title" caption.de="Titel" datafield="title" />
+  <memo caption="subtitle" caption.de="Untertitel" datafield="subtitle" />
+  <intedit caption="year" caption.de="Jahr" datafield="year" widgetwidth="100" />
+  <combobox caption="thesis type" caption.de="Art der Arbeit" datafield="subtype" completer="thesistype" widgetwidth="250" />
+  <edit caption="Institution/School" caption.de="Institution/Universität" datafield="institution" completer="institution" />
+  <memo caption="Places" caption.de="Verlagsort" datafield="places" completer="places" />
+</fdf>
