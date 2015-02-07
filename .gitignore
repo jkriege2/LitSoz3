@@ -67,3 +67,4 @@ qtplugins
 /test_poppler/pdfviewer.pro
 *.user
 /test_poppler/ui_window.h
+/output/config
