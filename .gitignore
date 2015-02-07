@@ -71,3 +71,14 @@ qtplugins
 Makefile
 *.db
 *.o
+/extlibs/poppler/build3
+/extlibs/poppler/build2
+.mocs
+.objs
+.rccs
+.uis
+*.Debug
+*.Release
+/output/assets
+*.a
+*.prl
