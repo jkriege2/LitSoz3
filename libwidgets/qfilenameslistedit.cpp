@@ -30,9 +30,10 @@ QVariant QFilenamesListEditModel::data(const QModelIndex &index, int role) const
         QString fn=QFileInfo(d.absoluteFilePath(QStringListModel::data(index, Qt::DisplayRole).toString())).canonicalFilePath();
         //qDebug()<<m_baseDir<<QStringListModel::data(index, Qt::DisplayRole)<<fn;
         return iconProvider->icon(QFileInfo(fn));
-    } else {
+    } else if (role==Qt::DisplayRole || role==Qt::EditRole){
         return d;
     }
+    return QVariant();
 }
 
 Qt::ItemFlags QFilenamesListEditModel::flags(const QModelIndex &index) const {
@@ -42,6 +43,29 @@ Qt::ItemFlags QFilenamesListEditModel::flags(const QModelIndex &index) const {
         return Qt::ItemIsDragEnabled | Qt::ItemIsEditable | defaultFlags;
     else
         return defaultFlags | Qt::ItemIsDropEnabled;
+}
+
+QMimeData *QFilenamesListEditModel::mimeData(const QModelIndexList &indexes) const
+{
+    QDir d(m_baseDir);
+    QList<QUrl> sl;
+
+    for (int i=0; i<indexes.size(); i++) {
+        QString fn=QFileInfo(d.absoluteFilePath(QStringListModel::data(indexes[i], Qt::EditRole).toString())).canonicalFilePath();
+
+        sl<<QUrl::fromLocalFile(fn);
+    }
+
+    QMimeData* m=new QMimeData();
+    m->setUrls(sl);
+    return m;
+}
+
+QStringList QFilenamesListEditModel::mimeTypes() const
+{
+    QStringList sl;
+    sl<<"text/uri-list";
+    return sl;
 }
 
 
@@ -317,6 +341,8 @@ QFilenamesListEdit::QFilenamesListEdit(QWidget *parent) :
     list->setItemDelegate(delegate);
     list->setDragDropOverwriteMode(false);
     list->setEditTriggers(QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
+    list->setDragEnabled(false);
+    list->setDragDropMode(QAbstractItemView::DragOnly);
     //list->setShowGrid(false);
     //list->verticalHeader()->setVisible(false);
     //list->horizontalHeader()->setStretchLastSection(true);
@@ -419,11 +445,7 @@ void QFilenamesListEdit::dragEnterEvent(QDragEnterEvent* event) {
     if (mimeData->hasUrls()) event->acceptProposedAction();
 }
 
-void QFilenamesListEdit::dragMoveEvent(QDragMoveEvent* event) {
-    const QMimeData* mimeData = event->mimeData();
-    // if some actions should not be usable, like move, this code must be adopted
-    if (mimeData->hasUrls())event->acceptProposedAction();
-}
+
 
 
 QFilenamesListEditEventFilter::QFilenamesListEditEventFilter(QFilenamesListEdit *parent):

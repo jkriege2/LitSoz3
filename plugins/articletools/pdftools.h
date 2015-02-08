@@ -2,6 +2,7 @@
 #define PDFTOOLS_H
 
 #include <QtCore>
+#include <QApplication>
 
 /*! \brief extract XMP metadata from the given file
  */

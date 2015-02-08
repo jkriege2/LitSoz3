@@ -2,13 +2,16 @@
 #include "bibtools.h"
 
 
+//#define DEBUG_PDF
+
 /////////////////////////////////////////////////////////
 // specially recognize data from OSA journals
 /////////////////////////////////////////////////////////
 bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxOSA("©\\s*(\\d\\d\\d\\d)\\s*Optical\\sSociety", Qt::CaseInsensitive);
-    if (rxOSA.indexIn(data)>=0) {
+    QRegExp rxOSA("(\\d\\d\\d\\d)\\s*Optical\\sSociety", Qt::CaseInsensitive);
+    QRegExp rxOSA2("journal\\s*of\\s*the\\s*\\s*optical\\s*society\\s*of\\s*america", Qt::CaseInsensitive);
+    if (rxOSA.indexIn(data)>=0 || rxOSA2.indexIn(data)>=0) {
         props["year"]=rxOSA.cap(1);
 
        /* QRegExp rxTitle("([ \\d\\w\\-\\:\\;\\,\\.\\?\\(\\)\\[\\]\\%\\&\\\"\\']*)\\n", Qt::CaseInsensitive);
@@ -16,6 +19,8 @@ bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QStr
         if (rxTitle.indexIn(data) != -1) {
             props["title"]=rxTitle.cap(1);
         }*/
+
+        if (rxOSA2.indexIn(data)>0) props["journal"]="Journal of the Optical Society of America";
 
         int i=0;
         while ((i<lines.size()) && (lines[i].simplified().isEmpty())) {
@@ -33,14 +38,14 @@ bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QStr
             props["authors"]=a;
         }
 
-        QRegExp rxJournal("Vol[\\.\\:\\s]*(\\d*).*No[\\.\\:\\s]*(\\d*)\\s*\\/\\s*([ a-zA-Z]*)\\s*(\\d*)\\s*\\n", Qt::CaseInsensitive);
+        QRegExp rxJournal("Vol[\\.\\:\\s]*(\\d+).*No[\\.\\:\\s]*(\\d+)\\s*\\/\\s*([ a-zA-Z]*)\\s*(\\d*)\\s*\\n", Qt::CaseInsensitive);
         rxJournal.setMinimal(true);
         int count = 0;
         int pos = 0;
         QString firstPages="", lastPages="";
         while ((pos = rxJournal.indexIn(data, pos)) != -1) {
             props["volume"]=rxJournal.cap(1);
-            props["number"]=rxJournal.cap(2);
+            props["issue"]=rxJournal.cap(2);
             props["journal"]=rxJournal.cap(3);
             if (firstPages.isEmpty()) firstPages=rxJournal.cap(4);
             else lastPages=rxJournal.cap(4);
@@ -52,6 +57,30 @@ bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QStr
         } else {
             props["pages"]=firstPages+lastPages;
         }
+
+        bool hasYear=false;
+        QRegExp rxYear("(jan|january|feb|february|march|mar|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)\\s*(\\d+)\\s*\\n", Qt::CaseInsensitive);
+        bool hasVol=false;
+        QRegExp rxVol("vol[^\\s]*\\s+(\\d+)\\s*", Qt::CaseInsensitive);
+        bool hasNumber=false;
+        QRegExp rxNumber("num[^\\s]*\\s+(\\d+)\\s*", Qt::CaseInsensitive);
+        for (int i=0; i<lines.size(); i++) {
+            if (!hasYear && rxYear.indexIn(lines[i])>=0) {
+                props["year"]=rxYear.cap(2);
+                hasYear=true;
+            }
+            if (!hasVol && rxVol.indexIn(lines[i])>=0) {
+                props["volume"]=rxVol.cap(1);
+                hasVol=true;
+            }
+            if (!hasNumber && rxNumber.indexIn(lines[i])>=0) {
+                props["issue"]=rxNumber.cap(1);
+                hasNumber=true;
+            }
+            if (lines[i].toLower().contains("index") && lines[i].toLower().contains("head")) break;
+        }
+
+
         return true;
     }
     return false;
@@ -100,9 +129,9 @@ bool recognizeElsevier(const QString& data, QMap<QString, QString>& props, QList
 /////////////////////////////////////////////////////////
 bool recognizeBentham(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxOSA("©\\s*(\\d\\d\\d\\d)\\s*Bentham\\sScience\\sPublishers", Qt::CaseInsensitive);
-    if (rxOSA.indexIn(data)>=0) {
-        props["year"]=rxOSA.cap(1);
+    QRegExp rxBentham("\\s*(\\d\\d\\d\\d)\\s*Bentham\\sScience\\sPublishers", Qt::CaseInsensitive);
+    if (rxBentham.indexIn(data)>=0) {
+        props["year"]=rxBentham.cap(1);
 
         int i=0;
         bool isTitle=false;
@@ -225,16 +254,19 @@ bool recognizeBiophysJ(const QString& data, QMap<QString, QString>& props, QList
 /////////////////////////////////////////////////////////
 bool recognizePNAS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("©\\s+(\\d\\d\\d\\d)\\s+by\\s+The\\s+National\\s+Academy\\s+of\\s+Sciences\\s+of\\s+the\\s+USA", Qt::CaseInsensitive);
+    QRegExp rxCheck("\\s+(\\d\\d\\d\\d)\\s+by\\s+The\\s+National\\s+Academy\\s+of\\s+Sciences\\s+of\\s+the\\s+USA", Qt::CaseInsensitive);
+    QRegExp rxCheck2("PNAS\\s+.+\\s+(\\d\\d\\d\\d)[^\\d].+vol.+(\\d+)[^\\d].+no.+(\\d+)[^\\d].*(\\d+)", Qt::CaseInsensitive);
 
-    if (rxCheck.indexIn(data)>=0) {
-        props["year"]=rxCheck.cap(1);
+    if (rxCheck.indexIn(data)>=0 || rxCheck2.indexIn(data)>=0) {
+        if (rxCheck.cap(1).size()>0) props["year"]=rxCheck.cap(1);
+        if (rxCheck2.cap(1).size()>0) props["year"]=rxCheck2.cap(1);
         props["journal"]="Proceedings of the National Academy of Sciences of the USA";
 
-        QRegExp rxPNAS=QRegExp("PNAS\\s+.+,\\s+(\\d\\d\\d\\d).+vol.+(\\d+).+no.+(\\d+)\\s+(\\d+)\\s", Qt::CaseInsensitive);
+        QRegExp rxPNAS=QRegExp("PNAS\\s+.+\\s+(\\d\\d\\d\\d)[^\\d].+vol.+(\\d+)[^\\d].+no.+(\\d+)[^\\d].*(\\d+)", Qt::CaseInsensitive);
         rxPNAS.setMinimal(true);
         int start=-1;
         if ((start=rxPNAS.indexIn(data))>=0) {
+            props["year"]=rxPNAS.cap(1);
             props["volume"]=rxPNAS.cap(2);
             props["issue"]=rxPNAS.cap(3);
             QString firstpage=rxPNAS.cap(4);
@@ -252,18 +284,47 @@ bool recognizePNAS(const QString& data, QMap<QString, QString>& props, QList<QSt
                 }
             }
         }
-        QRegExp rxDOI=QRegExp("doi\\s+(10\\..*)\\n", Qt::CaseInsensitive);
+        QRegExp rxDOI=QRegExp("doi\\s*(10\\..*)\\n", Qt::CaseInsensitive);
         rxDOI.setMinimal(true);
         if (rxDOI.indexIn(data)>=0) {
             props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
         } else {
-            if (lines.size()>0) props["title"]=lines[0];
-            if (lines.size()>1) {
-                QString auth=lines[1].simplified();
-                auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
-                QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
-                props["authors"]=a;
+            QString data1=data;
+            data1=data1.replace('?', '/');
+            rxDOI=QRegExp("doi\\s*(10\\..*)\\n", Qt::CaseInsensitive);
+            rxDOI.setMinimal(true);
+            if (rxDOI.indexIn(data)>=0) {
+                props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
+            } else {
+                rxDOI=QRegExp("www.pnas.orgcgi[?\\/]doi[?\\/](10\\..*)\\n", Qt::CaseInsensitive);
+                rxDOI.setMinimal(true);
+                if (rxDOI.indexIn(data)>=0) {
+                    props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
+                } else {
+                    if (lines.size()>0) props["title"]=lines[0];
+                    if (lines.size()>1) {
+                        int spcnt=0;
+                        spcnt+=lines[1].count('*');
+                        spcnt+=lines[1].count('#');
+                        spcnt+=lines[1].count('+');
+                        spcnt+=lines[1].count('~');
+                        spcnt+=lines[1].count('$');
+                        spcnt+=lines[1].count('§');
+                        spcnt+=lines[1].count('?');
+                        spcnt+=lines[1].count('?');
+                        QString aline=lines[1];
+                        if (spcnt>1) {
+                            props["title"]=props["title"]+lines[1];
+                            aline=lines.value(2, "");
+                        }
+                        QString auth=aline.simplified();
+                        auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
+                        QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
+                        props["authors"]=a;
+                    }
+                }
             }
+
         }
         return true;
     }
@@ -314,12 +375,12 @@ bool recognizeIEEE(const QString& data, QMap<QString, QString>& props, QList<QSt
 /////////////////////////////////////////////////////////
 bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("©\\s+(\\d+)\\s+The\\s+American\\s+Physical\\s+Society", Qt::CaseInsensitive);
+    QRegExp rxCheck("(\\d+).*\\s*American\\s*Physical\\s*Society", Qt::CaseInsensitive);
 
     if (rxCheck.indexIn(data)>=0) {
         props["year"]=rxCheck.cap(1);
 
-        QRegExp rxAPS("(.+)\\s+vol(ume)?\\s+(\\d+).+(no|number)\\s+(\\d+).+(\\d\\d\\d\\d)\\s+([a-z]+.+)\\n([a-z]+.+)\\n", Qt::CaseInsensitive);
+        QRegExp rxAPS("(.+)\\s+vol(ume)?[\\.\\:\\,]?\\s*(\\d+).+(no|number)[\\.\\:\\,]?\\s*(\\d+).+(\\d\\d\\d\\d)\\s+([a-z]+.+)\\n([a-z]+.+)\\n", Qt::CaseInsensitive);
         rxAPS.setMinimal(true);
 
         if (rxAPS.indexIn(data)>=0) {
@@ -341,13 +402,66 @@ bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QStr
 }
 
 
+/////////////////////////////////////////////////////////
+// specially recognize data from ACS
+/////////////////////////////////////////////////////////
+bool recognizeACS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
+    QStringList lines=data.trimmed().split('\n');
+    QRegExp rxCheck("(\\d+).*\\s*American\\s*Chemical\\s*Society", Qt::CaseInsensitive);
+    rxCheck.setMinimal(true);
+    if (rxCheck.indexIn(data)>=0) {
+        props["year"]=rxCheck.cap(1);
+
+        QRegExp rxAPS("(.+)\\s+vol(ume)?[\\.\\:\\,]?\\s*(\\d+).+(no|number)[\\.\\:\\,]?\\s*(\\d+).+(\\d\\d\\d\\d)\\n", Qt::CaseInsensitive);
+        rxAPS.setMinimal(true);
+
+        if (rxAPS.indexIn(data)>=0) {
+            props["journal"]=rxAPS.cap(1);
+            props["volume"]=rxAPS.cap(3);
+            props["issue"]=rxAPS.cap(5);
+            props["year"]=rxAPS.cap(6);
+
+            for (int i=0; i<lines.size(); i++) {
+                if (lines.size()>0) props["title"]=lines[0];
+                if (lines.size()>1) {
+                    int spcnt=0;
+                    spcnt+=lines[i].count('*');
+                    spcnt+=lines[i].count('#');
+                    spcnt+=lines[i].count('+');
+                    spcnt+=lines[i].count('~');
+                    spcnt+=lines[i].count('$');
+                    spcnt+=lines[i].count('§');
+                    spcnt+=lines[i].count('?');
+                    spcnt+=lines[i].count('?');
+                    QString aline=lines[i];
+                    if (spcnt>1) {
+                        QString auth=aline.simplified();
+                        auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
+                        QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
+                        props["authors"]=a;
+                        break;
+                    }
+                }
+            }
+            props["title"]=rxAPS.cap(7);
+            QString auth=rxCheck.cap(8).simplified();
+            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
+            QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
+            props["authors"]=a;
+        }
+
+        return true;
+    }
+    return false;
+
+}
 
 /////////////////////////////////////////////////////////
 // specially recognize data from Kluwer
 /////////////////////////////////////////////////////////
 bool recognizeKluwer(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("[©c]{1}\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
+    QRegExp rxCheck("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
 
     if (rxCheck.indexIn(data)>=0) {
         props["year"]=rxCheck.cap(1);
@@ -363,7 +477,51 @@ bool recognizeKluwer(const QString& data, QMap<QString, QString>& props, QList<Q
         }
 
 
-        rxData=QRegExp("[©c]{1}\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
+        rxData=QRegExp("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
+        rxData.setMinimal(true);
+
+        if (rxData.indexIn(data)>=0) {
+            props["year"]=rxCheck.cap(1);
+
+            QString auth=rxCheck.cap(8).simplified();
+            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
+            QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
+            props["authors"]=a;
+        }
+
+
+        return true;
+    }
+    return false;
+
+}
+
+
+
+
+/////////////////////////////////////////////////////////
+// specially recognize data from Rockefeller University Press
+/////////////////////////////////////////////////////////
+bool recognizeRockefeller(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
+    QStringList lines=data.trimmed().split('\n');
+    QRegExp rxCheck("\\s*Rockefeller\\s*University\\s*Press\\s*", Qt::CaseInsensitive);
+
+    if (rxCheck.indexIn(data)>=0) {
+        //props["year"]=rxCheck.cap(1);
+
+        //The Journal of Cell Biology, Volume 115, Number 1, October 1991 67-73
+        QRegExp rxData("([a-z\\s]+).*\\s*vol\\w*\\s*(\\d+).*num\\w*\\s*(\\d+).*\\w+\\s*(\\d\\d\\d\\d).* (\\d+)\\s*[\\-]*\\s*(\\d+)", Qt::CaseInsensitive);
+        rxData.setMinimal(true);
+        if (rxData.indexIn(data)>=0) {
+            props["journal"]=rxData.cap(1);
+            props["volume"]=rxData.cap(2);
+            props["issue"]=rxData.cap(3);
+            props["pages"]=rxData.cap(4)+"-"+rxData.cap(5);
+
+        }
+
+
+        rxData=QRegExp("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
         rxData.setMinimal(true);
 
         if (rxData.indexIn(data)>=0) {
@@ -384,10 +542,6 @@ bool recognizeKluwer(const QString& data, QMap<QString, QString>& props, QList<Q
     return false;
 
 }
-
-
-
-
 
 
 
@@ -418,14 +572,24 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
 
     QString params=" \""+filename+"\" \""+tempFile+"\"";
     QDir pd(pluginDir);
+    pd.cd("pdftools");
+    if (!QFile::exists(pd.absoluteFilePath("pdftotext.exe"))) {
+        pd=QDir(QApplication::applicationDirPath());
+    }
 #ifdef Q_OS_WIN32
 
-    qDebug()<<"running "<<pd.absoluteFilePath("pdftools/pdftotext.exe")+params;
-    QProcess::execute(pd.absoluteFilePath("pdftools/pdftotext.exe")+params);
+    qDebug()<<"running "<<pd.absoluteFilePath("pdftotext.exe")+params;
+    QProcess::execute(pd.absoluteFilePath("pdftotext.exe")+params);
 
 #else
-    qDebug()<<"running "<<pd.absoluteFilePath("pdftotext.exe")+params;
+    qDebug()<<"running "<<pd.absoluteFilePath("pdftotext")+params;
     QProcess::execute("pdftotext"+params);
+#endif
+
+#ifdef DEBUG_PDF
+    QFile testout(filename+".pdf2txt.debug.txt");
+    testout.open(QFile::WriteOnly|QFile::Text);
+    QTextStream dbgtxt(&testout);
 #endif
 
     if (QFile::exists(tempFile)) {
@@ -433,12 +597,16 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             QString contents=f.readAll();
 
+#ifdef DEBUG_PDF
+            dbgtxt<<"CONTENTS:\n"<<contents<<"\n\n\n";
+#endif
+
             //qDebug()<<contents;
 
             /////////////////////////////////////////////////////////
             // common metadata:
             /////////////////////////////////////////////////////////
-            QRegExp rxDoi("doi[\\:]?[\\s]*(10.[a-zA-Z\\d\\.\\/\\(\\)\\-\\_]*)", Qt::CaseInsensitive);
+            QRegExp rxDoi("doi[\\:]?\\s*(10.[a-zA-Z\\d\\.\\/\\(\\)\\-\\_]*)", Qt::CaseInsensitive);
             if (rxDoi.indexIn(contents)>=0) {
                 QString doi=rxDoi.cap(1);
                 QChar last=doi[doi.size()-1];
@@ -460,18 +628,18 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
                 if (ok && (y>999) && (y<=QDate::currentDate().year()+100)) props["year"]=rxYear.cap(1);
             }
 
-            QRegExp rxIntro("abstract\\s([^\\n©]*)", Qt::CaseInsensitive);
+            QRegExp rxIntro("abstract\\s([^\\n\xA9]*)", Qt::CaseInsensitive);
             if (rxIntro.indexIn(contents)>=0) {
                 props["abstract"]=rxIntro.cap(1);
             } else {
-                QRegExp rxIntro("introduction\\s([^\\n©]*)", Qt::CaseInsensitive);
+                QRegExp rxIntro("introduction\\s([^\\n\xA9]*)", Qt::CaseInsensitive);
                 if (rxIntro.indexIn(contents)>=0) {
                     props["abstract"]=rxIntro.cap(1);
                 }
 
             }
 
-            QRegExp rxkw("(keywords|ocis codes|index terms)[\\:\\-Ð]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
+            QRegExp rxkw("(keywords|ocis\\s*codes|index\\s*terms|index\\s*headings)[\\:\\-Ð]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
             if (rxkw.indexIn(contents)>=0) {
                 QString kw=rxkw.cap(2).simplified();
                 if (kw.contains(",") && kw.contains(";")) {
@@ -492,14 +660,49 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
             /////////////////////////////////////////////////////////
             bool ok=false;
             ok=recognizeOSA(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeOSA : "<<ok<<"\n";
+            #endif
             if (!ok) ok=recognizeElsevier(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeElsevier : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizeBentham(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeBentham : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizeSPIE(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeSPIE : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizeBiophysJ(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeBiophysJ : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizePNAS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizePNAS : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizeIEEE(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeIEEE : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizeAPS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeAPS : "<<ok<<"\n";
+#endif
+            if (!ok) ok=recognizeACS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeACS : "<<ok<<"\n";
+#endif
             if (!ok) ok=recognizeKluwer(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeKluwer : "<<ok<<"\n";
+#endif
+            if (!ok) ok=recognizeRockefeller(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+#ifdef DEBUG_PDF
+dbgtxt<<"recognizeRockefeller : "<<ok<<"\n";
+#endif
 
 
             f.close();
@@ -509,7 +712,15 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
 
         //QFile::remove(tempFile);
     }
-
+#ifdef DEBUG_PDF
+    dbgtxt<<"\n\n\nOUTPUT:\n";
+    QMapIterator<QString, QString> it(props);
+    while (it.hasNext()) {
+        it.next();
+        dbgtxt<<"  "<<it.key()<<" = "<<it.value()<<"\n";
+    }
+    testout.close();
+#endif
     return props;
 }
 

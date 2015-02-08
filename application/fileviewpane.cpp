@@ -53,7 +53,7 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     datastore=NULL;
     connected=false;
 
-    grid=new QGridLayout(this);
+    grid=new QGridLayout();
     setLayout(grid);
 
 

@@ -154,13 +154,13 @@ QMap<QString, QVariant> extractPubmedMetadata(const QString& data) {
                     QDomNodeList nID=n.firstChildElement("ArticleIdList").elementsByTagName("ArticleId");
                     for (int i=0; i<nID.size(); i++) {
                         QDomElement a=nID.at(i).toElement();
-                        QString type=a.attribute("IdType");
-                        QString id=a.text();
+                        QString type=a.attribute("IdType").trimmed().simplified();
+                        QString id=a.text().trimmed().simplified();
                         //qDebug()<<type<<id;
 
-                        if (type.toLower()=="doi") record["doi"]=id;
-                        if (type.toLower()=="pubmed") record["pubmed"]=id;
-                        if (type.toLower()=="pmc") record["pmcid"]=id;
+                        if (type.toLower()=="doi" && id.size()>0) record["doi"]=id;
+                        if (type.toLower()=="pubmed" && id.size()>0) record["pubmed"]=id;
+                        if (type.toLower()=="pmc" && id.size()>0) record["pmcid"]=id;
                     }
                 }
         }

@@ -1058,6 +1058,7 @@ void LS3PluginArticleTools::filesDropped(QStringList files, QString type, int ac
 void LS3PluginArticleTools::insertFiles(const QStringList& files, const QString& type, int action) {
     for (int i=0; i<files.size(); i++) {
         insertFile(files[i], type, action);
+        QApplication::processEvents();
     }
 }
 

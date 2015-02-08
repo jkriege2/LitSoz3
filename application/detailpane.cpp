@@ -7,16 +7,16 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     datastore=NULL;
     connected=false;
 
-    QVBoxLayout* mainLayout=new QVBoxLayout(this);
+    QVBoxLayout* mainLayout=new QVBoxLayout();
     this->setLayout(mainLayout);
     mainLayout->setContentsMargins(10,10,10,10);
 
     QHBoxLayout* hbLayout;
     QWidget* wl;
-    FlowLayout* fLayout=new FlowLayout(this);
+    FlowLayout* fLayout=new FlowLayout();
     mainLayout->addLayout(fLayout);
 
-    hbLayout=new QHBoxLayout(this);
+    hbLayout=new QHBoxLayout();
     hbLayout->setContentsMargins(0,0,0,0);
     wl=new QWidget(this);
     wl->setLayout(hbLayout);
@@ -34,7 +34,7 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     hbLayout->addWidget(edtNum);
     hbLayout->addSpacing(30);
 
-    hbLayout=new QHBoxLayout(this);
+    hbLayout=new QHBoxLayout();
     hbLayout->setContentsMargins(0,0,0,0);
     wl=new QWidget(this);
     wl->setLayout(hbLayout);
@@ -77,7 +77,7 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     hbLayout->addWidget(btnGenerateID);
     hbLayout->addSpacing(30);
 
-    hbLayout=new QHBoxLayout(this);
+    hbLayout=new QHBoxLayout();
     hbLayout->setContentsMargins(0,0,0,0);
     wl=new QWidget(this);
     wl->setLayout(hbLayout);
@@ -91,7 +91,7 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     hbLayout->addWidget(cmbType);
     hbLayout->addSpacing(30);
 
-    hbLayout=new QHBoxLayout(this);
+    hbLayout=new QHBoxLayout();
     hbLayout->setContentsMargins(0,0,0,0);
     wl=new QWidget(this);
     wl->setLayout(hbLayout);
@@ -110,7 +110,7 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     mainLayout->addWidget(scaMain, 4);
 
 
-    flTopic=new QGridLayout(this);
+    flTopic=new QGridLayout();
     flTopic->setContentsMargins(0,0,0,0);
 
     labKeywords=new QLabel(tr("&Keywords:"), this);

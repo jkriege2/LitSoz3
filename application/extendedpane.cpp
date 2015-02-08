@@ -18,8 +18,8 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     datastore=NULL;
     connected=false;
 
-    QGridLayout* mlay=new QGridLayout(this);
-    QFormLayout* lay=new QFormLayout(this);
+    QGridLayout* mlay=new QGridLayout();
+    QFormLayout* lay=new QFormLayout();
     setLayout(mlay);
     mlay->addLayout(lay, 0, 0);
     mlay->setContentsMargins(10,10,10,10);
@@ -47,7 +47,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     lay->addRow(f);
 
     edtOwner=new QEnhancedLineEdit(this);
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     w=new QWidget(this);
     if (extendedShortWidth>0) w->setMaximumWidth(extendedShortWidth);
@@ -84,7 +84,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     cmbStatus->setTranslationFilename(settings->GetConfigDirectory()+"/completers/status_"+settings->GetLanguageID().toLower()+".translation");
 
     dedStatusSince=new QDateEdit(this);
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     li->addWidget(cmbStatus, 3);
     label=new QLabel(tr("      since:"), this);
@@ -117,7 +117,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     cmbCurrency->setFilename(settings->GetConfigDirectory()+"/completers/currency.lst");
     edtPrice=new QDoubleSpinBox(this);
     edtPrice->setRange(0,1e20);
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     li->addWidget(cmbCurrency,1);
     li->addWidget(edtPrice,4);
@@ -136,7 +136,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     f->setFrameShadow(QFrame::Raised);
     lay->addRow(f);
 
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     edtDoi=new QEnhancedLineEdit(this);
     btnDoi=new JKStyledButton(JKStyledButton::OpenPrependedURL, edtDoi, this);
@@ -155,7 +155,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     w->setLayout(li);
     lay->addRow(label, w);
 
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     edtCiteseer=new QEnhancedLineEdit(this);
     li->addWidget(edtCiteseer);
@@ -166,7 +166,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     w->setLayout(li);
     lay->addRow(label, w);
 
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     edtPubmed=new QEnhancedLineEdit(this);
     btnPubmed=new JKStyledButton(JKStyledButton::OpenPrependedURL, edtPubmed, this);
@@ -185,7 +185,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     w->setLayout(li);
     lay->addRow(label, w);
 
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     edtPMCID=new QEnhancedLineEdit(this);
     btnPMCID=new JKStyledButton(JKStyledButton::OpenPrependedURL, edtPMCID, this);
@@ -204,7 +204,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     w->setLayout(li);
     lay->addRow(label, w);
 
-    li=new QHBoxLayout(this);
+    li=new QHBoxLayout();
     li->setContentsMargins (0,0,0,0);
     edtArxiv=new QEnhancedLineEdit(this);
     btnArxiv=new JKStyledButton(JKStyledButton::OpenPrependedURL, edtArxiv, this);

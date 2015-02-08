@@ -12,6 +12,7 @@
 #include "lib_imexport.h"
 #include <QVBoxLayout>
 #include <QMimeData>
+#include <QUrl>
 
 class QFilenamesListEdit;
 
@@ -31,6 +32,9 @@ class LS3LIBWIDGETS_EXPORT QFilenamesListEditModel: public QStringListModel {
         virtual Qt::DropActions supportedDropActions() const;
         virtual Qt::DropActions supportedDragActions() const;
         Qt::ItemFlags flags(const QModelIndex &index) const;
+
+        QMimeData * mimeData(const QModelIndexList & indexes) const;
+        QStringList mimeTypes() const;
 protected:
         QFileIconProvider* iconProvider;
         QString m_baseDir;
@@ -124,7 +128,6 @@ class LS3LIBWIDGETS_EXPORT QFilenamesListEdit : public QWidget {
 
         virtual void dropEvent(QDropEvent *event);
         virtual void dragEnterEvent(QDragEnterEvent* event);
-        virtual void dragMoveEvent(QDragMoveEvent* event);
 
 };
 
