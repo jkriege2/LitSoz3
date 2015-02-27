@@ -69,6 +69,9 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
     proxyType=QNetworkProxy::applicationProxy().type();
     proxyPort=QNetworkProxy::applicationProxy().port();
 
+    previewStyles->searchCSL(assetsDirectory+"/csl/");
+
+
     readSettings();
 }
 

@@ -45,7 +45,8 @@ HEADERS += bibtools.h \
     lib_imexport.h \
     ls3progressthread.h \
     filetools.h \
-    modstools.h
+    modstools.h \
+    csltools.h
 
 SOURCES += bibtools.cpp \
            ls3datastore.cpp \
@@ -60,7 +61,8 @@ SOURCES += bibtools.cpp \
     htmltokenizer.cpp \
     ls3progressthread.cpp \
     filetools.cpp \
-    modstools.cpp
+    modstools.cpp \
+    csltools.cpp
 
 FORMS +=
 

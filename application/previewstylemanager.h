@@ -11,6 +11,9 @@
 #include <QMap>
 #include <QVariant>
 
+
+class CSLFile; // forward
+
 /*! \brief manages and executes preview styles
 
 */
@@ -20,6 +23,7 @@ class PreviewStyleManager : public QObject {
         PreviewStyleManager(QObject* parent);
         virtual ~PreviewStyleManager();
 
+        void searchCSL(const QString& dir);
 
         /** \brief return a list of the names of the preview styles */
         QStringList styles() const;
@@ -30,6 +34,8 @@ class PreviewStyleManager : public QObject {
         /** \brief return the name for the i-th style */
         QString getName(int i) const;
     protected:
+        QStringList csls;
+        QList<CSLFile*> cslfiles;
 };
 
 #endif // PREVIEWSTYLEMANAGER_H
