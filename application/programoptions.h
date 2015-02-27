@@ -61,9 +61,9 @@ public:
 
 
     /** \brief Access configDirectory (the directory which contains the user config files */
-    inline QString GetConfigDirectory();
+    QString GetConfigDirectory();
     /** \brief Access configDirectory (the directory which contains the assets files (*.fdf ...)) */
-    inline QString GetAssetsDirectory();
+    QString GetAssetsDirectory();
 
 
     /** \brief Access currentFile ( the currently opened file) */
@@ -133,25 +133,25 @@ public:
     inline int GetTableFontSize() { return tableFontSize; }
 
     /** \brief width of shorter widgets on extended tab */
-    int GetExtendedLongWidth() { return extendedLongWidth; };
+    inline int GetExtendedLongWidth() { return extendedLongWidth; };
     /** \brief width of longer widgets on extended tab */
-    int GetExtendedShortWidth() { return extendedShortWidth; };
+    inline int GetExtendedShortWidth() { return extendedShortWidth; };
 
     /** \brief return the startup file */
-    QString GetStartupFile() { return startupFile; };
+    inline QString GetStartupFile() { return startupFile; };
 
     /** \brief get "and" words */
-    QList<QString> GetAndWords() { return andWords; };
+    inline QList<QString> GetAndWords() { return andWords; };
     /** \brief get name additions */
-    QSet<QString> GetNameAdditions() { return nameAdditions; };
+    inline QSet<QString> GetNameAdditions() { return nameAdditions; };
     /** \brief get name prefixes */
     inline QSet<QString> GetNamePrefixes() { return namePrefixes; };
 
     /** \brief the currently used preview style */
-    int GetCurrentPreviewStyle() { return currentPreviewStyle; };
+    inline int GetCurrentPreviewStyle() { return currentPreviewStyle; };
 
     /** \brief how to display "Reference Details" (0: as dockable Window, 1: as Tab behind "Reference Overview) */
-    int GetHowDisplayReferenceDetails() { return howDisplayReferenceDetails; };
+    inline int GetHowDisplayReferenceDetails() { return howDisplayReferenceDetails; };
 
 public slots:
     /** \brief open options dialog

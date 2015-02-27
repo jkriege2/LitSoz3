@@ -266,7 +266,7 @@ void PubmedThread::PubmedReplyComplete (QNetworkReply* reply_in) {
                     }
 
                     //append=false;
-                    QString doi=newRecord.value("doi").toString();
+                    QString doi=newRecord.value("doi").toString().simplified().trimmed();
                     if (doi.startsWith("10.")) {
                         resp->abort();
                         currentInstruction=scanDOICrossref;

@@ -166,13 +166,13 @@ bool fdfManager::loadFile(QString filename) {
 }
 
 
-QWidget* fdfManager::createWidgets(QString ID, QString language, QString configDir, QWidget* parent, LS3Datastore* datastore, QVector<QWidget*>* widgetvec) {
+QWidget* fdfManager::createWidgets(QString ID, QString language, QString configDir, QWidget* parent, LS3Datastore* datastore, QVector<QPointer<QWidget> >* widgetvec) {
     int row=0;
     int iID=-1;
-    QFormLayout* layout=new QFormLayout(parent);
-    //QGridLayout* layout=new QGridLayout(parent);
-    layout->setLabelAlignment(Qt::AlignLeft|Qt::AlignTop);
-    QWidget* w=new QWidget(parent);
+    QWidget* wret=new QWidget(parent);
+    QFormLayout* layout=new QFormLayout();
+    layout->setLabelAlignment(Qt::AlignTop|Qt::AlignRight);
+    wret->setLayout(layout);
     if (widgetvec!=NULL) widgetvec->clear();
 
     if (idmap.contains(ID)) {
@@ -181,13 +181,11 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
         fdfFile* f=files[iID];
         for (int i=0; i<f->widget.size(); i++) {
             fdfWidgetProperty* wp=f->widget[i];
-            //QLabel* l=new QLabel(wp->captionText.value(language, wp->captionTextDefault), parent);
-            //l->setAlignment(Qt::AlignLeft|Qt::AlignTop);
-            //layout->addWidget(l, row, 1);
+
             QString l=wp->captionText.value(language, wp->captionTextDefault);
             QWidget* w=NULL;
             if (wp->type==fdfWidgetAuthors) {
-                QCompleterPlainTextEdit* e=new QCompleterPlainTextEdit(parent);
+                QCompleterPlainTextEdit* e=new QCompleterPlainTextEdit(wret);
                 e->setAppendContents(false);
                 e->setTabChangesFocus(true);
                 w=e;
@@ -195,13 +193,13 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 e->setReadOnly(wp->readonly);
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetComboBox) {
-                QMappableComboBox* e=new QMappableComboBox(parent);
+                QMappableComboBox* e=new QMappableComboBox(wret);
                 w=e;
                 e->setEditable(true);
                 if (wp->completerList.size()>0) e->setFilename(configDir+"/completers/"+wp->completerList+".lst");
                 datastore->addMapping(e, wp->dataField, "text");
             } else if (wp->type==fdfWidgetSeparator) {
-                QFrame* f=new QFrame(parent);
+                QFrame* f=new QFrame(wret);
                 f->setFrameShape(QFrame::HLine);
                 f->setMidLineWidth(1);
                 f->setLineWidth(0);
@@ -209,13 +207,13 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 f->setFrameShadow(QFrame::Raised);
                 layout->addRow(f);
             } else if (wp->type==fdfWidgetDateEdit) {
-                QDateEdit* e=new QDateEdit(parent);
+                QDateEdit* e=new QDateEdit(wret);
                 w=e;
                 e->setDisplayFormat(wp->format.value(language, wp->formatDefault));
                 e->setReadOnly(wp->readonly);
                 datastore->addMapping(e, wp->dataField, "date");
             } else if (wp->type==fdfWidgetEdit) {
-                QLineEdit* e=new QEnhancedLineEdit(parent);
+                QLineEdit* e=new QEnhancedLineEdit(wret);
                 w=e;
                 e->setInputMask(wp->mask.value(language, wp->maskDefault));
                 e->setReadOnly(wp->readonly);
@@ -226,7 +224,7 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 }
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetRegexpEdit) {
-                QLineEdit* e=new QEnhancedLineEdit(parent);
+                QLineEdit* e=new QEnhancedLineEdit(wret);
                 w=e;
                 if (wp->casesensitive) {
                     e->setValidator(new QRegExpValidator(QRegExp(wp->regexp.value(language, wp->regexpDefault), Qt::CaseSensitive, QRegExp::RegExp2), e));
@@ -241,32 +239,32 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 e->setReadOnly(wp->readonly);
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetFloatEdit) {
-                QLineEdit* e=new QLineEdit(parent);
+                QLineEdit* e=new QLineEdit(wret);
                 w=e;
                 e->setValidator(new QDoubleValidator(wp->minVal, wp->maxVal, wp->precision, e));
                 e->setReadOnly(wp->readonly);
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetIntEdit) {
-                QLineEdit* e=new QLineEdit(parent);
+                QLineEdit* e=new QLineEdit(wret);
                 w=e;
                 e->setValidator(new QIntValidator(wp->minVal, wp->maxVal, e));
                 e->setReadOnly(wp->readonly);
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetFloatSpinbox) {
-                QDoubleSpinBox* e=new QDoubleSpinBox(parent);
+                QDoubleSpinBox* e=new QDoubleSpinBox(wret);
                 w=e;
                 e->setRange(wp->minVal, wp->maxVal);
                 e->setReadOnly(wp->readonly);
                 e->setDecimals(wp->precision);
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetIntSpinbox) {
-                QSpinBox* e=new QSpinBox(parent);
+                QSpinBox* e=new QSpinBox(wret);
                 w=e;
                 e->setRange(wp->minVal, wp->maxVal);
                 e->setReadOnly(wp->readonly);
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetMemo) {
-                QCompleterPlainTextEdit* e=new QCompleterPlainTextEdit(parent);
+                QCompleterPlainTextEdit* e=new QCompleterPlainTextEdit(wret);
                 e->setTabChangesFocus(true);
                 w=e;
                 e->setReadOnly(wp->readonly);
@@ -277,7 +275,7 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 }
                 datastore->addMapping(e, wp->dataField);
             } else if (wp->type==fdfWidgetWWWEdit) {
-                QEnhancedLineEdit* e=new QEnhancedLineEdit(parent);
+                QEnhancedLineEdit* e=new QEnhancedLineEdit(wret);
                 JKStyledButton* tb= new JKStyledButton(JKStyledButton::OpenURL, e, e);
                 e->addButton(tb);
                 e->setReadOnly(wp->readonly);
@@ -290,7 +288,7 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 w=e;
             }
             if (w!=NULL) {
-                if (widgetvec!=NULL) widgetvec->push_back(w);
+                if (widgetvec!=NULL) widgetvec->append(w);
                 layout->addRow(l, w);
                 //layout->addWidget(w, row, 2);
                 QSize s=w->size();
@@ -305,9 +303,7 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
 
     }
 
-    layout->setLabelAlignment(Qt::AlignTop|Qt::AlignRight);
-    w->setLayout(layout);
-    return w;
+    return wret;
 }
 
 

@@ -86,3 +86,4 @@ Makefile
 *.cpp~
 *.txt
 *.xld
+*.3-pre1

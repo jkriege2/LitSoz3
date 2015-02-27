@@ -23,6 +23,10 @@ MainWindow::MainWindow(ProgramOptions* settings, QSplashScreen* splash):
     tvMainSortProxy=new LS3SummarySortFilterProxyModel(this);
     tvMainSortProxy->setSourceModel(summaryProxy);
     tvMainSortProxy->setDatastore(datastore);
+    amazonTimestamp=clock();
+    setDockNestingEnabled(true);
+    setWindowIcon(QIcon(":/ls3icon.png"));
+    init();
     connect(datastore, SIGNAL(dbError(QString)), this, SLOT(showDBError(QString)));
     connect(datastore, SIGNAL(connectWidgets()), this, SLOT(connectWidgets()));
     connect(datastore, SIGNAL(disconnectWidgets()), this, SLOT(disconnectWidgets()));
@@ -32,16 +36,26 @@ MainWindow::MainWindow(ProgramOptions* settings, QSplashScreen* splash):
     connect(datastore, SIGNAL(wasChangedChanged(bool)), this, SLOT(wasChanged(bool)));
     connect(settings, SIGNAL(configDataChanged()), this, SLOT(readSettings()));
     connect(settings, SIGNAL(storeSettings()), this, SLOT(writeSettings()));
-    amazonTimestamp=clock();
-    setDockNestingEnabled(true);
-    setWindowIcon(QIcon(":/ls3icon.png"));
-    init();
+
+
+    if ((!settings->GetStartupFile().isEmpty())&&(QFile::exists(settings->GetStartupFile()))) {
+        QTimer::singleShot(100, this, SLOT(loadStartup()));
+    } else {
+        emit showSplashMessage(tr("READY !!!"));
+    }
 }
 
 MainWindow::~MainWindow() {
     clearPlugins();
 }
 
+void MainWindow::loadStartup() {
+    emit showSplashMessage(tr("loading file '%1' ...").arg(settings->GetStartupFile()));
+    QApplication::processEvents();
+    datastore->dbLoad(settings->GetStartupFile(), progress);
+    emit showSplashMessage(tr("READY !!!"));
+    QApplication::processEvents();
+}
 
 void MainWindow::closeEvent(QCloseEvent *event) {
     if (maybeSave()) {
@@ -255,20 +269,15 @@ void MainWindow::init()
     setUnifiedTitleAndToolBarOnMac(true);
     setCurrentFile("");
 
-    if ((!settings->GetStartupFile().isEmpty())&&(QFile::exists(settings->GetStartupFile()))) {
-        emit showSplashMessage(tr("loading file '%1' ...").arg(settings->GetStartupFile()));
-        datastore->dbLoad(settings->GetStartupFile(), progress);
-    }
-    emit showSplashMessage(tr("READY !!!"));
 }
 
 void MainWindow::clearPlugins() {
-    for (int i=0; i<m_importers.size(); i++) {
+    /*for (int i=0; i<m_importers.size(); i++) {
         delete m_importers[i];
     }
     for (int i=0; i<m_exporters.size(); i++) {
         delete m_exporters[i];
-    }
+    }*/
     deinitPlugins();
     m_plugins.clear();
     m_pluginFilenames.clear();
@@ -1067,6 +1076,14 @@ void MainWindow::registerImporter(LS3Importer* importer) {
 
 void MainWindow::registerExporter(LS3Exporter* exporter) {
     m_exporters.append(exporter);
+}
+void MainWindow::deregisterImporter(LS3Importer* importer) {
+    m_importers.removeAll(importer);
+    //std::cout<<"added imperter\n";
+}
+
+void MainWindow::deregisterExporter(LS3Exporter* exporter) {
+    m_exporters.removeAll(exporter);
 }
 
 QMenu* MainWindow::getMenu(LS3PluginServices::AvailableMenus menu) {

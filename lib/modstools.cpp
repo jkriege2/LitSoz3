@@ -36,7 +36,7 @@ QMap<QString, QVariant> extractMODSXMLMetadata(const QString& data, const QSet<Q
                     QDomElement a=nli.at(i).toElement();
                     QString t=a.attribute("type").toLower().trimmed();
                     if (t=="isbn") record["isbn"]=a.text();
-                    if (t=="doi") record["doi"]=a.text();
+                    if (t=="doi" && !a.text().simplified().trimmed().isEmpty()) record["doi"]=a.text();
                     if (t=="issn") record["issn"]=a.text();
                     if (t=="issue number") record["volume"]=a.text();
                 }

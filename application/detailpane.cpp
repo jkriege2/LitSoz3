@@ -6,6 +6,7 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     this->settings=settings;
     datastore=NULL;
     connected=false;
+    currentFDF="";
 
     QVBoxLayout* mainLayout=new QVBoxLayout();
     this->setLayout(mainLayout);
@@ -180,8 +181,35 @@ void DetailPane::topicModelChanged() {
     cmbTopic->setText(txt);
 }
 
+void DetailPane::databaseCurentChanged(int index)
+{
+    if (datastore) {
+        disconnect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
+        cmbType->setCurrentIndex(cmbType->findData(datastore->getField("type").toString()));
+        connect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
+        QString id=cmbType->itemData(cmbType->currentIndex()).toString();
+        //qDebug()<<"databaseCurentChanged("<<index<<"): "<<id<<currentFDF<<cmbType->currentIndex();
+        if (currentFDF != id) {
+            redisplayFDF(cmbType->currentIndex());
+        }
+    }
+}
+
+void DetailPane::typeChanged(int index)
+{
+    if (datastore) {
+        datastore->setField("type", cmbType->currentData().toString());
+        //qDebug()<<"typeChanged("<<index<<"): "<<cmbType->currentText()<<cmbType->itemText(index);
+        QString id=cmbType->itemData(cmbType->currentIndex()).toString();
+        //qDebug()<<"databaseCurentChanged("<<index<<"): "<<id<<currentFDF<<cmbType->currentIndex();
+        if (currentFDF != id) {
+            redisplayFDF(cmbType->currentIndex());
+        }
+    }
+}
+
 void DetailPane::connectWidgets(LS3Datastore* datastore) {
-    //std::cout<<"DetailPane::connectWidgets() ... ";
+    //qDebug()<<"DetailPane::connectWidgets() ... ";
     connected=true;
     this->datastore=datastore;
     topicModelChanged();
@@ -191,7 +219,8 @@ void DetailPane::connectWidgets(LS3Datastore* datastore) {
 
     configDirReread();
     cmbType->setCurrentIndex(-1);
-    connect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(redisplayFDF(int)));
+    connect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
+    connect(datastore, SIGNAL(currentRecordChanged(int)), this, SLOT(databaseCurentChanged(int)));
 
     //std::cout<<"adding details mappings ... ";
     fdfManager* fdf=settings->GetFDFManager();
@@ -200,7 +229,7 @@ void DetailPane::connectWidgets(LS3Datastore* datastore) {
 
     datastore->addMapping(edtNum, "num");
     datastore->addMapping(edtID, "id");
-    datastore->addMapping(cmbType, "type", "data");
+    //datastore->addMapping(cmbType, "type", "data");
     datastore->addMapping(pedKeywords, "keywords");
     datastore->addMapping(cmbTopic, "topic", "text");
     //datastore->addMapping(cmbTopic->lineEdit(), "topic");
@@ -210,20 +239,23 @@ void DetailPane::connectWidgets(LS3Datastore* datastore) {
 }
 
 void DetailPane::disconnectWidgets() {
-    disconnect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(redisplayFDF(int)));
+    //qDebug()<<"DetailPane::disconnectWidgets()";
+    disconnect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
+    disconnect(datastore, SIGNAL(currentRecordChanged(int)), this, SLOT(databaseCurentChanged(int)));
     if (datastore) {
         if (datastore->getTopicsModel()) {
             disconnect(datastore, SIGNAL(topicsListChanged()), this, SLOT(topicModelChanged()));
         }
         datastore->removeMapping(pedKeywords);
         datastore->removeMapping(edtID);
-        datastore->removeMapping(cmbType);
+        //datastore->removeMapping(cmbType);
         datastore->removeMapping(edtNum);
         datastore->removeMapping(cmbTopic);
         datastore->removeMapping(cmbLanguage);
         datastore->removeMapping(starRating);
 
     }
+    redisplayFDF(-1);
     completeKeywords->setModel(new QStringListModel(completeKeywords));
     //cmbTopic->setModel(new QStringListModel(cmbTopic));
     completeAuthors->setModel(NULL);
@@ -242,26 +274,40 @@ void DetailPane::configDirReread() {
 }
 
 void DetailPane::redisplayFDF( int index ) {
+    //qDebug()<<"DetailPane::redisplayFDF "<<index<<"    old widgtes: "<<widgetvec.size();
+    for (int i=0; i<widgetvec.size(); i++) {
+        if (widgetvec[i]) datastore->removeMapping(widgetvec[i]);
+    }
+    widgetvec.clear();
+    //QApplication::processEvents();
+    //QApplication::processEvents();
+    //QApplication::processEvents();
 
-
-    int idx=datastore->currentRecordNum();
-    QString id=cmbType->itemData(index).toString();
-    QMap<QString, QVariant> rec=datastore->currentRecord();
-    rec["type"]=QVariant(id);
-    //datastore->dbSubmit();
     if (scaMain->widget()!=NULL) {
-        QApplication::processEvents();
-        for (int i=0; i<widgetvec.size(); i++) {
-            datastore->removeMapping(widgetvec[i]);
-        }
         //QApplication::processEvents();
         scaMain->takeWidget()->deleteLater();
         //QApplication::processEvents();
     }
-    scaMain->setWidget(settings->GetFDFManager()->createWidgets(id, settings->GetLanguageID(), settings->GetConfigDirectory(), this, datastore, &widgetvec));
-    datastore->setRecord(idx, rec);
-    //datastore->dbSubmit();
-    datastore->dbMove(idx);
+    //QApplication::processEvents();
+    //QApplication::processEvents();
+    //QApplication::processEvents();
+    if (index>=0) {
+        //int idx=datastore->currentRecordNum();
+        QString id=cmbType->itemData(index).toString();
+        currentFDF=id;
+        //QMap<QString, QVariant> rec=datastore->currentRecord();
+        //rec["type"]=QVariant(id);
+        //datastore->dbSubmit();
+        //QApplication::processEvents();
+        //qDebug()<<"loding "<<id;
+        scaMain->setWidget(settings->GetFDFManager()->createWidgets(id, settings->GetLanguageID(), settings->GetConfigDirectory(), this, datastore, &widgetvec));
+        datastore->ensureMappedWidgetsPopulated();
+        //datastore->setRecord(idx, rec);
+        //datastore->dbSubmit();
+        //datastore->dbMove(idx);
+
+    }
+    //qDebug()<<"DetailPane::redisplayFDF "<<index<<" ... DONE";
 }
 
 void DetailPane::generateID() {

@@ -41,6 +41,7 @@
      - \c statuscomment (varchar):  comment on the current status (e.g. "return on feb 21st" ...)
      - \c statussince (varchar):  date o last status change
      - \c origin (varchar):  where did I get the reference from?
+     - \c library (varchar):  library
      - \c librarynum (varchar):  number of reference within a library
      - \c owner (varchar):  who added this reference to the database?
      - \c keywords (varchar):  keywords for this reference

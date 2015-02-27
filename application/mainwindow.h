@@ -369,6 +369,11 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
 
         /** \brief register LS3Importer */
         virtual void registerExporter(LS3Exporter* exporter);
+        /** \brief register LS3Importer */
+        virtual void deregisterImporter(LS3Importer* importer);
+
+        /** \brief register LS3Importer */
+        virtual void deregisterExporter(LS3Exporter* exporter);
 
         /** \brief return a pointer to a given menu, or NULL */
         virtual QMenu* getMenu(LS3PluginServices::AvailableMenus menu);
@@ -416,6 +421,8 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         virtual void SetIDType(QString type) { GetQSettings()->setValue("extended/idtype", type); };
 
         virtual void addProgressThread(LS3ProgressThread* thread);
+    public slots:
+        void loadStartup();
 };
 
 #endif

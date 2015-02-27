@@ -18,8 +18,9 @@ LS3PluginLatexTools::LS3PluginLatexTools():
 
 LS3PluginLatexTools::~LS3PluginLatexTools()
 {
-    delete bibteximport;
-    delete bibtexexport;
+
+    if (bibteximport) delete bibteximport;
+    if (bibtexexport) delete bibtexexport;
 }
 
 
@@ -67,6 +68,10 @@ void LS3PluginLatexTools::init(LS3PluginServices* pluginServices) {
 }
 
 void LS3PluginLatexTools::deinit(LS3PluginServices* pluginServices) {
+    if (m_pluginServices) {
+        m_pluginServices->deregisterExporter(bibtexexport);
+        m_pluginServices->deregisterImporter(bibteximport);
+    }
     LS3PluginBase::deinit(pluginServices);
 }
 

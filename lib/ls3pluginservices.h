@@ -101,6 +101,11 @@ class LS3PluginServices {
         /** \brief register LS3Exporter */
         virtual void registerExporter(LS3Exporter* exporter)=0;
 
+        /** \brief deregister LS3Importer */
+        virtual void deregisterImporter(LS3Importer* importer)=0;
+
+        /** \brief deregister LS3Exporter */
+        virtual void deregisterExporter(LS3Exporter* exporter)=0;
         /** \brief get list if importers */
         virtual QList<LS3Importer*> getImporters()=0;
 

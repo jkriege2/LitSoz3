@@ -226,6 +226,8 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
         /*! \brief unmap a widget */
         virtual void removeMapping(QWidget* widget)=0;
 
+        virtual void ensureMappedWidgetsPopulated()=0;
+
 
         /*!  \brief select the current dataset */
         virtual void selectCurrent();

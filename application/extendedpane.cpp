@@ -34,8 +34,12 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     if (extendedShortWidth>0) cmbOrigin->setMaximumWidth(extendedShortWidth);
     lay->addRow(tr("&Origin:"), cmbOrigin);
 
+    edtLibrary=new QEnhancedLineEdit(this);
+    lay->addRow(tr("&Library:"), edtLibrary);
+    if (extendedShortWidth>0) edtLibrary->setMaximumWidth(extendedShortWidth);
+
     edtLibNum=new QEnhancedLineEdit(this);
-    lay->addRow(tr("&Library No.:"), edtLibNum);
+    lay->addRow(tr("Library &No.:"), edtLibNum);
     if (extendedShortWidth>0) edtLibNum->setMaximumWidth(extendedShortWidth);
 
     f=new QFrame(this);
@@ -317,6 +321,7 @@ void ExtendedPane::connectWidgets(LS3Datastore* datastore) {
     datastore->addMapping(edtOwner, "owner");
     datastore->addMapping(dedWhenAdded, "addeddate", "date");
     datastore->addMapping(edtLibNum, "librarynum");
+    datastore->addMapping(edtLibrary, "library");
     datastore->addMapping(edtPrice, "price");
     datastore->addMapping(cmbCurrency, "currency", "text");
     datastore->addMapping(cmbStatus, "status", "text");
@@ -339,6 +344,7 @@ void ExtendedPane::disconnectWidgets() {
         datastore->removeMapping(edtOwner);
         datastore->removeMapping(dedWhenAdded);
         datastore->removeMapping(edtLibNum);
+        datastore->removeMapping(edtLibrary);
         datastore->removeMapping(edtPrice);
         datastore->removeMapping(cmbCurrency);
         datastore->removeMapping(cmbStatus);

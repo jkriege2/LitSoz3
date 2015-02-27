@@ -170,7 +170,7 @@ class fdfManager: public QObject {
          * \param widgetvec will be cleared and after the call contain pointers to all widgets that were
          *                  added to the \a mapper
          */
-         QWidget* createWidgets(QString ID, QString language, QString configDir, QWidget* parent, LS3Datastore* datastore, QVector<QWidget*>* widgetvec);
+         QWidget* createWidgets(QString ID, QString language, QString configDir, QWidget* parent, LS3Datastore* datastore, QVector<QPointer<QWidget> > *widgetvec);
 };
 
 

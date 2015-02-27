@@ -98,6 +98,11 @@ LS3LIB_EXPORT void addToFieldIfNotContained(QMap<QString, QVariant>& data, const
 */
 LS3LIB_EXPORT QString decodeLanguage(const QString& lang);
 
-
+#define LS3_SET_IF_NOT_EMPTY(set_var, value) {\
+    QString v=value; \
+    if (!v.trimmed().simplified().isEmpty()) { \
+        set_var = v; \
+    } \
+}
 
 #endif // BIBTOOLS_H

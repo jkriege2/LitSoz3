@@ -617,7 +617,7 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
                 }
                 //qDebug()<<doi;
 
-                if (doi.size()>0) props["doi"]=doi;
+                if (doi.simplified().trimmed().size()>0) props["doi"]=doi;
             }
 
             QRegExp rxYear("\\s(\\d\\d\\d\\d)\\s");

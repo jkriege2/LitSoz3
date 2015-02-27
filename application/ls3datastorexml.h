@@ -130,7 +130,7 @@ class LS3DatastoreXML : public LS3Datastore {
         virtual void removeMapping(QWidget* widget);
         /** \brief return \c true if we should provide means to save the database */
         virtual bool hasDbSave() const { return true; }
-
+        virtual void ensureMappedWidgetsPopulated();
 
 
 public slots:
@@ -180,6 +180,19 @@ public slots:
             emit wasChangedChanged(wasChanged);
         }
     protected:
+        /* Qt seems to be instable under some conditions, when addMapping and mapper->setCurrentIndex() are mixed. Therefore addMapping can be disabled
+         * and all calls will be stored, until the feature is re-enabled.
+         * */
+        struct storedMappingItems {
+            QPointer<QWidget> widget;
+            QString field;
+            QString property;
+        };
+        QList<storedMappingItems> storedMapping;
+        bool mappingEnabled;
+
+        void disableMapping();
+        void enableMapping();
 
         /** \brief main data model which holds the keywords table, read from the metadata */
         QStringListModel* keywordsdata;

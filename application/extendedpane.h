@@ -52,6 +52,8 @@ class ExtendedPane : public QWidget {
         QMappableComboBox* cmbStatus;
         /** \brief edit for owner of entry (who added it?) */
         QEnhancedLineEdit* edtOwner;
+        /** \brief edit for library  */
+        QEnhancedLineEdit* edtLibrary;
         /** \brief edit for library number */
         QEnhancedLineEdit* edtLibNum;
         /** \brief edit for price */

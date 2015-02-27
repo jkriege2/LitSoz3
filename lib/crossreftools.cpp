@@ -99,21 +99,21 @@ QMap<QString, QVariant> extractCrossrefUnixrefMetadata(const QString& data) {
                 QDomElement n = docElem.firstChildElement("doi_record").firstChildElement("crossref").firstChildElement("journal");
                 if (!n.isNull()) {
                     record["type"]="article";
-                    record["journal"]=n.firstChildElement("journal_metadata").firstChildElement("full_title").text();
+                    LS3_SET_IF_NOT_EMPTY(record["journal"],n.firstChildElement("journal_metadata").firstChildElement("full_title").text());
                     if (record["journal"].toString().isEmpty()) record["journal"]=n.firstChildElement("journal_metadata").firstChildElement("abbrev_title").text();
-                    record["issn"]=n.firstChildElement("journal_metadata").firstChildElement("issn").text();
-                    record["year"]=n.firstChildElement("journal_issue").firstChildElement("publication_date").firstChildElement("year").text();
+                    LS3_SET_IF_NOT_EMPTY(record["issn"],n.firstChildElement("journal_metadata").firstChildElement("issn").text());
+                    LS3_SET_IF_NOT_EMPTY(record["year"],n.firstChildElement("journal_issue").firstChildElement("publication_date").firstChildElement("year").text());
                     if (record["year"].toString().isEmpty()) record["year"]=n.firstChildElement("journal_article").firstChildElement("publication_date").firstChildElement("year").text();
-                    record["volume"]=n.firstChildElement("journal_issue").firstChildElement("journal_volume").firstChildElement("volume").text();
+                    LS3_SET_IF_NOT_EMPTY(record["volume"],n.firstChildElement("journal_issue").firstChildElement("journal_volume").firstChildElement("volume").text());
                     if (record["volume"].toString().isEmpty())  record["volume"]=n.firstChildElement("journal_issue").firstChildElement("journal_volume").text();
-                    record["number"]=n.firstChildElement("journal_issue").firstChildElement("issue").text();
+                    LS3_SET_IF_NOT_EMPTY(record["number"],n.firstChildElement("journal_issue").firstChildElement("issue").text());
 
                     readTitles(record, n.firstChildElement("journal_article").firstChildElement("titles"));
 
                     readContributors(record, n.firstChildElement("journal_article").firstChildElement("contributors"), "authors");
 
-                    record["url"]=n.firstChildElement("journal_article").firstChildElement("doi_data").firstChildElement("resource").text();
-                    record["doi"]=n.firstChildElement("book_metadata").firstChildElement("doi_data").firstChildElement("doi").text();
+                    LS3_SET_IF_NOT_EMPTY(record["url"], n.firstChildElement("journal_article").firstChildElement("doi_data").firstChildElement("resource").text());
+                    LS3_SET_IF_NOT_EMPTY(record["doi"], n.firstChildElement("book_metadata").firstChildElement("doi_data").firstChildElement("doi").text());
 
                     readPages(record, n.firstChildElement("journal_article").firstChildElement("pages"), "pages");
                     ok=true;
@@ -137,16 +137,16 @@ QMap<QString, QVariant> extractCrossrefUnixrefMetadata(const QString& data) {
                             record["edition"]=edn;
                         }
                     }
-                    record["volume"]=n.firstChildElement("book_metadata").firstChildElement("volume").text();
+                    LS3_SET_IF_NOT_EMPTY(record["volume"],n.firstChildElement("book_metadata").firstChildElement("volume").text());
 
-                    record["year"]=n.firstChildElement("book_metadata").firstChildElement("publication_date").firstChildElement("year").text();
-                    record["isbn"]=n.firstChildElement("book_metadata").firstChildElement("isbn").text();
-                    record["howpublished"]=n.firstChildElement("book_metadata").firstChildElement("isbn").attribute("media_type");
+                    LS3_SET_IF_NOT_EMPTY(record["year"],n.firstChildElement("book_metadata").firstChildElement("publication_date").firstChildElement("year").text());
+                    LS3_SET_IF_NOT_EMPTY(record["isbn"],n.firstChildElement("book_metadata").firstChildElement("isbn").text());
+                    LS3_SET_IF_NOT_EMPTY(record["howpublished"],n.firstChildElement("book_metadata").firstChildElement("isbn").attribute("media_type"));
 
                     readPublisher(record, n.firstChildElement("book_metadata").firstChildElement("publisher"));
 
-                    record["url"]=n.firstChildElement("book_metadata").firstChildElement("doi_data").firstChildElement("resource").text();
-                    record["doi"]=n.firstChildElement("book_metadata").firstChildElement("doi_data").firstChildElement("doi").text();
+                    LS3_SET_IF_NOT_EMPTY(record["url"],n.firstChildElement("book_metadata").firstChildElement("doi_data").firstChildElement("resource").text());
+                    LS3_SET_IF_NOT_EMPTY(record["doi"],n.firstChildElement("book_metadata").firstChildElement("doi_data").firstChildElement("doi").text());
 
                     QDomElement nc=n.firstChildElement("content_item");
                     if (!nc.isNull()) {
@@ -159,7 +159,7 @@ QMap<QString, QVariant> extractCrossrefUnixrefMetadata(const QString& data) {
                         readContributors(record, nc.firstChildElement("contributors"), "authors", true, "editors");
                         readTitles(record, nc.firstChildElement("titles"), "title", true, "subtitle");
                         readPages(record, nc.firstChildElement("pages"), "pages");
-                        record["year"]=nc.firstChildElement("publication_date").firstChildElement("year").text();
+                        LS3_SET_IF_NOT_EMPTY(record["year"],nc.firstChildElement("publication_date").firstChildElement("year").text());
                     }
 
                     ok=true;
@@ -174,24 +174,24 @@ QMap<QString, QVariant> extractCrossrefUnixrefMetadata(const QString& data) {
 
                     if (!n.firstChildElement("proceedings_series_metadata").isNull()) {
                         readContributors(record, n.firstChildElement("proceedings_series_metadata").firstChildElement("contributors"), "authors", true, "editors");
-                        record["booktitle"] = removeHTML(n.firstChildElement("proceedings_series_metadata").firstChildElement("proceedings_title").text());
-                        record["series"] = removeHTML(n.firstChildElement("proceedings_series_metadata").firstChildElement("series_metadata").firstChildElement("titles").text());
-                        record["issn"] = removeHTML(n.firstChildElement("proceedings_series_metadata").firstChildElement("series_metadata").firstChildElement("issn").text());
+                        LS3_SET_IF_NOT_EMPTY(record["booktitle"],removeHTML(n.firstChildElement("proceedings_series_metadata").firstChildElement("proceedings_title").text()));
+                        LS3_SET_IF_NOT_EMPTY(record["series"] , removeHTML(n.firstChildElement("proceedings_series_metadata").firstChildElement("series_metadata").firstChildElement("titles").text()));
+                        LS3_SET_IF_NOT_EMPTY(record["issn"] , removeHTML(n.firstChildElement("proceedings_series_metadata").firstChildElement("series_metadata").firstChildElement("issn").text()));
                         readPublisher(record, n.firstChildElement("proceedings_series_metadata").firstChildElement("publisher"));
-                        record["year"]=n.firstChildElement("proceedings_series_metadata").firstChildElement("publication_date").firstChildElement("year").text();
-                        record["volume"]=n.firstChildElement("proceedings_series_metadata").firstChildElement("volume").text();
-                        record["isbn"]=n.firstChildElement("proceedings_series_metadata").firstChildElement("isbn").text();
-                        record["url"]=n.firstChildElement("proceedings_series_metadata").firstChildElement("doi_data").firstChildElement("resource").text();
-                        record["doi"]=n.firstChildElement("proceedings_series_metadata").firstChildElement("doi_data").firstChildElement("doi").text();
+                        LS3_SET_IF_NOT_EMPTY(record["year"],n.firstChildElement("proceedings_series_metadata").firstChildElement("publication_date").firstChildElement("year").text());
+                        LS3_SET_IF_NOT_EMPTY(record["volume"],n.firstChildElement("proceedings_series_metadata").firstChildElement("volume").text());
+                        LS3_SET_IF_NOT_EMPTY(record["isbn"],n.firstChildElement("proceedings_series_metadata").firstChildElement("isbn").text());
+                        LS3_SET_IF_NOT_EMPTY(record["url"],n.firstChildElement("proceedings_series_metadata").firstChildElement("doi_data").firstChildElement("resource").text());
+                        LS3_SET_IF_NOT_EMPTY(record["doi"],n.firstChildElement("proceedings_series_metadata").firstChildElement("doi_data").firstChildElement("doi").text());
                     }
                     if (!n.firstChildElement("proceedings_metadata").isNull()) {
                         readContributors(record, n.firstChildElement("proceedings_metadata").firstChildElement("contributors"), "authors", true, "editors");
-                        record["booktitle"] = removeHTML(n.firstChildElement("proceedings_metadata").firstChildElement("proceedings_title").text());
+                        LS3_SET_IF_NOT_EMPTY(record["booktitle"] , removeHTML(n.firstChildElement("proceedings_metadata").firstChildElement("proceedings_title").text()));
                         readPublisher(record, n.firstChildElement("proceedings_metadata").firstChildElement("publisher"));
-                        record["year"]=n.firstChildElement("proceedings_metadata").firstChildElement("publication_date").firstChildElement("year").text();
-                        record["isbn"]=n.firstChildElement("proceedings_metadata").firstChildElement("isbn").text();
-                        record["url"]=n.firstChildElement("proceedings_metadata").firstChildElement("doi_data").firstChildElement("resource").text();
-                        record["doi"]=n.firstChildElement("proceedings_metadata").firstChildElement("doi_data").firstChildElement("doi").text();
+                        LS3_SET_IF_NOT_EMPTY(record["year"],n.firstChildElement("proceedings_metadata").firstChildElement("publication_date").firstChildElement("year").text());
+                        LS3_SET_IF_NOT_EMPTY(record["isbn"],n.firstChildElement("proceedings_metadata").firstChildElement("isbn").text());
+                        LS3_SET_IF_NOT_EMPTY(record["url"],n.firstChildElement("proceedings_metadata").firstChildElement("doi_data").firstChildElement("resource").text());
+                        LS3_SET_IF_NOT_EMPTY(record["doi"],n.firstChildElement("proceedings_metadata").firstChildElement("doi_data").firstChildElement("doi").text());
                     }
 
 
@@ -202,7 +202,7 @@ QMap<QString, QVariant> extractCrossrefUnixrefMetadata(const QString& data) {
                         readContributors(record, nc.firstChildElement("contributors"), "authors", true, "editors");
                         readTitles(record, nc.firstChildElement("titles"), "title", true, "subtitle");
                         readPages(record, nc.firstChildElement("pages"), "pages");
-                        record["year"]=nc.firstChildElement("publication_date").firstChildElement("year").text();
+                        LS3_SET_IF_NOT_EMPTY(record["year"],nc.firstChildElement("publication_date").firstChildElement("year").text());
                     }
 
                     ok=true;
@@ -219,12 +219,12 @@ QMap<QString, QVariant> extractCrossrefUnixrefMetadata(const QString& data) {
                     readTitles(record, n.firstChildElement("titles"), "title", true, "subtitle");
 
 
-                    record["institution"] = n.firstChildElement("institution").firstChildElement("institution_name").text()+" "+n.firstChildElement("institution").firstChildElement("institution_department").text();
-                    record["places"] = n.firstChildElement("institution").firstChildElement("institution_place").text();
-                    record["year"]=n.firstChildElement("approval_date").firstChildElement("year").text();
-                    record["isbn"]=n.firstChildElement("isbn").text();
-                    record["url"]=n.firstChildElement("doi_data").firstChildElement("resource").text();
-                    record["doi"]=n.firstChildElement("doi_data").firstChildElement("doi").text();
+                    LS3_SET_IF_NOT_EMPTY(record["institution"] , n.firstChildElement("institution").firstChildElement("institution_name").text()+" "+n.firstChildElement("institution").firstChildElement("institution_department").text());
+                    LS3_SET_IF_NOT_EMPTY(record["places"] , n.firstChildElement("institution").firstChildElement("institution_place").text());
+                    LS3_SET_IF_NOT_EMPTY(record["year"],n.firstChildElement("approval_date").firstChildElement("year").text());
+                    LS3_SET_IF_NOT_EMPTY(record["isbn"],n.firstChildElement("isbn").text());
+                    LS3_SET_IF_NOT_EMPTY(record["url"],n.firstChildElement("doi_data").firstChildElement("resource").text());
+                    LS3_SET_IF_NOT_EMPTY(record["doi"],n.firstChildElement("doi_data").firstChildElement("doi").text());
 
                     ok=true;
                 }

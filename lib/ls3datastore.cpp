@@ -58,6 +58,7 @@ LS3Datastore::LS3Datastore(LS3PluginServices* pservices, QObject* parent):
     d.type=FTString; d.name="statuscomment"; fields.append(d); // comment on the current status (e.g. "return on feb 21st" ...)
     d.type=FTString; d.name="statussince"; fields.append(d); // date o last status change
     d.type=FTString; d.name="origin"; fields.append(d); // where did I get the reference from?
+    d.type=FTString; d.name="library"; fields.append(d); // library, in which the item can be found/was found
     d.type=FTString; d.name="librarynum"; fields.append(d); // number of reference within a library
     d.type=FTString; d.name="owner"; fields.append(d); // who added this reference to the database?
     d.type=FTString; d.name="keywords"; fields.append(d); // keywords for this reference

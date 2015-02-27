@@ -93,7 +93,7 @@ void extractMetaDataWithRegExp(const QString& regex, const QString& data, QMap<Q
                 output["pubmed"]=value;
             } else if ((dcitem=="citation_doi")) {
                 if (value.startsWith("doi:")) value=value.remove("doi:");
-                output["doi"]=value;
+                if (!value.trimmed().simplified().isEmpty()) output["doi"]=value;
             } else if ((dcitem=="citation_date")) {
                 output["year"]=extractYear(value);
             } else if ((dcitem=="citation_issue")) {
@@ -253,26 +253,26 @@ QList<QMap<QString, QVariant> > extractCoins(const QString& data, const QSet<QSt
                         } else if (item.startsWith("rft.btitle")) {
                             coins["booktitle"]=value;
                         } else if (item.startsWith("rft_id")) {
-                            if (value.startsWith("info:doi/")) coins["doi"]=value.right(value.size()-9);
-                            if (value.startsWith("info:pmid/")) coins["pubmed"]=value.right(value.size()-10);
-                            if (value.startsWith("info:arxiv/")) coins["arxiv"]=value.right(value.size()-10);
-                            if (value.startsWith("info:pmcid/")) coins["pmcid"]=value.right(value.size()-10);
-                            if (value.startsWith("info:http://")) coins["url"]=value.right(value.size()-5);
-                            if (value.startsWith("info:https://")) coins["url"]=value.right(value.size()-5);
-                            if (value.startsWith("info:ftp://")) coins["url"]=value.right(value.size()-5);
-                            if (value.startsWith("info:ftps://")) coins["url"]=value.right(value.size()-5);
-                            if (value.startsWith("doi/")) coins["doi"]=value.right(value.size()-4);
-                            if (value.startsWith("pmid/")) coins["pubmed"]=value.right(value.size()-5);
-                            if (value.startsWith("arxiv/")) coins["arxiv"]=value.right(value.size()-5);
-                            if (value.startsWith("pmcid/")) coins["pmcid"]=value.right(value.size()-5);
-                            if (value.startsWith("http://")) coins["url"]=value;
-                            if (value.startsWith("https://")) coins["url"]=value;
-                            if (value.startsWith("ftp://")) coins["url"]=value;
-                            if (value.startsWith("ftps://")) coins["url"]=value;
+                            if (value.startsWith("info:doi/")) LS3_SET_IF_NOT_EMPTY(coins["doi"],value.right(value.size()-9));
+                            if (value.startsWith("info:pmid/")) LS3_SET_IF_NOT_EMPTY(coins["pubmed"],value.right(value.size()-10));
+                            if (value.startsWith("info:arxiv/")) LS3_SET_IF_NOT_EMPTY(coins["arxiv"],value.right(value.size()-10));
+                            if (value.startsWith("info:pmcid/")) LS3_SET_IF_NOT_EMPTY(coins["pmcid"],value.right(value.size()-10));
+                            if (value.startsWith("info:http://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value.right(value.size()-5));
+                            if (value.startsWith("info:https://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value.right(value.size()-5));
+                            if (value.startsWith("info:ftp://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value.right(value.size()-5));
+                            if (value.startsWith("info:ftps://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value.right(value.size()-5));
+                            if (value.startsWith("doi/")) LS3_SET_IF_NOT_EMPTY(coins["doi"],value.right(value.size()-4));
+                            if (value.startsWith("pmid/")) LS3_SET_IF_NOT_EMPTY(coins["pubmed"],value.right(value.size()-5));
+                            if (value.startsWith("arxiv/")) LS3_SET_IF_NOT_EMPTY(coins["arxiv"],value.right(value.size()-5));
+                            if (value.startsWith("pmcid/")) LS3_SET_IF_NOT_EMPTY(coins["pmcid"],value.right(value.size()-5));
+                            if (value.startsWith("http://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value);
+                            if (value.startsWith("https://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value);
+                            if (value.startsWith("ftp://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value);
+                            if (value.startsWith("ftps://")) LS3_SET_IF_NOT_EMPTY(coins["url"],value);
                         } else if (item.startsWith("req_ref_fmt")) {
-                            if (coins["url"].toString().isEmpty()) coins["url"]=value;
+                            if (coins["url"].toString().isEmpty()) LS3_SET_IF_NOT_EMPTY(coins["url"],value);
                         } else if (item.startsWith("req_ref")) {
-                            if (coins["url"].toString().isEmpty()) coins["url"]=value;
+                            if (coins["url"].toString().isEmpty()) LS3_SET_IF_NOT_EMPTY(coins["url"],value);
                         } else if (item.startsWith("rft.au")) {
                             if (!coins["authors"].toString().isEmpty()) coins["authors"]=coins["authors"].toString()+"; ";
                             coins["authors"]=coins["authors"].toString()+reformatAuthors(value, name_prefixes, name_additions, ands);

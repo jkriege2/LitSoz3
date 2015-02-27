@@ -51,6 +51,9 @@ private slots:
 
     void topicModelChanged();
 
+    void databaseCurentChanged(int index);
+    void typeChanged(int index);
+
 private:
     /** \brief a combobox that is used to select an item style */
     QMappableComboBox* cmbType;
@@ -86,7 +89,7 @@ private:
     bool connected;
 
     /** \brief used to store the widgets that re mapped to dta columns */
-    QVector<QWidget*> widgetvec;
+    QVector<QPointer<QWidget> > widgetvec;
 
     /** \brief QMenu for btnGenerateID */
     QMenu* menGenerateID;
@@ -108,6 +111,8 @@ private:
     QLabel* labKeywords;
     QGridLayout* flTopic;
     QSpacerItem* flTopicSpacer;
+
+    QString currentFDF;
 };
 
 #endif // DETAILPANE_H

@@ -8,6 +8,7 @@
 LS3DatastoreXML::LS3DatastoreXML(ProgramOptions* settings, LS3PluginServices* pservices, QObject* parent):
     LS3Datastore(pservices, parent)
 {
+    mappingEnabled=true;
     this->settings=settings;
     keywordsdata = new QStringListModel(this);
     topicsdata=new QStringListModel(this);
@@ -269,10 +270,27 @@ QVariant LS3DatastoreXML::getField(int record, QString field) const {
 void LS3DatastoreXML::dbMove(int current) {
     if (current<0) return;
     if (dbIsLoaded()) {
-        if (mapper->currentIndex()!=current) {
+        int oldidx=mapper->currentIndex();
+        //qDebug()<<"dbMove("<<current<<")  was="<<oldidx;
+        //QDataWidgetMapper::SubmitPolicy policy=mapper->submitPolicy();
+        //qDebug()<<"2";
+        //mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+        //qDebug()<<"3";
+        //mapper->submit();
+        //qDebug()<<"4";
+        if (oldidx!=current) {
+            //qDebug()<<"5";
+            disableMapping();
+            //qDebug()<<"5.1";
             mapper->setCurrentIndex(current);
+            //qDebug()<<"5.2";
+            enableMapping();
+            //qDebug()<<"6";
             emit currentRecordChanged(current);
+            //qDebug()<<"7";
         }
+       // mapper->setSubmitPolicy(policy);
+        //qDebug()<<"8";
     }
 }
 
@@ -473,22 +491,67 @@ void LS3DatastoreXML::tableDataChanged(const QModelIndex& topLeft, const QModelI
     }
 }
 
+void LS3DatastoreXML::disableMapping()
+{
+    mappingEnabled=false;
+    //qDebug()<<"disableMapping";
+}
+
+void LS3DatastoreXML::enableMapping()
+{
+    mappingEnabled=true;
+    //qDebug()<<"enableMapping .. ";
+    for (int i=0; i<storedMapping.size(); i++) {
+        if (storedMapping[i].property.isEmpty()) {
+            mapper->addMapping(storedMapping[i].widget, fieldColumn(storedMapping[i].field));
+        } else {
+            mapper->addMapping(storedMapping[i].widget, fieldColumn(storedMapping[i].field), storedMapping[i].property.toLatin1());
+        }
+    }
+    storedMapping.clear();
+    //qDebug()<<"enableMapping .. DONE!";
+}
+
 void LS3DatastoreXML::addMapping(QWidget* widget, QString field) {
     if (dbIsLoaded()) {
         //std::cout<<">>>> map '"<<field.toStdString()<<"' --> '"<<fieldColumn(field)<<"'\n";
-        mapper->addMapping(widget, fieldColumn(field));
+        if (mappingEnabled) {
+            mapper->addMapping(widget, fieldColumn(field));
+        } else {
+            storedMappingItems it;
+            it.widget=widget;
+            it.field=field;
+            it.property.clear();
+            storedMapping.append(it);
+        }
+
     }
 }
 
 void LS3DatastoreXML::addMapping(QWidget* widget, QString field, QString property) {
     if (dbIsLoaded()) {
-        mapper->addMapping(widget, fieldColumn(field), property.toLatin1());
+        if (mappingEnabled) {
+            mapper->addMapping(widget, fieldColumn(field), property.toLatin1());
+        } else {
+            storedMappingItems it;
+            it.widget=widget;
+            it.field=field;
+            it.property=property;
+            storedMapping.append(it);
+        }
     }
 }
 
 void LS3DatastoreXML::removeMapping(QWidget* widget) {
     if (dbIsLoaded()) {
         mapper->removeMapping(widget);
+    }
+}
+
+void LS3DatastoreXML::ensureMappedWidgetsPopulated()
+{
+    if (dbIsLoaded()) {
+        mapper->setCurrentIndex(mapper->currentIndex());
     }
 }
 
