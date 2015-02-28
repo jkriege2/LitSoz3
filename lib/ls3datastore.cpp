@@ -37,6 +37,7 @@ LS3Datastore::LS3Datastore(LS3PluginServices* pservices, QObject* parent):
     d.type=FTString; d.name="booktitle"; fields.append(d); // title of the book the reference appeared in
     d.type=FTString; d.name="series"; fields.append(d); // series, a book appeared in
     d.type=FTString; d.name="chapter"; fields.append(d); // referenced chapter inside a book
+    d.type=FTString; d.name="chapter"; fields.append(d); // referenced chapter inside a book
     d.type=FTString; d.name="howpublished"; fields.append(d); // how has the reference been published
     d.type=FTString; d.name="subtype"; fields.append(d); // a more detailed type description
     d.type=FTInt; d.name="edition"; fields.append(d); // edition of the book
