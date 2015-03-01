@@ -38,7 +38,7 @@ LS3LIB_EXPORT QString formatEtalAuthorsFamilyNames(const QString& authors, int m
 LS3LIB_EXPORT QString intToLetterCode(unsigned int n);
 
 /** \brief shorten names  (e.g. "Jan Wolfgang" to "J. W.") */
-LS3LIB_EXPORT QString shortenGivenName(const QString& names);
+LS3LIB_EXPORT QString shortenGivenName(const QString& names, const QString& shortenWith=QString(". "));
 
 /** \brief reformats lists of authors to the default LitSoz format
  *

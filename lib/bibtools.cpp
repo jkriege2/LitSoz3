@@ -86,9 +86,9 @@ void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* 
     }
 }
 
-QString shortenGivenName(const QString& names) {
+QString shortenGivenName(const QString& names, const QString& shortenWith) {
     QString result=names;
-    QRegExp rx("[.,;:]");
+    QRegExp rx("[.,;:-]");
     rx.setPatternSyntax(QRegExp::Wildcard);
     result.remove(rx);
     QStringList sl=result.split(QRegExp("\\s+"));
@@ -96,7 +96,7 @@ QString shortenGivenName(const QString& names) {
     for (int i=0; i<sl.size(); i++) {
         QString s=sl[i];
         if (!s.isEmpty())
-            result=result+s[0]+". ";
+            result=result+s[0]+shortenWith;
     }
     return result.trimmed();
 }

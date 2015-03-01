@@ -47,6 +47,8 @@ class LS3LIB_EXPORT CSLLocale: public CSLLocaleInterface {
             QString form;
         };
 
+
+
         explicit CSLLocale(const QString& fn);
         ~CSLLocale();
         inline QString name() const { return m_name; }
@@ -81,6 +83,11 @@ class LS3LIB_EXPORT CSLLocale: public CSLLocaleInterface {
 
 class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
     public:
+        enum OutputFormat {
+            ofPlaintext,
+            ofHTML
+        };
+
         explicit CSLFile(const QString& fn);
 
         ~CSLFile();
@@ -88,7 +95,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
         inline bool isValid() const { return valid; }
         inline QString name() const { return m_name; }
 
-        QString produceHTML(const QMap<QString, QVariant> &data, bool citation=false);
+        QString produce(const QMap<QString, QVariant> &data, bool citation=false, OutputFormat outf=ofHTML);
 
         virtual inline CSLLocale::CSLLocaleValue term(const QString& name, const QString& form=QString()) const {
             if (m_terms.contains(name)) {
@@ -161,8 +168,8 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 valign=vaBaseline;
             }
 
-            QString startFormatHTML(const CSLFormatState& lastFormat) const;
-            QString endFormatHTML(const CSLFormatState& newFormat) const ;
+            QString startFormat(const CSLFormatState& lastFormat, OutputFormat outf) const;
+            QString endFormat(const CSLFormatState& newFormat, OutputFormat outf) const ;
 
             FontStyle fstyle;
             FontVariant fvariant;
@@ -171,25 +178,18 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
             VerticalAlign valign;
         };
 
-        class LS3LIB_EXPORT CSLNode {
+        class LS3LIB_EXPORT CSLBasicProps {
             public:
-                explicit CSLNode(CSLNode* parent,CSLFile* file);
-                virtual ~CSLNode();
-                inline CSLNode* parent() const { return m_parent; }
-                virtual QString produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState &currentFormat);
-                static QVariant getCSLField(const QString& field, const QMap<QString, QVariant> &data, const QVariant &defaultVal=QVariant());
-                virtual void parseProperties(const QDomElement& e);
-                inline void setParent(CSLNode* p) { m_parent=p; }
+                CSLBasicProps();
+                void modifyStyle(CSLFormatState& style);
+                QString applyTextCase(const QString& text);
+                virtual void parseBasicProperties(const QDomElement& e);
             protected:
-                CSLNode* m_parent;
-                CSLFile* m_file;
 
                 QString suffix;
                 QString prefix;
                 QString delimiter;
 
-                void modifyStyle(CSLFormatState& style);
-                QString applyTextCase(const QString& text);
 
                 FontStyle fstyle;
                 FontVariant fvariant;
@@ -206,21 +206,28 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 bool set_tdecor;
                 bool set_valign;
 
-                /*QString getHTMLFormatting(const QString& text, CSLNode* m_parent);
-                QString getFontWeightTag(bool endtag=false);
-                QString getFontStyleTag(bool endtag=false);
-                QString getFontVariantTag(bool endtag=false);
-                QString getTextDecorationTag(bool endtag=false);
-                QString getVerticalAlignTag(bool endtag=false);*/
+        };
 
-
+        class LS3LIB_EXPORT CSLNode: public CSLBasicProps {
+            public:                
+                explicit CSLNode(CSLNode* parent,CSLFile* file);
+                virtual ~CSLNode();
+                inline CSLNode* parent() const { return m_parent; }
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState &currentFormat, OutputFormat outf);
+                static QVariant getCSLField(const QString& field, const QMap<QString, QVariant> &data, const QVariant &defaultVal=QVariant());
+                virtual void parseProperties(const QDomElement& e);
+                inline void setParent(CSLNode* p) { m_parent=p; }
+                static QString escapeString(OutputFormat outf, const QString& text);
+            protected:
+                CSLNode* m_parent;
+                CSLFile* m_file;
         };
 
         class LS3LIB_EXPORT CSLListNode: public CSLNode {
             public:
                 explicit CSLListNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLListNode();
-                virtual QString produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat);
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf);
                 void addChild(CSLNode* c);
                 void clearChildren();
             protected:
@@ -231,7 +238,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
             public:
                 explicit CSLTextNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLTextNode();
-                virtual QString produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat);
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf);
                 virtual void parseProperties(const QDomElement& e);
             protected:
                 QString macro;
@@ -246,18 +253,75 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
             public:
                 explicit CSLNumberNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLNumberNode();
-                virtual QString produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat);
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf);
                 virtual void parseProperties(const QDomElement& e);
             protected:
                 QString variable;
                 QString form;
         };
 
+        class LS3LIB_EXPORT CSLLabelNode: public CSLNode {
+            public:
+                explicit CSLLabelNode(CSLNode* parent, CSLFile* file);
+                virtual ~CSLLabelNode();
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf);
+                virtual void parseProperties(const QDomElement& e);
+                inline void setVariable(const QString variable) {
+                    this->variable=variable;
+                }
+
+            protected:
+                QString variable;
+                QString form;
+                QString plural;
+        };
+
+        class LS3LIB_EXPORT CSLNamesNode: public CSLNode {
+            public:
+                explicit CSLNamesNode(CSLNode* parent, CSLFile* file);
+                virtual ~CSLNamesNode();
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf);
+                virtual void parseProperties(const QDomElement& e);
+            protected:
+                void parseNameProperties(const QDomElement& e);
+                QStringList variables;
+                enum NameAndSeparator {
+                    nasAndTerm,
+                    nasSymbol
+                };
+                NameAndSeparator andSeparator;
+                enum DelimiterPrecedesEnum {
+                    dpeaContextual,
+                    dpeaAfterInverseName,
+                    dpeaAlways,
+                    dpeaNever
+                };
+
+                DelimiterPrecedesEnum delimiterPrecedesEtAl;
+                DelimiterPrecedesEnum delimiterPrecedesLast;
+                int etalMin;
+                int etaluseFirst;
+                bool etalUseLast;
+                QString form;
+                CSLBasicProps nameProps;
+                CSLBasicProps familyNameProps;
+                CSLBasicProps givenNameProps;
+                CSLBasicProps etalProps;
+                QString etal;
+                bool initialize;
+                QString initializeWith;
+                QString nameAsSortOrder;
+                QString sortSeparator;
+                QList<CSLNode*> m_substitutes;
+                CSLLabelNode* m_labelNode;
+
+        };
+
         class LS3LIB_EXPORT CSLChooseNode: public CSLNode {
             public:
                 explicit CSLChooseNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLChooseNode();
-                virtual QString produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat);
+                virtual QString produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf);
                 virtual void parseProperties(const QDomElement& e);
             protected:
                 enum IFType {

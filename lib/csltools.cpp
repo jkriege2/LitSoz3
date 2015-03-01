@@ -57,12 +57,12 @@ CSLFile::~CSLFile()
     m_citation=NULL;
 }
 
-QString CSLFile::produceHTML(const QMap<QString, QVariant>& data, bool citation)
+QString CSLFile::produce(const QMap<QString, QVariant>& data, bool citation, OutputFormat outf)
 {
     QString res;
     CSLFormatState defFont;
-    if (!citation && m_bibliography) res=res+m_bibliography->produceHTML(data, defFont);
-    if (citation && m_citation) res=res+m_citation->produceHTML(data, defFont);
+    if (!citation && m_bibliography) res=res+m_bibliography->produce(data, defFont, outf);
+    if (citation && m_citation) res=res+m_citation->produce(data, defFont, outf);
     return res;
 }
 
@@ -215,6 +215,16 @@ CSLFile::CSLNode* CSLFile::parseElement(const QDomElement &e, CSLFile::CSLNode *
         CSLChooseNode* node=new CSLChooseNode(parent, this);
         node->parseProperties(e);
         nodeOut=node;
+    } else if (e.tagName()=="names") {
+        qDebug()<<"parsing names ...";
+        CSLNamesNode* node=new CSLNamesNode(parent, this);
+        node->parseProperties(e);
+        nodeOut=node;
+    } else if (e.tagName()=="label") {
+        qDebug()<<"parsing label ...";
+        CSLLabelNode* node=new CSLLabelNode(parent, this);
+        node->parseProperties(e);
+        nodeOut=node;
     } else if (e.tagName()=="bibliography") {
         if (!e.firstChildElement("layout").isNull()) {
             qDebug()<<"parsing bibligraphy.layout ...";
@@ -235,21 +245,7 @@ CSLFile::CSLNode::CSLNode(CSLFile::CSLNode *parent, CSLFile *file)
 {
     m_file=file;
     m_parent=parent;
-    suffix="";
-    prefix="";
-    delimiter="";
-    fstyle=fsNormal;
-    fvariant=fvNormal;
-    fweight=fwNormal;
-    tdecor=tdNone;
-    valign=vaBaseline;
-    tcase=tcNormal;
 
-    set_fstyle=false;
-    set_fvariant=false;
-    set_fweight=false;
-    set_tdecor=false;
-    set_valign=false;
 
 }
 
@@ -258,7 +254,8 @@ CSLFile::CSLNode::~CSLNode()
 
 }
 
-QString CSLFile::CSLNode::produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat)
+
+QString CSLFile::CSLNode::produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf)
 {
     return QString();
 }
@@ -469,49 +466,15 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
 
 void CSLFile::CSLNode::parseProperties(const QDomElement &e)
 {
-    if (e.attribute("font-style")=="italic") { set_fstyle=true; fstyle=fsItalic; }
-    if (e.attribute("font-style")=="oblique") { set_fstyle=true; fstyle=fsOblique; }
-    if (e.attribute("font-style")=="normal") { set_fstyle=true; fstyle=fsNormal; }
-
-    if (e.attribute("font-variant")=="small-caps") { set_fvariant=true;  fvariant=fvSmallCaps; }
-    if (e.attribute("font-variant")=="normal") { set_fvariant=true; fvariant=fvNormal; }
-
-    if (e.attribute("font-weight")=="bold") { set_fweight=true; fweight=fwBold; }
-    if (e.attribute("font-weight")=="light") { set_fweight=true; fweight=fwLight; }
-    if (e.attribute("font-weight")=="normal") { set_fweight=true; fweight=fwNormal; }
-
-    if (e.attribute("text-decoration")=="none") { set_tdecor=true; tdecor=tdNone; }
-    if (e.attribute("text-decoration")=="underline") { set_tdecor=true; tdecor=tdUnderline; }
-
-    if (e.attribute("vertical-align")=="sub") { set_valign=true; valign=vaSub; }
-    if (e.attribute("vertical-align")=="sup") { set_valign=true; valign=vaSuper; }
-    if (e.attribute("vertical-align")=="baseline") { set_valign=true; valign=vaBaseline; }
-
-    if (e.attribute("text-case")=="lowercase") { tcase=tcLowercase; }
-    if (e.attribute("text-case")=="uppercase") { tcase=tcUppercase; }
-    if (e.attribute("text-case")=="capitalize-first") { tcase=tcCapitalizeFirst; }
-    if (e.attribute("text-case")=="capitalize-all") { tcase=tcCapitalizeAll; }
-    if (e.attribute("text-case")=="sentence") { tcase=tcSentence; }
-    if (e.attribute("text-case")=="title") { tcase=tcTitle; }
-
-    suffix=e.attribute("suffix");
-    prefix=e.attribute("prefix");
-    delimiter=e.attribute("delimiter");
+    parseBasicProperties(e);
 }
 
-void CSLFile::CSLNode::modifyStyle(CSLFile::CSLFormatState &style)
+QString CSLFile::CSLNode::escapeString(CSLFile::OutputFormat outf, const QString &text)
 {
-    if (set_fstyle) style.fstyle=fstyle;
-    if (set_fvariant) style.fvariant=fvariant;
-    if (set_fweight) style.fweight=fweight;
-    if (set_tdecor) style.tdecor=tdecor;
-    if (set_valign) style.valign=valign;
+    if (outf==ofHTML) return escapeHTMLString(text);
+    return text;
 }
 
-QString CSLFile::CSLNode::applyTextCase(const QString &text)
-{
-    return CSLFile::applyTextCase(text, tcase);
-}
 
 /*QString CSLFile::CSLNode::getHTMLFormatting(const QString &text, CSLNode* m_parent)
 {
@@ -703,17 +666,18 @@ CSLFile::CSLListNode::~CSLListNode()
     clearChildren();
 }
 
-QString CSLFile::CSLListNode::produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState &currentFormat)
+
+QString CSLFile::CSLListNode::produce(const QMap<QString, QVariant> &data, const CSLFormatState &currentFormat, OutputFormat outf)
 {
     CSLFormatState newf=currentFormat;
     modifyStyle(newf);
     QString res;
     for (int i=0; i<m_children.size(); i++) {
         if (i>0) res+=delimiter;
-        if (m_children[i]) res+=m_children[i]->produceHTML(data, newf);
+        if (m_children[i]) res+=m_children[i]->produce(data, newf, outf);
     }
 
-    return newf.startFormatHTML(currentFormat)+prefix+res+suffix+newf.endFormatHTML(currentFormat);
+    return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
 }
 
 void CSLFile::CSLListNode::addChild(CSLFile::CSLNode *c)
@@ -744,22 +708,23 @@ CSLFile::CSLTextNode::~CSLTextNode()
     form="";
 }
 
-QString CSLFile::CSLTextNode::produceHTML(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat)
+
+QString CSLFile::CSLTextNode::produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, OutputFormat outf)
 {
     CSLFormatState newf=currentFormat;
     modifyStyle(newf);
 
     QString res="";
-    if (!value.isEmpty()) res=escapeHTMLString(value);
-    else if (!variable.isEmpty()) res=escapeHTMLString(applyTextCase(getCSLField(variable, data, QString()).toString()));
-    else if (!term.isEmpty()) res=escapeHTMLString(applyTextCase(m_file->term(term, !plural, form)));
+    if (!value.isEmpty()) res=escapeString(outf, applyTextCase(value));
+    else if (!variable.isEmpty()) res=escapeString(outf, applyTextCase(getCSLField(variable, data, QString()).toString()));
+    else if (!term.isEmpty()) res=escapeString(outf, applyTextCase(m_file->term(term, !plural, form)));
     else if (!macro.isEmpty()) {
         if (m_file && m_file->m_macros.contains(macro)) {
-            res+=m_file->m_macros[macro]->produceHTML(data, newf);
+            res+=m_file->m_macros[macro]->produce(data, newf, outf);
         }
     }
 
-    return newf.startFormatHTML(currentFormat)+prefix+res+suffix+newf.endFormatHTML(currentFormat);
+    return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
 }
 
 void CSLFile::CSLTextNode::parseProperties(const QDomElement &e)
@@ -928,44 +893,49 @@ QString CSLLocale::formatDate(CSLLocaleInterface *localeIntf, QDate date, const 
 
 
 
-QString CSLFile::CSLFormatState::startFormatHTML(const CSLFile::CSLFormatState &lastFormat) const
+QString CSLFile::CSLFormatState::startFormat(const CSLFile::CSLFormatState &lastFormat, OutputFormat outf) const
 {
     QString res;
 
-    if (lastFormat.fstyle==fsNormal  && fstyle==fsItalic) res+=QLatin1String("<i>");
-    else if (lastFormat.fstyle==fsNormal  && fstyle==fsOblique) res+=QLatin1String("<i>");
-    else if (lastFormat.fstyle==fsItalic  && fstyle==fsNormal) res+=QLatin1String("</i>");
-    else if (lastFormat.fstyle==fsItalic  && fstyle==fsOblique) res+=QLatin1String("</i><i>");
-    else if (lastFormat.fstyle==fsOblique  && fstyle==fsNormal) res+=QLatin1String("</i>");
-    else if (lastFormat.fstyle==fsOblique  && fstyle==fsItalic) res+=QLatin1String("</i><i>");
+    if (outf==ofHTML) {
+        if (lastFormat.fstyle==fsNormal  && fstyle==fsItalic) res+=QLatin1String("<i>");
+        else if (lastFormat.fstyle==fsNormal  && fstyle==fsOblique) res+=QLatin1String("<i>");
+        else if (lastFormat.fstyle==fsItalic  && fstyle==fsNormal) res+=QLatin1String("</i>");
+        else if (lastFormat.fstyle==fsItalic  && fstyle==fsOblique) res+=QLatin1String("</i><i>");
+        else if (lastFormat.fstyle==fsOblique  && fstyle==fsNormal) res+=QLatin1String("</i>");
+        else if (lastFormat.fstyle==fsOblique  && fstyle==fsItalic) res+=QLatin1String("</i><i>");
 
-    if (lastFormat.fweight==fwNormal  && fweight==fwBold) res+=QLatin1String("<b>");
-    else if (lastFormat.fweight==fwNormal  && fweight==fwLight) res+=QLatin1String("");
-    else if (lastFormat.fweight==fwBold  && fweight==fwNormal) res+=QLatin1String("</b>");
-    else if (lastFormat.fweight==fwBold  && fweight==fwLight) res+=QLatin1String("</b>");
-    else if (lastFormat.fweight==fwLight  && fweight==fwNormal) res+=QLatin1String("");
-    else if (lastFormat.fweight==fwLight  && fweight==fwBold) res+=QLatin1String("<b>");
+        if (lastFormat.fweight==fwNormal  && fweight==fwBold) res+=QLatin1String("<b>");
+        else if (lastFormat.fweight==fwNormal  && fweight==fwLight) res+=QLatin1String("");
+        else if (lastFormat.fweight==fwBold  && fweight==fwNormal) res+=QLatin1String("</b>");
+        else if (lastFormat.fweight==fwBold  && fweight==fwLight) res+=QLatin1String("</b>");
+        else if (lastFormat.fweight==fwLight  && fweight==fwNormal) res+=QLatin1String("");
+        else if (lastFormat.fweight==fwLight  && fweight==fwBold) res+=QLatin1String("<b>");
 
-    if (lastFormat.fvariant==fvNormal  && fvariant==fvSmallCaps) res+=QLatin1String("<span style=\"font-variant: small-caps\">");
-    else if (lastFormat.fvariant==fvSmallCaps  && fvariant==fvNormal) res+=QLatin1String("</span>");
+        if (lastFormat.fvariant==fvNormal  && fvariant==fvSmallCaps) res+=QLatin1String("<span style=\"font-variant: small-caps\">");
+        else if (lastFormat.fvariant==fvSmallCaps  && fvariant==fvNormal) res+=QLatin1String("</span>");
 
-    if (lastFormat.tdecor==tdNone  && tdecor==tdUnderline) res+=QLatin1String("<u>");
-    else if (lastFormat.tdecor==tdUnderline  && tdecor==tdNone) res+=QLatin1String("</u>");
+        if (lastFormat.tdecor==tdNone  && tdecor==tdUnderline) res+=QLatin1String("<u>");
+        else if (lastFormat.tdecor==tdUnderline  && tdecor==tdNone) res+=QLatin1String("</u>");
 
 
-    if (lastFormat.valign==vaBaseline  && valign==vaSub) res+=QLatin1String("<sub>");
-    else if (lastFormat.valign==vaBaseline  && valign==vaSuper) res+=QLatin1String("<sup>");
-    else if (lastFormat.valign==vaSub  && valign==vaBaseline) res+=QLatin1String("</sub>");
-    else if (lastFormat.valign==vaSub  && valign==vaSuper) res+=QLatin1String("</sub><sup>");
-    else if (lastFormat.valign==vaSuper  && valign==vaBaseline) res+=QLatin1String("</sup>");
-    else if (lastFormat.valign==vaSuper  && valign==vaSub) res+=QLatin1String("</sup><sub>");
+        if (lastFormat.valign==vaBaseline  && valign==vaSub) res+=QLatin1String("<sub>");
+        else if (lastFormat.valign==vaBaseline  && valign==vaSuper) res+=QLatin1String("<sup>");
+        else if (lastFormat.valign==vaSub  && valign==vaBaseline) res+=QLatin1String("</sub>");
+        else if (lastFormat.valign==vaSub  && valign==vaSuper) res+=QLatin1String("</sub><sup>");
+        else if (lastFormat.valign==vaSuper  && valign==vaBaseline) res+=QLatin1String("</sup>");
+        else if (lastFormat.valign==vaSuper  && valign==vaSub) res+=QLatin1String("</sup><sub>");
+    }
 
     return res;
 }
 
-QString CSLFile::CSLFormatState::endFormatHTML(const CSLFile::CSLFormatState &newFormat) const
+QString CSLFile::CSLFormatState::endFormat(const CSLFile::CSLFormatState &newFormat, OutputFormat outf) const
 {
-    return newFormat.startFormatHTML(*this);
+    if (outf==ofHTML) {
+        return newFormat.startFormat(*this, outf);
+    }
+    return QString();
 }
 
 
@@ -980,46 +950,46 @@ CSLFile::CSLNumberNode::~CSLNumberNode()
 
 }
 
-QString CSLFile::CSLNumberNode::produceHTML(const QMap<QString, QVariant> &data, const CSLFile::CSLFormatState &currentFormat)
+QString CSLFile::CSLNumberNode::produce(const QMap<QString, QVariant> &data, const CSLFile::CSLFormatState &currentFormat, OutputFormat outf)
 {
     CSLFormatState newf=currentFormat;
     modifyStyle(newf);
 
     QString res="";
     if (!variable.isEmpty()) {
-        if (form=="numeric") res=escapeHTMLString(QString::number(getCSLField(variable, data, QString()).toInt()));
+        if (form=="numeric") res=escapeString(outf, QString::number(getCSLField(variable, data, QString()).toInt()));
         else if (form=="ordinal") {
             int i=getCSLField(variable, data, QString()).toInt();
-            res=escapeHTMLString(QString::number(i));
-            if (i==1) res+=escapeHTMLString(m_file->term("ordinal-01", true));
-            else if (i==2) res+=escapeHTMLString(m_file->term("ordinal-02", true));
-            else if (i==3) res+=escapeHTMLString(m_file->term("ordinal-03", true));
-            else if (i==11) res+=escapeHTMLString(m_file->term("ordinal-11", true));
-            else if (i==12) res+=escapeHTMLString(m_file->term("ordinal-12", true));
-            else if (i==13) res+=escapeHTMLString(m_file->term("ordinal-13", true));
-            else res+=escapeHTMLString(m_file->term("ordinal", true));
+            res=escapeString(outf, QString::number(i));
+            if (i==1) res+=escapeString(outf, m_file->term("ordinal-01", true));
+            else if (i==2) res+=escapeString(outf, m_file->term("ordinal-02", true));
+            else if (i==3) res+=escapeString(outf, m_file->term("ordinal-03", true));
+            else if (i==11) res+=escapeString(outf, m_file->term("ordinal-11", true));
+            else if (i==12) res+=escapeString(outf, m_file->term("ordinal-12", true));
+            else if (i==13) res+=escapeString(outf, m_file->term("ordinal-13", true));
+            else res+=escapeString(outf, m_file->term("ordinal", true));
 
         } else if (form=="long-ordinal") {
             int i=getCSLField(variable, data, QString()).toInt();
-            if (i==1) res+=escapeHTMLString(m_file->term("long-ordinal-01", true));
-            else if (i==2) res+=escapeHTMLString(m_file->term("long-ordinal-02", true));
-            else if (i==3) res+=escapeHTMLString(m_file->term("long-ordinal-03", true));
-            else if (i==4) res+=escapeHTMLString(m_file->term("long-ordinal-04", true));
-            else if (i==5) res+=escapeHTMLString(m_file->term("long-ordinal-05", true));
-            else if (i==6) res+=escapeHTMLString(m_file->term("long-ordinal-06", true));
-            else if (i==7) res+=escapeHTMLString(m_file->term("long-ordinal-07", true));
-            else if (i==8) res+=escapeHTMLString(m_file->term("long-ordinal-08", true));
-            else if (i==9) res+=escapeHTMLString(m_file->term("long-ordinal-09", true));
-            else if (i==10) res+=escapeHTMLString(m_file->term("long-ordinal-10", true));
-            else res+=(escapeHTMLString(QString::number(i))+escapeHTMLString(m_file->term("ordinal", true)));
+            if (i==1) res+=escapeString(outf, m_file->term("long-ordinal-01", true));
+            else if (i==2) res+=escapeString(outf, m_file->term("long-ordinal-02", true));
+            else if (i==3) res+=escapeString(outf, m_file->term("long-ordinal-03", true));
+            else if (i==4) res+=escapeString(outf, m_file->term("long-ordinal-04", true));
+            else if (i==5) res+=escapeString(outf, m_file->term("long-ordinal-05", true));
+            else if (i==6) res+=escapeString(outf, m_file->term("long-ordinal-06", true));
+            else if (i==7) res+=escapeString(outf, m_file->term("long-ordinal-07", true));
+            else if (i==8) res+=escapeString(outf, m_file->term("long-ordinal-08", true));
+            else if (i==9) res+=escapeString(outf, m_file->term("long-ordinal-09", true));
+            else if (i==10) res+=escapeString(outf, m_file->term("long-ordinal-10", true));
+            else res+=(escapeString(outf, QString::number(i))+escapeString(outf, m_file->term("ordinal", true)));
 
         }
         else { //if (form=="roman") {
-            res=escapeHTMLString(QString::number(getCSLField(variable, data, QString()).toInt()));
+            res=escapeString(outf, QString::number(getCSLField(variable, data, QString()).toInt()));
         }
     }
 
-    return newf.startFormatHTML(currentFormat)+prefix+res+suffix+newf.endFormatHTML(currentFormat);
+    return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
 }
 
 void CSLFile::CSLNumberNode::parseProperties(const QDomElement &e)
@@ -1044,7 +1014,7 @@ CSLFile::CSLChooseNode::~CSLChooseNode()
     ifs.clear();
 }
 
-QString CSLFile::CSLChooseNode::produceHTML(const QMap<QString, QVariant> &data, const CSLFile::CSLFormatState &currentFormat)
+QString CSLFile::CSLChooseNode::produce(const QMap<QString, QVariant> &data, const CSLFile::CSLFormatState &currentFormat, OutputFormat outf)
 {
     for (int i=0; i<ifs.size(); i++) {
         switch(ifs[i].ifType) {
@@ -1057,7 +1027,7 @@ QString CSLFile::CSLChooseNode::produceHTML(const QMap<QString, QVariant> &data,
                             ||(ifs[i].match=="" && ifs[i].type==type)
                        )
                     {
-                        if (ifs[i].node) return ifs[i].node->produceHTML(data, currentFormat);
+                        if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                         return QString();
                     }
                 }
@@ -1067,7 +1037,7 @@ QString CSLFile::CSLChooseNode::produceHTML(const QMap<QString, QVariant> &data,
                     QRegExp rx("[^\\d]*(\\d)+([^\\d]|[\\-\\&\\s\\,])*");
                     qDebug()<<"if-numeric: "<<ifs[i].variable<<field<<rx.indexIn(field);
                     if (rx.indexIn(field)>=0) {
-                        if (ifs[i].node) return ifs[i].node->produceHTML(data, currentFormat);
+                        if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                         return QString();
                     }
                 }
@@ -1076,7 +1046,7 @@ QString CSLFile::CSLChooseNode::produceHTML(const QMap<QString, QVariant> &data,
                     QString field=getCSLField(ifs[i].variable, data, QString()).toString();
                     qDebug()<<"if-variable: "<<ifs[i].variable<<field;
                     if (!field.isEmpty()) {
-                        if (ifs[i].node) return ifs[i].node->produceHTML(data, currentFormat);
+                        if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                         return QString();
                     }
                 }
@@ -1084,7 +1054,7 @@ QString CSLFile::CSLChooseNode::produceHTML(const QMap<QString, QVariant> &data,
 
             case iftElse:
                 qDebug()<<"else: ";
-                if (ifs[i].node) return ifs[i].node->produceHTML(data, currentFormat);
+                if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                 return QString();
                 break;
             default:
@@ -1136,4 +1106,313 @@ void CSLFile::CSLChooseNode::parseProperties(const QDomElement &e)
             ie=ie.nextSiblingElement();
         }
     }
+}
+
+
+CSLFile::CSLNamesNode::CSLNamesNode(CSLFile::CSLNode *parent, CSLFile *file):
+    CSLFile::CSLNode(parent, file)
+{
+    andSeparator=nasAndTerm;
+    delimiter=", ";
+    delimiterPrecedesEtAl=dpeaContextual;
+    delimiterPrecedesLast=dpeaContextual;
+    etalMin=-1;
+    etaluseFirst=-1;
+    etalUseLast=false;
+    form="short";
+    initialize=true;
+    initializeWith="";
+    nameAsSortOrder="";
+    sortSeparator=", ";
+    etal="et-al";
+    m_labelNode=NULL;
+}
+
+CSLFile::CSLNamesNode::~CSLNamesNode()
+{
+    for (int i=0; i<m_substitutes.size(); i++) {
+        if (m_substitutes[i]) delete m_substitutes[i];
+    }
+    m_substitutes.clear();
+    if (m_labelNode) delete m_labelNode;
+}
+
+QString CSLFile::CSLNamesNode::produce(const QMap<QString, QVariant> &data, const CSLFile::CSLFormatState &currentFormat, OutputFormat outf)
+{
+    CSLFormatState newf=currentFormat;
+    modifyStyle(newf);
+
+    QString res="";
+
+    QStringList familyNames, givenNames, vars;
+    for (int i=0; i<variables.size(); i++) {
+        QString names=getCSLField(variables[i], data, QString()).toString();
+        if (!names.isEmpty()) {
+            QStringList gn, fn, v;
+            parseAuthors(names, &gn, &fn);
+            if (gn.size()>0 && fn.size()>0 && gn.size()==fn.size()) {
+                for (int j=0; j<gn.size(); j++) v<<variables[i];
+                familyNames<<fn;
+                givenNames<<gn;
+                vars<<v;
+            }
+        }
+    }
+
+    if (familyNames.size()>0) {
+        QStringList names;
+        CSLFormatState namef=newf;
+        nameProps.modifyStyle(namef);
+        CSLFormatState fnamef=newf;
+        familyNameProps.modifyStyle(fnamef);
+        CSLFormatState gnamef=newf;
+        givenNameProps.modifyStyle(gnamef);
+        CSLFormatState etalf=newf;
+        etalProps.modifyStyle(etalf);
+        for (int i=0; i<familyNames.size(); i++) {
+            QString name;
+            QString gn=givenNameProps.applyTextCase(givenNames[i]);
+            QString fn=familyNameProps.applyTextCase(familyNames[i]);
+            if (initialize) {
+                if (initializeWith.endsWith(' ')) gn=shortenGivenName(gn, initializeWith);
+                else gn=shortenGivenName(gn, initializeWith+" ");
+            }
+            if (form=="short") {
+                name=namef.startFormat(newf, outf)+escapeString(outf,fn)+namef.endFormat(newf, outf);
+            } else { //(form=="long" )
+                if (nameAsSortOrder.isEmpty()) {
+                    name=gnamef.startFormat(newf, outf)+escapeString(outf,gn)+gnamef.endFormat(newf, outf)+" ";
+                    name=name+namef.startFormat(newf, outf)+escapeString(outf,fn)+namef.endFormat(newf, outf);
+                } else {
+                    name=namef.startFormat(newf, outf)+escapeString(outf,fn)+namef.endFormat(newf, outf);
+                    if (gn.size()>0) name=name+sortSeparator+gnamef.startFormat(newf, outf)+escapeString(outf,gn)+gnamef.endFormat(newf, outf);
+                }
+            }
+            if (m_labelNode && !vars.value(i, "").isEmpty()) {
+                m_labelNode->setVariable(vars.value(i, ""));
+                name=name+" "+m_labelNode->produce(data, newf, outf);
+            }
+            names<<name;
+        }
+        if (etalMin<0 || names.size()<=etalMin) {
+            for (int i=0; i<names.size(); i++) {
+                if (i>0 && i<names.size()-1) res=res+escapeString(outf, delimiter);
+                if (i>0 && i==names.size()-1) {
+                    if (delimiterPrecedesLast==dpeaAlways) res=res+escapeString(outf, delimiter);
+                    else if (delimiterPrecedesLast==dpeaNever) res=res+escapeString(outf, " ");
+                    else if (names.size()>1) res=res+escapeString(outf, delimiter);
+                    else res=res+" ";
+                }
+                res=res+names[i];
+            }
+        } else if (names.size()>etalMin) {
+            int count=qMin(etaluseFirst, names.size());
+            for (int i=0; i<count; i++) {
+                if (i>0 && i<count-1) res=res+escapeString(outf, delimiter);
+                res=res+names[i];
+            }
+            if (delimiterPrecedesEtAl==dpeaAlways) res=res+escapeString(outf, delimiter);
+            else if (delimiterPrecedesEtAl==dpeaNever) res=res+escapeString(outf, " ");
+            else if (names.size()>1) res=res+escapeString(outf, delimiter);
+            else res=res+" ";
+            res=res+etalf.startFormat(newf, outf)+etal+etalf.endFormat(newf, outf);
+            if (etalUseLast) {
+                res=res+" "+names.last();
+            }
+        }
+
+    } else {
+        for (int i=0; i<m_substitutes.size(); i++) {
+            if (m_substitutes[i]) {
+                //if (dynamic_cast<CSLFile::CSLNamesNode*>(m_substitutes[i])) {
+
+                //} else {
+                    QString plain=m_substitutes[i]->produce(data, currentFormat, ofPlaintext);
+                    if (plain.size()>0) {
+                        res=m_substitutes[i]->produce(data, currentFormat, outf);
+                        break;
+                    }
+                //}
+            }
+        }
+    }
+    //qDebug()<"produced names \n   from: "<<
+
+    return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
+}
+
+void CSLFile::CSLNamesNode::parseProperties(const QDomElement &e)
+{
+    CSLFile::CSLNode::parseProperties(e);
+    variables=e.attribute("variable").split(' ');
+
+    QDomElement npe=e.firstChildElement("substitute");
+    if (!npe.isNull()) {
+        QDomElement me=npe.firstChildElement();
+        while (!me.isNull()) {
+            CSLNode* n=m_file->parseElement(me, this);
+            if (dynamic_cast<CSLFile::CSLNamesNode*>(n)) {
+                dynamic_cast<CSLFile::CSLNamesNode*>(n)->parseNameProperties(e);
+            }
+            if (n) m_substitutes.append(n);
+            me=me.nextSiblingElement();
+        }
+    }
+
+    npe=e.firstChildElement("label");
+    if (!npe.isNull()) {
+        m_labelNode=new CSLLabelNode(this, m_file);
+        m_labelNode->parseProperties(e);
+    }
+
+}
+
+void CSLFile::CSLNamesNode::parseNameProperties(const QDomElement &e)
+{
+    parseBasicProperties(e);
+    QDomElement le=e.firstChildElement("name");
+    if (!le.isNull()) {
+        if (le.attribute("and")=="text") andSeparator=nasAndTerm;
+        if (le.attribute("and")=="symbol") andSeparator=nasSymbol;
+        form=le.attribute("form", "short");
+        initializeWith=le.attribute("initialize-with", initializeWith);
+        etalMin=le.attribute("et-al-min", "-1").toInt();
+        etaluseFirst=le.attribute("et-al-use-first", "-1").toInt();
+        nameAsSortOrder=le.attribute("name-as-sort-order", nameAsSortOrder);
+        sortSeparator=le.attribute("sort-separator", sortSeparator);
+        if (le.attribute("et-al-use-last")=="true") etalUseLast=true;
+        if (le.attribute("et-al-use-last")=="false") etalUseLast=false;
+
+        if (le.attribute("initialize")=="true") initialize=true;
+        if (le.attribute("initialize")=="false") initialize=false;
+
+        if (le.attribute("delimiter-precedes-et-al")=="contextual") delimiterPrecedesEtAl=dpeaContextual;
+        if (le.attribute("delimiter-precedes-et-al")=="after-inverted-name") delimiterPrecedesEtAl=dpeaAfterInverseName;
+        if (le.attribute("delimiter-precedes-et-al")=="always") delimiterPrecedesEtAl=dpeaAlways;
+        if (le.attribute("delimiter-precedes-et-al")=="never") delimiterPrecedesEtAl=dpeaNever;
+
+        if (le.attribute("delimiter-precedes-et-al")=="contextual") delimiterPrecedesLast=dpeaContextual;
+        if (le.attribute("delimiter-precedes-et-al")=="after-inverted-name") delimiterPrecedesLast=dpeaAfterInverseName;
+        if (le.attribute("delimiter-precedes-et-al")=="always") delimiterPrecedesLast=dpeaAlways;
+        if (le.attribute("delimiter-precedes-et-al")=="never") delimiterPrecedesLast=dpeaNever;
+        nameProps.parseBasicProperties(le);
+        QDomElement npe=le.firstChildElement("name-part");
+        if (!npe.isNull()) {
+            if (npe.attribute("name")=="family") familyNameProps.parseBasicProperties(npe);
+            else givenNameProps.parseBasicProperties(npe);
+            npe=npe.nextSiblingElement("name-part");
+        }
+        if (!npe.isNull()) {
+            if (npe.attribute("name")=="family") familyNameProps.parseBasicProperties(npe);
+            else givenNameProps.parseBasicProperties(npe);
+        }
+    }
+
+    QDomElement npe=e.firstChildElement("et-al");
+    if (!npe.isNull()) {
+        etalProps.parseBasicProperties(npe);
+        etal=npe.attribute("term", etal);
+    }
+}
+
+
+CSLFile::CSLBasicProps::CSLBasicProps()
+{
+    suffix="";
+    prefix="";
+    delimiter="";
+    fstyle=fsNormal;
+    fvariant=fvNormal;
+    fweight=fwNormal;
+    tdecor=tdNone;
+    valign=vaBaseline;
+    tcase=tcNormal;
+
+    set_fstyle=false;
+    set_fvariant=false;
+    set_fweight=false;
+    set_tdecor=false;
+    set_valign=false;
+}
+
+void CSLFile::CSLBasicProps::modifyStyle(CSLFile::CSLFormatState &style)
+{
+    if (set_fstyle) style.fstyle=fstyle;
+    if (set_fvariant) style.fvariant=fvariant;
+    if (set_fweight) style.fweight=fweight;
+    if (set_tdecor) style.tdecor=tdecor;
+    if (set_valign) style.valign=valign;}
+
+QString CSLFile::CSLBasicProps::applyTextCase(const QString &text)
+{
+    return CSLFile::applyTextCase(text, tcase);
+}
+
+void CSLFile::CSLBasicProps::parseBasicProperties(const QDomElement &e)
+{
+    if (e.attribute("font-style")=="italic") { set_fstyle=true; fstyle=fsItalic; }
+    if (e.attribute("font-style")=="oblique") { set_fstyle=true; fstyle=fsOblique; }
+    if (e.attribute("font-style")=="normal") { set_fstyle=true; fstyle=fsNormal; }
+
+    if (e.attribute("font-variant")=="small-caps") { set_fvariant=true;  fvariant=fvSmallCaps; }
+    if (e.attribute("font-variant")=="normal") { set_fvariant=true; fvariant=fvNormal; }
+
+    if (e.attribute("font-weight")=="bold") { set_fweight=true; fweight=fwBold; }
+    if (e.attribute("font-weight")=="light") { set_fweight=true; fweight=fwLight; }
+    if (e.attribute("font-weight")=="normal") { set_fweight=true; fweight=fwNormal; }
+
+    if (e.attribute("text-decoration")=="none") { set_tdecor=true; tdecor=tdNone; }
+    if (e.attribute("text-decoration")=="underline") { set_tdecor=true; tdecor=tdUnderline; }
+
+    if (e.attribute("vertical-align")=="sub") { set_valign=true; valign=vaSub; }
+    if (e.attribute("vertical-align")=="sup") { set_valign=true; valign=vaSuper; }
+    if (e.attribute("vertical-align")=="baseline") { set_valign=true; valign=vaBaseline; }
+
+    if (e.attribute("text-case")=="lowercase") { tcase=tcLowercase; }
+    if (e.attribute("text-case")=="uppercase") { tcase=tcUppercase; }
+    if (e.attribute("text-case")=="capitalize-first") { tcase=tcCapitalizeFirst; }
+    if (e.attribute("text-case")=="capitalize-all") { tcase=tcCapitalizeAll; }
+    if (e.attribute("text-case")=="sentence") { tcase=tcSentence; }
+    if (e.attribute("text-case")=="title") { tcase=tcTitle; }
+
+    suffix=e.attribute("suffix", suffix);
+    prefix=e.attribute("prefix", prefix);
+    delimiter=e.attribute("delimiter", delimiter);
+}
+
+
+CSLFile::CSLLabelNode::CSLLabelNode(CSLFile::CSLNode *parent, CSLFile *file):
+    CSLFile::CSLNode(parent, file)
+{
+
+}
+
+CSLFile::CSLLabelNode::~CSLLabelNode()
+{
+
+}
+
+QString CSLFile::CSLLabelNode::produce(const QMap<QString, QVariant> &data, const CSLFile::CSLFormatState &currentFormat, OutputFormat outf)
+{
+    CSLFormatState newf=currentFormat;
+    modifyStyle(newf);
+
+    QString res="";
+    QString dataf=getCSLField(variable, data, QString()).toString();
+    bool isSingleNumber=false;
+    int dat=dataf.toInt(&isSingleNumber);
+
+    if (plural=="always") res=escapeString(outf, applyTextCase(m_file->term(variable, false, form)));
+    if (plural=="never") res=escapeString(outf, applyTextCase(m_file->term(variable, true, form)));
+    else res=escapeString(outf, applyTextCase(m_file->term(variable, isSingleNumber, form)));
+
+
+    return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
+}
+
+void CSLFile::CSLLabelNode::parseProperties(const QDomElement &e)
+{
+    variable=e.attribute("variable");
+    form=e.attribute("form");
+    plural=e.attribute("plural");
 }

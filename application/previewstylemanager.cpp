@@ -190,7 +190,7 @@ QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>&
         int cslIndex=i;
         if (cslfiles.value(cslIndex, NULL)) {
             cslfiles.value(cslIndex, NULL)->setLocale(csllocales.value(locale, NULL));
-            result=cslfiles.value(cslIndex, NULL)->produceHTML(data);
+            result=cslfiles.value(cslIndex, NULL)->produce(data);
         }
     }
 
