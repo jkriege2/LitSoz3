@@ -2,7 +2,15 @@
 #include <QtCore>
 #include <QRegExp>
 #include <iostream>
+#include <QtGlobal>
 
+QString escapeHTMLString(const QString& input) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    return input.toHtmlEscaped();
+#else
+    return Qt::escaped(input);
+#endif
+}
 
 QString cleanString(const QString& text, bool cleanStrongly) {
     QString t=text.simplified();

@@ -10,6 +10,9 @@
 /** \brief clean a string of whitesaces, special characters ... */
 LS3LIB_EXPORT QString cleanString(const QString& input, bool cleanStrongly=false);
 
+/** \brief escape HTML character*/
+LS3LIB_EXPORT QString escapeHTMLString(const QString& input);
+
 /** \brief parse the given author string and return two list, one with the given and one with the family name */
 LS3LIB_EXPORT void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* familyNames);
 /*! \brief parse a given authors firld (format Family, Given; Family, Given; ...) and output at max. \a maxAuthors names.

@@ -64,12 +64,16 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
     defaultStatus=tr("present");
     startupFile="";
     specialCharacters=QString::fromUtf8("ÀàÁáÂâÃãÄäÅåÆæÇçÈèÉéÊêËëÌìÍíÎîÏïÐðÑñÒòÓóÔôÕõÖöØøÙùÚúÛûÜüÝýÞþßÿµ¿¡`^¢£¤¥«»·×÷¶±");
-    currentPreviewStyle=0;
+    currentPreviewStyle1=0;
+    currentPreviewStyle2=1;
+    currentPreviewLocale1="en-US";
+    currentPreviewLocale2="en-US";
     proxyHost=QNetworkProxy::applicationProxy().hostName();
     proxyType=QNetworkProxy::applicationProxy().type();
     proxyPort=QNetworkProxy::applicationProxy().port();
 
     previewStyles->searchCSL(assetsDirectory+"/csl/");
+    previewStyles->searchCSLLocales(assetsDirectory+"/csl_locales/");
 
 
     readSettings();
@@ -102,8 +106,18 @@ void ProgramOptions::openSettingsDialog() {
     settingsDlg->edtNameAdditions->setPlainText(QStringList(nameAdditions.toList()).join("\n"));
     settingsDlg->edtNamePrefixes->setPlainText(QStringList(namePrefixes.toList()).join("\n"));
     settingsDlg->cmbPreviewStyles->clear();
+    settingsDlg->cmbPreviewStyles2->clear();
     settingsDlg->cmbPreviewStyles->addItems(previewStyles->styles());
-    settingsDlg->cmbPreviewStyles->setCurrentIndex(currentPreviewStyle);
+    settingsDlg->cmbPreviewStyles2->addItems(previewStyles->styles());
+    settingsDlg->cmbPreviewLocales->clear();
+    settingsDlg->cmbPreviewLocales2->clear();
+    settingsDlg->cmbPreviewLocales->addItems(previewStyles->locales());
+    settingsDlg->cmbPreviewLocales2->addItems(previewStyles->locales());
+    settingsDlg->cmbPreviewStyles->setCurrentIndex(currentPreviewStyle1);
+    settingsDlg->cmbPreviewStyles2->setCurrentIndex(currentPreviewStyle2);
+    settingsDlg->cmbPreviewLocales->setCurrentIndex(settingsDlg->cmbPreviewLocales->findText(currentPreviewLocale1));
+    settingsDlg->cmbPreviewLocales2->setCurrentIndex(settingsDlg->cmbPreviewLocales2->findText(currentPreviewLocale2));
+
     settingsDlg->cmbReferenceDetails->setCurrentIndex(howDisplayReferenceDetails);
     settingsDlg->spinProxyPort->setValue(getProxyPort());
     settingsDlg->edtProxyHost->setText(getProxyHost());
@@ -192,7 +206,10 @@ void ProgramOptions::openSettingsDialog() {
         for (int i=0; i<andWords.size(); i++) andWords[i]=andWords[i].toLower().trimmed();
         nameAdditions=QSet<QString>::fromList(settingsDlg->edtNameAdditions->toPlainText().simplified().split(" "));
         namePrefixes=QSet<QString>::fromList(settingsDlg->edtNamePrefixes->toPlainText().simplified().split(" "));
-        currentPreviewStyle=settingsDlg->cmbPreviewStyles->currentIndex();
+        currentPreviewStyle1=settingsDlg->cmbPreviewStyles->currentIndex();
+        currentPreviewStyle2=settingsDlg->cmbPreviewStyles2->currentIndex();
+        currentPreviewLocale1=settingsDlg->cmbPreviewLocales->currentText();
+        currentPreviewLocale2=settingsDlg->cmbPreviewLocales2->currentText();
         howDisplayReferenceDetails=settingsDlg->cmbReferenceDetails->currentIndex();
         setProxyHost(settingsDlg->edtProxyHost->text());
         setProxyPort(settingsDlg->spinProxyPort->value());
@@ -213,7 +230,10 @@ void ProgramOptions::writeSettings() {
     settings->setValue("mainwindow/table_font_size", tableFontSize);
     settings->setValue("mainwindow/extendedShortWidth", extendedShortWidth);
     settings->setValue("mainwindow/extendedLongWidth", extendedLongWidth);
-    settings->setValue("mainwindow/currentPreviewStyle", currentPreviewStyle);
+    settings->setValue("mainwindow/currentPreviewStyle", currentPreviewStyle1);
+    settings->setValue("mainwindow/currentPreviewStyle2", currentPreviewStyle2);
+    settings->setValue("mainwindow/currentPreviewLocale", currentPreviewLocale1);
+    settings->setValue("mainwindow/currentPreviewLocale2", currentPreviewLocale2);
     settings->setValue("mainwindow/howDisplayReferenceDetails", howDisplayReferenceDetails);
     settings->setValue("litsoz/config_directory", configDirectory);
     settings->setValue("litsoz/language", languageID);
@@ -247,7 +267,11 @@ void ProgramOptions::readSettings() {
     tableFontName=settings->value("mainwindow/table_font_name", tableFontName).toString();
     tableFontSize=settings->value("mainwindow/table_font_size", tableFontSize).toInt();
     emit tableFontChanged(tableFontName, tableFontSize);
-    currentPreviewStyle= settings->value("mainwindow/currentPreviewStyle", 0).toInt();
+    currentPreviewStyle1= settings->value("mainwindow/currentPreviewStyle", 0).toInt();
+    currentPreviewStyle2= settings->value("mainwindow/currentPreviewStyle2", 0).toInt();
+    currentPreviewLocale1= settings->value("mainwindow/currentPreviewLocale1", "en-US").toString();
+    currentPreviewLocale2= settings->value("mainwindow/currentPreviewLocale2", "en-US").toString();
+
     howDisplayReferenceDetails = settings->value("mainwindow/howDisplayReferenceDetails", 0).toInt();
     username=settings->value("litsoz/username", username).toString();
     startupFile=settings->value("litsoz/startupFile", startupFile).toString();

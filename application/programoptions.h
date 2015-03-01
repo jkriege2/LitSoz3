@@ -148,7 +148,13 @@ public:
     inline QSet<QString> GetNamePrefixes() { return namePrefixes; };
 
     /** \brief the currently used preview style */
-    inline int GetCurrentPreviewStyle() { return currentPreviewStyle; };
+    inline int GetCurrentPreviewStyle1() { return currentPreviewStyle1; };
+    /** \brief the currently used preview style locale */
+    inline QString GetCurrentPreviewLocale1() { return currentPreviewLocale1; };
+    /** \brief the currently used preview style */
+    inline int GetCurrentPreviewStyle2() { return currentPreviewStyle2; };
+    /** \brief the currently used preview style locale */
+    inline QString GetCurrentPreviewLocale2() { return currentPreviewLocale2; };
 
     /** \brief how to display "Reference Details" (0: as dockable Window, 1: as Tab behind "Reference Overview) */
     inline int GetHowDisplayReferenceDetails() { return howDisplayReferenceDetails; };
@@ -264,7 +270,11 @@ protected:
     /** \brief name prefixes */
     QSet<QString> namePrefixes;
     /** \brief the currently used preview style */
-    int currentPreviewStyle;
+    int currentPreviewStyle1;
+    QString currentPreviewLocale1;
+    /** \brief the currently used preview style */
+    int currentPreviewStyle2;
+    QString currentPreviewLocale2;
     /** \brief how to display "Reference Details" (0: as dockable Window, 1: as Tab behind "Reference Overview) */
     int howDisplayReferenceDetails;
 

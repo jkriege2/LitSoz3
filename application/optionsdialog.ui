@@ -364,24 +364,11 @@ p, li { white-space: pre-wrap; }
          <item row="9" column="0">
           <widget class="QLabel" name="label_17">
            <property name="text">
-            <string>&amp;Preview Style:</string>
-           </property>
-           <property name="buddy">
-            <cstring>cmbPreviewStyles</cstring>
+            <string>&amp;Preview Style 1:</string>
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
-          <widget class="QComboBox" name="cmbPreviewStyles">
-           <property name="maximumSize">
-            <size>
-             <width>300</width>
-             <height>16777215</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0" colspan="2">
+         <item row="12" column="0" colspan="2">
           <widget class="Line" name="line_5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -394,14 +381,14 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="12" column="0">
+         <item row="13" column="0">
           <widget class="Line" name="line_3">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="13" column="0">
+         <item row="14" column="0">
           <widget class="QLabel" name="label_18">
            <property name="text">
             <string>Reference &amp;Details:</string>
@@ -411,7 +398,7 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="13" column="1">
+         <item row="14" column="1">
           <widget class="QComboBox" name="cmbReferenceDetails">
            <property name="maximumSize">
             <size>
@@ -454,14 +441,14 @@ p, li { white-space: pre-wrap; }
            </item>
           </widget>
          </item>
-         <item row="16" column="0" colspan="2">
+         <item row="17" column="0" colspan="2">
           <widget class="Line" name="line_4">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="18" column="0">
+         <item row="19" column="0">
           <widget class="QLabel" name="label_12">
            <property name="text">
             <string>Special &amp;characters:</string>
@@ -471,14 +458,14 @@ p, li { white-space: pre-wrap; }
            </property>
           </widget>
          </item>
-         <item row="18" column="1">
+         <item row="19" column="1">
           <widget class="QLineEdit" name="edtSpecialCharacters">
            <property name="toolTip">
             <string>These characters will be displayed in the on creen keyboard</string>
            </property>
           </widget>
          </item>
-         <item row="19" column="1">
+         <item row="20" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <spacer name="horizontalSpacer">
@@ -499,6 +486,47 @@ p, li { white-space: pre-wrap; }
               <string>load defaults</string>
              </property>
             </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="10" column="0">
+          <widget class="QLabel" name="label_22">
+           <property name="text">
+            <string>&amp;Preview Style 2:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,0">
+           <item>
+            <widget class="QComboBox" name="cmbPreviewStyles2">
+             <property name="maximumSize">
+              <size>
+               <width>300</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cmbPreviewLocales2"/>
+           </item>
+          </layout>
+         </item>
+         <item row="9" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0">
+           <item>
+            <widget class="QComboBox" name="cmbPreviewStyles">
+             <property name="maximumSize">
+              <size>
+               <width>300</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cmbPreviewLocales"/>
            </item>
           </layout>
          </item>

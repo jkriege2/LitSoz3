@@ -923,7 +923,14 @@ void MainWindow::currentRecordChanged(int row) {
     } else {
         labDBStatusToolBar->setText(tr("dataset -- / --"));
     }
-    txtPreview->setHtml(QString("<font face=\"%1\">%2</font>").arg(settings->GetTableFontName()).arg(settings->GetPreviewStyleManager()->createPreview(settings->GetCurrentPreviewStyle(), datastore->currentRecord())));
+    QString txt=QString("<font face=\"%1\">%2</font>")
+                .arg(settings->GetTableFontName())
+                .arg(settings->GetPreviewStyleManager()->createPreview(-1, datastore->currentRecord(), "en-US"));
+    txt=txt.arg(settings->GetPreviewStyleManager()->styles().value(settings->GetCurrentPreviewStyle1()))
+        .arg(settings->GetPreviewStyleManager()->createPreview(settings->GetCurrentPreviewStyle1(), datastore->currentRecord(), settings->GetCurrentPreviewLocale1()))
+        .arg(settings->GetPreviewStyleManager()->styles().value(settings->GetCurrentPreviewStyle2()))
+        .arg(settings->GetPreviewStyleManager()->createPreview(settings->GetCurrentPreviewStyle2(), datastore->currentRecord(), settings->GetCurrentPreviewLocale2()));
+    txtPreview->setHtml(txt);
     disconnecttvMain();
     tvMain->selectionModel()->clear();
     tvMain->selectRow(realRow);
