@@ -11,6 +11,8 @@
 #include <QDomElement>
 #include <QLocale>
 #include <QRegExp>
+#include <QDebug>
+
 
 /** \brief read the metadata from a CSL file */
 LS3LIB_EXPORT bool cslReadMetadata(const QString& filename, QString* name=NULL);
@@ -98,13 +100,15 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
         QString produce(const QMap<QString, QVariant> &data, bool citation=false, OutputFormat outf=ofHTML);
 
         virtual inline CSLLocale::CSLLocaleValue term(const QString& name, const QString& form=QString()) const {
+            CSLLocale::CSLLocaleValue res;
             if (m_terms.contains(name)) {
-                if (m_terms[name].contains(form)) return  m_terms[name].value(form, CSLLocale::CSLLocaleValue());
-                else return  m_terms[name].value("", CSLLocale::CSLLocaleValue());
+                if (m_terms[name].contains(form)) res= m_terms[name].value(form, CSLLocale::CSLLocaleValue());
+                else res=  m_terms[name].value("", CSLLocale::CSLLocaleValue());
             } else {
-                if (m_locale) return m_locale->term(name, form);
+                if (m_locale) res= m_locale->term(name, form);
             }
-            return CSLLocale::CSLLocaleValue();
+            qDebug()<<"term("<<name<<form<<") = "<<res.m_single<<res.m_multiple;
+            return res;
         }
         virtual inline QString term(const QString& name, bool single, const QString& form=QString()) const {
             if (single) return term(name, form).single();

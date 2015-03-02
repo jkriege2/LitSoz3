@@ -268,8 +268,8 @@ void ProgramOptions::readSettings() {
     tableFontSize=settings->value("mainwindow/table_font_size", tableFontSize).toInt();
     emit tableFontChanged(tableFontName, tableFontSize);
     currentPreviewStyle1= settings->value("mainwindow/currentPreviewStyle", 0).toInt();
-    currentPreviewStyle2= settings->value("mainwindow/currentPreviewStyle2", 0).toInt();
-    currentPreviewLocale1= settings->value("mainwindow/currentPreviewLocale1", "en-US").toString();
+    currentPreviewStyle2= settings->value("mainwindow/currentPreviewStyle2", 1).toInt();
+    currentPreviewLocale1= settings->value("mainwindow/currentPreviewLocale", "en-US").toString();
     currentPreviewLocale2= settings->value("mainwindow/currentPreviewLocale2", "en-US").toString();
 
     howDisplayReferenceDetails = settings->value("mainwindow/howDisplayReferenceDetails", 0).toInt();

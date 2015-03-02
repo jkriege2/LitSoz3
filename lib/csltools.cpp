@@ -1119,7 +1119,7 @@ CSLFile::CSLNamesNode::CSLNamesNode(CSLFile::CSLNode *parent, CSLFile *file):
     etalMin=-1;
     etaluseFirst=-1;
     etalUseLast=false;
-    form="short";
+    form="long";
     initialize=true;
     initializeWith="";
     nameAsSortOrder="";
@@ -1150,6 +1150,7 @@ QString CSLFile::CSLNamesNode::produce(const QMap<QString, QVariant> &data, cons
         if (!names.isEmpty()) {
             QStringList gn, fn, v;
             parseAuthors(names, &gn, &fn);
+            qDebug()<<" parsedAuthors "<<names<<" => "<<gn<<fn;
             if (gn.size()>0 && fn.size()>0 && gn.size()==fn.size()) {
                 for (int j=0; j<gn.size(); j++) v<<variables[i];
                 familyNames<<fn;
@@ -1159,8 +1160,8 @@ QString CSLFile::CSLNamesNode::produce(const QMap<QString, QVariant> &data, cons
         }
     }
 
+    QStringList names;
     if (familyNames.size()>0) {
-        QStringList names;
         CSLFormatState namef=newf;
         nameProps.modifyStyle(namef);
         CSLFormatState fnamef=newf;
@@ -1236,7 +1237,7 @@ QString CSLFile::CSLNamesNode::produce(const QMap<QString, QVariant> &data, cons
             }
         }
     }
-    //qDebug()<"produced names \n   from: "<<
+    qDebug()<<"produced names variables="<<variables<<" form="<<form<<" delimiter="<<delimiter<<" etal="<<etal<<" initialize="<<initialize<<" initializeWith="<<initializeWith<<" nameAsSortOrder="<<nameAsSortOrder<<" sortSeparator="<<sortSeparator<<"\n   from: "<<familyNames<<"\n         "<<givenNames<<"\n         "<<vars<<"\n => "<<names;
 
     return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
 }
@@ -1245,6 +1246,7 @@ void CSLFile::CSLNamesNode::parseProperties(const QDomElement &e)
 {
     CSLFile::CSLNode::parseProperties(e);
     variables=e.attribute("variable").split(' ');
+    parseNameProperties(e);
 
     QDomElement npe=e.firstChildElement("substitute");
     if (!npe.isNull()) {
@@ -1269,12 +1271,14 @@ void CSLFile::CSLNamesNode::parseProperties(const QDomElement &e)
 
 void CSLFile::CSLNamesNode::parseNameProperties(const QDomElement &e)
 {
+    qDebug()<<"parseNameProperties("<<e.tagName()<<")";
     parseBasicProperties(e);
     QDomElement le=e.firstChildElement("name");
+    qDebug()<<"parseNameProperties("<<e.tagName()<<")  le="<<le.tagName();
     if (!le.isNull()) {
         if (le.attribute("and")=="text") andSeparator=nasAndTerm;
         if (le.attribute("and")=="symbol") andSeparator=nasSymbol;
-        form=le.attribute("form", "short");
+        form=le.attribute("form", form);
         initializeWith=le.attribute("initialize-with", initializeWith);
         etalMin=le.attribute("et-al-min", "-1").toInt();
         etaluseFirst=le.attribute("et-al-use-first", "-1").toInt();
@@ -1412,6 +1416,7 @@ QString CSLFile::CSLLabelNode::produce(const QMap<QString, QVariant> &data, cons
 
 void CSLFile::CSLLabelNode::parseProperties(const QDomElement &e)
 {
+    CSLFile::CSLNode::parseProperties(e);
     variable=e.attribute("variable");
     form=e.attribute("form");
     plural=e.attribute("plural");
