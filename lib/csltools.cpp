@@ -5,6 +5,13 @@
 #include "bibtools.h"
 #include <QChar>
 
+
+QString cslStripPeriods(const QString& text, bool strip) {
+    QString t=text;
+    if (strip) t=t.remove('.');
+    return text;
+}
+
 bool cslReadMetadata(const QString& filename, QString* name) {
     QDomDocument doc;
     QFile f(filename);
@@ -70,7 +77,7 @@ QString CSLFile::produce(const QMap<QString, QVariant>& data, bool citation, CSL
 
 void CSLFile::setLocale(CSLLocale *locale)
 {
-    qDebug()<<"setLocale("<<locale->name()<<")";
+    //qDebug()<<"setLocale("<<locale->name()<<")";
     m_locale=locale;
 }
 
@@ -429,7 +436,7 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
     } else if (field==QLatin1String("accessed")) {
         return data.value("viewdate", defaultVal);
     } else if (field==QLatin1String("event-date")) {
-        return data.value("year", defaultVal);
+        //return data.value("year", defaultVal);
     } else if (field==QLatin1String("issued")) {
         return data.value("year", defaultVal);
     } else if (field==QLatin1String("original-date")) {
@@ -530,11 +537,13 @@ CSLFile::CSLTextNode::CSLTextNode(CSLFile::CSLNode *parent, CSLFile *file):
     CSLFile::CSLNode(parent, file)
 {
     plural=false;
+    quote=false;
+    form="";
+    stripPeriods=false;
 }
 
 CSLFile::CSLTextNode::~CSLTextNode()
 {
-    form="";
 }
 
 
@@ -544,13 +553,17 @@ QString CSLFile::CSLTextNode::produce(const QMap<QString, QVariant> &data, const
     modifyStyle(newf);
 
     QString res="";
-    if (!value.isEmpty()) res=escapeString(outf, applyTextCase(value));
-    else if (!variable.isEmpty()) res=escapeString(outf, applyTextCase(getCSLField(variable, data, QString()).toString()));
-    else if (!term.isEmpty()) res=escapeString(outf, applyTextCase(m_file->term(term, !plural, form)));
+    if (!value.isEmpty()) res=escapeString(outf, cslStripPeriods(applyTextCase(value), stripPeriods));
+    else if (!variable.isEmpty()) res=escapeString(outf, cslStripPeriods(applyTextCase(getCSLField(variable, data, QString()).toString()), stripPeriods));
+    else if (!term.isEmpty()) res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(term, !plural, form)), stripPeriods));
     else if (!macro.isEmpty()) {
         if (m_file && m_file->m_macros.contains(macro)) {
-            res+=m_file->m_macros[macro]->produce(data, newf, outf);
+            res+=cslStripPeriods(m_file->m_macros[macro]->produce(data, newf, outf), stripPeriods);
         }
+    }
+
+    if (quote && res.size()>0) {
+        res=escapeString(outf, applyTextCase(m_file->term("open-quote", false, "")))+res+escapeString(outf, applyTextCase(m_file->term("close-quote", false, "")));
     }
 
     if (res.isEmpty()) return QString();
@@ -566,6 +579,9 @@ void CSLFile::CSLTextNode::parseProperties(const QDomElement &e)
     form=e.attribute("form");
     if (e.attribute("plural ")=="true") plural=true;
     value=e.attribute("value");
+    if (e.attribute("strip-periods")=="true") stripPeriods=true;
+    if (e.attribute("quote")=="true") quote=true;
+
 }
 
 
@@ -594,6 +610,22 @@ CSLLocale::CSLLocale(const QString &fn)
 
 
     }
+
+    /*qDebug()<<"==================================================================================";
+    qDebug()<<m_name<<fn;
+    qDebug()<<"==================================================================================";
+    QMapIterator<QString, QMap<QString, CSLLocaleValue> > it(m_terms);
+    while (it.hasNext()) {
+        it.next();
+        qDebug()<<"  "<<it.key()<<":";
+        QMapIterator<QString, CSLLocaleValue> it2(it.value());
+        while (it2.hasNext()) {
+            it2.next();
+            qDebug()<<"    "<<it2.key()<<":";
+            qDebug()<<"      "<<it2.value().m_multiple<<it2.value().m_single;
+        }
+    }
+    qDebug()<<"==================================================================================";*/
 }
 
 CSLLocale::~CSLLocale()
@@ -610,12 +642,13 @@ void CSLLocale::parseLocale(QMap<QString, QMap<QString, CSLLocale::CSLLocaleValu
         QString form=e.attribute("form", "");
         QMap<QString, CSLLocaleValue> t;
         CSLLocaleValue l;
-        if (e.hasChildNodes()) {
+        if (!e.firstChildElement("single").isNull() || !e.firstChildElement("multiple").isNull()) {
             l.m_single=e.firstChildElement("single").text();
             l.m_multiple=e.firstChildElement("multiple").text();
         } else {
             l.m_single=e.text();
         }
+        //qDebug()<<"tag: "<<name<<form<<l.m_single<<l.m_multiple<<e.hasChildNodes()<<e.text();
         t.insert(form, l);
         if (!name.isEmpty()) {
             if (m_terms.contains(name)) {
@@ -696,25 +729,25 @@ QString CSLLocale::formatDate(QDate date, const QString &form)
     }
 }
 
-QString CSLLocale::formatDate(CSLLocaleInterface* localeIntf, const QLocale& locale, const QList<CSLDateFormat>& m_dates, QDate date, const QString& form)
+QString CSLLocale::formatDate(CSLLocaleInterface* localeIntf, const QLocale& locale, const QList<CSLDateFormat>& m_dates, QDate date, const QString& form, bool yearOnly)
 {
 
     QList<CSLDateFormat> l=m_dates;
     QString res;
     for (int i=0; i<l.size(); i++) {
-        res=res+l[i].prefix;
+        QString thisres;
         if (l[i].form=="numeric-leading-zeros") {
-            if (l[i].name=="day") res=res+QString("%1").arg(date.day(), 2, 10, QLatin1Char('0'));
-            if (l[i].name=="month") res=res+QString("%1").arg(date.month(), 2, 10, QLatin1Char('0'));
-            if (l[i].name=="year") res=res+locale.toString(date.year());
+            if (!yearOnly && l[i].name=="day") thisres=QString("%1").arg(date.day(), 2, 10, QLatin1Char('0'));
+            if (!yearOnly && l[i].name=="month") thisres=QString("%1").arg(date.month(), 2, 10, QLatin1Char('0'));
+            if (l[i].name=="year") thisres=QString::number((long)date.year());
         } else if (l[i].form=="numeric") {
-            if (l[i].name=="day") res=res+locale.toString(date.day());
-            if (l[i].name=="month") res=res+locale.toString(date.month());
-            if (l[i].name=="year") res=res+locale.toString(date.year());
+            if (!yearOnly && l[i].name=="day") thisres=QString::number((long)date.day());
+            if (!yearOnly && l[i].name=="month") thisres=QString::number((long)date.month());
+            if (l[i].name=="year") thisres=QString::number((long)date.year());
         } else if (l[i].form=="ordinal") {
             int val=-1;
-            if (l[i].name=="day") val=date.day();
-            if (l[i].name=="month") val=date.month();
+            if (!yearOnly && l[i].name=="day") val=date.day();
+            if (!yearOnly && l[i].name=="month") val=date.month();
             if (l[i].name=="year") val=date.year();
             if (val>=0) {
                 QString ord=localeIntf->term("ordinal", true);
@@ -724,26 +757,28 @@ QString CSLLocale::formatDate(CSLLocaleInterface* localeIntf, const QLocale& loc
                 if (val==11 && localeIntf->hasTerm("ordinal-11")) ord=localeIntf->term("ordinal-11", true);
                 if (val==12 && localeIntf->hasTerm("ordinal-12")) ord=localeIntf->term("ordinal-12", true);
                 if (val==13 && localeIntf->hasTerm("ordinal-13")) ord=localeIntf->term("ordinal-13", true);
-                res=res+locale.toString(val);
+                thisres=QString::number((long)val);
             }
         } else if (l[i].form=="short") {
-            if (l[i].name=="day") res=res+locale.dayName(date.day(), QLocale::ShortFormat);
-            if (l[i].name=="month") {
+            if (!yearOnly && l[i].name=="day") thisres=locale.dayName(date.day(), QLocale::ShortFormat);
+            if (!yearOnly && l[i].name=="month") {
                 QString t=QString("month-%1").arg(date.month(), 2, 10, QLatin1Char('0'));
-                if (localeIntf->hasTerm(t)) res=res+localeIntf->term(t, true, "short");
-                else res=res+locale.dayName(date.month(), QLocale::ShortFormat);
+                if (localeIntf->hasTerm(t)) thisres=localeIntf->term(t, true, "short");
+                else thisres=locale.dayName(date.month(), QLocale::ShortFormat);
             }
-            if (l[i].name=="year") res=res+locale.toString(date.year()%100);
+            if (l[i].name=="year") thisres=QString::number((long)(date.year()%100));
         } else { // "long"
-            if (l[i].name=="day") res=res+locale.dayName(date.day(), QLocale::LongFormat);
-            if (l[i].name=="month") {
+            if (!yearOnly && l[i].name=="day") thisres=locale.dayName(date.day(), QLocale::LongFormat);
+            if (!yearOnly && l[i].name=="month") {
                 QString t=QString("month-%1").arg(date.month(), 2, 10, QLatin1Char('0'));
-                if (localeIntf->hasTerm(t)) res=res+localeIntf->term(t, true, "");
-                else res=res+locale.dayName(date.month(), QLocale::ShortFormat);
+                if (localeIntf->hasTerm(t)) thisres=localeIntf->term(t, true, "");
+                else thisres=locale.dayName(date.month(), QLocale::ShortFormat);
             }
-            if (l[i].name=="year") res=res+locale.toString(date.year());
+            if (l[i].name=="year") thisres=QString::number((long)date.year());
         }
-        res=res+l[i].suffix;
+        if (!thisres.isEmpty()) res=res+l[i].prefix+thisres+l[i].suffix;
+        qDebug()<<"      formatDate "<<i<<l[i].name<<l[i].form<<thisres<<res<<date;
+
     }
     return res;
 
@@ -899,28 +934,64 @@ QString CSLFile::CSLChooseNode::produce(const QMap<QString, QVariant> &data, con
                 }
                 break;
             case iftIsNumeric:{
-                    QString field=getCSLField(ifs[i].variable, data, QString()).toString();
+                    QStringList vars=ifs[i].variable.split(' ');
                     QRegExp rx("[^\\d]*(\\d)+([^\\d]|[\\-\\&\\s\\,])*");
-                    //qDebug()()<<"if-numeric: "<<ifs[i].variable<<field<<rx.indexIn(field);
-                    if (rx.indexIn(field)>=0) {
+                    bool matchAny=false;
+                    bool matchAll=false;
+                    for (int ii=0; ii<vars.size(); ii++) {
+                        QString field=getCSLField(vars[ii], data, QString()).toString();
+                        bool found=rx.indexIn(field)>=0;
+                        matchAny=matchAny||(found);
+                        matchAll=matchAll&&(found);
+                    }
+                    bool ok=false;
+                    if (ifs[i].match=="any") ok=matchAny;
+                    else if (ifs[i].match=="none") ok=!matchAny;
+                    else ok=matchAll;
+                    if (ok) {
                         if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                         return QString();
                     }
+
                 }
                 break;
             case iftUncertainDate:{
-                    QString field=getCSLField(ifs[i].variable, data, QString()).toString().toLower().simplified().trimmed();
-                    //qDebug()()<<"if-uncertainDate: "<<ifs[i].variable<<field;
-                    if (field.startsWith("~") || field.startsWith("ca") || field.startsWith("around") || field.startsWith("appr") || field.startsWith("environ") || field.startsWith("ungef")) {
+
+                    QStringList vars=ifs[i].variable.split(' ');
+                    QRegExp rx("[^\\d]*(\\d)+([^\\d]|[\\-\\&\\s\\,])*");
+                    bool matchAny=false;
+                    bool matchAll=false;
+                    for (int ii=0; ii<vars.size(); ii++) {
+                        QString field=getCSLField(vars[ii], data, QString()).toString();
+                        bool found=(field.startsWith("~") || field.startsWith("ca") || field.startsWith("around") || field.startsWith("appr") || field.startsWith("environ") || field.startsWith("ungef"));
+                        matchAny=matchAny||(found);
+                        matchAll=matchAll&&(found);
+                    }
+                    bool ok=false;
+                    if (ifs[i].match=="any") ok=matchAny;
+                    else if (ifs[i].match=="none") ok=!matchAny;
+                    else ok=matchAll;
+                    if (ok) {
                         if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                         return QString();
                     }
+
                 }
                 break;
             case iftVariable:{
-                    QString field=getCSLField(ifs[i].variable, data, QString()).toString();
-                    //qDebug()()<<"if-variable: "<<ifs[i].variable<<field;
-                    if (!field.isEmpty()) {
+                    QStringList vars=ifs[i].variable.split(' ');
+                    bool matchAny=false;
+                    bool matchAll=false;
+                    for (int ii=0; ii<vars.size(); ii++) {
+                        QString field=getCSLField(vars[ii], data, QString()).toString();
+                        matchAny=matchAny||(!field.isEmpty());
+                        matchAll=matchAll&&(!field.isEmpty());
+                    }
+                    bool ok=false;
+                    if (ifs[i].match=="any") ok=matchAny;
+                    else if (ifs[i].match=="none") ok=!matchAny;
+                    else ok=matchAll;
+                    if (ok) {
                         if (ifs[i].node) return ifs[i].node->produce(data, currentFormat, outf);
                         return QString();
                     }
@@ -1266,7 +1337,7 @@ void CSLBasicProps::parseBasicProperties(const QDomElement &e)
 CSLFile::CSLLabelNode::CSLLabelNode(CSLFile::CSLNode *parent, CSLFile *file):
     CSLFile::CSLNode(parent, file)
 {
-
+    stripPeriods=false;
 }
 
 CSLFile::CSLLabelNode::~CSLLabelNode()
@@ -1284,9 +1355,9 @@ QString CSLFile::CSLLabelNode::produce(const QMap<QString, QVariant> &data, cons
     bool isSingleNumber=false;
     int dat=dataf.toInt(&isSingleNumber);
 
-    if (plural=="always") res=escapeString(outf, applyTextCase(m_file->term(variable, false, form)));
-    if (plural=="never") res=escapeString(outf, applyTextCase(m_file->term(variable, true, form)));
-    else res=escapeString(outf, applyTextCase(m_file->term(variable, isSingleNumber, form)));
+    if (plural=="always") res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, false, form)), stripPeriods));
+    if (plural=="never") res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, true, form)), stripPeriods));
+    else res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, isSingleNumber, form)), stripPeriods));
 
 
     if (res.isEmpty()) return QString();
@@ -1299,6 +1370,7 @@ void CSLFile::CSLLabelNode::parseProperties(const QDomElement &e)
     variable=e.attribute("variable");
     form=e.attribute("form", form);
     plural=e.attribute("plural", plural);
+    if (e.attribute("strip-periods")=="true") stripPeriods=true;
 }
 
 
@@ -1318,26 +1390,32 @@ QString CSLFile::CSLDateNode::produce(const QMap<QString, QVariant> &datain, con
     CSLFormatState newf=currentFormat;
     modifyStyle(newf);
 
+
+
     QString res="";
     QVariant data=getCSLField(variable, datain, QString());
+    if (data.isNull()) return QString();
     bool isDate=false;
     bool intOK=false;
+    bool yearOnly=false;
     QDate date=data.toDate();
     if (data.canConvert(QVariant::UInt)) {
         int year=data.toInt(&intOK);
         if (intOK) {
             isDate=true;
             date=QDate(year, 1, 1);
+            yearOnly=true;
         }
     } else if (data.canConvert(QVariant::Date)) {
         isDate=true;
     }
 
+    qDebug()<<"produce date: "<<form<<variable<<data<<isDate<<intOK<<date;
+
     QList<CSLLocale::CSLDateFormat> dp=dateParts;
     if (form=="numeric" || form=="text") {
-        if (dp.size()<=0) dp=m_file->cslLocale()->dateParts(form);
-        else {
-            dp=m_file->cslLocale()->dateParts(form);
+        dp=m_file->cslLocale()->dateParts(form);
+        if (dp.size()>0) {
             for (int i=0; i<dp.size(); i++) {
                 for (int j=0; j<dateParts.size(); j++) {
                     if (dp[i].name==dateParts[j].name) {
@@ -1346,8 +1424,10 @@ QString CSLFile::CSLDateNode::produce(const QMap<QString, QVariant> &datain, con
                 }
             }
         }
-    } else if (!form.isEmpty()) {
+    } else if (form=="text" || form=="numeric") {
         dp=m_file->cslLocale()->dateParts(form);
+    } else if (!form.isEmpty()) {
+        dp=m_file->cslLocale()->dateParts("text");
     }
 
     if (isDate) {
@@ -1363,9 +1443,9 @@ QString CSLFile::CSLDateNode::produce(const QMap<QString, QVariant> &datain, con
                 if (dp[i].name=="month") dp.removeAt(i);
             }
         }
-        m_file->cslLocale()->formatDate(m_file->cslLocale(), m_file->cslLocale()->locale(), dp, date, form);
+        res+=m_file->cslLocale()->formatDate(m_file->cslLocale(), m_file->cslLocale()->locale(), dp, date, form, yearOnly);
     }
-
+    qDebug()<<"  produce date: "<<res<<dp.size();
     if (res.isEmpty()) return QString();
     else return newf.startFormat(currentFormat, outf)+prefix+res+suffix+newf.endFormat(currentFormat, outf);
 }

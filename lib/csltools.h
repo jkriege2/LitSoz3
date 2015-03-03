@@ -113,9 +113,9 @@ LS3LIB_EXPORT bool cslReadMetadata(const QString& filename, QString* name=NULL);
 class LS3LIB_EXPORT CSLLocaleInterface {
     public:
         struct CSLLocaleValue {
-            inline QString single() { return m_single; }
-            inline QString multiple() { if (m_multiple.isEmpty()) return single(); else return m_multiple; }
-            inline QString get(bool multipl=false) {
+            inline QString single() const { return m_single; }
+            inline QString multiple() const { if (m_multiple.isEmpty()) return single(); else return m_multiple; }
+            inline QString get(bool multipl=false) const {
                 if (multipl) return multiple();
                 return single();
             }
@@ -164,9 +164,9 @@ class LS3LIB_EXPORT CSLLocale: public CSLLocaleInterface {
         static void parseLocale(QMap<QString, QMap<QString, CSLLocaleValue> >& m_terms, const QDomElement& e);
         static void parseDate(QList<CSLDateFormat>& m_terms, const QDomElement& e);
         virtual inline CSLLocaleValue term(const QString& name, const QString& form=QString()) const {
-            qDebug()<<"CSLLocale::form("<<name<<", "<<form<<") "<<m_terms.keys();
+            //qDebug()<<"CSLLocale::form("<<name<<", "<<form<<") "<<m_terms.keys();
             if (m_terms.contains(name)) {
-                qDebug()<<"CSLLocale::form("<<name<<", "<<form<<"): "<<m_terms[name].keys();
+                //qDebug()<<"CSLLocale::form("<<name<<", "<<form<<"): "<<m_terms[name].keys();
                 if (m_terms[name].contains(form)) return  m_terms[name].value(form);
                 else return  m_terms[name].value("", CSLLocaleValue());
             }
@@ -181,7 +181,7 @@ class LS3LIB_EXPORT CSLLocale: public CSLLocaleInterface {
         }
 
         QString formatDate(QDate date, const QString& form=QString("text"));
-        static QString formatDate(CSLLocaleInterface* localeIntf, const QLocale& locale, const QList<CSLDateFormat>& m_dates, QDate date, const QString& form=QString("text"));
+        static QString formatDate(CSLLocaleInterface* localeIntf, const QLocale& locale, const QList<CSLDateFormat>& m_dates, QDate date, const QString& form=QString("text"), bool yearOnly=false);
         QString formatDate(CSLLocaleInterface* localeIntf, QDate date, const QString& form=QString("text"));
         inline QLocale locale() const { return m_locale; }
         inline QList<CSLDateFormat> dateParts(const QString& form=QString("text")) const {
@@ -280,6 +280,8 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 QString value;
                 QString form;
                 bool plural;
+                bool quote;
+                bool stripPeriods;
         };
 
         class LS3LIB_EXPORT CSLNumberNode: public CSLNode {
@@ -307,6 +309,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 QString variable;
                 QString form;
                 QString plural;
+                bool stripPeriods;
         };
 
         class LS3LIB_EXPORT CSLDateNode: public CSLNode {
