@@ -49,6 +49,7 @@ bool fdfManager::loadFile(QString filename) {
             // read default widget properties
             wp->readonly=QVariant(e.attribute("readonly", "false")).toBool();
             wp->casesensitive=QVariant(e.attribute("casesensitive", "true")).toBool();
+            wp->editable=QVariant(e.attribute("editable", "true")).toBool();
             wp->captionTextDefault=e.attribute("caption");
             wp->completerList=e.attribute("completer");
             wp->dataField=e.attribute("datafield");
@@ -61,6 +62,14 @@ bool fdfManager::loadFile(QString filename) {
             wp->maxVal=e.attribute("max", "32765").toDouble();
             wp->widgetWidth=e.attribute("widgetwidth", "-1").toInt();
             wp->widgetHeight=e.attribute("widgetheight", "-1").toInt();
+            QDomElement ee=e.firstChildElement("item");
+            while (!ee.isNull()) {
+                QString l=ee.attribute("lang", "en");
+                if (!wp->items.contains(l)) wp->items.insert(l, QStringList());
+                wp->items[l].append(ee.text());
+                wp->itemIDs.append(ee.attribute("id."));
+                ee=ee.nextSiblingElement("item");
+            }
             //wp=e.attribute("");
             // find attributes of the form caption.language-id
             QDomNamedNodeMap m=e.attributes();
@@ -195,9 +204,18 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
             } else if (wp->type==fdfWidgetComboBox) {
                 QMappableComboBox* e=new QMappableComboBox(wret);
                 w=e;
-                e->setEditable(true);
-                if (wp->completerList.size()>0) e->setFilename(configDir+"/completers/"+wp->completerList+".lst");
-                datastore->addMapping(e, wp->dataField, "text");
+                e->setEditable(wp->editable);
+                if (wp->items.size()>0) {
+                    for (int ii=0; ii<qMax(wp->items[language].size(), wp->itemIDs.size()); ii++) {
+                        e->addItem(wp->items[language].value(i, wp->itemIDs.value(i, "")), wp->itemIDs.value(i, wp->items[language].value(i, "")));
+                    }
+                }
+                else if (wp->completerList.size()>0) e->setFilename(configDir+"/completers/"+wp->completerList+".lst");
+                if (wp->items.size()>0) {
+                    datastore->addMapping(e, wp->dataField, "data");
+                } else {
+                    datastore->addMapping(e, wp->dataField, "text");
+                }
             } else if (wp->type==fdfWidgetSeparator) {
                 QFrame* f=new QFrame(wret);
                 f->setFrameShape(QFrame::HLine);

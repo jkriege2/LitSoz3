@@ -77,6 +77,12 @@ class fdfManager: public QObject {
                 bool casesensitive;
                 /** \brief the widget type */
                 fdfWidget type;
+                /** \brief items for a combobox */
+                QMap<QString, QStringList> items;
+                /** \brief items for a combobox */
+                QStringList itemIDs;
+                /** \brief is the item editable (e.g. a combobox) */
+                bool editable;
 
         };
 

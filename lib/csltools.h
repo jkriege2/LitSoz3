@@ -222,7 +222,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                     else res=m_locale->term(name, form);
                 }
             }
-            qDebug()<<"term("<<name<<form<<") = "<<res.m_single<<res.m_multiple;
+            //qDebug()<<"term("<<name<<form<<") = "<<res.m_single<<res.m_multiple;
             return res;
         }
         virtual inline QString term(const QString& name, bool single, const QString& form=QString()) const {
@@ -378,7 +378,8 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                     iftType,
                     iftVariable,
                     iftElse,
-                    iftUncertainDate
+                    iftUncertainDate,
+                    iftNever
                 };
 
                 struct ifData {

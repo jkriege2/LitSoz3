@@ -10,7 +10,6 @@
   </options>
   <authors caption="Authors" caption.de="Autoren" completer="authors" datafield="authors" />
   <authors caption="Editors" caption.de="Herausgeber" completer="authors" datafield="editors" />
-  <edit caption="Chapter" caption.de="Kapitel" datafield="chapter" widgetwidth="100" />
   <edit caption="Title" caption.de="Titel" datafield="title" />
   <memo caption="Subtitle" caption.de="Untertitel" datafield="subtitle" />
   <separator />
@@ -22,5 +21,20 @@
   <edit caption="Publisher" caption.de="Verlag" datafield="publisher" completer="publisher" />
   <memo caption="Places" caption.de="Verlagsort" datafield="places" completer="places" />
   <edit caption="ISBN" datafield="isbn" />
+  <combobox caption="Where" caption.de="Wo im Buch" datafield="locator" widgetwidth="100" editable="false">
+    <item lang="en" id="pages">pages</item>
+	<item lang="de" id="pages">Seiten</item>
+    <item lang="en" id="chapter">chapter</item>
+	<item lang="de" id="chapter">Kapitel</item>
+    <item lang="en" id="figure">figure</item>
+	<item lang="de" id="figure">Abbildung</item>
+    <item lang="en" id="verse">verse</item>
+	<item lang="de" id="verse">Vers</item>
+    <item lang="en" id="section">section</item>
+	<item lang="de" id="section">Abschnitt</item>
+    <item lang="en" id="paragraph">paragraph</item>
+	<item lang="de" id="paragraph">Absatz</item>
+  </combobox>
+  <edit caption="Chapter/..." caption.de="Kapitel/..." datafield="chapter" widgetwidth="100" />
   <edit caption="Pages" caption.de="Seiten" datafield="pages" />
 </fdf>

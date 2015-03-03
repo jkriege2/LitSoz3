@@ -36,6 +36,8 @@ class ExtendedPane : public QWidget {
         void setBaseDir(QString bd);
 
         void addEditButton(LS3PluginServices::AvailableEditWidgetsForButtons edit, QAction* action);
+    protected slots:
+        void setAccessdate();
     protected:
         /** \brief main data model which holds the literature table for viewing and editing */
         LS3Datastore* datastore;
@@ -78,6 +80,9 @@ class ExtendedPane : public QWidget {
         QEnhancedLineEdit* edtArxiv;
         /** \brief edit for URL */
         QEnhancedLineEdit* edtUrl;
+        /** \brief dateedit for the date of last access */
+        QDateEdit* dedLastAccessed;
+
         /** \brief button which opens a webpage with the URL in edtUrl */
         JKStyledButton* btnUrl;
         /** \brief button which opens a DOI */

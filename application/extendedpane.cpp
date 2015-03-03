@@ -229,10 +229,16 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
 
 
     edtUrl=new QEnhancedLineEdit(this);
+    connect(edtUrl, SIGNAL(editingFinished()), this, SLOT(setAccessdate()));
     btnUrl=new JKStyledButton(JKStyledButton::OpenURL, edtUrl, this);
     edtUrl->addButton(btnUrl);
     if (extendedLongWidth>0) edtUrl->setMaximumWidth(extendedLongWidth);
     lay->addRow(tr("&URL:"), edtUrl);
+
+    dedLastAccessed=new QDateEdit(this);
+    dedLastAccessed->setMaximumWidth(100);
+    lay->addRow(tr("Last &Accessed:"), dedLastAccessed);
+
 
     f=new QFrame(this);
     f->setFrameShape(QFrame::HLine);
@@ -310,6 +316,16 @@ void ExtendedPane::addEditButton(LS3PluginServices::AvailableEditWidgetsForButto
     }
 }
 
+void ExtendedPane::setAccessdate()
+{
+    if (datastore) {
+        if (datastore->getField("viewdate").toString().isEmpty()) {
+            datastore->setField("viewdate", QDate::currentDate());
+            //qDebug()<<"set date";
+        }
+    }
+}
+
 
 void ExtendedPane::connectWidgets(LS3Datastore* datastore) {
     //std::cout<<"ExtendedPane::connectWidgets() ... ";
@@ -332,6 +348,7 @@ void ExtendedPane::connectWidgets(LS3Datastore* datastore) {
     datastore->addMapping(edtPMCID, "pmcid");
     datastore->addMapping(edtArxiv, "arxiv");
     datastore->addMapping(edtUrl, "url");
+    datastore->addMapping(dedLastAccessed, "viewdate");
     datastore->addMapping(edtFile, "files", "filesAsString");
     datastore->addMapping(edtStatusComment, "statuscomment");
 
@@ -356,6 +373,7 @@ void ExtendedPane::disconnectWidgets() {
         datastore->removeMapping(edtPMCID);
         datastore->removeMapping(edtArxiv);
         datastore->removeMapping(edtUrl);
+        datastore->removeMapping(dedLastAccessed);
         datastore->removeMapping(edtFile);
     }
     datastore=NULL;
