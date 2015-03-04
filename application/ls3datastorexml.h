@@ -159,9 +159,9 @@ public slots:
         virtual void dbClose(bool saveOnClose=false);
 
         /*! \brief insert a new record */
-        virtual void dbInsert();
+        virtual void dbInsert(const QMap<QString, QVariant> &data=QMap<QString, QVariant>());
 
-        virtual int dbInsertNoMoveCursor();
+        virtual int dbInsertNoMoveCursor(const QMap<QString, QVariant> &data=QMap<QString, QVariant>());
 
 
 

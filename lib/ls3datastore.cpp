@@ -262,6 +262,11 @@ void LS3Datastore::onDatabaseLoaded(bool isLoaded) {
     if (!isLoaded) clearSelection();
 }
 
+void LS3Datastore::invalidateModels()
+{
+
+}
+
 void LS3Datastore::resetFieldDefinitions() {
     for (int i=fields.size()-1; i>=0; i--) {
         if (!fields[i].basic) fields.removeAt(i);
@@ -454,4 +459,9 @@ QString LS3Datastore::createID(int record, QString type) {
 
 LS3PluginServices* LS3Datastore::getPluginServices() const {
     return m_pluginServices;
+}
+
+bool LS3Datastore::dbSave(const QString &fileName, QProgressBar *progress)
+{
+    return false;
 }

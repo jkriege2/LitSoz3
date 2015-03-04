@@ -294,29 +294,34 @@ void LS3DatastoreXML::dbMove(int current) {
     }
 }
 
-void LS3DatastoreXML::dbInsert() {
-    int row=dbInsertNoMoveCursor();
+void LS3DatastoreXML::dbInsert(const QMap<QString, QVariant>& indata) {
+    int row=dbInsertNoMoveCursor(indata);
     if (row>=0) {
         mapper->setCurrentIndex(row);
     }
 
 }
 
-int LS3DatastoreXML::dbInsertNoMoveCursor() {
+int LS3DatastoreXML::dbInsertNoMoveCursor(const QMap<QString, QVariant>& indata) {
     int row=-1;
     if (dbIsLoaded()) {
         mapper->submit();
         //data->submitAll();
-        row=data->insertRecord();
 
-        data->setField(row, "owner", settings->GetUsername());
-        data->setField(row, "viewdate", QDate::currentDate());
-        data->setField(row, "addeddate", QDate::currentDate());
-        data->setField(row, "statussince", QDate::currentDate());
-        data->setField(row, "status", settings->GetDefaultStatus());
-        data->setField(row, "currency", settings->GetDefaultCurrency());
-        data->setField(row, "price", 0.0);
-        data->setField(row, "rating", 0);
+
+        QMap<QString, QVariant> idata=indata;
+        idata["owner"]=settings->GetUsername();
+        idata["viewdate"]=QDate::currentDate();
+        idata["addeddate"]=QDate::currentDate();
+        idata["statussince"]=QDate::currentDate();
+        idata["status"]=settings->GetDefaultStatus();
+        idata["currency"]=settings->GetDefaultCurrency();
+        idata["price"]=double(0.0);
+        idata["rating"]=int(0);
+        //idata[""]=;
+        row=data->insertRecord(idata);
+
+
         //data->setField(row, "uuid", newUUID());
     }
     return row;
@@ -344,32 +349,28 @@ QString LS3DatastoreXML::currentFile() const {
 
 bool LS3DatastoreXML::addRecord(QMap<QString, QVariant>& data, bool moveToRecord, bool createIDD) {
     if (!dbIsLoaded()) return false;
-    int row=dbInsertNoMoveCursor();
-    bool ok=false;
+    int row=dbInsertNoMoveCursor(data);
     if (row>=0) {
-        ok=setRecord(row, data);
-        if (ok && createIDD) {
+        if (createIDD) {
             setField(row, "id", createID(row, getPluginServices()->GetIDType()));
         }
         if (moveToRecord) {
             dbMove(row);
         }
     }
-    return ok;
+    return row>=0;
 }
 
 bool LS3DatastoreXML::addRecord(QMap<QString, QVariant> &data, QString &uuid, bool createIDD) {
     if (!dbIsLoaded()) return false;
-    int row=dbInsertNoMoveCursor();
-    bool ok=false;
+    int row=dbInsertNoMoveCursor(data);
     if (row>=0) {
-        ok=setRecord(row, data);
-        if (ok && createIDD) {
+        if (createIDD) {
             setField(row, "id", createID(row, getPluginServices()->GetIDType()));
         }
         uuid=getField(row, "uuid").toString();
     }
-    return ok;
+    return row>=0;
 }
 
 bool LS3DatastoreXML::setRecord(int index, QMap<QString, QVariant>& datam) {

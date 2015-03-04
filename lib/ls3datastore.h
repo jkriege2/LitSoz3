@@ -31,7 +31,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
             FieldType type;
             bool basic;
 
-            FieldDescription() {
+            inline FieldDescription() {
                 name="";
                 type=FTString;
                 basic=true;
@@ -313,7 +313,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
 
             \return \c true on success
          */
-        virtual bool dbSave(const QString &fileName, QProgressBar* progress=NULL) { return false;};
+        virtual bool dbSave(const QString &fileName, QProgressBar* progress=NULL);
 
 
         /*! \brief close the currently opened database (if one is opened).
@@ -323,10 +323,10 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
         virtual void dbClose(bool saveOnClose=false)=0;
 
         /*! \brief insert a new record and set the cursor to the new record */
-        virtual void dbInsert()=0;
+        virtual void dbInsert(const QMap<QString, QVariant> &data=QMap<QString, QVariant>())=0;
 
         /*! \brief insert a new record and return it's row, but don't move the cursor */
-        virtual int dbInsertNoMoveCursor()=0;
+        virtual int dbInsertNoMoveCursor(const QMap<QString, QVariant> &data=QMap<QString, QVariant>())=0;
 
         /*! \brief remove the current record */
         virtual void dbDelete();
@@ -414,7 +414,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
         /*! \brief this may be used to invalidate/reset access models that include information
                    like the selection which is not directly stored in the database.
          */
-        virtual void invalidateModels() {};
+        virtual void invalidateModels() ;
 };
 
 

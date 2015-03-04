@@ -92,6 +92,7 @@ void PubmedThread::requestFromPMIDandDOI(const QString &pmid, const QString &DOI
 
     newRecord.clear();
     newRecord["pubmed"]=lastPMID;
+    newRecord["doi"]=lastDoi;
     newRecord["type"]="article";
 
     currentInstruction=scanNone;

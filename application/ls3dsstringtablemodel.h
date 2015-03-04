@@ -54,7 +54,7 @@ class LS3DSStringTableModel: public QAbstractTableModel {
         QMap<QString, QVariant> getRecord(int i) const;
         bool setField(int record, QString field, QVariant data);
         QVariant getField(int record, QString field) const;
-        int insertRecord();
+        int insertRecord(const QMap<QString, QVariant>& data=QMap<QString, QVariant>());
         void removeRecord(int i);
 
         /** \brief internally calls clear() and in addition sets wasChanged() to \c false */

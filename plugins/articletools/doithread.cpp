@@ -14,7 +14,11 @@ void DoiThread::requestFromDoi(const QString &doi, LS3PluginServices* services) 
     andWords=services->GetAndWords();
     proxy=services->getNetworkProxy();
 
-    lastDoi=doi;
+    lastDoi=doi.trimmed().simplified();
+    if (!lastDoi.startsWith("10.")) {
+        int idx=lastDoi.indexOf("10.");
+        if (idx>=0) lastDoi=lastDoi.mid(idx);
+    }
 
 
     running=true;

@@ -34,9 +34,11 @@ void AnalyzePDFThread::setInsertnewRecord() {
 void AnalyzePDFThread::run() {
     QString filename=PDF;
     if (QFile::exists(filename)) {
+        setMessage(tr("extracting XMP metadata from '%1' ...").arg(filename));
         QMap<QString, QString> xmp= extractXMP(filename, andWords,nameAdditions, namePrefixes);
         QMap<QString, QString> fromPDF;
         if (QFileInfo(filename).suffix().toLower()=="pdf") {
+            setMessage(tr("extracting metadata from PDF '%1' ...").arg(filename));
             fromPDF=extractFromPDF(filename, andWords,nameAdditions, namePrefixes, pluginDirectory);
         }
         //qDebug()<<"XMP: "<<xmp;
@@ -57,6 +59,7 @@ void AnalyzePDFThread::run() {
 
         QString newFilename=filename_base+"."+filename_suffix;
 
+        setMessage(tr("moving/copying '%1'").arg(filename));
         if (action==1) {
             QFile::copy(filename, d_lit.absoluteFilePath(newFilename));
         } else if (action==2) {
@@ -66,6 +69,7 @@ void AnalyzePDFThread::run() {
             newFilename = d_lit.relativeFilePath(filename);
         }
 
+        setMessage(tr("finalizing metadata from '%1'").arg(filename));
         //QMap<QString, QVariant> data;
         if (!xmp.isEmpty()) {
             QMapIterator<QString, QString> it(xmp);

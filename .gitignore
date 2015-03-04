@@ -87,3 +87,4 @@ Makefile
 *.txt
 *.xld
 *.3-pre1
+/lib/*.uS7484

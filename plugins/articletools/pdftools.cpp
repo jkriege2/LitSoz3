@@ -374,8 +374,8 @@ bool recognizeIEEE(const QString& data, QMap<QString, QString>& props, QList<QSt
 // specially recognize data from APS
 /////////////////////////////////////////////////////////
 bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
-    QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("(\\d+).*\\s*American\\s*Physical\\s*Society", Qt::CaseInsensitive);
+    //QStringList lines=data.trimmed().split('\n');
+    QRegExp rxCheck("(\\d\\d\\d\\d).*\\sAmerican\\s*Physical\\s*Society", Qt::CaseInsensitive);
 
     if (rxCheck.indexIn(data)>=0) {
         props["year"]=rxCheck.cap(1);
@@ -390,9 +390,11 @@ bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QStr
             props["year"]=rxAPS.cap(6);
             props["title"]=rxAPS.cap(7);
             QString auth=rxCheck.cap(8).simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
-            QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
-            props["authors"]=a;
+            if (auth.size()<8192) {
+                auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\§\\?]"));
+                QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
+                props["authors"]=a;
+            }
         }
 
         return true;
@@ -407,7 +409,7 @@ bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QStr
 /////////////////////////////////////////////////////////
 bool recognizeACS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("(\\d+).*\\s*American\\s*Chemical\\s*Society", Qt::CaseInsensitive);
+    QRegExp rxCheck("(\\d\\d\\d\\d).*\\sAmerican\\s*Chemical\\s*Society", Qt::CaseInsensitive);
     rxCheck.setMinimal(true);
     if (rxCheck.indexIn(data)>=0) {
         props["year"]=rxCheck.cap(1);
@@ -587,6 +589,8 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
 #endif
 
 #ifdef DEBUG_PDF
+    QElapsedTimer timerdbg;
+    timerdbg.start();
     QFile testout(filename+".pdf2txt.debug.txt");
     testout.open(QFile::WriteOnly|QFile::Text);
     QTextStream dbgtxt(&testout);
@@ -598,7 +602,10 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
             QString contents=f.readAll();
 
 #ifdef DEBUG_PDF
-            dbgtxt<<"CONTENTS:\n"<<contents<<"\n\n\n";
+            dbgtxt<<"CONTENTS:\n"<<contents<<"\n\n\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n\n\n";
+            dbgtxt.flush();
+            timerdbg.start();
+
 #endif
 
             //qDebug()<<contents;
@@ -619,28 +626,109 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
 
                 if (doi.simplified().trimmed().size()>0) props["doi"]=doi;
             }
-
-            QRegExp rxYear("\\s(\\d\\d\\d\\d)\\s");
-            if (rxYear.indexIn(contents)>=0) {
+            #ifdef DEBUG_PDF
+            dbgtxt<<"search DOI : "<<props.value("doi", "")<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+            QRegExp rxYear;
+            bool hasYear=false;
+            rxYear=QRegExp("Available[^\\n]*\\s(\\d\\d\\d\\d)\\s");
+            if (!hasYear && rxYear.indexIn(contents)>=0) {
                 //qDebug()<<"found year @ "<<rxYear.indexIn(contents)<<"   ="<<rxYear.cap(0).trimmed();
                 bool ok=true;
                 int y=rxYear.cap(1).toInt(&ok);
-                if (ok && (y>999) && (y<=QDate::currentDate().year()+100)) props["year"]=rxYear.cap(1);
+                if (ok && (y>1900) && (y<=QDate::currentDate().year()+100)) {
+                    props["year"]=rxYear.cap(1);
+                    hasYear=true;
+                }
+            }
+            rxYear=QRegExp("accepted[^\\n]*\\s(\\d\\d\\d\\d)\\s");
+            if (!hasYear && rxYear.indexIn(contents)>=0) {
+                //qDebug()<<"found year @ "<<rxYear.indexIn(contents)<<"   ="<<rxYear.cap(0).trimmed();
+                bool ok=true;
+                int y=rxYear.cap(1).toInt(&ok);
+                if (ok && (y>1900) && (y<=QDate::currentDate().year()+100)) {
+                    props["year"]=rxYear.cap(1);
+                    hasYear=true;
+                }
+            }
+            rxYear=QRegExp("\\s(\\d\\d\\d\\d)\\s");
+            if (!hasYear && rxYear.indexIn(contents)>=0) {
+                //qDebug()<<"found year @ "<<rxYear.indexIn(contents)<<"   ="<<rxYear.cap(0).trimmed();
+                bool ok=true;
+                int y=rxYear.cap(1).toInt(&ok);
+                if (ok && (y>1900) && (y<=QDate::currentDate().year()+100)) {
+                    props["year"]=rxYear.cap(1);
+                    hasYear=true;
+                }
             }
 
-            QRegExp rxIntro("abstract\\s([^\\n\xA9]*)", Qt::CaseInsensitive);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"search year : "<<props.value("year", "")<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+
+            #endif
+            bool hasAbstract=false;
+            QRegExp rxIntro("a\\s*b\\s*s\\s*t\\s*r\\s*a\\s*c\\s*t\\s([\xA9]*)\\n\\n", Qt::CaseInsensitive);
             if (rxIntro.indexIn(contents)>=0) {
-                props["abstract"]=rxIntro.cap(1);
-            } else {
-                QRegExp rxIntro("introduction\\s([^\\n\xA9]*)", Qt::CaseInsensitive);
-                if (rxIntro.indexIn(contents)>=0) {
+                if (rxIntro.cap(1).size()<=contents.size()/10){
                     props["abstract"]=rxIntro.cap(1);
+                    hasAbstract=true;
+                }
+            }
+            if (!hasAbstract) {
+                QRegExp rxIntro("i\\s*n\\s*t\\s*r\\s*o\\s*d\\s*u\\s*c\\s*t\\s*i\\s*o\\s*n\\s([^\xA9]*)\\n\\n", Qt::CaseInsensitive);
+                if (rxIntro.indexIn(contents)>=0) {
+                    if (rxIntro.cap(1).size()<=contents.size()/10){
+                        props["abstract"]=rxIntro.cap(1);
+                        hasAbstract=true;
+                    }
                 }
 
             }
+            if (!hasAbstract) {
+                QRegExp rxIntro("i\\s*n\\s*t\\s*r\\s*o\\s*d\\s*u\\s*c\\s*t\\s*i\\s*o\\s*n\\s([^\xA9\\n]*)\\n", Qt::CaseInsensitive);
+                if (rxIntro.indexIn(contents)>=0) {
+                    if (rxIntro.cap(1).size()<=contents.size()/10){
+                        props["abstract"]=rxIntro.cap(1);
+                        hasAbstract=true;
+                    }
+                }
 
-            QRegExp rxkw("(keywords|ocis\\s*codes|index\\s*terms|index\\s*headings)[\\:\\-Ð]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
-            if (rxkw.indexIn(contents)>=0) {
+            }
+            #ifdef DEBUG_PDF
+            dbgtxt<<"search abstract : "<<props.value("abstract", "")<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+
+            #endif
+
+            bool haskeywords=false;
+            QRegExp rxkw;
+            rxkw=QRegExp("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-Ð]?[\\s]*(.*)\\n\\n", Qt::CaseInsensitive);
+            if (!haskeywords && rxkw.indexIn(contents)>=0) {
+                QString kw=rxkw.cap(2).simplified();
+                if (kw.size()<contents.size()/20) {
+                    if (kw.contains(",") && kw.contains(";")) {
+                        kw.replace("; ", "\n");
+                        kw.replace(";", "\n");
+                    } else {
+                        kw.replace("; ", "\n");
+                        kw.replace(", ", "\n");
+                        kw.replace(';', '\n');
+                        kw.replace(',', '\n');
+                        kw.replace('·', '\n');
+                    }
+                    if (kw.simplified().size()>0) {
+                        props["keywords"]=kw.simplified();
+                        haskeywords=true;
+                    }
+                }
+            }
+            rxkw=QRegExp("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-Ð]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
+            if (!haskeywords && rxkw.indexIn(contents)>=0) {
                 QString kw=rxkw.cap(2).simplified();
                 if (kw.contains(",") && kw.contains(";")) {
                     kw.replace("; ", "\n");
@@ -652,8 +740,34 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
                     kw.replace(',', '\n');
                     kw.replace('·', '\n');
                 }
-                props["keywords"]=kw.simplified();
+                if (kw.simplified().size()>0) {
+                    props["keywords"]=kw.simplified();
+                    haskeywords=true;
+                }
             }
+            rxkw=QRegExp("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-Ð]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
+            if (!haskeywords && rxkw.indexIn(contents)>=0) {
+                QString kw=rxkw.cap(2).simplified();
+                if (kw.contains(",") && kw.contains(";")) {
+                    kw.replace("; ", "\n");
+                    kw.replace(";", "\n");
+                } else {
+                    kw.replace("; ", "\n");
+                    kw.replace(", ", "\n");
+                    kw.replace(';', '\n');
+                    kw.replace(',', '\n');
+                    kw.replace('·', '\n');
+                }
+                if (kw.simplified().size()>0) {
+                    props["keywords"]=kw.simplified();
+                    haskeywords=true;
+                }
+            }
+            #ifdef DEBUG_PDF
+            dbgtxt<<"search keywords : "<<props.value("keywords", "")<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
 
             /////////////////////////////////////////////////////////
             // specially recognize data from some journals
@@ -661,48 +775,70 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
             bool ok=false;
             ok=recognizeOSA(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
             #ifdef DEBUG_PDF
-            dbgtxt<<"recognizeOSA : "<<ok<<"\n";
+            dbgtxt<<"recognizeOSA : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
             #endif
             if (!ok) ok=recognizeElsevier(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeElsevier : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeBentham(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeBentham : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeSPIE(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeSPIE : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeBiophysJ(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeBiophysJ : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizePNAS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizePNAS : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeIEEE(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeIEEE : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeAPS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeAPS : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeACS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeACS : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeKluwer(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeKluwer : "<<ok<<"\n";
-#endif
-            if (!ok) ok=recognizeRockefeller(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
-#ifdef DEBUG_PDF
-dbgtxt<<"recognizeRockefeller : "<<ok<<"\n";
-#endif
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeElsevier : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeBentham(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeBentham : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeSPIE(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeSPIE : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeBiophysJ(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeBiophysJ : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizePNAS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizePNAS : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeIEEE(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeIEEE : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeAPS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeAPS : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeACS(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeACS : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeKluwer(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeKluwer : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
+                        if (!ok) ok=recognizeRockefeller(contents, props, andWords, nameAdditions, namePrefixes, pluginDir);
+            #ifdef DEBUG_PDF
+            dbgtxt<<"recognizeRockefeller : "<<ok<<"\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n";
+            dbgtxt.flush();
+            timerdbg.start();
+            #endif
 
 
             f.close();

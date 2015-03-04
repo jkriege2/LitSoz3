@@ -4,6 +4,7 @@
 #include <QAbstractProxyModel>
 #include <QItemDelegate>
 #include <QMimeData>
+#include <QPointer>
 #define LS3SUMMARYPROXYMODEL_COLUMN_SELECTION 0
 #define LS3SUMMARYPROXYMODEL_COLUMN_ID        1
 #define LS3SUMMARYPROXYMODEL_COLUMN_TYPE      2
@@ -88,7 +89,7 @@ class LS3SummaryProxyModel : public QAbstractProxyModel {
         void _rowsRemoved ( const QModelIndex & parent, int start, int end );
         void selectionChanged(int recordNum, bool newSelectionState);
     protected:
-        LS3Datastore* datastore;
+        QPointer<LS3Datastore> datastore;
 };
 
 /*! \brief QItemDelegate that displays HTML markup and the rating as a number of stars. This is designed to work together with LS3SummaryProxyModel

@@ -199,7 +199,9 @@ void MainWindow::openRecentFile(const QString &filename) {
 
 void MainWindow::wasChanged(bool changed) {
     //qDebug()<<"wasChanged("<<changed<<")";
-    setCurrentFile(curFile);
+    //setCurrentFile(curFile);
+    setWindowModified(changed);
+    setWindowTitle(tr("LitSoz %2 - %1 [*]").arg(curFile).arg(QApplication::applicationVersion()));
 }
 
 

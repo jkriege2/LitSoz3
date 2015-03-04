@@ -385,12 +385,8 @@ void LS3SummaryProxyModel::_layoutChanged () {
 }
 void LS3SummaryProxyModel::_rowsInserted ( const QModelIndex & parent, int start, int end ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsInserted\n";
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-beginResetModel();
-endResetModel();
-#else
-reset();
-#endif
+    beginInsertRows(QModelIndex(), start, end);
+    endInsertRows();
     //emit rowsInserted(mapFromSource(parent), start, end);
     //beginInsertRows(mapFromSource(parent), start, end);
     //endInsertRows();
@@ -406,12 +402,15 @@ reset();
 }
 void LS3SummaryProxyModel::_rowsRemoved ( const QModelIndex & parent, int start, int end ) {
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsRemoved\n";
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-beginResetModel();
-endResetModel();
-#else
-reset();
-#endif
+   // beginRemoveRows(QModelIndex(), start, end);
+   // endInsertRows();
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    beginResetModel();
+    endResetModel();
+    #else
+    reset();
+    #endif
+
 }
 
 void LS3SummaryProxyModel::selectionChanged(int recordNum, bool newSelectionState) {
