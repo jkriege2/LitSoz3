@@ -101,6 +101,7 @@ QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>&
         FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, publisher)
         FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, places)
         FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, edition)
+        if (edition.toInt()<=1) edition="";
         FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, pages)
         FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, institution)
         FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, subtype)
@@ -131,7 +132,7 @@ QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>&
             result+=QString("<p>%1</p>").arg(names);
             result+="<small>";
             QString add="";
-            if (!edition.isEmpty()) add+=QString("%1. edition").arg(edition);
+            if (!edition.isEmpty() && edition.toInt()>1) add+=QString("%1. edition").arg(edition);
             if (!publisher.isEmpty()) add+=((add.isEmpty())?QString(""):QString(", "))+publisher;
             if (!places.isEmpty()) add+=((add.isEmpty())?QString(""):QString(", "))+places;
             if (!isbn.isEmpty()) add+=((add.isEmpty())?QString(""):QString(", "))+tr("ISBN: ")+isbn;

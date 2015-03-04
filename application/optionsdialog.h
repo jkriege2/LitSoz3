@@ -17,6 +17,8 @@ class OptionsDialog : public QDialog, public Ui::OptionsDlg {
         OptionsDialog(QWidget* parent=NULL);
         /** Default destructor */
         virtual ~OptionsDialog();
+    public slots:
+        void ensureCurrentStyle();
     protected slots:
         void on_tbutConfigDir_clicked(bool checked);
         void on_tbutInitialFile_clicked(bool checked);

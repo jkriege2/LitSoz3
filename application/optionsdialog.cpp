@@ -11,6 +11,12 @@ OptionsDialog::~OptionsDialog()
     //dtor
 }
 
+void OptionsDialog::ensureCurrentStyle()
+{
+    on_cmbStyle_currentIndexChanged(cmbStyle->currentText());
+    on_cmbStylesheet_currentIndexChanged(cmbStylesheet->currentText());
+}
+
 void OptionsDialog::on_cmbStylesheet_currentIndexChanged( const QString & text ) {
     QString fn=QString(QCoreApplication::applicationDirPath()+"/stylesheets/%1.qss").arg(text);
     QFile f(fn);

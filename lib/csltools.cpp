@@ -351,7 +351,7 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
     } else if (field==QLatin1String("publisher")) {
         return data.value("publisher", defaultVal);
     } else if (field==QLatin1String("publisher-place")) {
-        return data.value("places", defaultVal);
+        return data.value("places", defaultVal).toString().replace("\n", ", ");
     } else if (field==QLatin1String("PMID")) {
         return data.value("pubmed", defaultVal);
     } else if (field==QLatin1String("PMCID")) {
@@ -391,7 +391,7 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
     } else if (field==QLatin1String("genre")) {
         if (type!="article") return data.value("subtype", defaultVal);
     } else if (field==QLatin1String("event-place")) {
-        return data.value("places", defaultVal);
+        return data.value("places", defaultVal).toString().replace("\n", ", ");
     } else if (field==QLatin1String("event")) {
         return QVariant();
     } else if (field==QLatin1String("DOI")) {
