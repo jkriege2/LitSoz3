@@ -1,4 +1,4 @@
 include(zlib.pri)
-INCLUDEPATH += ../extlibs/freetype/include/
-LIBS += -L../extlibs/freetype/lib/ -lfreetype
+INCLUDEPATH += $$PWD/freetype/include/
+LIBS += -L$$PWD/freetype/lib/ -lfreetype
 DEFINES += LS3_HAS_LIBFREETYPE

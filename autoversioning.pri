@@ -4,17 +4,19 @@
 
 
 # try to read the SVN version
-SVNVERSION = $$system(svnversion)
-contains(SVNVERSION,exported):SVNVERSION=
-isEmpty(SVNVERSION){
-    # if SVN does not work, try git svn
-    unix {
-        SVNVERSION = $$system(git svn info | grep -i 'revision' | cut -d: -f2)
-    }
-}
-isEmpty(SVNVERSION) {
-    SVNVERSION = ---
-}
+SVNVERSION = ---
+
+#SVNVERSION = $$system(svnversion)
+#contains(SVNVERSION,exported):SVNVERSION=
+#isEmpty(SVNVERSION){
+#    # if SVN does not work, try git svn
+#    unix {
+#        SVNVERSION = $$system(git svn info | grep -i 'revision' | cut -d: -f2)
+#    }
+#}
+#isEmpty(SVNVERSION) {
+#    SVNVERSION = ---
+#}
 
 
 win32 {

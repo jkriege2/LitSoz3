@@ -1,4 +1,4 @@
 include(zlib.pri)
-INCLUDEPATH += ../extlibs/libjpeg/include/
-LIBS += -L../extlibs/libjpeg/lib/ -ljpeg
+INCLUDEPATH += $$PWD/libjpeg/include/
+LIBS += -L$$PWD/libjpeg/lib/ -ljpeg
 DEFINES += LS3_HAS_LIBJPEG

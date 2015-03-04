@@ -1,4 +1,4 @@
 include(zlib.pri)
-INCLUDEPATH += ../extlibs/libtiff/include/
-LIBS += -L../extlibs/libtiff/lib/ -ltiff
+INCLUDEPATH += $$PWD/libtiff/include/
+LIBS += -L$$PWD/libtiff/lib/ -ltiff
 DEFINES += LS3_HAS_LIBTIFF

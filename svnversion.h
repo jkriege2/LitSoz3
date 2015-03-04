@@ -1,1 +1,1 @@
-# define SVNVERSION "Unversioned directory" 
+# define SVNVERSION "---" 
