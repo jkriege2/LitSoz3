@@ -320,12 +320,14 @@ void MainWindow::createDockWidgets() {
     dockReferenceTree=new ReferenceTreeDockWidget(this);
     dockReferenceTree->setWindowFlags( Qt::WindowStaysOnTopHint);
     viewDockMenu->addAction(dockReferenceTree->toggleViewAction());
+    dockReferenceTree->setFloating(true);
     QMainWindow::addDockWidget(Qt::LeftDockWidgetArea, dockReferenceTree);
 
     QDockWidget* w;
     w=new QDockWidget(tr("Special Characters"), this);
     w->setWindowFlags( Qt::WindowStaysOnTopHint);
     w->setObjectName("dock_special_chars");
+    w->setFloating(true);
     kbSpecial=new JKCharacterScreenKeyboard(w);
     w->setWidget(kbSpecial);
     kbSpecial->setKBFocusWidget(this);
@@ -335,6 +337,7 @@ void MainWindow::createDockWidgets() {
 
     lstSelection=new SelectionList(datastore, settings, this);
     w=lstSelection;
+    w->setFloating(true);
     w->setObjectName("dock_selection_list");
     viewDockMenu->addAction(w->toggleViewAction());
     QMainWindow::addDockWidget(Qt::LeftDockWidgetArea, w);
@@ -342,11 +345,13 @@ void MainWindow::createDockWidgets() {
 
     lstSearchResults=new SearchResultList(datastore, settings, this);
     w=lstSearchResults;
+    w->setFloating(true);
     w->setObjectName("dock_search_result_list");
     viewDockMenu->addAction(w->toggleViewAction());
     QMainWindow::addDockWidget(Qt::LeftDockWidgetArea, w);
 
     w=dockThreadOverview=new ThreadOverview(settings, this);
+    w->setFloating(true);
     w->setObjectName("dock_running_tasks");
     viewDockMenu->addAction(w->toggleViewAction());
     QMainWindow::addDockWidget(Qt::LeftDockWidgetArea, w);
@@ -476,12 +481,16 @@ void MainWindow::createWidgets() {
 
     tabPreview=new QTabWidget(this);
 
-    txtPreview=new QTextBrowser(this);
-    txtPreview->setOpenLinks(false);
-    txtPreview->setOpenExternalLinks(false);
-    txtPreview->setReadOnly(true);
+    txtPreview=new QWebView(this);
+    qDebug()<<txtPreview->textSizeMultiplier();
+    txtPreview->setTextSizeMultiplier(0.75);
+
+    //txtPreview->setOpenLinks(false);
+    //txtPreview->setOpenExternalLinks(false);
+    //txtPreview->setReadOnly(true);
     tabPreview->addTab(txtPreview, tr("&Preview"));
-    connect(txtPreview, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(previewAnchorClicked(const QUrl&)));
+    //connect(txtPreview, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(previewAnchorClicked(const QUrl&)));
+    connect(txtPreview, SIGNAL(linkClicked(QUrl)), this, SLOT(previewAnchorClicked(const QUrl&)));
 
     splitter->addWidget(tvMain);
     splitter->addWidget(tabPreview);
@@ -656,6 +665,13 @@ void MainWindow::createActions()
     connect(datastore, SIGNAL(databaseLoaded(bool)), createMissingIDsAct, SLOT(setEnabled(bool)));
     createMissingIDsAct->setEnabled(false);
 
+
+    actCopyFormatted=new QAction(QIcon(":/csl_copyformated.png"), tr("copy formatted"), this);
+    connect(actCopyFormatted, SIGNAL(triggered()), this, SLOT(copyCSLFormatted()));
+    actCopyPlainText=new QAction(QIcon(":/csl_copyplaintext.png"), tr("copy lpaintext"), this);
+    connect(actCopyPlainText, SIGNAL(triggered()), this, SLOT(copyCSLPlainText()));
+    actCopyHTMLtags=new QAction(QIcon(":/csl_copyhtmltags.png"), tr("copy HTML Tags"), this);
+    connect(actCopyHTMLtags, SIGNAL(triggered()), this, SLOT(copyCSLHTMLTags()));
     //std::cout<<std::endl;
 }
 
@@ -775,10 +791,30 @@ void MainWindow::createToolBars() {
     toolsToolBar->setObjectName("toolbar_tools");
     viewToolbarsMenu->addAction(toolsToolBar->toggleViewAction());
 
+    cmbCSLs=new QComboBox(databaseToolBar);
+    cmbCSLs->addItems(settings->GetPreviewStyleManager()->styles());
+    cmbCSLs->setMaximumWidth(250);
+
+    cmbCSLLocales=new QComboBox(databaseToolBar);
+    cmbCSLLocales->addItems(settings->GetPreviewStyleManager()->locales());
+    cmbCSLLocales->setMaximumWidth(250);
+
+
+
+    referencesToolBar = addToolBar(tr("Formated References"));
+    referencesToolBar->setObjectName("toolbar_references");
+    referencesToolBar->addWidget(cmbCSLs);
+    referencesToolBar->addWidget(cmbCSLLocales);
+    referencesToolBar->addAction(actCopyFormatted);
+    referencesToolBar->addAction(actCopyPlainText);
+    referencesToolBar->addAction(actCopyHTMLtags);
+    viewToolbarsMenu->addAction(referencesToolBar->toggleViewAction());
+
     // workaround, so the widgets loose focus, when any button is clicked and therefore
     // QWidgetdataMapper write data back into the model!
     databaseToolBar->setFocusPolicy(Qt::StrongFocus);
     quickfindToolBar->setFocusPolicy(Qt::StrongFocus);
+    referencesToolBar->setFocusPolicy(Qt::StrongFocus);
     fileToolBar->setFocusPolicy(Qt::StrongFocus);
     editToolBar->setFocusPolicy(Qt::StrongFocus);
     toolsToolBar->setFocusPolicy(Qt::StrongFocus);
@@ -818,6 +854,9 @@ void MainWindow::readSettings() {
     edtQuickFindTerm->setText(s->value("mainwindow/qf_term","").toString());;
     chkQuickFindRegExp->setChecked(s->value("mainwindow/qf_regexp",false).toBool());
 
+    cmbCSLLocales->setCurrentText(s->value("mainwindow/csl_locale","en-US").toString());;
+    cmbCSLs->setCurrentText(s->value("mainwindow/csl","").toString());;
+
     if (curDisplayStyle!=settings->GetHowDisplayReferenceDetails()) {
         curDisplayStyle=settings->GetHowDisplayReferenceDetails();
         // clean up main display widgets for later recreation!
@@ -847,6 +886,7 @@ void MainWindow::readSettings() {
             tabReferenceData->addTab(extended, QIcon(":/tab_additional.png"), tr("Additional"));
             tabReferenceData->addTab(contents, QIcon(":/tab_contents.png"), tr("Contents"));
             dockReferenceData->setWidget(tabReferenceData);
+            dockReferenceData->setFloating(true);
             addDockWidget(dockReferenceData);
         } else if (settings->GetHowDisplayReferenceDetails()==1) {
             //tabMain->addTab(tabReferenceData, QIcon(":/tab_details.png"), tr("Reference Details"));
@@ -885,6 +925,9 @@ void MainWindow::writeSettings() {
     s->setValue("mainwindow/qf_fields",cmbQuickFindFields->currentIndex());
     s->setValue("mainwindow/qf_term",edtQuickFindTerm->text());
     s->setValue("mainwindow/qf_regexp",chkQuickFindRegExp->isChecked());
+
+    s->setValue("mainwindow/csl_locale",cmbCSLLocales->currentText());
+    s->setValue("mainwindow/csl",cmbCSLs->currentText());
 
     if (dockReferenceData) {
         //std::cout<<">>>>>> write dockReferenceData/size = ("<<dockReferenceData->size().width()<<", "<<dockReferenceData->size().height()<<")\n";
@@ -926,13 +969,16 @@ void MainWindow::currentRecordChanged(int row) {
         labDBStatusToolBar->setText(tr("dataset -- / --"));
     }
     QString txt=QString("<font face=\"%1\">%2</font>")
-                .arg(settings->GetTableFontName())
+                .arg(settings->GetTableFontName())//.arg(settings->GetTableFontSize())
                 .arg(settings->GetPreviewStyleManager()->createPreview(-1, datastore->currentRecord(), "en-US"));
     txt=txt.arg(settings->GetPreviewStyleManager()->styles().value(settings->GetCurrentPreviewStyle1()))
         .arg(settings->GetPreviewStyleManager()->createPreview(settings->GetCurrentPreviewStyle1(), datastore->currentRecord(), settings->GetCurrentPreviewLocale1()))
         .arg(settings->GetPreviewStyleManager()->styles().value(settings->GetCurrentPreviewStyle2()))
         .arg(settings->GetPreviewStyleManager()->createPreview(settings->GetCurrentPreviewStyle2(), datastore->currentRecord(), settings->GetCurrentPreviewLocale2()));
     txtPreview->setHtml(txt);
+    txtPreview->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    txtPreview->page()->setContentEditable(false);
+
     disconnecttvMain();
     tvMain->selectionModel()->clear();
     tvMain->selectRow(realRow);
@@ -1140,6 +1186,7 @@ void MainWindow::insertToolBar(QToolBar* newToolbar) {
 }
 
 void MainWindow::addDockWidget(QDockWidget* dockWidget) {
+    dockWidget->setFloating(true);
     QMainWindow::addDockWidget(Qt::AllDockWidgetAreas, dockWidget);
     viewDockMenu->addAction(dockWidget->toggleViewAction());
 }
@@ -1472,6 +1519,30 @@ void MainWindow::createMissingIDs() {
         }
     }
     QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::copyCSLHTMLTags()
+{
+    QString text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), ofHTML);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(text);
+}
+
+void MainWindow::copyCSLPlainText()
+{
+    QString text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), ofPlaintext);
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(text);
+}
+
+void MainWindow::copyCSLFormatted()
+{
+    QString text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), ofHTML);
+    QTextEdit* edt=new QTextEdit(this);
+    edt->setHtml(text);
+    edt->selectAll();
+    edt->copy();
+    delete edt;
 }
 
 void MainWindow::previewAnchorClicked(const QUrl& link) {

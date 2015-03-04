@@ -56,6 +56,12 @@ enum CSLTextCase {
     tcTitle
 };
 
+enum CSLTextDisplay {
+    tdiBlock,
+    tdiIndent,
+    tdiRight=tdiIndent
+};
+
 LS3LIB_EXPORT QString applyTextCase(const QString& text, CSLTextCase tcase);
 
 struct LS3LIB_EXPORT CSLFormatState {
@@ -65,6 +71,7 @@ struct LS3LIB_EXPORT CSLFormatState {
         fweight=fwNormal;
         tdecor=tdNone;
         valign=vaBaseline;
+        tdisplay=tdiBlock;
     }
 
     QString startFormat(const CSLFormatState& lastFormat, CSLOutputFormat outf) const;
@@ -75,6 +82,7 @@ struct LS3LIB_EXPORT CSLFormatState {
     CSLFontWeight fweight;
     CSLTextDecoration tdecor;
     CSLVerticalAlign valign;
+    CSLTextDisplay tdisplay;
 };
 
 class CSLBasicProps {
@@ -97,6 +105,7 @@ class CSLBasicProps {
         CSLTextDecoration tdecor;
         CSLVerticalAlign valign;
         CSLTextCase tcase;
+        CSLTextDisplay tdisplay;
 
 
 
@@ -105,11 +114,11 @@ class CSLBasicProps {
         bool set_fweight;
         bool set_tdecor;
         bool set_valign;
-
+        bool set_tdisplay;
 };
 
 /** \brief read the metadata from a CSL file */
-LS3LIB_EXPORT bool cslReadMetadata(const QString& filename, QString* name=NULL);
+LS3LIB_EXPORT bool cslReadMetadata(const QString& filename, QString* name=NULL, QString* dependentFilename=NULL, bool* isDependent=NULL);
 class LS3LIB_EXPORT CSLLocaleInterface {
     public:
         struct CSLLocaleValue {
@@ -398,6 +407,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
         QString filename;
         QString m_name;
         bool valid;
+        bool parsed;
 
         CSLNode* m_bibliography;
         CSLNode* m_citation;

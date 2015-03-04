@@ -10,6 +10,7 @@
 #include <QtAlgorithms>
 #include <QMap>
 #include <QVariant>
+#include "csltools.h"
 
 
 class CSLFile; // forward
@@ -34,13 +35,13 @@ class PreviewStyleManager : public QObject {
         QStringList locales() const;
 
         /** \brief return the evaluated HTML for the i-th style */
-        QString createPreview(int i, const QMap<QString, QVariant>& data, QString locale=QString("en-US")) const;
+        QString createPreview(int i, const QMap<QString, QVariant>& data, QString locale=QString("en-US"), CSLOutputFormat outf=ofHTML) const;
 
         /** \brief return the name for the i-th style */
         QString getName(int i) const;
     protected:
-        QStringList csls;
-        QList<CSLFile*> cslfiles;
+        QList<QPair<QString, CSLFile*> > csls;
+        //QList<CSLFile*> cslfiles;
         QMap<QString, CSLLocale*> csllocales;
 };
 

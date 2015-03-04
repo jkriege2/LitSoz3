@@ -5,6 +5,7 @@
 #include "bibtools.h"
 #include <QChar>
 
+static QMap<QString, QString> depententCSLFilesList=QMap<QString, QString>();
 
 QString cslStripPeriods(const QString& text, bool strip) {
     QString t=text;
@@ -12,9 +13,13 @@ QString cslStripPeriods(const QString& text, bool strip) {
     return text;
 }
 
-bool cslReadMetadata(const QString& filename, QString* name) {
+
+bool cslReadMetadata(const QString& filename, QString* name, QString* dependentFilename, bool* isDependent) {
     QDomDocument doc;
     QFile f(filename);
+    bool isD=false;
+    QString depfn="";
+    QString uri="";
     if (f.open(QFile::ReadOnly|QFile::Text)) {
         doc.setContent(f.readAll());
         f.close();
@@ -27,10 +32,27 @@ bool cslReadMetadata(const QString& filename, QString* name) {
             if (!pe.isNull() && name) *name=pe.text();
             pe=e.firstChildElement("title");
             if (!pe.isNull() && name) *name=pe.text();
+            pe=e.firstChildElement("id");
+            if (!pe.isNull() ) uri=pe.text();
+            pe=e.firstChildElement("link");
+            while (!pe.isNull()) {
+                if (pe.attribute("rel")=="independent-parent") {
+                    isD=true;
+                    depfn=depententCSLFilesList.value(pe.attribute("href"), "");
+                } else if (pe.attribute("rel")=="self") {
+                    //uri=pe.attribute("href");
+                }
+                pe=pe.nextSiblingElement("link");
+            }
         } else {
             return false;
         }
 
+        if (dependentFilename) *dependentFilename=depfn;
+        if (isDependent) *isDependent=isD;
+        if (!isD) {
+            depententCSLFilesList.insert(uri, filename);
+        }
         return true;
     }
     return false;
@@ -45,8 +67,9 @@ CSLFile::CSLFile(const QString &fn)
     m_citation=NULL;
     filename=fn;
     m_name="";
+    parsed=false;
     valid=cslReadMetadata(fn, &m_name);
-    if (valid) valid=parse(fn);
+
 
 }
 
@@ -66,6 +89,8 @@ CSLFile::~CSLFile()
 
 QString CSLFile::produce(const QMap<QString, QVariant>& data, bool citation, CSLOutputFormat outf)
 {
+    if (!valid) return QString();
+    if (!parsed) valid=parse(filename);
     QString res;
     CSLFormatState defFont;
     if (!citation && m_bibliography) res=res+m_bibliography->produce(data, defFont, outf);
@@ -79,6 +104,10 @@ QString CSLFile::produce(const QMap<QString, QVariant>& data, bool citation, CSL
     res=res.replace(". :", ".:");
     res=res.replace(". ,", ".,");
     res=res.replace(": ;", ":");
+    res=res.replace(" ,", ",");
+    res=res.replace(" .", ".");
+    res=res.replace(" :", ":");
+    res=res.replace(" ;", ";");
 
 
     return res;
@@ -332,6 +361,8 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
         return QVariant();
     } else if (field==QLatin1String("title")) {
         return data.value("title", defaultVal);
+    } else if (field==QLatin1String("language")) {
+        return data.value("language", defaultVal);
     } else if (field==QLatin1String("title-short")) {
         return QVariant(); //return data.value("title", defaultVal);
     } else if (field==QLatin1String("status")) {
@@ -349,6 +380,7 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
     } else if (field==QLatin1String("URL")) {
         return data.value("url", defaultVal);
     } else if (field==QLatin1String("publisher")) {
+        if (type=="thesis") return data.value("institution", defaultVal);
         return data.value("publisher", defaultVal);
     } else if (field==QLatin1String("publisher-place")) {
         return data.value("places", defaultVal).toString().replace("\n", ", ");
@@ -389,6 +421,7 @@ QVariant CSLFile::CSLNode::getCSLField(const QString &field, const QMap<QString,
     } else if (field==QLatin1String("ISBN")) {
         return data.value("isbn", defaultVal);
     } else if (field==QLatin1String("genre")) {
+        if (type=="thesis") return data.value("subtype", defaultVal);
         if (type!="article") return data.value("subtype", defaultVal);
     } else if (field==QLatin1String("event-place")) {
         return data.value("places", defaultVal).toString().replace("\n", ", ");
@@ -853,6 +886,9 @@ QString CSLFormatState::startFormat(const CSLFormatState &lastFormat, CSLOutputF
         else if (lastFormat.valign==vaSub  && valign==vaSuper) res+=QLatin1String("</sub><sup>");
         else if (lastFormat.valign==vaSuper  && valign==vaBaseline) res+=QLatin1String("</sup>");
         else if (lastFormat.valign==vaSuper  && valign==vaSub) res+=QLatin1String("</sup><sub>");
+
+        if (lastFormat.tdisplay==tdiBlock  && tdisplay==tdiIndent) res+=QLatin1String("<blockquote>");
+        else if (lastFormat.tdisplay==tdiIndent  && tdisplay==tdiBlock) res+=QLatin1String("</blockquote>");
     }
 
     return res;
@@ -1252,7 +1288,7 @@ void CSLFile::CSLNamesNode::parseProperties(const QDomElement &e)
     npe=e.firstChildElement("label");
     if (!npe.isNull()) {
         m_labelNode=new CSLLabelNode(this, m_file);
-        m_labelNode->parseProperties(e);
+        m_labelNode->parseProperties(npe);
     }
 
 }
@@ -1319,12 +1355,14 @@ CSLBasicProps::CSLBasicProps()
     tdecor=tdNone;
     valign=vaBaseline;
     tcase=tcNormal;
+    tdisplay=tdiBlock;
 
     set_fstyle=false;
     set_fvariant=false;
     set_fweight=false;
     set_tdecor=false;
     set_valign=false;
+    set_tdisplay=false;
 }
 
 void CSLBasicProps::modifyStyle(CSLFormatState &style)
@@ -1333,7 +1371,9 @@ void CSLBasicProps::modifyStyle(CSLFormatState &style)
     if (set_fvariant) style.fvariant=fvariant;
     if (set_fweight) style.fweight=fweight;
     if (set_tdecor) style.tdecor=tdecor;
-    if (set_valign) style.valign=valign;}
+    if (set_valign) style.valign=valign;
+    if (set_tdisplay) style.tdisplay=tdisplay;
+}
 
 QString CSLBasicProps::applyTextCase(const QString &text)
 {
@@ -1367,6 +1407,11 @@ void CSLBasicProps::parseBasicProperties(const QDomElement &e)
     if (e.attribute("text-case")=="sentence") { tcase=tcSentence; }
     if (e.attribute("text-case")=="title") { tcase=tcTitle; }
 
+    if (e.attribute("display")=="block") { set_tdisplay=true; tdisplay=tdiBlock; }
+    if (e.attribute("display")=="left-margin") { set_tdisplay=true; tdisplay=tdiBlock; }
+    if (e.attribute("display")=="right-inline") { set_tdisplay=true; tdisplay=tdiBlock; }
+    if (e.attribute("display")=="indent") { set_tdisplay=true; tdisplay=tdiIndent; }
+
     suffix=e.attribute("suffix", suffix);
     prefix=e.attribute("prefix", prefix);
     delimiter=e.attribute("delimiter", delimiter);
@@ -1377,6 +1422,7 @@ CSLFile::CSLLabelNode::CSLLabelNode(CSLFile::CSLNode *parent, CSLFile *file):
     CSLFile::CSLNode(parent, file)
 {
     stripPeriods=false;
+    form="long";
 }
 
 CSLFile::CSLLabelNode::~CSLLabelNode()
@@ -1394,6 +1440,7 @@ QString CSLFile::CSLLabelNode::produce(const QMap<QString, QVariant> &data, cons
     bool isSingleNumber=false;
     int dat=dataf.toInt(&isSingleNumber);
 
+    //qDebug()<<"CSLLabelNode: form="<<form<<"  plural="<<plural<<"  variable="<<variable;
     if (plural=="always") res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, false, form)), stripPeriods));
     if (plural=="never") res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, true, form)), stripPeriods));
     else res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, isSingleNumber, form)), stripPeriods));

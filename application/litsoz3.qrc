@@ -107,5 +107,9 @@
         <file alias="pdf_finddown.png">images/pdf_finddown.png</file>
         <file alias="pdf_findup.png">images/pdf_findup.png</file>
         <file alias="settingsdlg/opt_network.png">images/settingsdlg/opt_network.png</file>
+
+        <file alias="csl_copyformated.png">images/csl_copyformated.png</file>
+        <file alias="csl_copyplaintext.png">images/csl_copyplaintext.png</file>
+        <file alias="csl_copyhtmltags.png">images/csl_copyhtmltags.png</file>
     </qresource>
 </RCC>

@@ -3,6 +3,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QClipboard>
 #include <QMainWindow>
 #include <QAction>
 #include <QMenu>
@@ -43,6 +44,7 @@
 #include "qrecentfilesmenu.h"
 #include "threadoverview.h"
 #include "fileviewpane.h"
+#include <QWebView>
 
 
 
@@ -144,6 +146,10 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         void wasChanged(bool changed);
 
         void createMissingIDs();
+
+        void copyCSLHTMLTags();
+        void copyCSLPlainText();
+        void copyCSLFormatted();
     protected:
         bool maybeSave();
         void createActions();
@@ -152,6 +158,8 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         void createStatusBar();
         void createWidgets();
         void createDockWidgets();
+
+
 
         /** \brief search for plugins */
         void searchPlugins(QString directory);
@@ -195,6 +203,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         QToolBar* toolsToolBar;
         QToolBar* databaseToolBar;
         QToolBar* quickfindToolBar;
+        QToolBar* referencesToolBar;
 
         QAction* actQuickFindEnabled;
         QComboBox* cmbQuickFindFields;
@@ -234,6 +243,14 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
 
         /** \brief combobox to select sorting order */
         QComboBox* cmbSorting;
+
+        /** \brief combobox to select CSL to use */
+        QComboBox* cmbCSLs;
+        QComboBox* cmbCSLLocales;
+
+        QAction* actCopyFormatted;
+        QAction* actCopyPlainText;
+        QAction* actCopyHTMLtags;
 
         /** \brief combobox to select sorting direction */
         QComboBox* cmbSortingDirection;
@@ -297,7 +314,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         SearchResultList* lstSearchResults;
 
         /** \brief preview of current dataset */
-        QTextBrowser* txtPreview;
+        QWebView* txtPreview;
 
         /** \brief reference data dock widget */
         QDockWidget* dockReferenceData;

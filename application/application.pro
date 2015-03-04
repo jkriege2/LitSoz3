@@ -57,8 +57,9 @@ HEADERS     = mainwindow.h \
 
 
 
-RESOURCES   = litsoz3.qrc \
-              languages.qrc
+RESOURCES   = \
+              languages.qrc \
+    litsoz3.qrc
 
 SOURCES     = main.cpp \
               mainwindow.cpp \
@@ -113,7 +114,7 @@ win32 {
     RC_FILE = litsoz3.rc
 }
 
-QT += gui xml
+QT += gui xml webkitwidgets
 CONFIG += exceptions rtti stl link_prl
 
 

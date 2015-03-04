@@ -12,10 +12,9 @@ PreviewStyleManager::PreviewStyleManager(QObject* parent):
 
 PreviewStyleManager::~PreviewStyleManager()
 {
-    for (int i=0; i<cslfiles.size(); i++) {
-        delete cslfiles[i];
+    for (int i=0; i<csls.size(); i++) {
+        delete csls[i].second;
     }
-    cslfiles.clear();
     csls.clear();
     QMapIterator<QString, CSLLocale*> it(csllocales);
     while (it.hasNext()) {
@@ -43,6 +42,10 @@ void PreviewStyleManager::searchCSLLocales(const QString &dir)
     }
 }
 
+static bool PreviewStyleManager_isSmaller(const QPair<QString, CSLFile*>& s1, const QPair<QString, CSLFile*>& s2) {
+    return s1.first<s2.first;
+}
+
 void PreviewStyleManager::searchCSL(const QString &dir)
 {
     QDir d(dir);
@@ -50,31 +53,46 @@ void PreviewStyleManager::searchCSL(const QString &dir)
     filters<<"*.csl";
     QStringList files=d.entryList(filters, QDir::Files);
     csls.clear();
-    cslfiles.clear();
-    for (int i=0; i<files.size(); i++) {
+    for (int i=files.size()-1; i>=0; i--) {
         QString fn=d.absoluteFilePath(files[i]);
         QString name="";
+        bool isDep=false;
+        QString depFile;
         qDebug()<<i<<fn;
-        if (cslReadMetadata(fn, &name)) {
-            qDebug()<<i<<"   "<<name;
-            if (!name.isEmpty()) {
+        if (cslReadMetadata(fn, &name, &depFile, &isDep)) {
+            qDebug()<<i<<"   "<<name<<isDep<<depFile;
+            if (!name.isEmpty() && (!isDep)) {
                 CSLFile* f=new CSLFile(fn);
                 if (f->isValid()) {
-                    cslfiles.append(f);
-                    csls.append(name);
+                    csls.append(qMakePair(name, f));
                 } else {
                     delete f;
                 }
+                files.removeAt(i);
+            } else if (!name.isEmpty() && (isDep && !depFile.isEmpty() && QFile::exists(depFile))) {
+                CSLFile* f=new CSLFile(depFile);
+                if (f->isValid()) {
+                    csls.append(qMakePair(name, f));
+
+                } else {
+                    delete f;
+                }
+                files.removeAt(i);
             }
+        } else {
+            files.removeAt(i);
         }
     }
+    qSort(csls.begin(), csls.end(), PreviewStyleManager_isSmaller);
 }
 
 
 QStringList PreviewStyleManager::styles() const {
     QStringList s;
     //s<<tr("Default Preview");
-    s<<csls;
+    for (int i=0; i<csls.size(); i++) {
+        s<<csls[i].first;
+    }
     return s;
 }
 
@@ -85,7 +103,7 @@ QStringList PreviewStyleManager::locales() const
 
 #define FORMATREFERENCESUMMARY_MAP_READ_ITEM(data, item) QString item=""; if (data.contains(#item)) item=escapeHTMLString(data[#item].toString());
 
-QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>& data, QString locale) const {
+QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>& data, QString locale, CSLOutputFormat outf) const {
     if ((i<-1)||(i>=styles().size())) return "";
     QString result="";
     if (i==-1) {
@@ -148,13 +166,13 @@ QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>&
         if (!url.isEmpty() || !urls.isEmpty()) {
             add+="<p>";
             if (!url.isEmpty()) {
-                add+=tr("<a href=\"%1\"><img src=\":/weblink.png\"></a>&nbsp;<a href=\"%1\">%1</a><br>").arg(url);
+                add+=tr("<a href=\"%1\"><img src=\"qrc:/weblink.png\"></a>&nbsp;<a href=\"%1\">%1</a><br>").arg(url);
             }
             if (!urls.isEmpty()) {
                 QStringList sl=urls.split('\n');
                 for (int i=0; i<sl.size(); i++) {
                     if (sl[i]!=url) {
-                        add+=tr("<a href=\"%1\"><img src=\":/weblink.png\"></a>&nbsp;<a href=\"%1\">%1</a><br>").arg(sl[i]);
+                        add+=tr("<a href=\"%1\"><img src=\"qrc:/weblink.png\"></a>&nbsp;<a href=\"%1\">%1</a><br>").arg(sl[i]);
                     }
                 }
             }
@@ -179,7 +197,7 @@ QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>&
             add+="<p>";
             QStringList sl=files.split('\n');
             for (int i=0; i<sl.size(); i++) {
-                add+=tr("<a href=\"file://%1\"><img src=\"%2\"></a>&nbsp;<a href=\"file://%1\">%1</a><br>").arg(sl[i]).arg(filenameToIconFile(sl[i]));
+                add+=tr("<a href=\"file://%1\"><img src=\"qrc%2\"></a>&nbsp;<a href=\"file://%1\">%1</a><br>").arg(sl[i]).arg(filenameToIconFile(sl[i]));
             }
             add+="</p>";
         }
@@ -189,9 +207,9 @@ QString PreviewStyleManager::createPreview(int i, const QMap<QString, QVariant>&
 
     } else {
         int cslIndex=i;
-        if (cslfiles.value(cslIndex, NULL)) {
-            cslfiles.value(cslIndex, NULL)->setLocale(csllocales.value(locale, NULL));
-            result=cslfiles.value(cslIndex, NULL)->produce(data);
+        if (cslIndex>=0 && cslIndex<csls.size() && csls[cslIndex].second) {
+            csls[cslIndex].second->setLocale(csllocales.value(locale, NULL));
+            result=csls[cslIndex].second->produce(data, false, outf);
         }
     }
 
