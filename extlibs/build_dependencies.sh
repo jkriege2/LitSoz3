@@ -43,7 +43,7 @@ echo -e "=======================================================================
 "rectory include the libraries in a way that preferences these libraries \n"\
 "here!\n\nBefore running, please make sure that QTDIR points to Qt!!! using\n"\
 "  export QTDIR=/c/development/Qt5/5.3/mingw482_32/\n"\
-"  export PATH=\$PATH:/c/development/Qt5/5.3/mingw482_32/bin/ \n"\
+"  export PATH=/c/development/Qt5/5.3/mingw482_32/bin/:\$PATH \n"\
 "\n\nFinally this script will copy all generated dynamic link libraries into\n"\
 "the LitSoz output folder, so they are found by the program at runtime."\
 "\n\nFirst we need to set some basics for the builds:"\
