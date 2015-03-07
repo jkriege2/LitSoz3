@@ -482,7 +482,7 @@ void MainWindow::createWidgets() {
     tabPreview=new QTabWidget(this);
 
     txtPreview=new QWebView(this);
-    qDebug()<<txtPreview->textSizeMultiplier();
+//    qDebug()<<txtPreview->textSizeMultiplier();
     txtPreview->setTextSizeMultiplier(0.75);
 
     //txtPreview->setOpenLinks(false);
@@ -800,11 +800,19 @@ void MainWindow::createToolBars() {
     cmbCSLLocales->setMaximumWidth(250);
 
 
+    cmbCSLWhich=new QComboBox(databaseToolBar);
+    cmbCSLWhich->addItem(tr("current rec."));
+    cmbCSLWhich->addItem(tr("selected recs."));
+    cmbCSLWhich->addItem(tr("all recs."));
+    cmbCSLWhich->setCurrentIndex(0);
+
 
     referencesToolBar = addToolBar(tr("Formated References"));
     referencesToolBar->setObjectName("toolbar_references");
     referencesToolBar->addWidget(cmbCSLs);
     referencesToolBar->addWidget(cmbCSLLocales);
+    referencesToolBar->addSeparator();
+    referencesToolBar->addWidget(cmbCSLWhich);
     referencesToolBar->addAction(actCopyFormatted);
     referencesToolBar->addAction(actCopyPlainText);
     referencesToolBar->addAction(actCopyHTMLtags);
@@ -856,6 +864,7 @@ void MainWindow::readSettings() {
 
     cmbCSLLocales->setCurrentText(s->value("mainwindow/csl_locale","en-US").toString());;
     cmbCSLs->setCurrentText(s->value("mainwindow/csl","").toString());;
+    cmbCSLWhich->setCurrentIndex(s->value("mainwindow/cmbCSLWhich",cmbCSLWhich->currentIndex()).toInt());;
 
     if (curDisplayStyle!=settings->GetHowDisplayReferenceDetails()) {
         curDisplayStyle=settings->GetHowDisplayReferenceDetails();
@@ -928,6 +937,7 @@ void MainWindow::writeSettings() {
 
     s->setValue("mainwindow/csl_locale",cmbCSLLocales->currentText());
     s->setValue("mainwindow/csl",cmbCSLs->currentText());
+    s->setValue("mainwindow/cmbCSLWhich",cmbCSLWhich->currentIndex());
 
     if (dockReferenceData) {
         //std::cout<<">>>>>> write dockReferenceData/size = ("<<dockReferenceData->size().width()<<", "<<dockReferenceData->size().height()<<")\n";
@@ -1521,28 +1531,78 @@ void MainWindow::createMissingIDs() {
     QApplication::restoreOverrideCursor();
 }
 
+QString MainWindow::copyCSL(CSLOutputFormat format, const QString linetemplate)
+{
+    QString text;
+    if (cmbCSLWhich->currentIndex()==0) {
+        text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), format);
+    } else {
+        QModernProgressDialog pdlg;
+        pdlg.setLabelText(tr("exporting records to formatted text ..."));
+        pdlg.setCancelButtonText(tr("&Cancel"));
+        pdlg.setHasCancel(false);
+        pdlg.openDelayed(500);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        QStringList uuids=tvMainSortProxy->getUUIDs();
+        int cnt=1;
+        if (cmbCSLWhich->currentIndex()==1) {
+            for (int i=0; i<uuids.size(); i++) {
+                if (datastore->isSelected(uuids[i])) {
+                    text=text+linetemplate.arg(settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->getRecord(datastore->getRecordByUUID(uuids[i])), cmbCSLLocales->currentText(), format)).arg(cnt);
+                    cnt++;
+                }
+                if (i%10==0) QApplication::processEvents();
+                if (pdlg.wasCanceled()) {
+                    return "";
+                }
+            }
+        } else if (cmbCSLWhich->currentIndex()==2) {
+            for (int i=0; i<uuids.size(); i++) {
+                text=text+linetemplate.arg(settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->getRecord(datastore->getRecordByUUID(uuids[i])), cmbCSLLocales->currentText(), format)).arg(cnt);
+                cnt++;
+                if (i%10==0) QApplication::processEvents();
+                if (pdlg.wasCanceled()) {
+                    return "";
+                }
+            }
+        }
+    }
+    return text;
+}
+
 void MainWindow::copyCSLHTMLTags()
 {
-    QString text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), ofHTML);
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(text);
+    QString text=copyCSL(ofHTML, QString("  <li><b>[%2]:</b> %1</li>\n"));
+    if (text.size()>0) {
+        text=QString("<ul>\n")+text+QString("</ul>");
+        QClipboard *clipboard = QApplication::clipboard();
+        clipboard->setText(text);
+    }
 }
 
 void MainWindow::copyCSLPlainText()
 {
-    QString text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), ofPlaintext);
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(text);
+    QString text=copyCSL(ofHTML, QString("  [%2]: %1\n"));
+
+    if (text.size()>0) {
+        QClipboard *clipboard = QApplication::clipboard();
+        clipboard->setText(text);
+    }
 }
 
 void MainWindow::copyCSLFormatted()
 {
-    QString text=settings->GetPreviewStyleManager()->createPreview(cmbCSLs->currentIndex(), datastore->currentRecord(), cmbCSLLocales->currentText(), ofHTML);
-    QTextEdit* edt=new QTextEdit(this);
-    edt->setHtml(text);
-    edt->selectAll();
-    edt->copy();
-    delete edt;
+    QString text=copyCSL(ofHTML, QString("  <li><b>[%2]:</b> %1</li>\n"));
+    if (text.size()>0) {
+        text=QString("<ul>\n")+text+QString("</ul>");
+
+        QTextEdit* edt=new QTextEdit(this);
+        edt->setHtml(text);
+        edt->selectAll();
+        edt->copy();
+        delete edt;
+    }
+
 }
 
 void MainWindow::previewAnchorClicked(const QUrl& link) {

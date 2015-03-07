@@ -32,7 +32,7 @@ void LS3PluginISBNImport::init(LS3PluginServices* pluginServices) {
     QWidget* p=pluginServices->GetParentWidget();
 
     widMain=new QWidget(p);
-    QHBoxLayout* l=new QHBoxLayout(p);
+    QGridLayout* l=new QGridLayout();
     //l->setContentsMargins(0,0,0,0);
     widMain->setLayout(l);
 
@@ -43,8 +43,8 @@ void LS3PluginISBNImport::init(LS3PluginServices* pluginServices) {
     cmbSource->addItem(tr("ISBNdb.com"));
     cmbSource->addItem(tr("Google Books"));
     cmbSource->addItem(tr("COPAC"));
-    l->addWidget(new QLabel(tr("source: "), p));
-    l->addWidget(cmbSource);
+    l->addWidget(new QLabel(tr("source: "), p), 0, 0);
+    l->addWidget(cmbSource, 0, 1);
     cmbSource->setCurrentIndex(pluginServices->GetQSettings()->value("plugins/isbnlookup_lastsource", 1).toInt());
 
 
@@ -52,12 +52,13 @@ void LS3PluginISBNImport::init(LS3PluginServices* pluginServices) {
     btnExecute=new JKStyledButton(icon, edtISBN);
     edtISBN->addButton(btnExecute);
     edtISBN->setMaximumWidth(150);
-    l->addWidget(new QLabel(tr("  ISBN:"), p));
-    l->addWidget(edtISBN);
+    l->addWidget(new QLabel(tr("  ISBN:"), p), 0,2);
+    l->addWidget(edtISBN,0,3);
     QShortcut* sc=new QShortcut(QKeySequence("Enter,Return"), edtISBN);
     connect(sc, SIGNAL(activated()), this, SLOT(insert()));
     connect(btnExecute, SIGNAL(clicked()), this, SLOT(insert()));
-
+    l->addItem(new 	QSpacerItem(10,10,QSizePolicy::Minimum,QSizePolicy::Expanding),1,0);
+    l->setRowStretch(1,1);
     dw->setWidget(widMain);
 
     pluginServices->addDockWidget(dw);
