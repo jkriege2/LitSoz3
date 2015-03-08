@@ -3,9 +3,17 @@
 #include "fdf.h"
 #include <QNetworkProxy>
 
+ProgramOptions *ProgramOptions::m_instance=NULL;
+
+ProgramOptions *ProgramOptions::instance()
+{
+    return m_instance;
+}
+
 ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app  ):
     QObject(parent)
 {
+    if (!m_instance) m_instance=this;
     this->app=app;
     QFileInfo fi(QCoreApplication::applicationFilePath());
     configDirectory=QDir::homePath()+"/."+fi.completeBaseName()+"/";
@@ -191,6 +199,8 @@ void ProgramOptions::openSettingsDialog() {
     settingsDlg->cmbStylesheet->setCurrentIndex( settingsDlg->cmbStylesheet->findText(stylesheet));
 
     if (settingsDlg->exec() == QDialog::Accepted ){
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
         username=settingsDlg->edtUserName->text();
         languageID=settingsDlg->cmbLanguage->currentText();
         stylesheet=settingsDlg->cmbStylesheet->currentText();
@@ -217,6 +227,7 @@ void ProgramOptions::openSettingsDialog() {
 
         writeSettings();
         readSettings();
+        QApplication::restoreOverrideCursor();
     }
 
 }

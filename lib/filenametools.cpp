@@ -26,7 +26,7 @@ QString cleanFilename(const QString& text, int maxLen, bool removeDot, bool remo
 }
 
 #define REPLACE_FROM_DATA(newName, partName, fieldName) \
-    newName=newName.replace(partName, cleanFilename(cleanString(data.value(fieldName, "").toString())));
+    newName=newName.replace(partName, cleanFilename(cleanStringForFilename(data.value(fieldName, "").toString())));
 
 QString createFileName(const QString& scheme, const QMap<QString, QVariant>& data, const QString& filename, int maxLength) {
     QString originalName=QFileInfo(filename).baseName();
@@ -42,9 +42,9 @@ QString createFileName(const QString& scheme, const QMap<QString, QVariant>& dat
     newName=newName.replace("%original_name%", originalName);
     newName=newName.replace("%extension%", extension);
     newName=newName.replace("%ext%", extension);
-    newName=newName.replace("%authors%", cleanString(authorsFN));
-    newName=newName.replace("%editors%", cleanString(editorsFN));
-    newName=newName.replace("%names%", cleanString(names));
+    newName=newName.replace("%authors%", cleanStringForFilename(authorsFN));
+    newName=newName.replace("%editors%", cleanStringForFilename(editorsFN));
+    newName=newName.replace("%names%", cleanStringForFilename(names));
     REPLACE_FROM_DATA(newName, "%topic%", "topic");
     REPLACE_FROM_DATA(newName, "%title%", "title");
     REPLACE_FROM_DATA(newName, "%year%", "year");
@@ -78,9 +78,9 @@ QString createFileDir(const QString& scheme, const QMap<QString, QVariant>& data
     QString names=cleanFilename(formatEtalAuthorsFamilyNames(authors+"; "+editors, 3, "etal", "_", "_", ""));;
     if (scheme.isEmpty()) return dirname;
     newName=newName.replace("%original_name%", originalName);
-    newName=newName.replace("%authors%", cleanString(authorsFN));
-    newName=newName.replace("%editors%", cleanString(editorsFN));
-    newName=newName.replace("%names%", cleanString(names));
+    newName=newName.replace("%authors%", cleanStringForFilename(authorsFN));
+    newName=newName.replace("%editors%", cleanStringForFilename(editorsFN));
+    newName=newName.replace("%names%", cleanStringForFilename(names));
     REPLACE_FROM_DATA(newName, "%topic%", "topic");
     REPLACE_FROM_DATA(newName, "%title%", "title");
     REPLACE_FROM_DATA(newName, "%year%", "year");
