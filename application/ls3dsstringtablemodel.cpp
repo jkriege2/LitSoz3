@@ -275,8 +275,11 @@ bool LS3DSStringTableModel::getDoEmitSignals() const
     return doEmitSignal;
 }
 
-bool LS3DSStringTableModel::setRecord(int row, QMap<QString, QVariant>& data) {
+bool LS3DSStringTableModel::setRecord(int row, const QMap<QString, QVariant> &data) {
     if ((row<0) || (row>=m_data.size())) return false;
+
+
+
     QMapIterator<QString, QVariant> i(data);
     bool oldc=m_wasChanged;
     while (i.hasNext()) {

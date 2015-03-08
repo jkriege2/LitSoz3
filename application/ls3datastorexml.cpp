@@ -318,6 +318,11 @@ int LS3DatastoreXML::dbInsertNoMoveCursor(const QMap<QString, QVariant>& indata)
         idata["currency"]=settings->GetDefaultCurrency();
         idata["price"]=double(0.0);
         idata["rating"]=int(0);
+
+        QString langtest;
+        langtest=idata.value("title").toString()+" "+idata.value("booktitle").toString()+" "+idata.value("abstract").toString()+" "+idata.value("comment").toString()+" "+idata.value("contents").toString()+" "+idata.value("keywords").toString()+" "+idata.value("topic").toString();
+        idata["language"]=recognizeLanguage(langtest);
+        if (idata["language"].toString().isEmpty()) idata.remove("language");
         //idata[""]=;
         row=data->insertRecord(idata);
 
@@ -347,7 +352,7 @@ QString LS3DatastoreXML::currentFile() const {
     return m_currentFile;
 }
 
-bool LS3DatastoreXML::addRecord(QMap<QString, QVariant>& data, bool moveToRecord, bool createIDD) {
+bool LS3DatastoreXML::addRecord(const QMap<QString, QVariant>& data, bool moveToRecord, bool createIDD) {
     if (!dbIsLoaded()) return false;
     int row=dbInsertNoMoveCursor(data);
     if (row>=0) {
@@ -361,7 +366,7 @@ bool LS3DatastoreXML::addRecord(QMap<QString, QVariant>& data, bool moveToRecord
     return row>=0;
 }
 
-bool LS3DatastoreXML::addRecord(QMap<QString, QVariant> &data, QString &uuid, bool createIDD) {
+bool LS3DatastoreXML::addRecord(const QMap<QString, QVariant> &data, QString &uuid, bool createIDD) {
     if (!dbIsLoaded()) return false;
     int row=dbInsertNoMoveCursor(data);
     if (row>=0) {
@@ -373,9 +378,19 @@ bool LS3DatastoreXML::addRecord(QMap<QString, QVariant> &data, QString &uuid, bo
     return row>=0;
 }
 
-bool LS3DatastoreXML::setRecord(int index, QMap<QString, QVariant>& datam) {
+bool LS3DatastoreXML::setRecord(int index, const QMap<QString, QVariant>& datam) {
     if (!dbIsLoaded()) return false;
-    data->setRecord(index, datam);
+
+    QMap<QString, QVariant> data=datam;
+
+    if (data.value("language").toString().isEmpty()) {
+        QString langtest;
+        langtest=data.value("title").toString()+" "+data.value("booktitle").toString()+" "+data.value("abstract").toString()+" "+data.value("comment").toString()+" "+data.value("contents").toString()+" "+data.value("keywords").toString()+" "+data.value("topic").toString();
+        data["language"]=recognizeLanguage(langtest);
+        if (data["language"].toString().isEmpty()) data.remove("language");
+    }
+
+    this->data->setRecord(index, data);
     return true;
 }
 

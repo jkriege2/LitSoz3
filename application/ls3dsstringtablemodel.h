@@ -50,7 +50,7 @@ class LS3DSStringTableModel: public QAbstractTableModel {
 
         QString newUUID() const;
 
-        bool setRecord(int index, QMap<QString, QVariant>& data);
+        bool setRecord(int index, const QMap<QString, QVariant>& data);
         QMap<QString, QVariant> getRecord(int i) const;
         bool setField(int record, QString field, QVariant data);
         QVariant getField(int record, QString field) const;

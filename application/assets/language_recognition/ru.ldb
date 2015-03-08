@@ -1,0 +1,1005 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<language_ngram_database lang="russian"> 
+
+<ngram ng="о" cnt="8474"/>
+<ngram ng="а" cnt="7474"/>
+<ngram ng="и" cnt="7407"/>
+<ngram ng="е" cnt="6866"/>
+<ngram ng="н" cnt="5681"/>
+<ngram ng="р" cnt="4765"/>
+<ngram ng="с" cnt="4728"/>
+<ngram ng="т" cnt="4570"/>
+<ngram ng="в" cnt="4023"/>
+<ngram ng="л" cnt="4007"/>
+<ngram ng="к" cnt="3795"/>
+<ngram ng="п" cnt="2749"/>
+<ngram ng="м" cnt="2535"/>
+<ngram ng="д" cnt="2349"/>
+<ngram ng="у" cnt="1958"/>
+<ngram ng="я" cnt="1818"/>
+<ngram ng="а " cnt="1748"/>
+<ngram ng="и " cnt="1694"/>
+<ngram ng=" п" cnt="1689"/>
+<ngram ng="ы" cnt="1597"/>
+<ngram ng="б" cnt="1547"/>
+<ngram ng="г" cnt="1518"/>
+<ngram ng=" в" cnt="1511"/>
+<ngram ng=" с" cnt="1381"/>
+<ngram ng="e" cnt="1355"/>
+<ngram ng="е " cnt="1346"/>
+<ngram ng="ст" cnt="1271"/>
+<ngram ng="я " cnt="1164"/>
+<ngram ng="ь" cnt="1162"/>
+<ngram ng="о " cnt="1137"/>
+<ngram ng="й" cnt="1131"/>
+<ngram ng="з" cnt="1127"/>
+<ngram ng=" к" cnt="1064"/>
+<ngram ng="на" cnt="1054"/>
+<ngram ng="ра" cnt="1039"/>
+<ngram ng="ни" cnt="1029"/>
+<ngram ng="в " cnt="1025"/>
+<ngram ng="ко" cnt="1002"/>
+<ngram ng=" и" cnt="1002"/>
+<ngram ng="ч" cnt="946"/>
+<ngram ng="ен" cnt="940"/>
+<ngram ng="ан" cnt="934"/>
+<ngram ng="но" cnt="928"/>
+<ngram ng="й " cnt="895"/>
+<ngram ng="t" cnt="891"/>
+<ngram ng="i" cnt="884"/>
+<ngram ng="ро" cnt="849"/>
+<ngram ng="ер" cnt="844"/>
+<ngram ng="r" cnt="842"/>
+<ngram ng="х" cnt="829"/>
+<ngram ng="ов" cnt="826"/>
+<ngram ng="a" cnt="821"/>
+<ngram ng="o" cnt="819"/>
+<ngram ng="s" cnt="814"/>
+<ngram ng="по" cnt="810"/>
+<ngram ng="ре" cnt="808"/>
+<ngram ng="n" cnt="793"/>
+<ngram ng="ли" cnt="784"/>
+<ngram ng=" н" cnt="781"/>
+<ngram ng="ал" cnt="775"/>
+<ngram ng="та" cnt="749"/>
+<ngram ng=" в " cnt="730"/>
+<ngram ng=" о" cnt="708"/>
+<ngram ng="ск" cnt="708"/>
+<ngram ng="пр" cnt="699"/>
+<ngram ng="ж" cnt="676"/>
+<ngram ng="то" cnt="669"/>
+<ngram ng="ка" cnt="665"/>
+<ngram ng=" м" cnt="662"/>
+<ngram ng="те" cnt="661"/>
+<ngram ng=" по" cnt="640"/>
+<ngram ng="од" cnt="638"/>
+<ngram ng="l" cnt="613"/>
+<ngram ng=" д" cnt="605"/>
+<ngram ng="го" cnt="602"/>
+<ngram ng=" пр" cnt="601"/>
+<ngram ng="ки" cnt="598"/>
+<ngram ng="ла" cnt="592"/>
+<ngram ng="м " cnt="586"/>
+<ngram ng="ор" cnt="575"/>
+<ngram ng="ва" cnt="570"/>
+<ngram ng="ол" cnt="553"/>
+<ngram ng=" б" cnt="550"/>
+<ngram ng="ис" cnt="549"/>
+<ngram ng="ь " cnt="546"/>
+<ngram ng="ль" cnt="545"/>
+<ngram ng="ри" cnt="545"/>
+<ngram ng="ел" cnt="544"/>
+<ngram ng="он" cnt="533"/>
+<ngram ng="ос" cnt="529"/>
+<ngram ng="ве" cnt="525"/>
+<ngram ng="ш" cnt="521"/>
+<ngram ng="от" cnt="520"/>
+<ngram ng="во" cnt="517"/>
+<ngram ng="ны" cnt="509"/>
+<ngram ng="об" cnt="500"/>
+<ngram ng="со" cnt="489"/>
+<ngram ng="х " cnt="480"/>
+<ngram ng="ом" cnt="478"/>
+<ngram ng="ф" cnt="477"/>
+<ngram ng="ат" cnt="475"/>
+<ngram ng=" т" cnt="472"/>
+<ngram ng="c" cnt="471"/>
+<ngram ng=" и " cnt="470"/>
+<ngram ng="ес" cnt="464"/>
+<ngram ng=" на" cnt="461"/>
+<ngram ng=" р" cnt="459"/>
+<ngram ng="ле" cnt="452"/>
+<ngram ng="не" cnt="450"/>
+<ngram ng="ти" cnt="445"/>
+<ngram ng="ло" cnt="441"/>
+<ngram ng="у " cnt="441"/>
+<ngram ng="де" cnt="435"/>
+<ngram ng="ц" cnt="431"/>
+<ngram ng="ар" cnt="429"/>
+<ngram ng="на " cnt="427"/>
+<ngram ng="ин" cnt="423"/>
+<ngram ng=" ко" cnt="423"/>
+<ngram ng="ма" cnt="420"/>
+<ngram ng="ю" cnt="418"/>
+<ngram ng="w" cnt="416"/>
+<ngram ng="ме" cnt="416"/>
+<ngram ng="ия" cnt="415"/>
+<ngram ng="ак" cnt="414"/>
+<ngram ng="л " cnt="408"/>
+<ngram ng="m" cnt="398"/>
+<ngram ng="ог" cnt="398"/>
+<ngram ng="ит" cnt="397"/>
+<ngram ng=" а" cnt="393"/>
+<ngram ng=" со" cnt="387"/>
+<ngram ng="d" cnt="384"/>
+<ngram ng="ми" cnt="383"/>
+<ngram ng=" г" cnt="382"/>
+<ngram ng="h" cnt="377"/>
+<ngram ng="ы " cnt="377"/>
+<ngram ng="e " cnt="373"/>
+<ngram ng="пе" cnt="369"/>
+<ngram ng="ек" cnt="364"/>
+<ngram ng="ас" cnt="362"/>
+<ngram ng="ед" cnt="361"/>
+<ngram ng="ия " cnt="358"/>
+<ngram ng="ой" cnt="356"/>
+<ngram ng="u" cnt="348"/>
+<ngram ng="ав" cnt="345"/>
+<ngram ng="нн" cnt="344"/>
+<ngram ng="с " cnt="343"/>
+<ngram ng="ие" cnt="337"/>
+<ngram ng="т " cnt="335"/>
+<ngram ng="ди" cnt="333"/>
+<ngram ng="про" cnt="332"/>
+<ngram ng="да" cnt="330"/>
+<ngram ng="пи" cnt="330"/>
+<ngram ng="ой " cnt="330"/>
+<ngram ng="че" cnt="327"/>
+<ngram ng="ет" cnt="323"/>
+<ngram ng="ста" cnt="323"/>
+<ngram ng="s " cnt="315"/>
+<ngram ng="ик" cnt="311"/>
+<ngram ng="ил" cnt="305"/>
+<ngram ng="из" cnt="303"/>
+<ngram ng=" про" cnt="303"/>
+<ngram ng="ани" cnt="302"/>
+<ngram ng="ей" cnt="300"/>
+<ngram ng="p" cnt="299"/>
+<ngram ng="ру" cnt="296"/>
+<ngram ng="ам" cnt="294"/>
+<ngram ng="ла " cnt="293"/>
+<ngram ng="за" cnt="292"/>
+<ngram ng="к " cnt="290"/>
+<ngram ng="ски" cnt="283"/>
+<ngram ng="ви" cnt="282"/>
+<ngram ng="оп" cnt="282"/>
+<ngram ng="но " cnt="280"/>
+<ngram ng="го " cnt="280"/>
+<ngram ng="ени" cnt="279"/>
+<ngram ng="ем" cnt="278"/>
+<ngram ng=" у" cnt="277"/>
+<ngram ng="ев" cnt="277"/>
+<ngram ng="мо" cnt="275"/>
+<ngram ng="ку" cnt="272"/>
+<ngram ng="вы" cnt="271"/>
+<ngram ng="ом " cnt="270"/>
+<ngram ng="ере" cnt="269"/>
+<ngram ng="g" cnt="267"/>
+<ngram ng="ио" cnt="266"/>
+<ngram ng="ли " cnt="266"/>
+<ngram ng="ие " cnt="266"/>
+<ngram ng="ть" cnt="264"/>
+<ngram ng="ров" cnt="263"/>
+<ngram ng="ий" cnt="260"/>
+<ngram ng="до" cnt="259"/>
+<ngram ng=" на " cnt="255"/>
+<ngram ng=" ма" cnt="255"/>
+<ngram ng=" з" cnt="254"/>
+<ngram ng="f" cnt="254"/>
+<ngram ng="же" cnt="254"/>
+<ngram ng="ка " cnt="251"/>
+<ngram ng="пер" cnt="248"/>
+<ngram ng="тр" cnt="245"/>
+<ngram ng="щ" cnt="245"/>
+<ngram ng="ля" cnt="243"/>
+<ngram ng="ая" cnt="242"/>
+<ngram ng="тв" cnt="240"/>
+<ngram ng="им" cnt="240"/>
+<ngram ng="ого" cnt="237"/>
+<ngram ng="b" cnt="236"/>
+<ngram ng=" пе" cnt="236"/>
+<ngram ng=" л" cnt="236"/>
+<ngram ng="аз" cnt="235"/>
+<ngram ng="ния" cnt="235"/>
+<ngram ng=" w" cnt="233"/>
+<ngram ng="кр" cnt="233"/>
+<ngram ng="ост" cnt="231"/>
+<ngram ng="ая " cnt="231"/>
+<ngram ng="тс" cnt="229"/>
+<ngram ng=" ч" cnt="227"/>
+<ngram ng="ско" cnt="226"/>
+<ngram ng="ё" cnt="226"/>
+<ngram ng="ова" cnt="225"/>
+<ngram ng="ий " cnt="225"/>
+<ngram ng=" с " cnt="225"/>
+<ngram ng="ча" cnt="223"/>
+<ngram ng="ии" cnt="222"/>
+<ngram ng="а п" cnt="221"/>
+<ngram ng="ии " cnt="220"/>
+<ngram ng="ки " cnt="219"/>
+<ngram ng="ок" cnt="218"/>
+<ngram ng=" е" cnt="217"/>
+<ngram ng=" го" cnt="214"/>
+<ngram ng="ого " cnt="214"/>
+<ngram ng="ци" cnt="214"/>
+<ngram ng="она" cnt="213"/>
+<ngram ng=" пер" cnt="212"/>
+<ngram ng=" ф" cnt="212"/>
+<ngram ng="ся" cnt="210"/>
+<ngram ng="а в" cnt="209"/>
+<ngram ng="ть " cnt="208"/>
+<ngram ng="ния " cnt="206"/>
+<ngram ng="э" cnt="206"/>
+<ngram ng="би" cnt="205"/>
+<ngram ng="ств" cnt="204"/>
+<ngram ng="ест" cnt="203"/>
+<ngram ng="er" cnt="203"/>
+<ngram ng="ран" cnt="203"/>
+<ngram ng="in" cnt="202"/>
+<ngram ng="n " cnt="202"/>
+<ngram ng="ив" cnt="202"/>
+<ngram ng="ул" cnt="201"/>
+<ngram ng="бо" cnt="200"/>
+<ngram ng=" из" cnt="198"/>
+<ngram ng="се" cnt="197"/>
+<ngram ng="соб" cnt="197"/>
+<ngram ng="пис" cnt="196"/>
+<ngram ng="ые " cnt="194"/>
+<ngram ng="бр" cnt="194"/>
+<ngram ng="ьн" cnt="194"/>
+<ngram ng="ые" cnt="194"/>
+<ngram ng="льн" cnt="194"/>
+<ngram ng="сь" cnt="193"/>
+<ngram ng="бл" cnt="193"/>
+<ngram ng=" ра" cnt="192"/>
+<ngram ng=" вы" cnt="192"/>
+<ngram ng="ых" cnt="192"/>
+<ngram ng="год" cnt="191"/>
+<ngram ng="и п" cnt="191"/>
+<ngram ng="при" cnt="190"/>
+<ngram ng="сл" cnt="189"/>
+<ngram ng="н " cnt="189"/>
+<ngram ng="ир" cnt="189"/>
+<ngram ng="ей " cnt="188"/>
+<ngram ng="ря" cnt="187"/>
+<ngram ng=" ст" cnt="187"/>
+<ngram ng=" не" cnt="187"/>
+<ngram ng=" за" cnt="186"/>
+<ngram ng="нс" cnt="185"/>
+<ngram ng="аст" cnt="185"/>
+<ngram ng="бы" cnt="185"/>
+<ngram ng="тор" cnt="184"/>
+<ngram ng="вер" cnt="183"/>
+<ngram ng="и в" cnt="182"/>
+<ngram ng="са" cnt="182"/>
+<ngram ng="оро" cnt="182"/>
+<ngram ng="бе" cnt="182"/>
+<ngram ng="е с" cnt="181"/>
+<ngram ng="гр" cnt="181"/>
+<ngram ng="ми " cnt="181"/>
+<ngram ng="ги" cnt="180"/>
+<ngram ng=" соб" cnt="180"/>
+<ngram ng="v" cnt="180"/>
+<ngram ng="ов " cnt="180"/>
+<ngram ng="ых " cnt="179"/>
+<ngram ng="иг" cnt="179"/>
+<ngram ng="ель" cnt="179"/>
+<ngram ng="ту" cnt="178"/>
+<ngram ng="ое" cnt="177"/>
+<ngram ng="па" cnt="176"/>
+<ngram ng="ся " cnt="176"/>
+<ngram ng="re" cnt="176"/>
+<ngram ng="es" cnt="174"/>
+<ngram ng="тел" cnt="173"/>
+<ngram ng="ю " cnt="173"/>
+<ngram ng="сп" cnt="171"/>
+<ngram ng="ба" cnt="171"/>
+<ngram ng=" t" cnt="170"/>
+<ngram ng=" год" cnt="170"/>
+<ngram ng="та " cnt="169"/>
+<ngram ng="ду" cnt="168"/>
+<ngram ng="е п" cnt="167"/>
+<ngram ng=" при" cnt="167"/>
+<ngram ng="дн" cnt="167"/>
+<ngram ng="ты" cnt="166"/>
+<ngram ng="их" cnt="166"/>
+<ngram ng="енн" cnt="165"/>
+<ngram ng="сь " cnt="165"/>
+<ngram ng="оль" cnt="164"/>
+<ngram ng="и с" cnt="163"/>
+<ngram ng="уч" cnt="163"/>
+<ngram ng="ала" cnt="163"/>
+<ngram ng="ние" cnt="163"/>
+<ngram ng="нт" cnt="161"/>
+<ngram ng="t " cnt="161"/>
+<ngram ng="тн" cnt="161"/>
+<ngram ng="ич" cnt="160"/>
+<ngram ng=" m" cnt="160"/>
+<ngram ng="ове" cnt="160"/>
+<ngram ng=" s" cnt="159"/>
+<ngram ng="а с" cnt="157"/>
+<ngram ng="нг" cnt="157"/>
+<ngram ng="ыл" cnt="157"/>
+<ngram ng=" кр" cnt="156"/>
+<ngram ng="з " cnt="156"/>
+<ngram ng="сто" cnt="155"/>
+<ngram ng="ря " cnt="155"/>
+<ngram ng="нны" cnt="155"/>
+<ngram ng=" би" cnt="154"/>
+<ngram ng="гл" cnt="154"/>
+<ngram ng="ван" cnt="153"/>
+<ngram ng="ля " cnt="152"/>
+<ngram ng="коп" cnt="152"/>
+<ngram ng=" э" cnt="151"/>
+<ngram ng="али" cnt="151"/>
+<ngram ng="кн" cnt="151"/>
+<ngram ng="чес" cnt="150"/>
+<ngram ng="тек" cnt="150"/>
+<ngram ng=" бы" cnt="150"/>
+<ngram ng="пров" cnt="148"/>
+<ngram ng=" c" cnt="148"/>
+<ngram ng="сти" cnt="148"/>
+<ngram ng="en" cnt="148"/>
+<ngram ng=" до" cnt="148"/>
+<ngram ng="ап" cnt="146"/>
+<ngram ng="ус" cnt="146"/>
+<ngram ng="е в" cnt="146"/>
+<ngram ng="st" cnt="145"/>
+<ngram ng=" кн" cnt="145"/>
+<ngram ng="ег" cnt="144"/>
+<ngram ng="иб" cnt="144"/>
+<ngram ng="ше" cnt="144"/>
+<ngram ng="тав" cnt="144"/>
+<ngram ng="рен" cnt="144"/>
+<ngram ng="их " cnt="144"/>
+<ngram ng="кни" cnt="144"/>
+<ngram ng=" ка" cnt="144"/>
+<ngram ng=" кни" cnt="143"/>
+<ngram ng="чи" cnt="142"/>
+<ngram ng="был" cnt="142"/>
+<ngram ng="мен" cnt="141"/>
+<ngram ng="я с" cnt="141"/>
+<ngram ng=" был" cnt="140"/>
+<ngram ng="ый" cnt="140"/>
+<ngram ng="ние " cnt="139"/>
+<ngram ng="ад" cnt="139"/>
+<ngram ng="си" cnt="139"/>
+<ngram ng="ый " cnt="138"/>
+<ngram ng="еск" cnt="138"/>
+<ngram ng="y" cnt="138"/>
+<ngram ng="став" cnt="138"/>
+<ngram ng="бли" cnt="138"/>
+<ngram ng="нд" cnt="138"/>
+<ngram ng="еди" cnt="137"/>
+<ngram ng="тал" cnt="137"/>
+<ngram ng="ной" cnt="137"/>
+<ngram ng=" ве" cnt="137"/>
+<ngram ng="k" cnt="137"/>
+<ngram ng="li" cnt="136"/>
+<ngram ng="ной " cnt="136"/>
+<ngram ng="ры" cnt="135"/>
+<ngram ng="кра" cnt="135"/>
+<ngram ng=" мо" cnt="135"/>
+<ngram ng="кий" cnt="135"/>
+<ngram ng="кий " cnt="135"/>
+<ngram ng="вал" cnt="134"/>
+<ngram ng=" я" cnt="134"/>
+<ngram ng="и и" cnt="134"/>
+<ngram ng="пол" cnt="134"/>
+<ngram ng="о п" cnt="134"/>
+<ngram ng="ите" cnt="133"/>
+<ngram ng="ные " cnt="132"/>
+<ngram ng="ные" cnt="132"/>
+<ngram ng="вр" cnt="132"/>
+<ngram ng="оте" cnt="132"/>
+<ngram ng="he" cnt="131"/>
+<ngram ng="te" cnt="131"/>
+<ngram ng="r " cnt="131"/>
+<ngram ng="да " cnt="130"/>
+<ngram ng="ыс" cnt="129"/>
+<ngram ng="биб" cnt="128"/>
+<ngram ng="an" cnt="128"/>
+<ngram ng=" об" cnt="128"/>
+<ngram ng="ский" cnt="128"/>
+<ngram ng=" b" cnt="127"/>
+<ngram ng=" де" cnt="127"/>
+<ngram ng=" биб" cnt="127"/>
+<ngram ng="га" cnt="127"/>
+<ngram ng="ке" cnt="127"/>
+<ngram ng="рове" cnt="126"/>
+<ngram ng="ибл" cnt="126"/>
+<ngram ng="ул " cnt="125"/>
+<ngram ng=" d" cnt="125"/>
+<ngram ng="и н" cnt="125"/>
+<ngram ng="аф" cnt="125"/>
+<ngram ng="ян" cnt="125"/>
+<ngram ng="ибли" cnt="124"/>
+<ngram ng="лу" cnt="124"/>
+<ngram ng="on" cnt="124"/>
+<ngram ng="раз" cnt="123"/>
+<ngram ng="библ" cnt="123"/>
+<ngram ng="ала " cnt="123"/>
+<ngram ng="аль" cnt="122"/>
+<ngram ng="я п" cnt="122"/>
+<ngram ng="оба" cnt="122"/>
+<ngram ng="ист" cnt="122"/>
+<ngram ng="ду " cnt="122"/>
+<ngram ng="иот" cnt="121"/>
+<ngram ng="блио" cnt="121"/>
+<ngram ng="лио" cnt="121"/>
+<ngram ng="ных" cnt="121"/>
+<ngram ng="оло" cnt="121"/>
+<ngram ng="пт" cnt="121"/>
+<ngram ng="я в" cnt="121"/>
+<ngram ng=" p" cnt="121"/>
+<ngram ng="ах" cnt="121"/>
+<ngram ng="ных " cnt="121"/>
+<ngram ng="ts" cnt="120"/>
+<ngram ng="ения" cnt="120"/>
+<ngram ng="or" cnt="120"/>
+<ngram ng="ено" cnt="120"/>
+<ngram ng="иоте" cnt="119"/>
+<ngram ng="соба" cnt="119"/>
+<ngram ng="ческ" cnt="119"/>
+<ngram ng="и к" cnt="119"/>
+<ngram ng="лиот" cnt="119"/>
+<ngram ng="ото" cnt="118"/>
+<ngram ng="пре" cnt="118"/>
+<ngram ng="отек" cnt="118"/>
+<ngram ng="овер" cnt="118"/>
+<ngram ng="бак" cnt="117"/>
+<ngram ng="из " cnt="117"/>
+<ngram ng="а к" cnt="117"/>
+<ngram ng="а и" cnt="117"/>
+<ngram ng="обак" cnt="116"/>
+<ngram ng=" ста" cnt="116"/>
+<ngram ng="вн" cnt="115"/>
+<ngram ng="нск" cnt="115"/>
+<ngram ng=" a" cnt="114"/>
+<ngram ng=" o" cnt="114"/>
+<ngram ng="ком" cnt="114"/>
+<ngram ng="ерен" cnt="114"/>
+<ngram ng="ода" cnt="114"/>
+<ngram ng="раф" cnt="114"/>
+<ngram ng="ено " cnt="114"/>
+<ngram ng="g " cnt="114"/>
+<ngram ng="сс" cnt="113"/>
+<ngram ng="вере" cnt="113"/>
+<ngram ng="ека" cnt="113"/>
+<ngram ng=" во" cnt="113"/>
+<ngram ng=" ан" cnt="113"/>
+<ngram ng="выс" cnt="113"/>
+<ngram ng=" из " cnt="113"/>
+<ngram ng="th" cnt="113"/>
+<ngram ng="кул" cnt="112"/>
+<ngram ng="о в" cnt="112"/>
+<ngram ng=" кра" cnt="112"/>
+<ngram ng=" выс" cnt="112"/>
+<ngram ng="d " cnt="112"/>
+<ngram ng=" х" cnt="112"/>
+<ngram ng="ска" cnt="111"/>
+<ngram ng=" ме" cnt="111"/>
+<ngram ng="ar" cnt="111"/>
+<ngram ng="ать" cnt="111"/>
+<ngram ng="а в " cnt="111"/>
+<ngram ng="не " cnt="111"/>
+<ngram ng="то " cnt="109"/>
+<ngram ng="нно" cnt="109"/>
+<ngram ng="пос" cnt="109"/>
+<ngram ng="ниг" cnt="109"/>
+<ngram ng="или" cnt="109"/>
+<ngram ng="иа" cnt="109"/>
+<ngram ng="в к" cnt="108"/>
+<ngram ng="ng" cnt="108"/>
+<ngram ng=" от" cnt="108"/>
+<ngram ng="ch" cnt="108"/>
+<ngram ng="хо" cnt="108"/>
+<ngram ng="ак " cnt="108"/>
+<ngram ng="тск" cnt="108"/>
+<ngram ng="книг" cnt="108"/>
+<ngram ng="обр" cnt="107"/>
+<ngram ng="иче" cnt="107"/>
+<ngram ng="рено" cnt="107"/>
+<ngram ng=" то" cnt="107"/>
+<ngram ng="анг" cnt="106"/>
+<ngram ng="ую" cnt="106"/>
+<ngram ng="ым" cnt="106"/>
+<ngram ng=" та" cnt="105"/>
+<ngram ng="же " cnt="105"/>
+<ngram ng="нов" cnt="105"/>
+<ngram ng="ред" cnt="105"/>
+<ngram ng="пере" cnt="104"/>
+<ngram ng="ож" cnt="104"/>
+<ngram ng="бра" cnt="104"/>
+<ngram ng="ыст" cnt="104"/>
+<ngram ng="ур" cnt="104"/>
+<ngram ng="тер" cnt="103"/>
+<ngram ng="ук" cnt="103"/>
+<ngram ng=" ш" cnt="103"/>
+<ngram ng="анн" cnt="103"/>
+<ngram ng="св" cnt="103"/>
+<ngram ng="ло " cnt="103"/>
+<ngram ng="в г" cnt="103"/>
+<ngram ng="ят" cnt="102"/>
+<ngram ng=" ж" cnt="102"/>
+<ngram ng="выст" cnt="102"/>
+<ngram ng="ован" cnt="102"/>
+<ngram ng="еч" cnt="102"/>
+<ngram ng="оз" cnt="101"/>
+<ngram ng="вл" cnt="101"/>
+<ngram ng=" па" cnt="101"/>
+<ngram ng="альн" cnt="101"/>
+<ngram ng="nt" cnt="101"/>
+<ngram ng="ово" cnt="100"/>
+<ngram ng="y " cnt="100"/>
+<ngram ng="а н" cnt="100"/>
+<ngram ng="ичес" cnt="100"/>
+<ngram ng="рс" cnt="100"/>
+<ngram ng=" в г" cnt="100"/>
+<ngram ng="ль " cnt="99"/>
+<ngram ng="дл" cnt="99"/>
+<ngram ng="ое " cnt="99"/>
+<ngram ng="мон" cnt="99"/>
+<ngram ng="анс" cnt="99"/>
+<ngram ng="ания" cnt="99"/>
+<ngram ng="фт" cnt="99"/>
+<ngram ng="ши" cnt="99"/>
+<ngram ng="жн" cnt="99"/>
+<ngram ng="й п" cnt="99"/>
+<ngram ng="о с" cnt="98"/>
+<ngram ng="я к" cnt="98"/>
+<ngram ng=" те" cnt="98"/>
+<ngram ng="и д" cnt="98"/>
+<ngram ng="рв" cnt="98"/>
+<ngram ng="аря" cnt="98"/>
+<ngram ng="й с" cnt="97"/>
+<ngram ng=" ми" cnt="97"/>
+<ngram ng="жа" cnt="97"/>
+<ngram ng="род" cnt="97"/>
+<ngram ng="вар" cnt="97"/>
+<ngram ng="ител" cnt="97"/>
+<ngram ng=" коп" cnt="97"/>
+<ngram ng="res" cnt="96"/>
+<ngram ng="ра " cnt="96"/>
+<ngram ng="вк" cnt="96"/>
+<ngram ng="це" cnt="96"/>
+<ngram ng="er " cnt="96"/>
+<ngram ng=" пос" cnt="96"/>
+<ngram ng="зн" cnt="96"/>
+<ngram ng="кол" cnt="96"/>
+<ngram ng="кон" cnt="95"/>
+<ngram ng="ник" cnt="95"/>
+<ngram ng="опт" cnt="95"/>
+<ngram ng="тра" cnt="95"/>
+<ngram ng="одн" cnt="95"/>
+<ngram ng="рафт" cnt="95"/>
+<ngram ng="г " cnt="95"/>
+<ngram ng="краф" cnt="95"/>
+<ngram ng="тся " cnt="95"/>
+<ngram ng="афт" cnt="95"/>
+<ngram ng="тся" cnt="95"/>
+<ngram ng="гра" cnt="95"/>
+<ngram ng="копт" cnt="95"/>
+<ngram ng="аб" cnt="94"/>
+<ngram ng="ts " cnt="94"/>
+<ngram ng="дел" cnt="94"/>
+<ngram ng="аря " cnt="94"/>
+<ngram ng="нос" cnt="94"/>
+<ngram ng="ид" cnt="94"/>
+<ngram ng="еп" cnt="94"/>
+<ngram ng=" бо" cnt="94"/>
+<ngram ng="кт" cnt="94"/>
+<ngram ng="уп" cnt="93"/>
+<ngram ng="le" cnt="93"/>
+<ngram ng="тель" cnt="93"/>
+<ngram ng="му" cnt="93"/>
+<ngram ng="час" cnt="93"/>
+<ngram ng="ате" cnt="93"/>
+<ngram ng="we" cnt="93"/>
+<ngram ng="вс" cnt="93"/>
+<ngram ng=" e" cnt="93"/>
+<ngram ng="оч" cnt="93"/>
+<ngram ng="фо" cnt="93"/>
+<ngram ng="англ" cnt="92"/>
+<ngram ng=" пре" cnt="92"/>
+<ngram ng="тво" cnt="92"/>
+<ngram ng="е к" cnt="92"/>
+<ngram ng=" раз" cnt="92"/>
+<ngram ng="нгл" cnt="92"/>
+<ngram ng="ент" cnt="92"/>
+<ngram ng="ный" cnt="92"/>
+<ngram ng="ный " cnt="92"/>
+<ngram ng="кул " cnt="92"/>
+<ngram ng="ерв" cnt="92"/>
+<ngram ng="в го" cnt="92"/>
+<ngram ng=" анг" cnt="92"/>
+<ngram ng="ика" cnt="91"/>
+<ngram ng="ков" cnt="91"/>
+<ngram ng="рн" cnt="91"/>
+<ngram ng="иц" cnt="91"/>
+<ngram ng="ьно" cnt="91"/>
+<ngram ng="льно" cnt="91"/>
+<ngram ng="в с" cnt="91"/>
+<ngram ng="ma" cnt="91"/>
+<ngram ng=" th" cnt="90"/>
+<ngram ng=" мак" cnt="90"/>
+<ngram ng="и по" cnt="90"/>
+<ngram ng="чн" cnt="90"/>
+<ngram ng="фи" cnt="90"/>
+<ngram ng="кая" cnt="90"/>
+<ngram ng="кая " cnt="90"/>
+<ngram ng="сн" cnt="90"/>
+<ngram ng="кой" cnt="90"/>
+<ngram ng="р " cnt="90"/>
+<ngram ng="по " cnt="90"/>
+<ngram ng="ну" cnt="90"/>
+<ngram ng=" св" cnt="90"/>
+<ngram ng=" i" cnt="90"/>
+<ngram ng="кл" cnt="90"/>
+<ngram ng="мак" cnt="90"/>
+<ngram ng=" по " cnt="90"/>
+<ngram ng="лен" cnt="90"/>
+<ngram ng="ека " cnt="89"/>
+<ngram ng="ион" cnt="89"/>
+<ngram ng="эт" cnt="89"/>
+<ngram ng="ал " cnt="89"/>
+<ngram ng="ном" cnt="89"/>
+<ngram ng="кой " cnt="89"/>
+<ngram ng="кот" cnt="89"/>
+<ngram ng="кк" cnt="88"/>
+<ngram ng="года" cnt="88"/>
+<ngram ng="част" cnt="88"/>
+<ngram ng="ног" cnt="88"/>
+<ngram ng="и в " cnt="88"/>
+<ngram ng="ing" cnt="88"/>
+<ngram ng="те " cnt="88"/>
+<ngram ng="су" cnt="87"/>
+<ngram ng="ь в" cnt="87"/>
+<ngram ng="ще" cnt="87"/>
+<ngram ng="зв" cnt="87"/>
+<ngram ng=" ис" cnt="87"/>
+<ngram ng="ня" cnt="87"/>
+<ngram ng="l " cnt="87"/>
+<ngram ng="ная" cnt="86"/>
+<ngram ng="др" cnt="86"/>
+<ngram ng="the" cnt="86"/>
+<ngram ng="ство" cnt="86"/>
+<ngram ng="жд" cnt="86"/>
+<ngram ng="ыста" cnt="86"/>
+<ngram ng="зо" cnt="86"/>
+<ngram ng="ная " cnt="86"/>
+<ngram ng="али " cnt="86"/>
+<ngram ng="рани" cnt="85"/>
+<ngram ng=" гр" cnt="85"/>
+<ngram ng="ись" cnt="85"/>
+<ngram ng=" но" cnt="85"/>
+<ngram ng=" од" cnt="85"/>
+<ngram ng="ение" cnt="85"/>
+<ngram ng="оду" cnt="85"/>
+<ngram ng=" ос" cnt="85"/>
+<ngram ng=" в к" cnt="85"/>
+<ngram ng="отор" cnt="85"/>
+<ngram ng="кото" cnt="85"/>
+<ngram ng="стр" cnt="85"/>
+<ngram ng="перв" cnt="84"/>
+<ngram ng="ало" cnt="84"/>
+<ngram ng="а о" cnt="84"/>
+<ngram ng="ет " cnt="84"/>
+<ngram ng="ным" cnt="83"/>
+<ngram ng=" че" cnt="83"/>
+<ngram ng="ти " cnt="83"/>
+<ngram ng="оду " cnt="83"/>
+<ngram ng="x" cnt="83"/>
+<ngram ng="кс" cnt="83"/>
+<ngram ng="ах " cnt="83"/>
+<ngram ng="нв" cnt="82"/>
+<ngram ng="me" cnt="82"/>
+<ngram ng="иро" cnt="82"/>
+<ngram ng="а по" cnt="82"/>
+<ngram ng="в п" cnt="82"/>
+<ngram ng="году" cnt="82"/>
+<ngram ng=" уч" cnt="82"/>
+<ngram ng="ww" cnt="82"/>
+<ngram ng=" ви" cnt="82"/>
+<ngram ng=" the" cnt="82"/>
+<ngram ng="ская" cnt="82"/>
+<ngram ng="акку" cnt="81"/>
+<ngram ng="уд" cnt="81"/>
+<ngram ng="акк" cnt="81"/>
+<ngram ng=" ли" cnt="81"/>
+<ngram ng="ii" cnt="81"/>
+<ngram ng="кку" cnt="81"/>
+<ngram ng="макк" cnt="81"/>
+<ngram ng="ккул" cnt="81"/>
+<ngram ng="и о" cnt="81"/>
+<ngram ng="ать " cnt="81"/>
+<ngram ng="й к" cnt="81"/>
+<ngram ng="ели" cnt="81"/>
+<ngram ng="обе" cnt="81"/>
+<ngram ng="мп" cnt="81"/>
+<ngram ng="it" cnt="80"/>
+<ngram ng=" кот" cnt="80"/>
+<ngram ng=" wwe" cnt="80"/>
+<ngram ng="под" cnt="80"/>
+<ngram ng="ng " cnt="80"/>
+<ngram ng=" ww" cnt="80"/>
+<ngram ng="wwe" cnt="80"/>
+<ngram ng="рев" cnt="80"/>
+<ngram ng="мат" cnt="80"/>
+<ngram ng="д " cnt="80"/>
+<ngram ng="его" cnt="80"/>
+<ngram ng="мона" cnt="80"/>
+<ngram ng="жен" cnt="80"/>
+<ngram ng=" он" cnt="79"/>
+<ngram ng="ru" cnt="79"/>
+<ngram ng="жи" cnt="79"/>
+<ngram ng="ют" cnt="79"/>
+<ngram ng="wwe " cnt="79"/>
+<ngram ng="ач" cnt="79"/>
+<ngram ng="а м" cnt="79"/>
+<ngram ng="лог" cnt="79"/>
+<ngram ng="ного" cnt="79"/>
+<ngram ng="во " cnt="79"/>
+<ngram ng="we " cnt="79"/>
+<ngram ng="ing " cnt="79"/>
+<ngram ng=" эт" cnt="79"/>
+<ngram ng="нас" cnt="78"/>
+<ngram ng="птск" cnt="78"/>
+<ngram ng="щи" cnt="78"/>
+<ngram ng=" мон" cnt="78"/>
+<ngram ng="нва" cnt="78"/>
+<ngram ng=" ре" cnt="78"/>
+<ngram ng="птс" cnt="78"/>
+<ngram ng="he " cnt="78"/>
+<ngram ng="оптс" cnt="78"/>
+<ngram ng="ами" cnt="78"/>
+<ngram ng="the " cnt="78"/>
+<ngram ng="зд" cnt="78"/>
+<ngram ng="так" cnt="78"/>
+<ngram ng="варя" cnt="77"/>
+<ngram ng="ша" cnt="77"/>
+<ngram ng="век" cnt="77"/>
+<ngram ng="вани" cnt="77"/>
+<ngram ng="lin" cnt="77"/>
+<ngram ng="пор" cnt="77"/>
+<ngram ng=" тр" cnt="77"/>
+<ngram ng="est" cnt="77"/>
+<ngram ng="ода " cnt="77"/>
+<ngram ng="co" cnt="77"/>
+<ngram ng=" ян" cnt="77"/>
+<ngram ng=" l" cnt="77"/>
+<ngram ng="ела" cnt="77"/>
+<ngram ng="ики" cnt="77"/>
+<ngram ng="сты" cnt="77"/>
+<ngram ng="ны " cnt="77"/>
+<ngram ng="ге" cnt="77"/>
+<ngram ng="пл" cnt="76"/>
+<ngram ng="ац" cnt="76"/>
+<ngram ng="ent" cnt="76"/>
+<ngram ng=" под" cnt="76"/>
+<ngram ng="анск" cnt="76"/>
+<ngram ng="нвар" cnt="76"/>
+<ngram ng="оде" cnt="76"/>
+<ngram ng="аци" cnt="76"/>
+<ngram ng="янва" cnt="76"/>
+<ngram ng="ем " cnt="76"/>
+<ngram ng="янв" cnt="76"/>
+<ngram ng="лан" cnt="76"/>
+<ngram ng=" янв" cnt="76"/>
+<ngram ng="и на" cnt="75"/>
+<ngram ng="ель " cnt="75"/>
+<ngram ng=" так" cnt="75"/>
+<ngram ng="уча" cnt="75"/>
+<ngram ng="а пр" cnt="75"/>
+<ngram ng="тве" cnt="75"/>
+<ngram ng="иров" cnt="75"/>
+<ngram ng="ic" cnt="75"/>
+<ngram ng="de" cnt="75"/>
+<ngram ng="е о" cnt="75"/>
+<ngram ng="ta" cnt="75"/>
+<ngram ng="рт" cnt="75"/>
+<ngram ng="о и" cnt="75"/>
+<ngram ng="нц" cnt="75"/>
+<ngram ng="обра" cnt="74"/>
+<ngram ng="е б" cnt="74"/>
+<ngram ng="а т" cnt="74"/>
+<ngram ng="ri" cnt="74"/>
+<ngram ng="иск" cnt="74"/>
+<ngram ng="ым " cnt="74"/>
+<ngram ng="ыр" cnt="74"/>
+<ngram ng="ност" cnt="74"/>
+<ngram ng="ои" cnt="74"/>
+<ngram ng="е и" cnt="74"/>
+<ngram ng="оди" cnt="73"/>
+<ngram ng="хр" cnt="73"/>
+<ngram ng="она " cnt="73"/>
+<ngram ng="вра" cnt="73"/>
+<ngram ng="и м" cnt="73"/>
+<ngram ng="сле" cnt="73"/>
+<ngram ng=" в с" cnt="73"/>
+<ngram ng="лис" cnt="73"/>
+<ngram ng="ке " cnt="73"/>
+<ngram ng="й в" cnt="73"/>
+<ngram ng="тов" cnt="73"/>
+<ngram ng="рм" cnt="73"/>
+<ngram ng="дер" cnt="73"/>
+<ngram ng="е в " cnt="72"/>
+<ngram ng="зы" cnt="72"/>
+<ngram ng="ког" cnt="72"/>
+<ngram ng="о я" cnt="72"/>
+<ngram ng="тыр" cnt="72"/>
+<ngram ng="ип" cnt="72"/>
+<ngram ng="ори" cnt="72"/>
+<ngram ng="ина" cnt="72"/>
+<ngram ng="м п" cnt="72"/>
+<ngram ng=" f" cnt="71"/>
+<ngram ng="иш" cnt="71"/>
+<ngram ng="наст" cnt="71"/>
+<ngram ng="спо" cnt="71"/>
+<ngram ng="ден" cnt="71"/>
+<ngram ng="лл" cnt="71"/>
+<ngram ng="ию" cnt="71"/>
+<ngram ng="чт" cnt="70"/>
+<ngram ng="i " cnt="70"/>
+<ngram ng="аж" cnt="70"/>
+<ngram ng="тат" cnt="70"/>
+<ngram ng=" ру" cnt="70"/>
+<ngram ng="ами " cnt="70"/>
+<ngram ng=" сп" cnt="70"/>
+<ngram ng="и б" cnt="70"/>
+<ngram ng="х п" cnt="69"/>
+<ngram ng="аг" cnt="69"/>
+<ngram ng="ti" cnt="69"/>
+<ngram ng="al" cnt="69"/>
+<ngram ng=" дл" cnt="69"/>
+<ngram ng="f " cnt="69"/>
+<ngram ng="в ко" cnt="69"/>
+<ngram ng="о к" cnt="69"/>
+<ngram ng="ую " cnt="68"/>
+<ngram ng="это" cnt="68"/>
+<ngram ng="и р" cnt="68"/>
+<ngram ng="е н" cnt="68"/>
+<ngram ng="лас" cnt="68"/>
+<ngram ng="ном " cnt="68"/>
+<ngram ng="tl" cnt="68"/>
+<ngram ng="ды" cnt="68"/>
+<ngram ng="авк" cnt="68"/>
+<ngram ng="рал" cnt="67"/>
+<ngram ng="сть" cnt="67"/>
+<ngram ng="рин" cnt="67"/>
+<ngram ng=" пол" cnt="67"/>
+<ngram ng="ески" cnt="67"/>
+<ngram ng=" поб" cnt="67"/>
+<ngram ng="ание" cnt="67"/>
+<ngram ng="осл" cnt="67"/>
+<ngram ng="cr" cnt="67"/>
+<ngram ng="поб" cnt="67"/>
+<ngram ng=" ро" cnt="67"/>
+<ngram ng="кого" cnt="67"/>
+<ngram ng="йс" cnt="67"/>
+<ngram ng="ох" cnt="67"/>
+<ngram ng="я и" cnt="66"/>
+<ngram ng="рат" cnt="66"/>
+<ngram ng="для " cnt="66"/>
+<ngram ng="оя" cnt="66"/>
+<ngram ng="еж" cnt="66"/>
+<ngram ng="ера" cnt="66"/>
+<ngram ng="ко " cnt="66"/>
+<ngram ng="вик" cnt="66"/>
+<ngram ng=" для" cnt="66"/>
+<ngram ng="ила" cnt="66"/>
+<ngram ng="стал" cnt="66"/>
+<ngram ng="для" cnt="66"/>
+<ngram ng="дно" cnt="66"/>
+<ngram ng="рес" cnt="66"/>
+<ngram ng="иж" cnt="66"/>
+<ngram ng="или " cnt="66"/>
+<ngram ng="е со" cnt="66"/>
+<ngram ng="шо" cnt="66"/>
+<ngram ng="тавк" cnt="66"/>
+<ngram ng="х с" cnt="66"/>
+<ngram ng="ись " cnt="65"/>
+<ngram ng="но я" cnt="65"/>
+<ngram ng=" кон" cnt="65"/>
+<ngram ng="do" cnt="65"/>
+<ngram ng="име" cnt="65"/>
+<ngram ng="о ян" cnt="65"/>
+<ngram ng="бед" cnt="65"/>
+<ngram ng="ь п" cnt="65"/>
+<ngram ng="нк" cnt="65"/>
+<ngram ng="еле" cnt="65"/>
+<ngram ng=" r" cnt="64"/>
+<ngram ng="енны" cnt="64"/>
+<ngram ng="и и " cnt="64"/>
+<ngram ng="фе" cnt="64"/>
+<ngram ng="ман" cnt="64"/>
+<ngram ng="уб" cnt="64"/>
+<ngram ng="е д" cnt="64"/>
+<ngram ng="овал" cnt="64"/>
+<ngram ng="енно" cnt="64"/>
+<ngram ng="о м" cnt="64"/>
+<ngram ng="анд" cnt="64"/>
+<ngram ng="a " cnt="64"/>
+<ngram ng="дин" cnt="64"/>
+<ngram ng="рг" cnt="64"/>
+<ngram ng="be" cnt="64"/>
+<ngram ng="дс" cnt="64"/>
+<ngram ng="й и" cnt="64"/>
+<ngram ng=" сл" cnt="64"/>
+<ngram ng="ая с" cnt="64"/>
+<ngram ng="el" cnt="64"/>
+<ngram ng="за " cnt="64"/>
+<ngram ng=" век" cnt="64"/>
+<ngram ng="ле " cnt="64"/>
+<ngram ng=" бе" cnt="64"/>
+<ngram ng="p " cnt="64"/>
+<ngram ng="а д" cnt="64"/>
+<ngram ng="побе" cnt="63"/>
+<ngram ng="еств" cnt="63"/>
+<ngram ng="m " cnt="63"/>
+<ngram ng="его " cnt="63"/>
+<ngram ng="rt" cnt="63"/>
+<ngram ng="тно" cnt="63"/>
+<ngram ng=" вс" cnt="63"/>
+<ngram ng="ром" cnt="63"/>
+<ngram ng="я б" cnt="62"/>
+<ngram ng="la" cnt="62"/>
+<ngram ng="в и" cnt="62"/>
+<ngram ng="ял" cnt="62"/>
+<ngram ng=" не " cnt="62"/>
+<ngram ng="уж" cnt="62"/>
+<ngram ng="см" cnt="62"/>
+<ngram ng="обед" cnt="62"/>
+<ngram ng="рус" cnt="62"/>
+<ngram ng="что" cnt="62"/>
+<ngram ng="торо" cnt="62"/>
+<ngram ng="ской" cnt="62"/>
+<ngram ng="о о" cnt="62"/>
+<ngram ng="е пр" cnt="62"/>
+<ngram ng="ё " cnt="62"/>
+<ngram ng="от " cnt="62"/>
+<ngram ng="of" cnt="61"/>
+<ngram ng="стыр" cnt="61"/>
+<ngram ng="сте" cnt="61"/>
+<ngram ng=" се" cnt="61"/>
+<ngram ng="wr" cnt="61"/>
+<ngram ng="я о" cnt="61"/>
+<ngram ng="гл " cnt="61"/>
+<ngram ng="ку " cnt="61"/>
+<ngram ng="асты" cnt="61"/>
+<ngram ng="rest" cnt="61"/>
+<ngram ng="ельн" cnt="61"/>
+<ngram ng="ling" cnt="61"/>
+<ngram ng="онас" cnt="61"/>
+<ngram ng="в м" cnt="61"/>
+<ngram ng="di" cnt="61"/>
+<ngram ng="я в " cnt="61"/>
+<ngram ng="тит" cnt="61"/>
+<ngram ng="е по" cnt="61"/>
+<ngram ng=" wr" cnt="61"/>
+<ngram ng="ac" cnt="61"/>
+<ngram ng="ь в " cnt="61"/>
+<ngram ng="ва " cnt="61"/>
+<ngram ng="ыв" cnt="60"/>
+<ngram ng="е м" cnt="60"/>
+<ngram ng="м в" cnt="60"/>
+<ngram ng="wre" cnt="60"/>
+<ngram ng=" чт" cnt="60"/>
+<ngram ng="исто" cnt="60"/>
+<ngram ng="ll" cnt="60"/>
+<ngram ng="етс" cnt="60"/>
+<ngram ng="ае" cnt="60"/>
+<ngram ng="ter" cnt="60"/>
+<ngram ng="нал" cnt="60"/>
+
+</language_ngram_database>

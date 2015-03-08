@@ -46,7 +46,8 @@ HEADERS += bibtools.h \
     ls3progressthread.h \
     filetools.h \
     modstools.h \
-    csltools.h
+    csltools.h \
+    languagetools.h
 
 SOURCES += bibtools.cpp \
            ls3datastore.cpp \
@@ -62,7 +63,8 @@ SOURCES += bibtools.cpp \
     ls3progressthread.cpp \
     filetools.cpp \
     modstools.cpp \
-    csltools.cpp
+    csltools.cpp \
+    languagetools.cpp
 
 FORMS +=
 

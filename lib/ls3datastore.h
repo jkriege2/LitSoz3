@@ -98,7 +98,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
             \param uuid returns the uuid
 
         */
-        virtual bool addRecord(QMap<QString, QVariant>& data, bool moveToRecord=true, bool createID=false)=0;
+        virtual bool addRecord(const QMap<QString, QVariant>& data, bool moveToRecord=true, bool createID=false)=0;
 
 
         /*! \brief add a record to the current database
@@ -110,7 +110,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
             \param uuid returns the uuid
 
         */
-        virtual bool addRecord(QMap<QString, QVariant>& data, QString& uuid, bool createID=false)=0;
+        virtual bool addRecord(const QMap<QString, QVariant>& data, QString& uuid, bool createID=false)=0;
 
 
         /*! \brief set data of the current record
@@ -121,7 +121,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
                         names see \link ls3_database LitSoz 3.0 Databases \endlink
 
         */
-        virtual bool setCurrentRecord(QMap<QString, QVariant>& data);
+        virtual bool setCurrentRecord(const QMap<QString, QVariant>& data);
 
         /*! \brief set data of the specified record
 
@@ -132,7 +132,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
                         names see \link ls3_database LitSoz 3.0 Databases \endlink
 
         */
-        virtual bool setRecord(int index, QMap<QString, QVariant>& data)=0;
+        virtual bool setRecord(int index, const QMap<QString, QVariant>& data)=0;
 
         /*! \brief get the data of the current record
 

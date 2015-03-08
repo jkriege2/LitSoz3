@@ -1,0 +1,1007 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<language_ngram_database lang="italian"> 
+
+<ngram ng="e" cnt="12808"/>
+<ngram ng="i" cnt="12418"/>
+<ngram ng="a" cnt="10086"/>
+<ngram ng="o" cnt="9220"/>
+<ngram ng="n" cnt="7738"/>
+<ngram ng="t" cnt="7330"/>
+<ngram ng="l" cnt="6816"/>
+<ngram ng="r" cnt="6785"/>
+<ngram ng="c" cnt="4955"/>
+<ngram ng="s" cnt="4933"/>
+<ngram ng="e " cnt="4523"/>
+<ngram ng="d" cnt="4270"/>
+<ngram ng="a " cnt="3471"/>
+<ngram ng="u" cnt="3137"/>
+<ngram ng="p" cnt="3083"/>
+<ngram ng="i " cnt="3081"/>
+<ngram ng="o " cnt="2831"/>
+<ngram ng="m" cnt="2714"/>
+<ngram ng=" d" cnt="2461"/>
+<ngram ng="on" cnt="1831"/>
+<ngram ng="di" cnt="1822"/>
+<ngram ng="er" cnt="1727"/>
+<ngram ng="g" cnt="1725"/>
+<ngram ng=" c" cnt="1721"/>
+<ngram ng="en" cnt="1565"/>
+<ngram ng=" s" cnt="1525"/>
+<ngram ng="v" cnt="1492"/>
+<ngram ng=" i" cnt="1488"/>
+<ngram ng=" p" cnt="1448"/>
+<ngram ng="te" cnt="1438"/>
+<ngram ng=" a" cnt="1424"/>
+<ngram ng="in" cnt="1396"/>
+<ngram ng="re" cnt="1384"/>
+<ngram ng="ne" cnt="1368"/>
+<ngram ng="co" cnt="1360"/>
+<ngram ng="al" cnt="1264"/>
+<ngram ng="ri" cnt="1247"/>
+<ngram ng="de" cnt="1233"/>
+<ngram ng="f" cnt="1222"/>
+<ngram ng="ti" cnt="1185"/>
+<ngram ng=" l" cnt="1155"/>
+<ngram ng="le" cnt="1152"/>
+<ngram ng="ic" cnt="1149"/>
+<ngram ng="to" cnt="1149"/>
+<ngram ng="b" cnt="1146"/>
+<ngram ng="li" cnt="1138"/>
+<ngram ng="z" cnt="1137"/>
+<ngram ng="io" cnt="1136"/>
+<ngram ng="nt" cnt="1129"/>
+<ngram ng=" e" cnt="1122"/>
+<ngram ng=" di" cnt="1119"/>
+<ngram ng="la" cnt="1117"/>
+<ngram ng="ra" cnt="1114"/>
+<ngram ng="or" cnt="1102"/>
+<ngram ng="ta" cnt="1100"/>
+<ngram ng="at" cnt="1054"/>
+<ngram ng="el" cnt="1053"/>
+<ngram ng="h" cnt="999"/>
+<ngram ng="l " cnt="981"/>
+<ngram ng="n " cnt="950"/>
+<ngram ng=" de" cnt="927"/>
+<ngram ng="an" cnt="904"/>
+<ngram ng="ar" cnt="896"/>
+<ngram ng=" co" cnt="884"/>
+<ngram ng="ll" cnt="870"/>
+<ngram ng="ia" cnt="862"/>
+<ngram ng="it" cnt="857"/>
+<ngram ng="st" cnt="839"/>
+<ngram ng="es" cnt="823"/>
+<ngram ng="di " cnt="812"/>
+<ngram ng="pe" cnt="811"/>
+<ngram ng="no" cnt="796"/>
+<ngram ng="lo" cnt="775"/>
+<ngram ng="to " cnt="766"/>
+<ngram ng="la " cnt="763"/>
+<ngram ng=" n" cnt="758"/>
+<ngram ng="me" cnt="758"/>
+<ngram ng=" di " cnt="751"/>
+<ngram ng="si" cnt="747"/>
+<ngram ng="ni" cnt="747"/>
+<ngram ng=" in" cnt="734"/>
+<ngram ng="ion" cnt="722"/>
+<ngram ng="le " cnt="722"/>
+<ngram ng="re " cnt="717"/>
+<ngram ng="ca" cnt="712"/>
+<ngram ng="zi" cnt="710"/>
+<ngram ng="ro" cnt="706"/>
+<ngram ng="ci" cnt="703"/>
+<ngram ng="tr" cnt="696"/>
+<ngram ng=" t" cnt="690"/>
+<ngram ng="et" cnt="685"/>
+<ngram ng="tt" cnt="672"/>
+<ngram ng="e d" cnt="665"/>
+<ngram ng=" m" cnt="657"/>
+<ngram ng=" r" cnt="655"/>
+<ngram ng="il" cnt="652"/>
+<ngram ng="na" cnt="644"/>
+<ngram ng="ol" cnt="631"/>
+<ngram ng="ne " cnt="620"/>
+<ngram ng="se" cnt="619"/>
+<ngram ng="del" cnt="608"/>
+<ngram ng="un" cnt="607"/>
+<ngram ng="ent" cnt="604"/>
+<ngram ng=" del" cnt="594"/>
+<ngram ng="ma" cnt="593"/>
+<ngram ng="ch" cnt="587"/>
+<ngram ng="pr" cnt="584"/>
+<ngram ng="is" cnt="578"/>
+<ngram ng="zio" cnt="573"/>
+<ngram ng="te " cnt="555"/>
+<ngram ng="ed" cnt="555"/>
+<ngram ng="so" cnt="550"/>
+<ngram ng="ell" cnt="543"/>
+<ngram ng="op" cnt="538"/>
+<ngram ng="zion" cnt="530"/>
+<ngram ng=" f" cnt="527"/>
+<ngram ng=" u" cnt="522"/>
+<ngram ng=" la" cnt="520"/>
+<ngram ng="ss" cnt="517"/>
+<ngram ng="o d" cnt="510"/>
+<ngram ng="con" cnt="507"/>
+<ngram ng="po" cnt="506"/>
+<ngram ng="he" cnt="499"/>
+<ngram ng="ve" cnt="495"/>
+<ngram ng="ia " cnt="495"/>
+<ngram ng="nc" cnt="491"/>
+<ngram ng="nte" cnt="489"/>
+<ngram ng="no " cnt="470"/>
+<ngram ng="one" cnt="464"/>
+<ngram ng="ut" cnt="462"/>
+<ngram ng="nd" cnt="462"/>
+<ngram ng="ti " cnt="459"/>
+<ngram ng="he " cnt="455"/>
+<ngram ng=" o" cnt="452"/>
+<ngram ng="one " cnt="452"/>
+<ngram ng="a d" cnt="452"/>
+<ngram ng="ie" cnt="439"/>
+<ngram ng="da" cnt="439"/>
+<ngram ng="ce" cnt="437"/>
+<ngram ng=" pr" cnt="434"/>
+<ngram ng="e i" cnt="433"/>
+<ngram ng="om" cnt="430"/>
+<ngram ng="ione" cnt="425"/>
+<ngram ng=" e " cnt="424"/>
+<ngram ng=" ne" cnt="421"/>
+<ngram ng=" con" cnt="420"/>
+<ngram ng="r " cnt="416"/>
+<ngram ng="edi" cnt="416"/>
+<ngram ng="che" cnt="407"/>
+<ngram ng=" la " cnt="405"/>
+<ngram ng="i d" cnt="404"/>
+<ngram ng=" il" cnt="403"/>
+<ngram ng=" v" cnt="400"/>
+<ngram ng=" un" cnt="400"/>
+<ngram ng="gi" cnt="396"/>
+<ngram ng="per" cnt="395"/>
+<ngram ng="il " cnt="389"/>
+<ngram ng=" il " cnt="388"/>
+<ngram ng=" g" cnt="387"/>
+<ngram ng="che " cnt="386"/>
+<ngram ng="lla" cnt="386"/>
+<ngram ng="dell" cnt="384"/>
+<ngram ng="e a" cnt="382"/>
+<ngram ng="ta " cnt="378"/>
+<ngram ng="os" cnt="371"/>
+<ngram ng="vi" cnt="371"/>
+<ngram ng="am" cnt="370"/>
+<ngram ng="ica" cnt="367"/>
+<ngram ng="ali" cnt="365"/>
+<ngram ng="men" cnt="360"/>
+<ngram ng="e s" cnt="357"/>
+<ngram ng="pa" cnt="357"/>
+<ngram ng="e c" cnt="356"/>
+<ngram ng="az" cnt="354"/>
+<ngram ng="tra" cnt="347"/>
+<ngram ng="mo" cnt="346"/>
+<ngram ng="im" cnt="345"/>
+<ngram ng="el " cnt="344"/>
+<ngram ng=" al" cnt="343"/>
+<ngram ng="in " cnt="343"/>
+<ngram ng="iv" cnt="342"/>
+<ngram ng="rt" cnt="340"/>
+<ngram ng="ope" cnt="339"/>
+<ngram ng="e l" cnt="338"/>
+<ngram ng="q" cnt="337"/>
+<ngram ng="azi" cnt="336"/>
+<ngram ng="sc" cnt="336"/>
+<ngram ng="ment" cnt="332"/>
+<ngram ng="lla " cnt="331"/>
+<ngram ng="qu" cnt="325"/>
+<ngram ng="su" cnt="323"/>
+<ngram ng="er " cnt="322"/>
+<ngram ng="ter" cnt="320"/>
+<ngram ng="cl" cnt="320"/>
+<ngram ng="a c" cnt="319"/>
+<ngram ng="mi" cnt="319"/>
+<ngram ng="a p" cnt="313"/>
+<ngram ng="s " cnt="312"/>
+<ngram ng="com" cnt="311"/>
+<ngram ng="i c" cnt="311"/>
+<ngram ng="ec" cnt="310"/>
+<ngram ng=" le" cnt="310"/>
+<ngram ng=" in " cnt="309"/>
+<ngram ng="ni " cnt="309"/>
+<ngram ng="azio" cnt="307"/>
+<ngram ng="iz" cnt="304"/>
+<ngram ng=" ch" cnt="304"/>
+<ngram ng="y" cnt="304"/>
+<ngram ng="ess" cnt="302"/>
+<ngram ng="vo" cnt="301"/>
+<ngram ng="e p" cnt="300"/>
+<ngram ng=" ri" cnt="299"/>
+<ngram ng="li " cnt="299"/>
+<ngram ng="lop" cnt="298"/>
+<ngram ng="do" cnt="296"/>
+<ngram ng="sa" cnt="294"/>
+<ngram ng="e di" cnt="293"/>
+<ngram ng="fi" cnt="293"/>
+<ngram ng=" pe" cnt="291"/>
+<ngram ng="ato" cnt="291"/>
+<ngram ng=" b" cnt="289"/>
+<ngram ng="e de" cnt="289"/>
+<ngram ng="enc" cnt="288"/>
+<ngram ng="o i" cnt="288"/>
+<ngram ng="as" cnt="287"/>
+<ngram ng="e e" cnt="286"/>
+<ngram ng="t " cnt="286"/>
+<ngram ng=" q" cnt="285"/>
+<ngram ng="on " cnt="285"/>
+<ngram ng=" da" cnt="284"/>
+<ngram ng="i s" cnt="283"/>
+<ngram ng="clo" cnt="281"/>
+<ngram ng="tu" cnt="281"/>
+<ngram ng=" com" cnt="281"/>
+<ngram ng="ra " cnt="278"/>
+<ngram ng=" qu" cnt="276"/>
+<ngram ng="a s" cnt="275"/>
+<ngram ng="o a" cnt="274"/>
+<ngram ng="w" cnt="274"/>
+<ngram ng="ale" cnt="271"/>
+<ngram ng="clop" cnt="270"/>
+<ngram ng="fo" cnt="269"/>
+<ngram ng=" per" cnt="269"/>
+<ngram ng="oc" cnt="268"/>
+<ngram ng="ati" cnt="268"/>
+<ngram ng="k" cnt="268"/>
+<ngram ng="lt" cnt="268"/>
+<ngram ng="em" cnt="267"/>
+<ngram ng=" a " cnt="266"/>
+<ngram ng="rs" cnt="264"/>
+<ngram ng="ped" cnt="264"/>
+<ngram ng="ale " cnt="263"/>
+<ngram ng="pedi" cnt="263"/>
+<ngram ng=" se" cnt="263"/>
+<ngram ng="i a" cnt="261"/>
+<ngram ng="ue" cnt="260"/>
+<ngram ng=" re" cnt="254"/>
+<ngram ng="nci" cnt="253"/>
+<ngram ng="o s" cnt="252"/>
+<ngram ng="mp" cnt="252"/>
+<ngram ng=" che" cnt="252"/>
+<ngram ng=" su" cnt="252"/>
+<ngram ng="rn" cnt="252"/>
+<ngram ng="tor" cnt="251"/>
+<ngram ng="dia" cnt="250"/>
+<ngram ng="ett" cnt="250"/>
+<ngram ng="lope" cnt="249"/>
+<ngram ng="o di" cnt="249"/>
+<ngram ng="ella" cnt="248"/>
+<ngram ng="ere" cnt="248"/>
+<ngram ng="va" cnt="247"/>
+<ngram ng=" en" cnt="247"/>
+<ngram ng="i p" cnt="247"/>
+<ngram ng=" st" cnt="246"/>
+<ngram ng="og" cnt="245"/>
+<ngram ng="na " cnt="245"/>
+<ngram ng="si " cnt="244"/>
+<ngram ng="o c" cnt="242"/>
+<ngram ng="lle" cnt="241"/>
+<ngram ng="are" cnt="241"/>
+<ngram ng="io " cnt="241"/>
+<ngram ng="ori" cnt="240"/>
+<ngram ng="ur" cnt="239"/>
+<ngram ng="ato " cnt="238"/>
+<ngram ng="ge" cnt="237"/>
+<ngram ng="nte " cnt="236"/>
+<ngram ng=" po" cnt="235"/>
+<ngram ng="a l" cnt="232"/>
+<ngram ng="ns" cnt="232"/>
+<ngram ng="a i" cnt="232"/>
+<ngram ng="lu" cnt="231"/>
+<ngram ng="sta" cnt="231"/>
+<ngram ng=" si" cnt="230"/>
+<ngram ng="oped" cnt="230"/>
+<ngram ng="pro" cnt="229"/>
+<ngram ng="à" cnt="229"/>
+<ngram ng="eg" cnt="229"/>
+<ngram ng="à " cnt="229"/>
+<ngram ng="i i" cnt="229"/>
+<ngram ng="ag" cnt="228"/>
+<ngram ng="ot" cnt="228"/>
+<ngram ng="ico" cnt="226"/>
+<ngram ng="ono" cnt="225"/>
+<ngram ng="int" cnt="224"/>
+<ngram ng="rm" cnt="223"/>
+<ngram ng="cic" cnt="223"/>
+<ngram ng="icl" cnt="222"/>
+<ngram ng="cicl" cnt="221"/>
+<ngram ng="ita" cnt="220"/>
+<ngram ng="iclo" cnt="220"/>
+<ngram ng="pi" cnt="219"/>
+<ngram ng="d " cnt="218"/>
+<ngram ng="are " cnt="218"/>
+<ngram ng="edia" cnt="218"/>
+<ngram ng="lo " cnt="217"/>
+<ngram ng="ca " cnt="217"/>
+<ngram ng="ua" cnt="216"/>
+<ngram ng="za" cnt="216"/>
+<ngram ng="ente" cnt="215"/>
+<ngram ng="del " cnt="215"/>
+<ngram ng="oni" cnt="214"/>
+<ngram ng=" so" cnt="214"/>
+<ngram ng="us" cnt="212"/>
+<ngram ng="a e" cnt="211"/>
+<ngram ng="ncic" cnt="210"/>
+<ngram ng="e in" cnt="210"/>
+<ngram ng="enci" cnt="210"/>
+<ngram ng="ere " cnt="209"/>
+<ngram ng="so " cnt="209"/>
+<ngram ng="izi" cnt="209"/>
+<ngram ng=" pa" cnt="207"/>
+<ngram ng="era" cnt="206"/>
+<ngram ng=" ma" cnt="206"/>
+<ngram ng="tà" cnt="206"/>
+<ngram ng="ro " cnt="206"/>
+<ngram ng="tà " cnt="206"/>
+<ngram ng="gl" cnt="206"/>
+<ngram ng=" pro" cnt="206"/>
+<ngram ng="ver" cnt="205"/>
+<ngram ng="dia " cnt="204"/>
+<ngram ng="bi" cnt="203"/>
+<ngram ng="per " cnt="203"/>
+<ngram ng="i e" cnt="202"/>
+<ngram ng="ul" cnt="202"/>
+<ngram ng="a di" cnt="199"/>
+<ngram ng="nz" cnt="198"/>
+<ngram ng="av" cnt="198"/>
+<ngram ng="nti" cnt="197"/>
+<ngram ng=" no" cnt="197"/>
+<ngram ng="ad" cnt="197"/>
+<ngram ng="e co" cnt="197"/>
+<ngram ng="se " cnt="196"/>
+<ngram ng="a a" cnt="196"/>
+<ngram ng="ig" cnt="195"/>
+<ngram ng="nn" cnt="195"/>
+<ngram ng=" enc" cnt="192"/>
+<ngram ng="lit" cnt="191"/>
+<ngram ng="est" cnt="190"/>
+<ngram ng="ist" cnt="190"/>
+<ngram ng="for" cnt="190"/>
+<ngram ng=" ca" cnt="189"/>
+<ngram ng="ne d" cnt="189"/>
+<ngram ng="y " cnt="188"/>
+<ngram ng="all" cnt="188"/>
+<ngram ng="be" cnt="187"/>
+<ngram ng="nel" cnt="186"/>
+<ngram ng="o l" cnt="185"/>
+<ngram ng="cc" cnt="185"/>
+<ngram ng="o p" cnt="185"/>
+<ngram ng="a r" cnt="184"/>
+<ngram ng="i di" cnt="184"/>
+<ngram ng="gr" cnt="184"/>
+<ngram ng="pp" cnt="184"/>
+<ngram ng="tto" cnt="184"/>
+<ngram ng="net" cnt="183"/>
+<ngram ng=" nel" cnt="183"/>
+<ngram ng=" te" cnt="183"/>
+<ngram ng="ac" cnt="182"/>
+<ngram ng="que" cnt="181"/>
+<ngram ng="ers" cnt="181"/>
+<ngram ng="tal" cnt="180"/>
+<ngram ng="tat" cnt="180"/>
+<ngram ng=" an" cnt="180"/>
+<ngram ng="tic" cnt="180"/>
+<ngram ng=" tr" cnt="179"/>
+<ngram ng="hi" cnt="179"/>
+<ngram ng="ern" cnt="179"/>
+<ngram ng="ral" cnt="178"/>
+<ngram ng="da " cnt="178"/>
+<ngram ng="art" cnt="178"/>
+<ngram ng="è" cnt="176"/>
+<ngram ng="id" cnt="176"/>
+<ngram ng="o de" cnt="176"/>
+<ngram ng="ib" cnt="175"/>
+<ngram ng="inte" cnt="175"/>
+<ngram ng="al " cnt="175"/>
+<ngram ng="a n" cnt="175"/>
+<ngram ng=" int" cnt="174"/>
+<ngram ng="ame" cnt="174"/>
+<ngram ng=" mo" cnt="174"/>
+<ngram ng="cu" cnt="174"/>
+<ngram ng="è " cnt="174"/>
+<ngram ng="ri " cnt="173"/>
+<ngram ng="ica " cnt="172"/>
+<ngram ng="ma " cnt="171"/>
+<ngram ng=" li" cnt="171"/>
+<ngram ng="ten" cnt="171"/>
+<ngram ng="nto" cnt="171"/>
+<ngram ng="e n" cnt="170"/>
+<ngram ng="ap" cnt="169"/>
+<ngram ng="ov" cnt="169"/>
+<ngram ng="i co" cnt="169"/>
+<ngram ng="ono " cnt="169"/>
+<ngram ng="pri" cnt="169"/>
+<ngram ng="att" cnt="168"/>
+<ngram ng="ie " cnt="168"/>
+<ngram ng="a de" cnt="167"/>
+<ngram ng="ive" cnt="167"/>
+<ngram ng="sp" cnt="167"/>
+<ngram ng="l c" cnt="166"/>
+<ngram ng="uni" cnt="163"/>
+<ngram ng="co " cnt="163"/>
+<ngram ng="oni " cnt="163"/>
+<ngram ng="ir" cnt="163"/>
+<ngram ng="enz" cnt="163"/>
+<ngram ng="gli" cnt="163"/>
+<ngram ng=" è" cnt="162"/>
+<ngram ng=" è " cnt="162"/>
+<ngram ng="pu" cnt="161"/>
+<ngram ng="and" cnt="161"/>
+<ngram ng=" w" cnt="161"/>
+<ngram ng="col" cnt="161"/>
+<ngram ng="um" cnt="160"/>
+<ngram ng="ng" cnt="160"/>
+<ngram ng="elle" cnt="159"/>
+<ngram ng="et " cnt="159"/>
+<ngram ng="o e" cnt="158"/>
+<ngram ng=" le " cnt="158"/>
+<ngram ng="ont" cnt="157"/>
+<ngram ng="pre" cnt="157"/>
+<ngram ng="ip" cnt="156"/>
+<ngram ng="e la" cnt="156"/>
+<ngram ng=" h" cnt="155"/>
+<ngram ng="e t" cnt="155"/>
+<ngram ng="lle " cnt="155"/>
+<ngram ng="una" cnt="154"/>
+<ngram ng="izio" cnt="154"/>
+<ngram ng="nter" cnt="154"/>
+<ngram ng="ioni" cnt="154"/>
+<ngram ng=" me" cnt="154"/>
+<ngram ng="ssi" cnt="153"/>
+<ngram ng="ità " cnt="153"/>
+<ngram ng="ità" cnt="153"/>
+<ngram ng="od" cnt="153"/>
+<ngram ng="do " cnt="152"/>
+<ngram ng=" una" cnt="152"/>
+<ngram ng="cr" cnt="152"/>
+<ngram ng="tori" cnt="152"/>
+<ngram ng=" vo" cnt="151"/>
+<ngram ng="rat" cnt="151"/>
+<ngram ng="olo" cnt="151"/>
+<ngram ng="ei" cnt="151"/>
+<ngram ng="i in" cnt="151"/>
+<ngram ng="e r" cnt="151"/>
+<ngram ng="amen" cnt="150"/>
+<ngram ng="to d" cnt="149"/>
+<ngram ng="nto " cnt="149"/>
+<ngram ng="ev" cnt="148"/>
+<ngram ng=" que" cnt="148"/>
+<ngram ng="un " cnt="147"/>
+<ngram ng="e m" cnt="147"/>
+<ngram ng="go" cnt="146"/>
+<ngram ng="ui" cnt="146"/>
+<ngram ng="net " cnt="146"/>
+<ngram ng="ste" cnt="145"/>
+<ngram ng="ea" cnt="145"/>
+<ngram ng="ha" cnt="145"/>
+<ngram ng=" un " cnt="144"/>
+<ngram ng="ser" cnt="144"/>
+<ngram ng=" tra" cnt="144"/>
+<ngram ng="eu" cnt="143"/>
+<ngram ng="ina" cnt="143"/>
+<ngram ng="par" cnt="142"/>
+<ngram ng="orm" cnt="142"/>
+<ngram ng="a co" cnt="142"/>
+<ngram ng="sto" cnt="142"/>
+<ngram ng="bb" cnt="141"/>
+<ngram ng="ito" cnt="140"/>
+<ngram ng="sti" cnt="140"/>
+<ngram ng="e o" cnt="140"/>
+<ngram ng="tti" cnt="140"/>
+<ngram ng="ata" cnt="139"/>
+<ngram ng="una " cnt="139"/>
+<ngram ng="res" cnt="139"/>
+<ngram ng="sso" cnt="138"/>
+<ngram ng="vol" cnt="138"/>
+<ngram ng="me " cnt="137"/>
+<ngram ng="i de" cnt="137"/>
+<ngram ng=" i " cnt="136"/>
+<ngram ng="gg" cnt="136"/>
+<ngram ng="rma" cnt="136"/>
+<ngram ng="e il" cnt="134"/>
+<ngram ng="i t" cnt="134"/>
+<ngram ng="rne" cnt="134"/>
+<ngram ng="alit" cnt="134"/>
+<ngram ng="gra" cnt="134"/>
+<ngram ng="a m" cnt="133"/>
+<ngram ng="lic" cnt="133"/>
+<ngram ng="if" cnt="133"/>
+<ngram ng="a in" cnt="132"/>
+<ngram ng="nu" cnt="132"/>
+<ngram ng="bl" cnt="132"/>
+<ngram ng="str" cnt="131"/>
+<ngram ng="ico " cnt="131"/>
+<ngram ng=" es" cnt="131"/>
+<ngram ng="lin" cnt="131"/>
+<ngram ng="ons" cnt="130"/>
+<ngram ng="l p" cnt="130"/>
+<ngram ng="erne" cnt="130"/>
+<ngram ng="br" cnt="130"/>
+<ngram ng=" sc" cnt="129"/>
+<ngram ng="tern" cnt="128"/>
+<ngram ng=" fo" cnt="128"/>
+<ngram ng="fic" cnt="127"/>
+<ngram ng="a f" cnt="127"/>
+<ngram ng="tto " cnt="127"/>
+<ngram ng="ant" cnt="127"/>
+<ngram ng="eri" cnt="126"/>
+<ngram ng="cont" cnt="126"/>
+<ngram ng="tta" cnt="126"/>
+<ngram ng="ric" cnt="125"/>
+<ngram ng="th" cnt="125"/>
+<ngram ng="ari" cnt="125"/>
+<ngram ng="e u" cnt="125"/>
+<ngram ng=" sta" cnt="125"/>
+<ngram ng="rim" cnt="125"/>
+<ngram ng="form" cnt="125"/>
+<ngram ng="rali" cnt="124"/>
+<ngram ng="vers" cnt="124"/>
+<ngram ng="pos" cnt="124"/>
+<ngram ng="ata " cnt="124"/>
+<ngram ng="ga" cnt="123"/>
+<ngram ng="sse" cnt="123"/>
+<ngram ng="ate" cnt="123"/>
+<ngram ng="ome" cnt="123"/>
+<ngram ng="ba" cnt="123"/>
+<ngram ng="i r" cnt="123"/>
+<ngram ng="rc" cnt="122"/>
+<ngram ng=" all" cnt="122"/>
+<ngram ng="ei " cnt="122"/>
+<ngram ng="u " cnt="122"/>
+<ngram ng="o n" cnt="121"/>
+<ngram ng="orma" cnt="121"/>
+<ngram ng="tte" cnt="121"/>
+<ngram ng="fa" cnt="121"/>
+<ngram ng="ret" cnt="120"/>
+<ngram ng="rti" cnt="120"/>
+<ngram ng="ann" cnt="120"/>
+<ngram ng=" pri" cnt="119"/>
+<ngram ng="sul" cnt="119"/>
+<ngram ng="cat" cnt="119"/>
+<ngram ng="chi" cnt="119"/>
+<ngram ng="nti " cnt="119"/>
+<ngram ng="enti" cnt="119"/>
+<ngram ng="ano" cnt="118"/>
+<ngram ng="ento" cnt="118"/>
+<ngram ng="i l" cnt="117"/>
+<ngram ng="ali " cnt="117"/>
+<ngram ng=" da " cnt="117"/>
+<ngram ng="ai" cnt="117"/>
+<ngram ng="nta" cnt="117"/>
+<ngram ng="nic" cnt="116"/>
+<ngram ng="o il" cnt="116"/>
+<ngram ng="ital" cnt="116"/>
+<ngram ng="zz" cnt="116"/>
+<ngram ng="ost" cnt="116"/>
+<ngram ng="con " cnt="116"/>
+<ngram ng="ran" cnt="115"/>
+<ngram ng="za " cnt="115"/>
+<ngram ng="ntr" cnt="115"/>
+<ngram ng="der" cnt="114"/>
+<ngram ng="ien" cnt="114"/>
+<ngram ng=" pu" cnt="114"/>
+<ngram ng="nel " cnt="113"/>
+<ngram ng="de " cnt="113"/>
+<ngram ng="rd" cnt="113"/>
+<ngram ng="tut" cnt="113"/>
+<ngram ng="mu" cnt="112"/>
+<ngram ng="ond" cnt="112"/>
+<ngram ng="e le" cnt="112"/>
+<ngram ng="dis" cnt="112"/>
+<ngram ng="ndo" cnt="112"/>
+<ngram ng="ria" cnt="112"/>
+<ngram ng="o in" cnt="111"/>
+<ngram ng="mb" cnt="111"/>
+<ngram ng="ces" cnt="111"/>
+<ngram ng="qua" cnt="111"/>
+<ngram ng="tral" cnt="111"/>
+<ngram ng="end" cnt="110"/>
+<ngram ng="ggi" cnt="110"/>
+<ngram ng="neu" cnt="110"/>
+<ngram ng="ide" cnt="110"/>
+<ngram ng="ano " cnt="110"/>
+<ngram ng="llo" cnt="110"/>
+<ngram ng="tro" cnt="110"/>
+<ngram ng="e f" cnt="110"/>
+<ngram ng="utra" cnt="109"/>
+<ngram ng="utr" cnt="109"/>
+<ngram ng="du" cnt="109"/>
+<ngram ng="mat" cnt="109"/>
+<ngram ng="eut" cnt="109"/>
+<ngram ng="to i" cnt="109"/>
+<ngram ng="eutr" cnt="109"/>
+<ngram ng="utt" cnt="109"/>
+<ngram ng=" neu" cnt="109"/>
+<ngram ng="neut" cnt="109"/>
+<ngram ng="ona" cnt="109"/>
+<ngram ng="ore" cnt="109"/>
+<ngram ng="dei" cnt="109"/>
+<ngram ng="eb" cnt="108"/>
+<ngram ng="nf" cnt="108"/>
+<ngram ng="nza" cnt="108"/>
+<ngram ng="ab" cnt="108"/>
+<ngram ng="a ne" cnt="108"/>
+<ngram ng=" qua" cnt="108"/>
+<ngram ng="ff" cnt="108"/>
+<ngram ng="son" cnt="108"/>
+<ngram ng="ndi" cnt="107"/>
+<ngram ng=" pi" cnt="107"/>
+<ngram ng="gio" cnt="107"/>
+<ngram ng="o co" cnt="107"/>
+<ngram ng="ine" cnt="107"/>
+<ngram ng="ber" cnt="107"/>
+<ngram ng=" dei" cnt="106"/>
+<ngram ng="ene" cnt="106"/>
+<ngram ng="i m" cnt="106"/>
+<ngram ng="rnet" cnt="106"/>
+<ngram ng="dei " cnt="106"/>
+<ngram ng="fe" cnt="105"/>
+<ngram ng="te d" cnt="105"/>
+<ngram ng="l co" cnt="105"/>
+<ngram ng=" gr" cnt="104"/>
+<ngram ng="rit" cnt="104"/>
+<ngram ng="of" cnt="104"/>
+<ngram ng="i u" cnt="104"/>
+<ngram ng="la r" cnt="104"/>
+<ngram ng="fu" cnt="103"/>
+<ngram ng="ial" cnt="103"/>
+<ngram ng="tri" cnt="103"/>
+<ngram ng="a t" cnt="103"/>
+<ngram ng="nal" cnt="103"/>
+<ngram ng=" par" cnt="103"/>
+<ngram ng="mo " cnt="102"/>
+<ngram ng="ati " cnt="102"/>
+<ngram ng="ich" cnt="102"/>
+<ngram ng="uo" cnt="102"/>
+<ngram ng="la p" cnt="102"/>
+<ngram ng="ore " cnt="102"/>
+<ngram ng=" ve" cnt="102"/>
+<ngram ng="ini" cnt="102"/>
+<ngram ng="ru" cnt="102"/>
+<ngram ng=" si " cnt="102"/>
+<ngram ng="omp" cnt="102"/>
+<ngram ng="anc" cnt="101"/>
+<ngram ng="à d" cnt="101"/>
+<ngram ng="ndo " cnt="101"/>
+<ngram ng="sso " cnt="101"/>
+<ngram ng="mm" cnt="101"/>
+<ngram ng="arti" cnt="101"/>
+<ngram ng="la c" cnt="100"/>
+<ngram ng="non" cnt="100"/>
+<ngram ng="ues" cnt="100"/>
+<ngram ng="e un" cnt="100"/>
+<ngram ng="sci" cnt="100"/>
+<ngram ng="cia" cnt="100"/>
+<ngram ng=" ha" cnt="100"/>
+<ngram ng="a re" cnt="99"/>
+<ngram ng=" lo" cnt="99"/>
+<ngram ng="ques" cnt="99"/>
+<ngram ng="comp" cnt="99"/>
+<ngram ng="esso" cnt="99"/>
+<ngram ng="gli " cnt="99"/>
+<ngram ng="tà d" cnt="99"/>
+<ngram ng="por" cnt="99"/>
+<ngram ng="uest" cnt="98"/>
+<ngram ng="cen" cnt="98"/>
+<ngram ng="sa " cnt="98"/>
+<ngram ng="gn" cnt="98"/>
+<ngram ng="nza " cnt="98"/>
+<ngram ng=" vi" cnt="98"/>
+<ngram ng="ort" cnt="97"/>
+<ngram ng="x" cnt="97"/>
+<ngram ng="ris" cnt="97"/>
+<ngram ng="fr" cnt="97"/>
+<ngram ng="nat" cnt="97"/>
+<ngram ng="tiv" cnt="97"/>
+<ngram ng=" non" cnt="96"/>
+<ngram ng="olt" cnt="96"/>
+<ngram ng="e en" cnt="96"/>
+<ngram ng="mi " cnt="96"/>
+<ngram ng="pl" cnt="96"/>
+<ngram ng="a la" cnt="96"/>
+<ngram ng=" pre" cnt="95"/>
+<ngram ng="dal" cnt="95"/>
+<ngram ng="die" cnt="95"/>
+<ngram ng="oli" cnt="94"/>
+<ngram ng="e v" cnt="94"/>
+<ngram ng=" fa" cnt="94"/>
+<ngram ng="m " cnt="94"/>
+<ngram ng=" ed" cnt="94"/>
+<ngram ng="dic" cnt="94"/>
+<ngram ng=" dis" cnt="94"/>
+<ngram ng="bli" cnt="93"/>
+<ngram ng="a pr" cnt="93"/>
+<ngram ng="ese" cnt="93"/>
+<ngram ng="ing" cnt="93"/>
+<ngram ng="tes" cnt="92"/>
+<ngram ng="ci " cnt="92"/>
+<ngram ng="ete" cnt="92"/>
+<ngram ng="rv" cnt="92"/>
+<ngram ng="ce " cnt="92"/>
+<ngram ng="n p" cnt="92"/>
+<ngram ng="acc" cnt="92"/>
+<ngram ng="o la" cnt="92"/>
+<ngram ng=" ret" cnt="92"/>
+<ngram ng=" fi" cnt="91"/>
+<ngram ng="au" cnt="91"/>
+<ngram ng="iver" cnt="91"/>
+<ngram ng=" tu" cnt="91"/>
+<ngram ng="i e " cnt="91"/>
+<ngram ng="igi" cnt="91"/>
+<ngram ng=" dal" cnt="91"/>
+<ngram ng="tre" cnt="91"/>
+<ngram ng="gen" cnt="91"/>
+<ngram ng="ile" cnt="90"/>
+<ngram ng="enza" cnt="90"/>
+<ngram ng="l s" cnt="90"/>
+<ngram ng="non " cnt="90"/>
+<ngram ng="olo " cnt="90"/>
+<ngram ng="rl" cnt="90"/>
+<ngram ng="lar" cnt="90"/>
+<ngram ng="zza" cnt="90"/>
+<ngram ng="e e " cnt="90"/>
+<ngram ng="re d" cnt="90"/>
+<ngram ng="ome " cnt="89"/>
+<ngram ng="tutt" cnt="89"/>
+<ngram ng="sio" cnt="89"/>
+<ngram ng="o m" cnt="89"/>
+<ngram ng="eco" cnt="89"/>
+<ngram ng="a v" cnt="89"/>
+<ngram ng="oci" cnt="89"/>
+<ngram ng="olu" cnt="89"/>
+<ngram ng="inf" cnt="89"/>
+<ngram ng="ven" cnt="89"/>
+<ngram ng="af" cnt="89"/>
+<ngram ng="cons" cnt="88"/>
+<ngram ng="e al" cnt="88"/>
+<ngram ng="alla" cnt="88"/>
+<ngram ng=" for" cnt="88"/>
+<ngram ng=" th" cnt="88"/>
+<ngram ng="re i" cnt="88"/>
+<ngram ng=" op" cnt="88"/>
+<ngram ng="ult" cnt="88"/>
+<ngram ng="e pr" cnt="87"/>
+<ngram ng="k " cnt="87"/>
+<ngram ng=" ge" cnt="87"/>
+<ngram ng="lità" cnt="87"/>
+<ngram ng="ele" cnt="87"/>
+<ngram ng="cess" cnt="87"/>
+<ngram ng="tale" cnt="87"/>
+<ngram ng="app" cnt="87"/>
+<ngram ng="n c" cnt="87"/>
+<ngram ng="i pr" cnt="87"/>
+<ngram ng="ual" cnt="87"/>
+<ngram ng="sion" cnt="87"/>
+<ngram ng="lica" cnt="87"/>
+<ngram ng="ire" cnt="87"/>
+<ngram ng="die " cnt="86"/>
+<ngram ng="ima" cnt="86"/>
+<ngram ng="va " cnt="86"/>
+<ngram ng="come" cnt="86"/>
+<ngram ng="ora" cnt="85"/>
+<ngram ng="part" cnt="85"/>
+<ngram ng="ici" cnt="85"/>
+<ngram ng="izz" cnt="85"/>
+<ngram ng="cie" cnt="85"/>
+<ngram ng="tato" cnt="85"/>
+<ngram ng="o u" cnt="85"/>
+<ngram ng="ura" cnt="85"/>
+<ngram ng="enta" cnt="85"/>
+<ngram ng="ola" cnt="85"/>
+<ngram ng="i n" cnt="85"/>
+<ngram ng="gu" cnt="85"/>
+<ngram ng="ero" cnt="84"/>
+<ngram ng="ltr" cnt="84"/>
+<ngram ng="min" cnt="84"/>
+<ngram ng="ty" cnt="83"/>
+<ngram ng="agg" cnt="83"/>
+<ngram ng="aggi" cnt="83"/>
+<ngram ng="tan" cnt="83"/>
+<ngram ng="port" cnt="83"/>
+<ngram ng="ob" cnt="83"/>
+<ngram ng="e pe" cnt="83"/>
+<ngram ng=" ar" cnt="83"/>
+<ngram ng="stat" cnt="83"/>
+<ngram ng="re l" cnt="82"/>
+<ngram ng="ner" cnt="82"/>
+<ngram ng=" al " cnt="82"/>
+<ngram ng="prim" cnt="82"/>
+<ngram ng="nda" cnt="82"/>
+<ngram ng="bil" cnt="82"/>
+<ngram ng="ice" cnt="82"/>
+<ngram ng="rta" cnt="82"/>
+<ngram ng=" tut" cnt="82"/>
+<ngram ng="ior" cnt="82"/>
+<ngram ng=" fu" cnt="82"/>
+<ngram ng="volu" cnt="82"/>
+<ngram ng="tec" cnt="82"/>
+<ngram ng="era " cnt="82"/>
+<ngram ng="ù" cnt="81"/>
+<ngram ng="o e " cnt="81"/>
+<ngram ng="sit" cnt="81"/>
+<ngram ng="pres" cnt="81"/>
+<ngram ng="iù" cnt="81"/>
+<ngram ng="più" cnt="81"/>
+<ngram ng="ù " cnt="81"/>
+<ngram ng="più " cnt="81"/>
+<ngram ng="o t" cnt="81"/>
+<ngram ng=" più" cnt="81"/>
+<ngram ng="e g" cnt="81"/>
+<ngram ng="iù " cnt="81"/>
+<ngram ng="ò" cnt="80"/>
+<ngram ng="la s" cnt="80"/>
+<ngram ng=" fr" cnt="80"/>
+<ngram ng=" sul" cnt="80"/>
+<ngram ng=" ap" cnt="80"/>
+<ngram ng="ty " cnt="80"/>
+<ngram ng="ili" cnt="80"/>
+<ngram ng=" ci" cnt="80"/>
+<ngram ng="erv" cnt="80"/>
+<ngram ng="e ne" cnt="80"/>
+<ngram ng="iona" cnt="79"/>
+<ngram ng="a u" cnt="79"/>
+<ngram ng="le d" cnt="79"/>
+<ngram ng="ile " cnt="79"/>
+<ngram ng="ron" cnt="79"/>
+<ngram ng="ò " cnt="79"/>
+<ngram ng="sono" cnt="79"/>
+<ngram ng="e ri" cnt="79"/>
+<ngram ng="rop" cnt="78"/>
+<ngram ng="rio" cnt="78"/>
+<ngram ng="uz" cnt="78"/>
+<ngram ng="rg" cnt="78"/>
+<ngram ng="uzio" cnt="78"/>
+<ngram ng="tti " cnt="78"/>
+<ngram ng="la n" cnt="78"/>
+<ngram ng="wi" cnt="78"/>
+<ngram ng="uzi" cnt="78"/>
+<ngram ng="i f" cnt="78"/>
+<ngram ng="i un" cnt="78"/>
+<ngram ng=" o " cnt="78"/>
+<ngram ng="sto " cnt="78"/>
+<ngram ng="ren" cnt="78"/>
+<ngram ng="mer" cnt="77"/>
+<ngram ng=" vol" cnt="77"/>
+<ngram ng="ria " cnt="77"/>
+<ngram ng="izza" cnt="77"/>
+<ngram ng="i o" cnt="77"/>
+<ngram ng="tar" cnt="77"/>
+<ngram ng="ori " cnt="77"/>
+<ngram ng="car" cnt="77"/>
+<ngram ng="di c" cnt="77"/>
+<ngram ng="no a" cnt="77"/>
+<ngram ng="ino" cnt="76"/>
+<ngram ng="llo " cnt="76"/>
+<ngram ng=" ce" cnt="76"/>
+<ngram ng="len" cnt="76"/>
+<ngram ng="oper" cnt="76"/>
+<ngram ng="esse" cnt="76"/>
+<ngram ng="log" cnt="76"/>
+<ngram ng="nde" cnt="76"/>
+<ngram ng="up" cnt="76"/>
+<ngram ng="e ch" cnt="76"/>
+<ngram ng="tur" cnt="76"/>
+<ngram ng="o al" cnt="76"/>
+<ngram ng="l m" cnt="76"/>
+<ngram ng="cor" cnt="76"/>
+<ngram ng="ass" cnt="75"/>
+<ngram ng=" inf" cnt="75"/>
+<ngram ng="rsi" cnt="75"/>
+<ngram ng="ub" cnt="75"/>
+<ngram ng="diz" cnt="75"/>
+<ngram ng="sta " cnt="75"/>
+<ngram ng="ote" cnt="75"/>
+<ngram ng="ito " cnt="75"/>
+<ngram ng="tio" cnt="75"/>
+<ngram ng="bo" cnt="75"/>
+<ngram ng="te a" cnt="75"/>
+<ngram ng="tem" cnt="75"/>
+<ngram ng="dizi" cnt="75"/>
+<ngram ng="f " cnt="74"/>
+<ngram ng="lio" cnt="74"/>
+<ngram ng="rin" cnt="74"/>
+<ngram ng="tit" cnt="74"/>
+<ngram ng="ve " cnt="74"/>
+<ngram ng="o a " cnt="74"/>
+<ngram ng="alt" cnt="74"/>
+<ngram ng="ime" cnt="74"/>
+<ngram ng="ete " cnt="74"/>
+<ngram ng="the" cnt="74"/>
+<ngram ng="tico" cnt="74"/>
+<ngram ng="ity " cnt="73"/>
+<ngram ng="ity" cnt="73"/>
+<ngram ng="ti d" cnt="73"/>
+<ngram ng="isc" cnt="73"/>
+<ngram ng="mod" cnt="73"/>
+<ngram ng="rr" cnt="73"/>
+<ngram ng="ifi" cnt="73"/>
+<ngram ng="o ne" cnt="73"/>
+<ngram ng="i v" cnt="73"/>
+<ngram ng="tali" cnt="73"/>
+<ngram ng="a o" cnt="72"/>
+<ngram ng="iu" cnt="72"/>
+<ngram ng=" pos" cnt="72"/>
+<ngram ng="nell" cnt="72"/>
+<ngram ng="mar" cnt="72"/>
+<ngram ng="tion" cnt="72"/>
+<ngram ng="ta d" cnt="72"/>
+<ngram ng="ate " cnt="72"/>
+<ngram ng="lli" cnt="72"/>
+<ngram ng="rete" cnt="72"/>
+<ngram ng="j" cnt="72"/>
+<ngram ng="a e " cnt="71"/>
+<ngram ng="ef" cnt="71"/>
+<ngram ng="lia" cnt="71"/>
+<ngram ng="iti" cnt="71"/>
+<ngram ng="pub" cnt="71"/>
+<ngram ng="oss" cnt="71"/>
+<ngram ng=" sp" cnt="71"/>
+<ngram ng="e a " cnt="71"/>
+<ngram ng="po " cnt="71"/>
+<ngram ng="ific" cnt="71"/>
+<ngram ng="a ri" cnt="71"/>
+<ngram ng="sen" cnt="70"/>
+<ngram ng="lo s" cnt="70"/>
+<ngram ng=" the" cnt="70"/>
+<ngram ng="erm" cnt="70"/>
+<ngram ng="cam" cnt="70"/>
+<ngram ng="tim" cnt="70"/>
+<ngram ng=" mi" cnt="70"/>
+<ngram ng="serv" cnt="70"/>
+<ngram ng="ine " cnt="70"/>
+<ngram ng="lm" cnt="70"/>
+<ngram ng="lta" cnt="70"/>
+<ngram ng="to a" cnt="69"/>
+<ngram ng="n l" cnt="69"/>
+<ngram ng="riv" cnt="69"/>
+<ngram ng="itt" cnt="69"/>
+<ngram ng="fin" cnt="69"/>
+<ngram ng="uto" cnt="69"/>
+<ngram ng=" e i" cnt="69"/>
+<ngram ng="cy" cnt="69"/>
+<ngram ng="ott" cnt="69"/>
+<ngram ng="ue " cnt="69"/>
+<ngram ng="ove" cnt="69"/>
+<ngram ng="edie" cnt="69"/>
+<ngram ng=" lin" cnt="69"/>
+<ngram ng="o ch" cnt="69"/>
+<ngram ng="man" cnt="69"/>
+<ngram ng=" do" cnt="69"/>
+<ngram ng="an " cnt="68"/>
+<ngram ng="le e" cnt="68"/>
+<ngram ng="ee" cnt="68"/>
+<ngram ng=" cu" cnt="68"/>
+<ngram ng="van" cnt="68"/>
+<ngram ng=" gra" cnt="68"/>
+<ngram ng="e se" cnt="68"/>
+<ngram ng="tica" cnt="68"/>
+<ngram ng=" mod" cnt="68"/>
+<ngram ng="cri" cnt="68"/>
+<ngram ng="a b" cnt="68"/>
+<ngram ng="e su" cnt="68"/>
+<ngram ng="i se" cnt="67"/>
+<ngram ng=" ser" cnt="67"/>
+<ngram ng=" pub" cnt="67"/>
+<ngram ng="oro" cnt="67"/>
+<ngram ng="ette" cnt="67"/>
+<ngram ng="nfo" cnt="67"/>
+<ngram ng="erc" cnt="67"/>
+<ngram ng="ani" cnt="67"/>
+<ngram ng="cer" cnt="67"/>
+<ngram ng="div" cnt="67"/>
+<ngram ng="blic" cnt="67"/>
+<ngram ng="nfor" cnt="67"/>
+<ngram ng="inc" cnt="67"/>
+<ngram ng="a da" cnt="66"/>
+<ngram ng="di t" cnt="66"/>
+<ngram ng=" son" cnt="66"/>
+<ngram ng="ian" cnt="66"/>
+<ngram ng=" gi" cnt="66"/>
+
+
+
+</language_ngram_database>

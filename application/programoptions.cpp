@@ -2,6 +2,7 @@
 #include <iostream>
 #include "fdf.h"
 #include <QNetworkProxy>
+#include "languagetools.h"
 
 ProgramOptions *ProgramOptions::m_instance=NULL;
 
@@ -44,6 +45,12 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
 
 
     assetsDirectory=QCoreApplication::applicationDirPath()+"/assets/";
+
+    LanguageRecognizer::globalInstance()->clearInit();
+    QStringList langDirs;
+    langDirs<<QString(assetsDirectory+"/language_recognition/");
+    langDirs<<QString(":/language_recognition/");
+    LanguageRecognizer::globalInstance()->initFromDirs(langDirs);
 
     // copy initial assets files
     {

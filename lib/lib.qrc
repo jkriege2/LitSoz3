@@ -6,4 +6,11 @@
         <file alias="reftree_folderall.png">images/reftree_folderall.png</file>
         <file alias="reftree_folderfilter.png">images/reftree_folderfilter.png</file>
     </qresource>
+    <qresource prefix="/language_recognition">
+        <file alias="en.ldb">language_recognition/en.ldb</file>
+        <file alias="es.ldb">language_recognition/es.ldb</file>
+        <file alias="de.ldb">language_recognition/de.ldb</file>
+        <file alias="fr.ldb">language_recognition/fr.ldb</file>
+        <file alias="it.ldb">language_recognition/it.ldb</file>
+    </qresource>
 </RCC>

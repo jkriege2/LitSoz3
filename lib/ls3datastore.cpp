@@ -298,7 +298,7 @@ int LS3Datastore::fieldColumn(const QString& field) const  {
     return fieldsMap.value(field.toLower(), -1);
 }
 
-bool LS3Datastore::setCurrentRecord(QMap<QString, QVariant>& data) {
+bool LS3Datastore::setCurrentRecord(const QMap<QString, QVariant> &data) {
     return setRecord(currentRecordNum(), data);
 }
 
