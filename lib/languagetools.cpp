@@ -54,21 +54,22 @@ void LanguageRecognizer::initFromDirs(const QStringList &datadirs)
     init(files);
 }
 
-QString LanguageRecognizer::recognizeLanguage(const QString &text, int* distance)
+QString LanguageRecognizer::recognizeLanguage(const QString &text, double* distance)
 {
     QHash<QString, int> hash;
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 1);
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 2);
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 3);
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 4);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 5);
     QList<QPair<QString, int> > ngramlist=___LanguageRecognizerGlobalInstance___LS3.hashToList(hash);
     QString lang="";
-    int minD=0;
+    double minD=0;
     QMapIterator<QString, LangDB> it(m_dbs);
     int i=0;
     while (it.hasNext()) {
         it.next();
-        int d=it.value().distance(ngramlist);
+        double d=it.value().distance(ngramlist);
         if (d<it.value().getMaxUseDist()) {
             if (i==0) {
                 minD=d;
@@ -107,7 +108,7 @@ void LanguageRecognizer::splitNGrams(QHash<QString, int> &hash, const QString &t
 {
     QString txt=cleanText(text);
     txt=QString(length-1, ' ')+txt+QString(length-1, ' ');
-    for (int i=0; i<txt.size()-length-1; i++) {
+    for (int i=0; i<txt.size()-length+1; i++) {
         QString ngram=txt.mid(i, length);
         if (ngram.count(' ')<ngram.size()) {
             if (!hash.contains(ngram)) {
@@ -123,14 +124,14 @@ bool LanguageRecognizer_notLessThan(const QPair<QString, int>& p1, const QPair<Q
     return p1.second>=p2.second;
 }
 
-QList<QPair<QString, int> > LanguageRecognizer::hashToList(const QHash<QString, int> &hash)
+QList<QPair<QString, int> > LanguageRecognizer::hashToList(const QHash<QString, int> &hash, int minOccurence)
 {
     QList<QPair<QString, int> > l;
 
     QHashIterator<QString, int> it(hash);
     while (it.hasNext()) {
         it.next();
-        l.append(qMakePair(it.key(), it.value()));
+        if (minOccurence<0 || it.value()>=minOccurence) l.append(qMakePair(it.key(), it.value()));
     }
 
     qSort(l.begin(), l.end(), LanguageRecognizer_notLessThan);
@@ -143,16 +144,16 @@ LanguageRecognizer *LanguageRecognizer::globalInstance()
     return &___LanguageRecognizerGlobalInstance___LS3;
 }
 
-int LanguageRecognizer::getMaxUseDist(int firstNNgrams)
+double LanguageRecognizer::getMaxUseDist(int firstNNgrams)
 {
-    return 600*firstNNgrams;
+    return 15*firstNNgrams;
 }
 
 
-long long LanguageRecognizer::LangDB::distance(const QList<QPair<QString, int> > &other, int firstNNgrams) const
+double LanguageRecognizer::LangDB::distance(const QList<QPair<QString, int> > &other, int firstNNgrams) const
 {
     long long dist=0;
-    const long long MAX_DIST=2000;
+    const long long MAX_DIST=10000;
     int maxN=qMin(other.size(), firstNNgrams);
     if (firstNNgrams<0) maxN=other.size();
     for (int i=0; i<maxN; i++) {
@@ -161,10 +162,10 @@ long long LanguageRecognizer::LangDB::distance(const QList<QPair<QString, int> >
         if (ngramIx<0) dist+=MAX_DIST;
         else dist+=abs(i-ngramIx);
     }
-    return dist;
+    return double(dist)/double(maxN);
 }
 
-int LanguageRecognizer::LangDB::getMaxUseDist(int firstNNgrams) const
+double LanguageRecognizer::LangDB::getMaxUseDist(int firstNNgrams) const
 {
     return LanguageRecognizer::getMaxUseDist(firstNNgrams);
 }
@@ -174,7 +175,7 @@ int LanguageRecognizer::LangDB::getMaxUseDist(int firstNNgrams) const
 
 
 
-QString recognizeLanguage(const QString& text, int* distance) {
+QString recognizeLanguage(const QString& text, double* distance) {
     QString lang="";
 
     if (!___LanguageRecognizerGlobalInstance___LS3.isInitialize()) {
@@ -184,15 +185,16 @@ QString recognizeLanguage(const QString& text, int* distance) {
         ___LanguageRecognizerGlobalInstance___LS3.initFromDirs(dirs);
     }
 
-    QHash<QString, int> hash;
+    /*QHash<QString, int> hash;
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 1);
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 2);
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 3);
     ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 4);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 5);
     QList<QPair<QString, int> > ngramlist=___LanguageRecognizerGlobalInstance___LS3.hashToList(hash);
     //qDebug()<<"## reg NGRAMS size="<<ngramlist.size();
     QString xml;
-    for (int i=0; i<qMin(1000,ngramlist.size()); i++) {
+    for (int i=0; i<qMin(3000,ngramlist.size()); i++) {
         xml+=QString("<ngram ng=\"%1\" cnt=\"%2\"/>\n").arg(ngramlist[i].first).arg(ngramlist[i].second);
         //if (i<=200) qDebug()<<"  "<<ngramlist[i].first<<": "<<ngramlist[i].second;
     }
@@ -204,7 +206,7 @@ QString recognizeLanguage(const QString& text, int* distance) {
         f.write(QByteArray("\n\n"));
         f.write(xml.toUtf8());
         f.close();
-    }
+    }*/
 
     lang=___LanguageRecognizerGlobalInstance___LS3.recognizeLanguage(text, distance);
 

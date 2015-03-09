@@ -10,28 +10,60 @@
 #include <QElapsedTimer>
 
 #define TEST_REFORMATAUHTORS(pattern) { QString t=pattern; qDebug()<<"  pattern = '"<<pattern<<"'\n    -> '"<<reformatAuthors(t, name_prefixes, name_additions, ands)<<"'\n\n"; };
-#define TEST_RECOGNIZELANG(FILENM) {\
-    filename=FILENM;\
-    txt="";\
-    /*qDebug()<<"reading data "<<filename;*/\
-    QFile file(filename);\
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) { txt=QString::fromUtf8(file.readAll()); file.close(); }\
-    qDebug()<<"recognizeLanguage("<<filename<<") = "<<recognizeLanguage(txt);\
-}
+#define TEST_BUILDLANGNGRAMBOOK(FILENM) {\
+        filename=FILENM;\
+        txt="";\
+        qDebug()<<"reading data "<<filename;\
+        QFile file(filename);\
+        QHash<QString, int> hash;\
+        if (file.open(QIODevice::ReadOnly)) { \
+          while (!file.atEnd()) {\
+              txt+=QString::fromUtf8(file.readLine()); \
+              if (txt.size()>4096) {\
+                std::cout<<"."; \
+                LanguageRecognizer::splitNGrams(hash, txt, 1);\
+                LanguageRecognizer::splitNGrams(hash, txt, 2);\
+                LanguageRecognizer::splitNGrams(hash, txt, 3);\
+                LanguageRecognizer::splitNGrams(hash, txt, 4);\
+                LanguageRecognizer::splitNGrams(hash, txt, 5);\
+                txt="";\
+              } \
+          }\
+          file.close(); \
+        }\
+        std::cout<<"\nsorting N-gram histogram:\n"; \
+        QList<QPair<QString, int> > ngramlist=LanguageRecognizer::hashToList(hash, 10); \
+        QString xml;\
+        std::cout<<"\nwriting N-gram XML-data:\n"; \
+        for (int i=0; i<qMin(3000,ngramlist.size()); i++) {\
+            xml+=QString("<ngram ng=\"%1\" cnt=\"%2\"/>\n").arg(ngramlist[i].first).arg(ngramlist[i].second);\
+        }\
+        QFile f("./langrec.txt");\
+        if (f.open(QFile::Append)) {\
+            f.write(QByteArray("\n\n\n\n\n"));\
+            f.write(QByteArray(FILENM));\
+            f.write(QByteArray("\n\n"));\
+            f.write(xml.toUtf8());\
+            f.close();\
+        }\
+    }
 
 #define MULTITEST_RECOGNIZELANG(FILENM) {\
     filename=FILENM;\
     txt="";\
     QFile file(filename);\
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) { \
-        txt=QString::fromUtf8(file.readAll()); \
+    if (file.open(QIODevice::ReadOnly)) { \
+        while (!file.atEnd()) {\
+            txt+=QString::fromUtf8(file.readLine()); \
+        }\
+        /*txt=QString::fromUtf8(file.readAll());*/ \
         QStringList lst=txt.split("\n\n"); \
         QMap<QString, int> langCnt; \
         double t=0, cnt=0, l=0, d=0; \
         for (int ii=0; ii<lst.size(); ii++) { \
             if (LanguageRecognizer::cleanText(lst[ii]).size()>5) {\
                 QElapsedTimer time; \
-                int dist=0; \
+                double dist=0; \
                 time.start(); \
                 QString lang=recognizeLanguage(lst[ii], &dist); \
                 t=t+time.nsecsElapsed()/1e6; cnt++;\
@@ -57,6 +89,7 @@ int main(int argc, char * argv[]) {
     bool testCOINS=false;
     bool testAuthors=false;
     bool testLangRec=true;
+    bool buildLangRec=false;
 
     QSet<QString> name_additions, name_prefixes;
     QList<QString> ands;
@@ -171,13 +204,15 @@ int main(int argc, char * argv[]) {
         QFile::remove("./langrec.txt");
         QString txt="";
         QString filename="";
-        TEST_RECOGNIZELANG("../lib/test/langreference_de.txt")
-        TEST_RECOGNIZELANG("../lib/test/langreference_en.txt")
-        TEST_RECOGNIZELANG("../lib/test/langreference_fr.txt")
-        TEST_RECOGNIZELANG("../lib/test/langreference_es.txt")
-        TEST_RECOGNIZELANG("../lib/test/langreference_it.txt")
-        TEST_RECOGNIZELANG("../lib/test/langreference_ru.txt")
-        TEST_RECOGNIZELANG("../lib/test/langreference_cn.txt")
+        if (buildLangRec) {
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_de.txt")
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_en.txt")
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_fr.txt")
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_es.txt")
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_it.txt")
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_ru.txt")
+            TEST_BUILDLANGNGRAMBOOK("../lib/test/langreference_cn.txt")
+        }
 
         MULTITEST_RECOGNIZELANG("../lib/test/langtest_de.txt")
         MULTITEST_RECOGNIZELANG("../lib/test/langtest_en.txt")
