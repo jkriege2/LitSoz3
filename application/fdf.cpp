@@ -5,10 +5,78 @@
 #include "jkstyledbutton.h"
 #include "qenhancedlineedit.h"
 #include "qcompleterplaintextedit.h"
-
-
+#include "bibtools.h"
+#include "programoptions.h"
 #include <iostream>
 
+
+void fdfManager::normalizeAuthors()
+{
+    ProgramOptions* opt=ProgramOptions::instance();
+    //qDebug()<<"normalizeAuthors opt="<<opt;
+    if (!opt) return;
+    QObject* p=sender();
+    if (qobject_cast<QAction*>(p)) p=qobject_cast<QAction*>(p)->parent();
+    //qDebug()<<"sender="<<sender()<<"  p="<<p;
+    {
+        QPlainTextEdit* w=qobject_cast<QPlainTextEdit*>(p);
+        if (w) {
+            w->setPlainText(reformatAuthors(w->toPlainText(), opt->GetNamePrefixes(), opt->GetNameAdditions(), opt->GetAndWords()));
+            return;
+        }
+    }
+    {
+        QTextEdit* w=qobject_cast<QTextEdit*>(p);
+        if (w) {
+            w->setHtml(reformatAuthors(w->toHtml(), opt->GetNamePrefixes(), opt->GetNameAdditions(), opt->GetAndWords()));
+            return;
+        }
+
+    }
+    {
+        QLineEdit* w=qobject_cast<QLineEdit*>(p);
+        if (w) {
+            w->setText(reformatAuthors(w->text(), opt->GetNamePrefixes(), opt->GetNameAdditions(), opt->GetAndWords()));
+            return;
+        }
+    }
+}
+
+void fdfManager::showCustomContextmenu(const QPoint & pos)
+{
+    {
+        QPlainTextEdit* w=qobject_cast<QPlainTextEdit*>(sender());
+        if (w) {
+            QMenu* menu=w->createStandardContextMenu();
+            menu->setAttribute(Qt::WA_DeleteOnClose);
+            menu->addActions(w->actions());
+            menu->exec(QCursor::pos());
+
+            return;
+        }
+    }
+    {
+        QTextEdit* w=qobject_cast<QTextEdit*>(sender());
+        if (w) {
+            QMenu* menu=w->createStandardContextMenu();
+            menu->setAttribute(Qt::WA_DeleteOnClose);
+            menu->addActions(w->actions());
+            menu->exec(QCursor::pos());
+            return;
+        }
+
+    }
+    {
+        QLineEdit* w=qobject_cast<QLineEdit*>(sender());
+        if (w) {
+            QMenu* menu=w->createStandardContextMenu();
+            menu->setAttribute(Qt::WA_DeleteOnClose);
+            menu->addActions(w->actions());
+            menu->exec(QCursor::pos());
+            return;
+        }
+    }
+}
 
 bool fdfManager::loadFile(QString filename) {
     fdfFile* fdf= new fdfFile;
@@ -195,6 +263,11 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
             QWidget* w=NULL;
             if (wp->type==fdfWidgetAuthors) {
                 QCompleterPlainTextEdit* e=new QCompleterPlainTextEdit(wret);
+                e->setContextMenuPolicy(Qt::CustomContextMenu);
+                connect(e, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showCustomContextmenu(QPoint)));
+                QAction* act=new QAction(tr("normalize authors"), e);
+                connect(act, SIGNAL(triggered()), this, SLOT(normalizeAuthors()));
+                e->addAction(act);
                 e->setAppendContents(false);
                 e->setTabChangesFocus(true);
                 w=e;

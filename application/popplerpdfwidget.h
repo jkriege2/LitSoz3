@@ -45,6 +45,8 @@ class PopplerPDFWidget : public QLabel {
         void hasNext(bool hasn);
         void hasPrevious(bool hasp);
         void textSelected(QString text);
+        /** \brief emitted, when text selection changes, hasText is true, when the selected text has a size>0 **/
+        void hasSelectedText(bool hasText);
         
     public slots:
 
@@ -57,6 +59,8 @@ class PopplerPDFWidget : public QLabel {
 
         void showPage(int page = -1);
         void selectedText(const QRectF &rect);
+
+        bool belongsToTextSelection(const QRectF& selectedRect, const QRectF& boundingBox);
 
         void clearTextSelection();
         void updateTextSelection();

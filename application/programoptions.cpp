@@ -2,10 +2,19 @@
 #include <iostream>
 #include "fdf.h"
 #include <QNetworkProxy>
+#include "languagetools.h"
+
+ProgramOptions *ProgramOptions::m_instance=NULL;
+
+ProgramOptions *ProgramOptions::instance()
+{
+    return m_instance;
+}
 
 ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app  ):
     QObject(parent)
 {
+    if (!m_instance) m_instance=this;
     this->app=app;
     QFileInfo fi(QCoreApplication::applicationFilePath());
     configDirectory=QDir::homePath()+"/."+fi.completeBaseName()+"/";
@@ -36,6 +45,12 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
 
 
     assetsDirectory=QCoreApplication::applicationDirPath()+"/assets/";
+
+    LanguageRecognizer::globalInstance()->clearInit();
+    QStringList langDirs;
+    langDirs<<QString(assetsDirectory+"/language_recognition/");
+    langDirs<<QString(":/language_recognition/");
+    LanguageRecognizer::globalInstance()->initFromDirs(langDirs);
 
     // copy initial assets files
     {
@@ -191,6 +206,8 @@ void ProgramOptions::openSettingsDialog() {
     settingsDlg->cmbStylesheet->setCurrentIndex( settingsDlg->cmbStylesheet->findText(stylesheet));
 
     if (settingsDlg->exec() == QDialog::Accepted ){
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
         username=settingsDlg->edtUserName->text();
         languageID=settingsDlg->cmbLanguage->currentText();
         stylesheet=settingsDlg->cmbStylesheet->currentText();
@@ -217,6 +234,7 @@ void ProgramOptions::openSettingsDialog() {
 
         writeSettings();
         readSettings();
+        QApplication::restoreOverrideCursor();
     }
 
 }

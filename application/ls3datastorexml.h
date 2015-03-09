@@ -11,7 +11,7 @@
 #include "ls3datastore.h"
 #include "programoptions.h"
 #include "ls3dsstringtablemodel.h"
-
+#include "languagetools.h"
 
 class LS3DatastoreXML : public LS3Datastore {
         Q_OBJECT
@@ -50,8 +50,8 @@ class LS3DatastoreXML : public LS3Datastore {
                         names see \link ls3_database LitSoz 3.0 Databases \endlink
 
         */
-        virtual bool addRecord(QMap<QString, QVariant>& data, bool moveToRecord=true, bool createID=false);
-        virtual bool addRecord(QMap<QString, QVariant>& data, QString& uuid, bool createIDD=false);
+        virtual bool addRecord(const QMap<QString, QVariant>& data, bool moveToRecord=true, bool createID=false);
+        virtual bool addRecord(const QMap<QString, QVariant>& data, QString& uuid, bool createIDD=false);
 
 
         /*! \brief set data of the specified record
@@ -63,7 +63,7 @@ class LS3DatastoreXML : public LS3Datastore {
                         names see \link ls3_database LitSoz 3.0 Databases \endlink
 
         */
-        virtual bool setRecord(int index, QMap<QString, QVariant>& data);
+        virtual bool setRecord(int index, const QMap<QString, QVariant>& data);
 
 
         /*! \brief get the data of the given record

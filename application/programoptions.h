@@ -17,7 +17,11 @@ class fdfManager;
 /** \brief this class manages the overall program options (and may also display an options Dialog */
 class ProgramOptions: public QObject {
     Q_OBJECT
+protected:
+    static ProgramOptions* m_instance;
 public:
+    static ProgramOptions* instance();
+
     /** \brief Default constructor
      *
      * \param ini filename of the INI file of the application

@@ -147,6 +147,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
 
         void createMissingIDs();
 
+        QString copyCSL(CSLOutputFormat format, const QString linetemplate=QString("  <li><b>[%2]:</b>%1</li>\n"));
         void copyCSLHTMLTags();
         void copyCSLPlainText();
         void copyCSLFormatted();
@@ -251,6 +252,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         QAction* actCopyFormatted;
         QAction* actCopyPlainText;
         QAction* actCopyHTMLtags;
+        QComboBox* cmbCSLWhich;
 
         /** \brief combobox to select sorting direction */
         QComboBox* cmbSortingDirection;

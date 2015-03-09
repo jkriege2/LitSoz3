@@ -124,6 +124,10 @@ class fdfManager: public QObject {
         /** \brief authors completer */
         QCompleter* authorsdata;
 
+    protected slots:
+        void normalizeAuthors();
+        void showCustomContextmenu(const QPoint & pos);
+
     public:
         /** \brief class constructor */
         fdfManager(QObject * parent = 0): QObject(parent) {

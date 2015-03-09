@@ -37,7 +37,6 @@ LS3Datastore::LS3Datastore(LS3PluginServices* pservices, QObject* parent):
     d.type=FTString; d.name="booktitle"; fields.append(d); // title of the book the reference appeared in
     d.type=FTString; d.name="series"; fields.append(d); // series, a book appeared in
     d.type=FTString; d.name="chapter"; fields.append(d); // referenced chapter inside a book
-    d.type=FTString; d.name="chapter"; fields.append(d); // referenced chapter inside a book
     d.type=FTString; d.name="howpublished"; fields.append(d); // how has the reference been published
     d.type=FTString; d.name="subtype"; fields.append(d); // a more detailed type description
     d.type=FTInt; d.name="edition"; fields.append(d); // edition of the book
@@ -299,7 +298,7 @@ int LS3Datastore::fieldColumn(const QString& field) const  {
     return fieldsMap.value(field.toLower(), -1);
 }
 
-bool LS3Datastore::setCurrentRecord(QMap<QString, QVariant>& data) {
+bool LS3Datastore::setCurrentRecord(const QMap<QString, QVariant> &data) {
     return setRecord(currentRecordNum(), data);
 }
 
@@ -354,40 +353,40 @@ QStringList LS3Datastore::getFieldNames() const {
     QString id="";
     if (type==AuthorYearDefaultCase) {
         if (af.size()>0) {
-            id=cleanString(af[0]);
+            id=cleanStringForFilename(af[0]);
         } else if (ef.size()>0) {
-            id=cleanString(ef[0]);
+            id=cleanStringForFilename(ef[0]);
         }
         id=id+y;
     } else if (type==AuthorYearUpperCase) {
         if (af.size()>0) {
-            id=cleanString(af[0]);
+            id=cleanStringForFilename(af[0]);
         } else if (ef.size()>0) {
-            id=cleanString(ef[0]);
+            id=cleanStringForFilename(ef[0]);
         }
         id=id.toUpper()+y;
     } else if (type==Author3YearUpperCase) {
         if (af.size()>0) {
-            id=cleanString(af[0]).left(3).toUpper();
+            id=cleanStringForFilename(af[0]).left(3).toUpper();
         } else if (ef.size()>0) {
-            id=cleanString(ef[0]).left(3).toUpper();
+            id=cleanStringForFilename(ef[0]).left(3).toUpper();
         }
         id=id+y;
     } else if (type==Author6YearUpperCase) {
         if (af.size()>0) {
-            id=cleanString(af[0]).left(6).toUpper();
+            id=cleanStringForFilename(af[0]).left(6).toUpper();
         } else if (ef.size()>0) {
-            id=cleanString(ef[0]).left(6).toUpper();
+            id=cleanStringForFilename(ef[0]).left(6).toUpper();
         }
         id=id+y;
     } else if (type==InitialsYear) {
         if (af.size()>0) {
             for (int i=0; i<af.size(); i++) {
-                id=id+cleanString(af[i]).left(1).toUpper();
+                id=id+cleanStringForFilename(af[i]).left(1).toUpper();
             }
         } else if (ef.size()>0) {
             for (int i=0; i<ef.size(); i++) {
-                id=id+cleanString(ef[i]).left(1).toUpper();
+                id=id+cleanStringForFilename(ef[i]).left(1).toUpper();
             }
         }
         id=id+y;

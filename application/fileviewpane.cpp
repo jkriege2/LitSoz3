@@ -65,6 +65,125 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     actZoomOut=new QAction(QIcon(":/pdf_zoomout.png"), tr("zoom one step out"), this);
     actFindDown=new QAction(QIcon(":/pdf_finddown.png"), tr("find downwards"), this);
     actFindUp=new QAction(QIcon(":/pdf_findup.png"), tr("find upwards"), this);
+    actCopySel=new QAction(QIcon(":/copy.png"), tr("copy selected text"), this);
+    actCopySel->setShortcut(QKeySequence::Copy);
+
+    QAction* act;
+    menuSetAsField=new QMenu(tr("set field value from selection ..."), this);
+    actTextDummy=new QAction("", this);
+    actTextDummy->setEnabled(false);
+    menuSetAsField->addAction(actTextDummy);
+    menuSetAsField->addAction(newSeparatorQAction());
+
+    menuSetAsField->addAction(act=new QAction(tr("... TITLE"), this));
+    act->setShortcut(QKeySequence("Ctrl+t"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="title";
+
+    menuSetAsField->addAction(act=new QAction(tr("... AUTHORS"), this));
+    act->setShortcut(QKeySequence("Ctrl+a"));
+    connect(act, SIGNAL(triggered()), this, SLOT(appendToAuthorFieldActionTriggered()));
+    actsSetAsField[act]="authors";
+
+    menuSetAsField->addAction(act=new QAction(tr("... EDITORS"), this));
+    act->setShortcut(QKeySequence("Ctrl+e"));
+    connect(act, SIGNAL(triggered()), this, SLOT(appendToAuthorFieldActionTriggered()));
+    actsSetAsField[act]="editors";
+
+    menuSetAsField->addAction(act=new QAction(tr("... YEAR"), this));
+    act->setShortcut(QKeySequence("Ctrl+t"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsYearFieldActionTriggered()));
+    actsSetAsField[act]="year";
+
+    menuSetAsField->addAction(act=new QAction(tr("... JOURNAL"), this));
+    act->setShortcut(QKeySequence("Ctrl+j"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="journal";
+
+    menuSetAsField->addAction(act=new QAction(tr("... VOLUME"), this));
+    act->setShortcut(QKeySequence("Ctrl+v"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="volume";
+
+    menuSetAsField->addAction(act=new QAction(tr("... NUMBER/ISSUE"), this));
+    act->setShortcut(QKeySequence("Ctrl+i"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="number";
+
+    menuSetAsField->addAction(act=new QAction(tr("... PAGES"), this));
+    act->setShortcut(QKeySequence("Ctrl+p"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="pages";
+
+    menuSetAsField->addAction(act=new QAction(tr("... PUBLISHER"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="publisher";
+
+    menuSetAsField->addAction(act=new QAction(tr("... INSTITUTION"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="institution";
+
+    menuSetAsField->addAction(act=new QAction(tr("... PLACES [replace]"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="places";
+
+    menuSetAsField->addAction(act=new QAction(tr("... PLACES [append]"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(appendToFieldLinebreakActionTriggered()));
+    actsSetAsField[act]="places";
+
+    menuSetAsField->addAction(act=new QAction(tr("... BOOKTITLE"), this));
+    act->setShortcut(QKeySequence("Ctrl+b"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="booktitle";
+
+    menuSetAsField->addAction(act=new QAction(tr("... SERIES"), this));
+    act->setShortcut(QKeySequence("Ctrl+s"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="series";
+
+    menuSetAsField->addAction(act=new QAction(tr("... ABSTRACT [replace]"), this));
+    act->setShortcut(QKeySequence("Ctrl+a"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="abstract";
+
+    menuSetAsField->addAction(act=new QAction(tr("... ABSTRACT [append]"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(appendToFieldLinebreakActionTriggered()));
+    actsSetAsField[act]="abstract";
+
+    menuSetAsField->addAction(act=new QAction(tr("... KEYWORDS [replace]"), this));
+    act->setShortcut(QKeySequence("Ctrl+a"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="keywords";
+
+    menuSetAsField->addAction(act=new QAction(tr("... KEYWORDS [append]"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(appendToFieldLinebreakActionTriggered()));
+    actsSetAsField[act]="keywords";
+
+    menuSetAsField->addAction(act=new QAction(tr("... DOI"), this));
+    act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="doi";
+
+    menuSetAsField->addAction(act=new QAction(tr("... ISBN"), this));
+    act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="isbn";
+
+    menuSetAsField->addAction(act=new QAction(tr("... PUBMED ID"), this));
+    //act->setShortcut(QKeySequence("Ctrl+d"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="pubmed";
+
+    menuSetAsField->addAction(act=new QAction(tr("... URL"), this));
+    act->setShortcut(QKeySequence("Ctrl+u"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="url";
 
 
     toolbar=new QToolBar("tbPDF", this);
@@ -120,6 +239,22 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     scroll=new QScrollArea(this);
 
     pdf=new PopplerPDFWidget(this);
+    pdf->setContextMenuPolicy(Qt::ActionsContextMenu);
+    pdf->addAction(actCopySel);
+    pdf->addAction(newSeparatorQAction());
+    pdf->addAction(menuSetAsField->menuAction());
+    pdf->addAction(newSeparatorQAction());
+    pdf->addAction(actFindDown);
+    pdf->addAction(actFindUp);
+    pdf->addAction(newSeparatorQAction());
+    pdf->addAction(actFirst);
+    pdf->addAction(actPrevieous);
+    pdf->addAction(actNext);
+    pdf->addAction(actLast);
+    pdf->addAction(newSeparatorQAction());
+    pdf->addAction(actZoomIn);
+    pdf->addAction(actZoomOut);
+
     scroll->setWidgetResizable(true);
     scroll->setWidget(pdf);
 
@@ -161,6 +296,7 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     connect(pdf, SIGNAL(hasNext(bool)), actLast, SLOT(setEnabled(bool)));
     connect(pdf, SIGNAL(hasPrevious(bool)), actPrevieous, SLOT(setEnabled(bool)));
     connect(pdf, SIGNAL(hasPrevious(bool)), actFirst, SLOT(setEnabled(bool)));
+    connect(pdf, SIGNAL(textSelected(QString)), this, SLOT(setSelectedText(QString)));
     connect(actZoomIn, SIGNAL(triggered()), this, SLOT(zoomIn()));
     connect(actZoomOut, SIGNAL(triggered()), this, SLOT(zoomOut()));
     connect(splitter, SIGNAL(splitterMoved(int,int)), this, SLOT(writeSettings()));
@@ -205,6 +341,24 @@ void FileViewPane::setBaseDir(QString bd)
     basedir=bd;
 }
 
+QAction *FileViewPane::newSeparatorQAction()
+{
+    QAction* act=new QAction(this);
+    act->setSeparator(true);
+    return act;
+}
+
+void FileViewPane::setSelectedText(const QString &text)
+{
+    selectedText=text;
+    menuSetAsField->setEnabled(text.size()>0);
+    QString sel=selectedText.simplified();
+    if (sel.size()>30) {
+        sel=sel.left(25)+"...";
+    }
+    actTextDummy->setText(tr("selected text: '%1'").arg(sel));
+}
+
 void FileViewPane::currentRecordChanged(int currentRecord) {
     m_currentRecord=currentRecord;
     QStringList files=datastore->getField("files").toString().split('\n');
@@ -245,6 +399,70 @@ void FileViewPane::dataChanged(int firstRow, int lastRow) {
         pdf->setPage(page);
 
     }
+}
+
+void FileViewPane::setAsFieldActionTriggered()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QAction* act=qobject_cast<QAction*>(sender());
+    if (act && actsSetAsField.contains(act)) {
+        datastore->setField(actsSetAsField[act], cleanText(selectedText.simplified()));
+    }
+    QApplication::restoreOverrideCursor();
+}
+
+void FileViewPane::setAsYearFieldActionTriggered()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QAction* act=qobject_cast<QAction*>(sender());
+    if (act && actsSetAsField.contains(act)) {
+        datastore->setField(actsSetAsField[act], extractYear(cleanText(selectedText.simplified())));
+    }
+    QApplication::restoreOverrideCursor();
+}
+void FileViewPane::appendToFieldCommaActionTriggered()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QAction* act=qobject_cast<QAction*>(sender());
+    if (act && actsSetAsField.contains(act)) {
+        QString old=datastore->getField(actsSetAsField[act]).toString();
+        if (old.size()>0) old=old+", ";
+        datastore->setField(actsSetAsField[act], old+cleanText(selectedText.simplified()));
+    }
+    QApplication::restoreOverrideCursor();
+}
+
+void FileViewPane::appendToFieldLinebreakActionTriggered()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QAction* act=qobject_cast<QAction*>(sender());
+    if (act && actsSetAsField.contains(act)) {
+        QString old=datastore->getField(actsSetAsField[act]).toString();
+        if (old.size()>0) old=old+"\n";
+        datastore->setField(actsSetAsField[act], old+cleanText(selectedText.simplified()));
+    }
+    QApplication::restoreOverrideCursor();
+}
+
+void FileViewPane::appendToAuthorFieldActionTriggered()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QAction* act=qobject_cast<QAction*>(sender());
+    if (act && actsSetAsField.contains(act)) {
+        QString old=datastore->getField(actsSetAsField[act]).toString();
+        if (old.size()>0) old=old+";";
+        QString authors=cleanText(selectedText.simplified().trimmed());
+        if (authors.size()>0) {
+            authors=reformatAuthors(authors, settings->GetNamePrefixes(), settings->GetNameAdditions(), settings->GetAndWords());
+            datastore->setField(actsSetAsField[act], old+authors);
+        }
+    }
+    QApplication::restoreOverrideCursor();
+}
+
+void FileViewPane::copySelection()
+{
+    QApplication::clipboard()->setText(selectedText.simplified());
 }
 
 void FileViewPane::tocItemActivated(QTreeWidgetItem *item, int column) {

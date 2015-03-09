@@ -8,7 +8,7 @@
 #include <QVariant>
 #include "lib_imexport.h"
 /** \brief clean a string of whitesaces, special characters ... */
-LS3LIB_EXPORT QString cleanString(const QString& input, bool cleanStrongly=false);
+LS3LIB_EXPORT QString cleanStringForFilename(const QString& input, bool cleanStrongly=false);
 
 /** \brief escape HTML character*/
 LS3LIB_EXPORT QString escapeHTMLString(const QString& input);
@@ -87,6 +87,13 @@ LS3LIB_EXPORT QString filenameToIconFile(const QString& file);
     \return 0 if failed and the year else
 */
 LS3LIB_EXPORT int extractYear(const QString& data);
+
+
+/*! \brief clean stray characters from text
+
+*/
+LS3LIB_EXPORT QString cleanText(const QString& data, bool simplify=true, const QString& specialChars=QLatin1String(",;-#+~*&%$§/\\"));
+
 /*! \brief search the supplied string for the first integer number
 
     \return 0 if failed and the year else

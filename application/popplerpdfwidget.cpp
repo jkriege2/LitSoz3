@@ -136,59 +136,70 @@ void PopplerPDFWidget::setSelectRectangle()
 }
 
 void PopplerPDFWidget::mousePressEvent(QMouseEvent *event) {
-    if (!doc)
-        return;
 
-
-    if (selectionMode==PopplerPDFWidget::SelectRectangle) {
-        clearTextSelection();
-        dragPosition = event->pos();
-        if (!rubberBand)
-            rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
-        rubberBand->setGeometry(QRect(dragPosition, dragPosition));
-        rubberBand->show();
-    } else if (selectionMode==PopplerPDFWidget::SelectText) {
-        clearTextSelection();
-        dragPosition = event->pos();
-        selectionRect=QRectF(dragPosition, dragPosition);
-        updateTextSelection();
+    if (doc && event->button()==Qt::LeftButton){
+        if (selectionMode==PopplerPDFWidget::SelectRectangle) {
+            clearTextSelection();
+            dragPosition = event->pos();
+            if (!rubberBand)
+                rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+            rubberBand->setGeometry(QRect(dragPosition, dragPosition));
+            rubberBand->show();
+        } else if (selectionMode==PopplerPDFWidget::SelectText) {
+            clearTextSelection();
+            dragPosition = event->pos();
+            selectionRect=QRectF(dragPosition, dragPosition);
+            updateTextSelection();
+        }
+        event->accept();
+    } else {
+        QLabel::mousePressEvent(event);
     }
 }
 
 void PopplerPDFWidget::mouseMoveEvent(QMouseEvent *event) {
-    if (!doc) return;
-    if (selectionMode==PopplerPDFWidget::SelectRectangle) {
-        if (!rubberBand)
-            return;
-        if (event->buttons()==Qt::LeftButton) rubberBand->setGeometry(QRect(dragPosition, event->pos()).normalized());
-    } else if (selectionMode==PopplerPDFWidget::SelectText) {
-        if (event->buttons()==Qt::LeftButton) {
-            selectionRect=QRect(dragPosition, event->pos()).normalized();
-            updateTextSelection();
+    //qDebug()<<event->button()<<event->buttons()<<Qt::LeftButton;
+    if (doc && event->buttons()==Qt::LeftButton){
+        if (selectionMode==PopplerPDFWidget::SelectRectangle) {
+            if (!rubberBand)
+                return;
+            if (event->buttons()==Qt::LeftButton) rubberBand->setGeometry(QRect(dragPosition, event->pos()).normalized());
+        } else if (selectionMode==PopplerPDFWidget::SelectText) {
+            if (event->buttons()==Qt::LeftButton) {
+                selectionRect=QRect(dragPosition, event->pos()).normalized();
+                updateTextSelection();
+            }
         }
+        event->accept();
+    } else {
+        QLabel::mouseMoveEvent(event);
     }
 }
 
 void PopplerPDFWidget::mouseReleaseEvent(QMouseEvent *event) {
-    if (!doc) return;
-    if (selectionMode==PopplerPDFWidget::SelectRectangle) {
-        if (!rubberBand)
-            return;
+    if (doc && event->buttons()==Qt::LeftButton){
+        if (selectionMode==PopplerPDFWidget::SelectRectangle) {
+            if (!rubberBand)
+                return;
 
-        if (!rubberBand->size().isEmpty()) {
-            // Correct for the margin around the image in the label.
-            QRectF rect = QRectF(rubberBand->pos(), rubberBand->size());
-            rect.moveLeft(rect.left() - (width() - pixmap()->width()) / 2.0);
-            rect.moveTop(rect.top() - (height() - pixmap()->height()) / 2.0);
-            selectedText(rect);
-        }
-    } else if (selectionMode==PopplerPDFWidget::SelectText) {
-        if (event->buttons()==Qt::LeftButton) {
-            if (selectionRect.size().isEmpty()) {
-                clearTextSelection();
+            if (!rubberBand->size().isEmpty()) {
+                // Correct for the margin around the image in the label.
+                QRectF rect = QRectF(rubberBand->pos(), rubberBand->size());
+                rect.moveLeft(rect.left() - (width() - pixmap()->width()) / 2.0);
+                rect.moveTop(rect.top() - (height() - pixmap()->height()) / 2.0);
+                selectedText(rect);
             }
-            updateTextSelection();
+        } else if (selectionMode==PopplerPDFWidget::SelectText) {
+            if (event->buttons()==Qt::LeftButton) {
+                if (selectionRect.size().isEmpty()) {
+                    clearTextSelection();
+                }
+                updateTextSelection();
+            }
         }
+        event->accept();
+    } else {
+        QLabel::mouseReleaseEvent(event);
     }
 
 }
@@ -216,7 +227,7 @@ void PopplerPDFWidget::showPage(int page) {
         QImage highlight = image.copy(highlightRect);
         QPainter painter;
         painter.begin(&image);
-        painter.fillRect(image.rect(), QColor(0, 0, 0, 32));
+        painter.fillRect(image.rect(), QColor(0, 0, 0, 64));
         painter.drawImage(highlightRect, highlight);
         painter.end();
     }
@@ -236,7 +247,7 @@ void PopplerPDFWidget::selectedText(const QRectF &rect) {
     bool hadSpace = false;
     QPointF center;
     foreach (Poppler::TextBox *box, doc->page(currentPage)->textList()) {
-        if (selectedRect.intersects(box->boundingBox())) {
+        if (belongsToTextSelection(selectedRect, box->boundingBox())) {
             if (hadSpace)
                 text += " ";
             if (!text.isEmpty() && box->boundingBox().top() > center.y())
@@ -247,9 +258,17 @@ void PopplerPDFWidget::selectedText(const QRectF &rect) {
         }
     }
 
-    if (!text.isEmpty())
-        emit textSelected(text);
+    //if (!text.isEmpty())
+    emit textSelected(text);
+    emit hasSelectedText(!text.isEmpty());
     m_selectedText=text;
+}
+
+bool PopplerPDFWidget::belongsToTextSelection(const QRectF &selectedRect, const QRectF &boundingBox)
+{
+    //qDebug()<<"belongsToTextSelection("<<selectedRect<<boundingBox<<"): "<<selectedRect.contains(boundingBox)<<selectedRect.intersects(boundingBox);
+    return selectedRect.contains(boundingBox) ||
+           (selectedRect.intersects(boundingBox) && boundingBox.right()<=selectedRect.right());
 }
 
 void PopplerPDFWidget::clearTextSelection()
@@ -262,6 +281,7 @@ void PopplerPDFWidget::clearTextSelection()
 
 void PopplerPDFWidget::updateTextSelection()
 {
+    //qDebug()<<"PopplerPDFWidget::updateTextSelection(): selectionRect="<<selectionRect<<"   dragPosition="<<dragPosition;
     QRectF rin=selectionRect;
     rin.moveLeft(rin.left() - (width() - pixmap()->width()) / 2.0);
     rin.moveTop(rin.top() - (height() - pixmap()->height()) / 2.0);
@@ -276,7 +296,9 @@ void PopplerPDFWidget::updateTextSelection()
     setUpdatesEnabled(false);
     clearTextSelection();
     foreach (Poppler::TextBox *box, doc->page(currentPage)->textList()) {
-        if (selectedRect.right()>box->boundingBox().left() && selectedRect.bottom()>box->boundingBox().top()) {
+        //if (selectedRect.right()>box->boundingBox().left() && selectedRect.bottom()>box->boundingBox().top()) {
+        //qDebug()<<"  check rects: "<<box->boundingBox()<<selectedRect<<selectedRect.contains(box->boundingBox())<<selectedRect.intersects(box->boundingBox());
+        if (belongsToTextSelection(selectedRect, box->boundingBox())) {
             if (hadSpace)
                 text += " ";
             if (!text.isEmpty() && box->boundingBox().top() > center.y())
@@ -294,8 +316,9 @@ void PopplerPDFWidget::updateTextSelection()
         }
     }
     setUpdatesEnabled(upd);
-    if (!text.isEmpty())
-        emit textSelected(text);
+    //if (!text.isEmpty())
+    emit textSelected(text);
+    emit hasSelectedText(!text.isEmpty());
     m_selectedText=text;
 }
 
@@ -314,6 +337,10 @@ void PopplerPDFWidget::wheelEvent(QWheelEvent *event) {
 }
 QRectF PopplerPDFWidget::searchBackwards(const QString &text)
 {
+    if (text.isEmpty()) {
+        searchLocation=QRectF(0,0,0,0);
+        showPage(currentPage);
+    }
     QRectF oldLocation = searchLocation;
 
     int page = currentPage;
@@ -400,6 +427,10 @@ QRectF PopplerPDFWidget::searchBackwards(const QString &text)
 
 QRectF PopplerPDFWidget::searchForwards(const QString &text)
 {
+    if (text.isEmpty()) {
+        searchLocation=QRectF(0,0,0,0);
+        showPage(currentPage);
+    }
     int page = currentPage;
     while (page < doc->numPages()) {
         double l=searchLocation.left();

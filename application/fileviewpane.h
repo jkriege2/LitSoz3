@@ -38,6 +38,7 @@ class FileViewPane : public QWidget
 
 
     protected:
+        QAction* newSeparatorQAction();
         /** \brief main data model which holds the literature table for viewing and editing */
         LS3Datastore* datastore;
 
@@ -61,6 +62,10 @@ class FileViewPane : public QWidget
         QAction* actZoomOut;
         QAction* actFindDown;
         QAction* actFindUp;
+        QAction* actCopySel;
+        QMenu* menuSetAsField;
+        QAction* actTextDummy;
+        QMap<QAction*, QString> actsSetAsField;
         QComboBox* cmbScale;
         QSpinBox* spinPage;
         QSplitter* splitter;
@@ -72,11 +77,20 @@ class FileViewPane : public QWidget
 
         int m_currentRecord;
 
+        QString selectedText;
+
     protected slots:
+        void setSelectedText(const QString& text);
         void currentRecordChanged(int currentRecord);
         void scaleChanged(QString scale);
         void pageChanged(int page, int pages);
         void dataChanged(int firstRow, int lastRow);
+        void setAsFieldActionTriggered();
+        void setAsYearFieldActionTriggered();
+        void appendToFieldCommaActionTriggered();
+        void appendToFieldLinebreakActionTriggered();
+        void appendToAuthorFieldActionTriggered();
+        void copySelection();
 
         void tocItemActivated(QTreeWidgetItem* item,int column);
         void thumbnailItemActivated(QListWidgetItem* item);

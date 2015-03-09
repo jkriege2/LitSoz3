@@ -1,6 +1,6 @@
 #include "pdftools.h"
 #include "bibtools.h"
-
+#include "languagetools.h"
 
 //#define DEBUG_PDF
 
@@ -600,6 +600,8 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
         QFile f(tempFile);
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             QString contents=f.readAll();
+            props["language"]=recognizeLanguage(contents);
+            if (props["language"].isEmpty()) props.remove("language");
 
 #ifdef DEBUG_PDF
             dbgtxt<<"CONTENTS:\n"<<contents<<"\n\n\n=== elapsed: "<<timerdbg.elapsed()<<"ms\n\n\n";
