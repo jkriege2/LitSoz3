@@ -88,3 +88,5 @@ Makefile
 *.xld
 *.3-pre1
 /lib/*.uS7484
+/compiledate.h
+/svnversion.h
