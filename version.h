@@ -7,9 +7,9 @@
 
 #define VERSION_STATUS "beta"
 
-#define LS3_COPYRIGHT "&copy; 2010-2011 by Jan Krieger"
+#define LS3_COPYRIGHT "&copy; 2010-2015 by Jan W. Krieger"
 
-#define LS3_AUTHOR "Jan Krieger"
+#define LS3_AUTHOR "Jan W. Krieger"
 
 #define LS3_WEBLINK "http://www.jkrieger.de/"
 
