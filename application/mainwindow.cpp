@@ -862,8 +862,8 @@ void MainWindow::readSettings() {
     edtQuickFindTerm->setText(s->value("mainwindow/qf_term","").toString());;
     chkQuickFindRegExp->setChecked(s->value("mainwindow/qf_regexp",false).toBool());
 
-    cmbCSLLocales->setCurrentText(s->value("mainwindow/csl_locale","en-US").toString());;
-    cmbCSLs->setCurrentText(s->value("mainwindow/csl","").toString());;
+    cmbCSLLocales->setCurrentIndex(cmbCSLLocales->findText(s->value("mainwindow/csl_locale","en-US").toString()));;
+    cmbCSLs->setCurrentIndex(cmbCSLLocales->findText(s->value("mainwindow/csl","").toString()));;
     cmbCSLWhich->setCurrentIndex(s->value("mainwindow/cmbCSLWhich",cmbCSLWhich->currentIndex()).toInt());;
 
     if (curDisplayStyle!=settings->GetHowDisplayReferenceDetails()) {

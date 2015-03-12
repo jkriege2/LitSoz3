@@ -1,7 +1,14 @@
 #ifndef POPPLERPDFWIDGET_H
 #define POPPLERPDFWIDGET_H
 
-#include <poppler-qt5.h>
+#include <QtGlobal>
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    #include <poppler/qt5/poppler-qt5.h>
+#else
+    #include <poppler/qt4/poppler-qt4.h>
+#endif
+
 #include <QApplication>
 #include <QLabel>
 #include <QRectF>

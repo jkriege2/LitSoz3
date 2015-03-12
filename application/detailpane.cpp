@@ -198,7 +198,7 @@ void DetailPane::databaseCurentChanged(int index)
 void DetailPane::typeChanged(int index)
 {
     if (datastore) {
-        datastore->setField("type", cmbType->currentData().toString());
+        datastore->setField("type", cmbType->data().toString());
         //qDebug()<<"typeChanged("<<index<<"): "<<cmbType->currentText()<<cmbType->itemText(index);
         QString id=cmbType->itemData(cmbType->currentIndex()).toString();
         //qDebug()<<"databaseCurentChanged("<<index<<"): "<<id<<currentFDF<<cmbType->currentIndex();
