@@ -843,7 +843,8 @@ void MainWindow::createStatusBar() {
 }
 
 void MainWindow::readSettings() {
-    setUpdatesEnabled(false);
+    bool upEn=updatesEnabled();
+    if (upEn) setUpdatesEnabled(false);
     QSettings* s=settings->GetQSettings();
     s->sync();
     recentFilesMenu->readSettings(*s, QString("mainwindow/"));
@@ -918,7 +919,7 @@ void MainWindow::readSettings() {
         dockReferenceData->resize(s->value("dockReferenceData/size", dockReferenceData->size()).toSize());
         dockReferenceData->move(s->value("dockReferenceData/pos", dockReferenceData->pos()).toPoint());
     }
-    setUpdatesEnabled(true);
+    if (upEn) setUpdatesEnabled(true);
 
 }
 

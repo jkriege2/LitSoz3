@@ -293,7 +293,7 @@ void PopplerPDFWidget::updateTextSelection()
     bool hadSpace = false;
     QPointF center;
     bool upd=updatesEnabled();
-    setUpdatesEnabled(false);
+    if (upd) setUpdatesEnabled(false);
     clearTextSelection();
     foreach (Poppler::TextBox *box, doc->page(currentPage)->textList()) {
         //if (selectedRect.right()>box->boundingBox().left() && selectedRect.bottom()>box->boundingBox().top()) {
@@ -315,7 +315,7 @@ void PopplerPDFWidget::updateTextSelection()
 
         }
     }
-    setUpdatesEnabled(upd);
+    if (upd) setUpdatesEnabled(upd);
     //if (!text.isEmpty())
     emit textSelected(text);
     emit hasSelectedText(!text.isEmpty());
