@@ -153,3 +153,8 @@ ASSETSCSLLANG_FILES.path = $${LS3OUTPUT}/assets/language_recognition/
 INSTALLS += ASSETSSTYLESHEET_FILES ASSETS_FILES ASSETSCOMPLETERS_FILES ASSETSFDF_FILES ASSETSCSLLOCALES_FILES ASSETSCSL_FILES ASSETSCSLLANG_FILES
 
 
+CONFIG(debug, debug|release) {
+    message("building $$TARGET $$TEMPLATE in DEBUG mode, output is in $$LS3OUTPUT ... CONFIG DONE! ")
+} else {
+    message("building $$TARGET $$TEMPLATE in RELEASE mode, output is in $$LS3OUTPUT ... CONFIG DONE!  ")
+}

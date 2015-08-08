@@ -1,4 +1,4 @@
-#ifndef LS3PLUGIN_H
+v#ifndef LS3PLUGIN_H
 #define LS3PLUGIN_H
 
 #include <QtPlugin>

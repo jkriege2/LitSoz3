@@ -73,5 +73,9 @@ RESOURCES += \
 
 TRANSLATIONS= ../output/translations/de.lib.ts
 
-
+CONFIG(debug, debug|release) {
+    message("building $$TARGET $$TEMPLATE in DEBUG mode, output is in $$LS3OUTPUT ... CONFIG DONE ")
+} else {
+    message("building $$TARGET $$TEMPLATE in RELEASE mode, output is in $$LS3OUTPUT ... CONFIG DONE ")
+}
 

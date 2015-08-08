@@ -1,4 +1,4 @@
-#ifndef LS3PLUGINLATEXTOOLS_H
+v#ifndef LS3PLUGINLATEXTOOLS_H
 #define LS3PLUGINLATEXTOOLS_H
 
 #include "ls3pluginbase.h"

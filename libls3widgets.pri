@@ -11,4 +11,4 @@ macx {
     }
 }
 
-INCLUDEPATH += $$LS3OUTPUT/../libwidgets/
+INCLUDEPATH += $$PWD/libwidgets/

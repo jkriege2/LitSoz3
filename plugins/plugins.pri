@@ -5,7 +5,7 @@ MOC_DIR = ./.mocs/
 UI_DIR = ./.uis/
 RCC_DIR = ./.rccs/
 OBJECTS_DIR = ./.objs/
-LS3OUTPUT = ../../output
+LS3OUTPUT = $$PWD/../output
 DESTDIR = $$LS3OUTPUT/plugins
 
 

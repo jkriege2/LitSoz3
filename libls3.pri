@@ -9,5 +9,5 @@ macx {
     }
 }
 
-INCLUDEPATH += $$LS3OUTPUT/../lib/
+INCLUDEPATH += $$PWD/lib/
 
