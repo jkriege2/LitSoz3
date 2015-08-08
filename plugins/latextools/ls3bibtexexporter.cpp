@@ -118,7 +118,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD("editor",  formatEtalAuthors(record.value("editors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("publisher", record.value("publisher", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("volume", record.value("volume", ""));
                 OUTPUT_FIELD("number", record.value("number", ""));
@@ -130,7 +130,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
         } else if (outType.toLower()=="booklet") {
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("howpublished", record.value("howpublished", ""));
         } else if (outType.toLower()=="inbook") {
@@ -139,7 +139,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("chapter", record.value("chapter", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("publisher", record.value("publisher", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("volume", record.value("volume", ""));
                 OUTPUT_FIELD("number", record.value("number", ""));
@@ -154,7 +154,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("booktitle", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("chapter", record.value("title", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("publisher", record.value("publisher", ""));
-                OUTPUT_FIELD_BRACKETDOUBLE("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD_BRACKETDOUBLE("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("volume", record.value("volume", ""));
                 OUTPUT_FIELD("number", record.value("number", ""));
@@ -170,7 +170,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD_BRACKETDOUBLE("booktitle", record.value("booktitle", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("publisher", record.value("publisher", ""));
-                OUTPUT_FIELD_BRACKETDOUBLE("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD_BRACKETDOUBLE("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("volume", record.value("volume", ""));
                 OUTPUT_FIELD("number", record.value("number", ""));
@@ -186,7 +186,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD_BRACKETDOUBLE("booktitle", record.value("booktitle", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("publisher", record.value("publisher", ""));
-                OUTPUT_FIELD_BRACKETDOUBLE("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD_BRACKETDOUBLE("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("volume", record.value("volume", ""));
                 OUTPUT_FIELD("number", record.value("number", ""));
@@ -201,7 +201,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD("editor",  formatEtalAuthors(record.value("editors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD_BRACKETDOUBLE("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD_BRACKETDOUBLE("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 bool edok=false;
                 int ed=record.value("edition", "0").toInt(&edok);
@@ -210,21 +210,21 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
         } else if (outType.toLower()=="mastersthesis") {
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("type", record.value("subtype", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("school", record.value("institution", ""));
         } else if (outType.toLower()=="phdthesis") {
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("type", record.value("subtype", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("school", record.value("institution", ""));
         } else if (outType.toLower()=="misc") {
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("howpublished", record.value("howpublished", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("organization", record.value("institution", ""));
@@ -247,7 +247,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
         } else if (outType.toLower()=="patent") {
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("howpublished", record.value("howpublished", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("organization", record.value("institution", ""));
@@ -261,7 +261,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 OUTPUT_FIELD("editor",  formatEtalAuthors(record.value("editors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("publisher", record.value("publisher", ""));
-                OUTPUT_FIELD_BRACKETDOUBLE("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD_BRACKETDOUBLE("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD("volume", record.value("volume", ""));
                 OUTPUT_FIELD("number", record.value("number", ""));
@@ -271,7 +271,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
         } else if (outType.toLower()=="techreport") {
                 OUTPUT_FIELD("author",  formatEtalAuthors(record.value("authors", "").toString(), -1, "", false, " and ", " and ", "", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("title", record.value("title", ""));
-                OUTPUT_FIELD_BRACKETDOUBLE("adress", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
+                OUTPUT_FIELD_BRACKETDOUBLE("address", record.value("places", "").toString().simplified().replace("\r", "").replace("\n", ", "));
                 OUTPUT_FIELD_BRACKETDOUBLE("institution", record.value("institution", ""));
                 OUTPUT_FIELD("year", record.value("year", ""));
                 OUTPUT_FIELD_BRACKETDOUBLE("howpublished", record.value("howpublished", ""));
