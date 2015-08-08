@@ -2,6 +2,8 @@
 #define VERSION_H
 
 #include "compiledate.h"
+#include "compiler.h"
+#include "gitversion.h"
 
 #define VERSION_FULL "3.0"
 
@@ -11,6 +13,6 @@
 
 #define LS3_AUTHOR "Jan W. Krieger"
 
-#define LS3_WEBLINK "http://www.jkrieger.de/"
+#define LS3_WEBLINK "https://github.com/jkriege2/LitSoz3"
 
 #endif //VERSION_H

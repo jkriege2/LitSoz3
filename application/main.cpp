@@ -41,7 +41,7 @@ int main(int argc, char * argv[])
     QPixmap pixmap(":/splash.png");
     QPainter* painter=new QPainter(&pixmap);
     painter->setFont(QFont("Arial", 9));
-    painter->drawText(QPoint(5,290), QString("version %1 (%2)").arg(VERSION_FULL).arg(COMPILEDATE));
+    painter->drawText(QPoint(5,290), QString("version %1 (GITCC: %3 DATE: %2)").arg(VERSION_FULL).arg(COMPILEDATE).arg(GITCOMMITCOUNT));
     delete painter;
     painter=NULL;
     QSplashScreen splash(pixmap,Qt::WindowStaysOnTopHint);

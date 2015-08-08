@@ -146,3 +146,5 @@ Makefile*
 *.qmlproject.user.*
 /svnversion.h
 /compiledate.h
+/compiler.h
+/gitversion.h

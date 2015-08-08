@@ -12,7 +12,7 @@ COMPILERVERSION_MACHINE=$$system($$QMAKE_CXX -dumpmachine)
 message($$QMAKE_CXX  .$${DIR_SEPARATOR}tools$${DIR_SEPARATOR}ls3infotool$${DIR_SEPARATOR}main.cpp -o .$${DIR_SEPARATOR}output$${DIR_SEPARATOR}ls3infotool$${EXE_SUFFIX})
 system($$QMAKE_CXX  .$${DIR_SEPARATOR}tools$${DIR_SEPARATOR}ls3infotool$${DIR_SEPARATOR}main.cpp -o .$${DIR_SEPARATOR}output$${DIR_SEPARATOR}ls3infotool$${EXE_SUFFIX})
 
-# try to read the SVN version
+# try to read the GIT version
 GITCOMMITCOUNT = $$system(git rev-list HEAD --count)
 contains(GITCOMMITCOUNT,exported):GITCOMMITCOUNT=
 contains(GITCOMMITCOUNT,exported):GITCOMMITCOUNT=

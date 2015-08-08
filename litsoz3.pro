@@ -4,24 +4,24 @@ TEMPLATE = subdirs
 SUBDIRS += lib
 
 # Test application for lib
-SUBDIRS += libtest
+#SUBDIRS += libtest
 libtest.depends = lib
 libtest.subdir = ./lib/test
 Debug_TestLIB.target = Debug_TestLIB
 Debug_TestLIB.depends =  debug
-QMAKE_EXTRA_TARGETS += Debug_TestLIB
+#QMAKE_EXTRA_TARGETS += Debug_TestLIB
 
 # additional widgets library
 SUBDIRS += libwidgets
 libwidgets.depends = lib
 
 # Test application for libwidgets
-SUBDIRS += libwidgetstest
+#SUBDIRS += libwidgetstest
 libwidgetstest.depends = libwidgets lib
 libwidgetstest.subdir = ./libwidgets/test
 Debug_TestWidgetsLIB.target = Debug_TestWidgetsLIB
 Debug_TestWidgetsLIB.depends = debug
-QMAKE_EXTRA_TARGETS += Debug_TestWidgetsLIB
+#QMAKE_EXTRA_TARGETS += Debug_TestWidgetsLIB
 
 
 
