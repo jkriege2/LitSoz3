@@ -144,3 +144,5 @@ Makefile*
 #QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+/svnversion.h
+/compiledate.h

@@ -1,1 +1,0 @@
-# define COMPILEDATE "08.08.2015" 
