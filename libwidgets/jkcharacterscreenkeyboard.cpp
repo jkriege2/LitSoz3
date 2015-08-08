@@ -82,7 +82,8 @@ void JKCharacterScreenKeyboard::buttonClicked() {
 }
 
 void JKCharacterScreenKeyboard::populateLayout() {
-    setUpdatesEnabled(false);
+    bool upEn=updatesEnabled();
+    if (upEn) setUpdatesEnabled(false);
     // remove all buttons from layout and delete them
     for (int i=0; i<m_buttons.size(); i++) {
         disconnect(m_buttons[i], SIGNAL(clicked()), this, SLOT(buttonClicked()));
@@ -103,7 +104,7 @@ void JKCharacterScreenKeyboard::populateLayout() {
             lay->addWidget(but);
         }
     }
-    setUpdatesEnabled(true);
+    if (upEn) setUpdatesEnabled(true);
 }
 
 

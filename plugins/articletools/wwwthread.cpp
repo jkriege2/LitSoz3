@@ -175,15 +175,16 @@ QString WWWThread::networkErrorToString(QNetworkReply::NetworkError err) {
         case QNetworkReply::OperationCanceledError: return tr("operation canceled"); break;
         case QNetworkReply::SslHandshakeFailedError: return tr("SSL handshake failed"); break;
         case QNetworkReply::TemporaryNetworkFailureError: return tr("temporary network failure"); break;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    case QNetworkReply::NetworkSessionFailedError: return tr("network session failes"); break;
+    case QNetworkReply::BackgroundRequestNotAllowedError: return tr("background request not allowede"); break;
+    case QNetworkReply::ContentConflictError: return tr("content conflict"); break;
+    case QNetworkReply::ContentGoneError: return tr("content gone"); break;
 
-        case QNetworkReply::NetworkSessionFailedError: return tr("network session failes"); break;
-        case QNetworkReply::BackgroundRequestNotAllowedError: return tr("background request not allowede"); break;
-        case QNetworkReply::ContentConflictError: return tr("content conflict"); break;
-        case QNetworkReply::ContentGoneError: return tr("content gone"); break;
-
-        case QNetworkReply::InternalServerError: return tr("internal server error"); break;
-        case QNetworkReply::OperationNotImplementedError: return tr("operation not implemented"); break;
-        case QNetworkReply::ServiceUnavailableError: return tr("servie unavailable"); break;
+    case QNetworkReply::InternalServerError: return tr("internal server error"); break;
+    case QNetworkReply::OperationNotImplementedError: return tr("operation not implemented"); break;
+    case QNetworkReply::ServiceUnavailableError: return tr("servie unavailable"); break;
+#endif
 
         case QNetworkReply::ProxyConnectionRefusedError: return tr("proxy connection refused"); break;
         case QNetworkReply::ProxyConnectionClosedError: return tr("proxy closed connection"); break;

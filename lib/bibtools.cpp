@@ -3,12 +3,13 @@
 #include <QRegExp>
 #include <iostream>
 #include <QtGlobal>
+#include <QTextDocument>
 
 QString escapeHTMLString(const QString& input) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     return input.toHtmlEscaped();
 #else
-    return Qt::escaped(input);
+    return Qt::escape(input);
 #endif
 }
 

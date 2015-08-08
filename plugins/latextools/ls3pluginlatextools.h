@@ -6,7 +6,7 @@
 #include <QComboBox>
 #include <QProgressDialog>
 #include <QLineEdit>
-#include <QToolbar>
+#include <QToolBar>
 #include <QMenu>
 #include <QClipboard>
 #include <QApplication>
