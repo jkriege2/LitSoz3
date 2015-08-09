@@ -14,6 +14,7 @@
 */
 
 #include "fileviewpane.h"
+#include "ls3tools.h"
 
 static const int PageRole = Qt::UserRole + 1;
 
@@ -326,6 +327,7 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
 }
 
 void FileViewPane::connectWidgets(LS3Datastore *datastore) {
+    LS3ElapsedAutoTimer timer("FileViewPane::connectWidgets()");
     connected=true;
     m_currentRecord=-1;
     if (this->datastore) disconnect(this->datastore, SIGNAL(currentRecordChanged(int)), this, SLOT(currentRecordChanged(int)));
@@ -342,6 +344,7 @@ void FileViewPane::connectWidgets(LS3Datastore *datastore) {
 }
 
 void FileViewPane::disconnectWidgets() {
+    LS3ElapsedAutoTimer timer("FileViewPane::disconnectWidgets()");
     if (datastore) {
         //datastore->removeMapping(cmbOrigin);
         disconnect(datastore, SIGNAL(currentRecordChanged(int)), this, SLOT(currentRecordChanged(int)));
@@ -482,7 +485,7 @@ void FileViewPane::copySelection()
 
 void FileViewPane::tocItemActivated(QTreeWidgetItem *item, int column) {
     //qDebug()<<"goto "<<item->data(0, PageRole).toDouble();
-    pdf->setPage(trunc(item->data(0, PageRole).toDouble()));
+    pdf->setPage(trunc(item->data(1, PageRole).toDouble()));
 }
 
 void FileViewPane::thumbnailItemActivated(QListWidgetItem *item) {
@@ -567,7 +570,7 @@ void FileViewPane::fillThumbnails() {
             QListWidgetItem *item = new QListWidgetItem();
             item->setText(QString::number(i + 1));
             item->setData(Qt::DecorationRole, QPixmap::fromImage(image));
-            item->setData(PageRole, i);
+            item->setData(PageRole, i+1);
             thumbnails->addItem(item);
             maxSize.setWidth(qMax(maxSize.width(), image.width()));
             maxSize.setHeight(qMax(maxSize.height(), image.height()));

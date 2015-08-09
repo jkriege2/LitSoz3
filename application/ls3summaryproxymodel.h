@@ -20,6 +20,7 @@
 #include <QItemDelegate>
 #include <QMimeData>
 #include <QPointer>
+#include "ls3tools.h"
 #define LS3SUMMARYPROXYMODEL_COLUMN_SELECTION 0
 #define LS3SUMMARYPROXYMODEL_COLUMN_ID        1
 #define LS3SUMMARYPROXYMODEL_COLUMN_TYPE      2

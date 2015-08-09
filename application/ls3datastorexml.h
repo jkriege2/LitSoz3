@@ -27,6 +27,7 @@
 #include "programoptions.h"
 #include "ls3dsstringtablemodel.h"
 #include "languagetools.h"
+#include "ls3tools.h"
 
 class LS3DatastoreXML : public LS3Datastore {
         Q_OBJECT

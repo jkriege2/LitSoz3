@@ -130,7 +130,7 @@ Qt::ItemFlags LS3ReferenceTreeModel::flags(const QModelIndex &index) const {
 }
 
 
-QVariant LS3ReferenceTreeModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant LS3ReferenceTreeModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const {
     return QVariant();
 }
 
@@ -186,7 +186,7 @@ int LS3ReferenceTreeModel::rowCount(const QModelIndex &parent) const {
 }
 
 
-int LS3ReferenceTreeModel::columnCount(const QModelIndex &parent) const {
+int LS3ReferenceTreeModel::columnCount(const QModelIndex &/*parent*/) const {
     /*if (parent.isValid())
         return static_cast<LS3ReferenceTreeItem*>(parent.internalPointer())->columnCount();
     else
@@ -275,7 +275,7 @@ bool LS3ReferenceTreeModel::dropMimeData(const QMimeData *data,  Qt::DropAction 
 
      if (column > 0)
          return false;
-     int beginRow;
+     int beginRow=0;
 
      if (row != -1)
          beginRow = row;
@@ -370,6 +370,7 @@ void LS3ReferenceTreeModel::topicsChanged() {
 }
 
 void LS3ReferenceTreeModel::keywordsChanged() {
+    //return;
     QStringList sl=m_datastore->getKeywords();
 
     // 1. remove all unused children
@@ -404,6 +405,7 @@ void LS3ReferenceTreeModel::keywordsChanged() {
 }
 
 void LS3ReferenceTreeModel::authorsChanged() {
+    //return;
     QStringList sl=m_datastore->getAuthors();
 
     // 1. remove all unused children

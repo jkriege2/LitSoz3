@@ -16,6 +16,7 @@
 
 #include "contentspane.h"
 #include <iostream>
+#include "ls3tools.h"
 
 ContentsPane::ContentsPane(ProgramOptions* settings, QWidget* parent):
     QWidget(parent)
@@ -46,6 +47,7 @@ ContentsPane::~ContentsPane()
 }
 
 void ContentsPane::connectWidgets(LS3Datastore* datastore) {
+    LS3ElapsedAutoTimer timer("ContentsPane::connectWidgets()");
     //std::cout<<"ContentsPane::connectWidgets() ... ";
     connected=true;
     this->datastore=datastore;
@@ -57,6 +59,7 @@ void ContentsPane::connectWidgets(LS3Datastore* datastore) {
 }
 
 void ContentsPane::disconnectWidgets() {
+    LS3ElapsedAutoTimer timer("ContentsPane::disconnectWidgets()");
     if (datastore) {
         datastore->removeMapping(edtAbstract);
         datastore->removeMapping(edtComments);

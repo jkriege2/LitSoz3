@@ -85,7 +85,7 @@ void QMappableComboBox::setFilename(QString fn) {
     }
 }
 
-void QMappableComboBox::modelDataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight ) {
+void QMappableComboBox::modelDataChanged ( const QModelIndex & /*topLeft*/, const QModelIndex & /*bottomRight*/ ) {
     //std::cout<<"model changed\n";
     if (m_filename.size()>0) {
         QFile f(m_filename);
@@ -101,7 +101,7 @@ void QMappableComboBox::modelDataChanged ( const QModelIndex & topLeft, const QM
     }
 }
 
-void QMappableComboBox::modelRowChanged ( const QModelIndex & parent, int start, int end ) {
+void QMappableComboBox::modelRowChanged ( const QModelIndex & /*parent*/, int /*start*/, int /*end*/ ) {
     modelDataChanged(QModelIndex(), QModelIndex());
 }
 

@@ -28,6 +28,7 @@
 #include <QXmlStreamWriter>
 #include <QProgressBar>
 #include <QMimeData>
+#include "ls3tools.h"
 
 class LS3DatastoreXML; // forward
 

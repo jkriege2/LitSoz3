@@ -92,8 +92,8 @@ void QEnhancedLineEdit::insertActTriggered() {
 
 void QEnhancedLineEdit::moveButtons() {
     QRect r = rect();
-    QPalette pal = palette();
-    QMargins m=textMargins();
+    //QPalette pal = palette();
+    //QMargins m=textMargins();
 
     QStyleOptionFrameV2 panel;
     initStyleOption(&panel);

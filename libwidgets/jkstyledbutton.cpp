@@ -190,8 +190,8 @@ void JKStyledButton::setPressedIcon(const QPixmap& pixmap) {
     setIcon(i);
 }
 
-void JKStyledButton::paintEvent(QPaintEvent* e) {
-    QSize s=size();
+void JKStyledButton::paintEvent(QPaintEvent* /*e*/) {
+    //QSize s=size();
     //std::cout<<"paintEvent size="<<width()<<", "<<height()<<" hover="<<hover<<"\n";
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);

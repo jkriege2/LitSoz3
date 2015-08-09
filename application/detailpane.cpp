@@ -15,6 +15,9 @@
 
 #include "detailpane.h"
 #include <iostream>
+#include "ls3tools.h"
+
+
 DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     QWidget(parent)
 {
@@ -191,12 +194,15 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
 
 void DetailPane::topicModelChanged() {
     QString txt=cmbTopic->text();
+    bool en=cmbTopic->updatesEnabled();
+    cmbTopic->setUpdatesEnabled(false);
     cmbTopic->clear();
     if (datastore) cmbTopic->addItems(datastore->getTopicsModel()->stringList());
     cmbTopic->setText(txt);
+    if (en) cmbTopic->setUpdatesEnabled(en);
 }
 
-void DetailPane::databaseCurentChanged(int index)
+void DetailPane::databaseCurentChanged(int /*index*/)
 {
     if (datastore) {
         disconnect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
@@ -210,7 +216,7 @@ void DetailPane::databaseCurentChanged(int index)
     }
 }
 
-void DetailPane::typeChanged(int index)
+void DetailPane::typeChanged(int /*index*/)
 {
     if (datastore) {
         datastore->setField("type", cmbType->data().toString());
@@ -224,6 +230,7 @@ void DetailPane::typeChanged(int index)
 }
 
 void DetailPane::connectWidgets(LS3Datastore* datastore) {
+    LS3ElapsedAutoTimer timer("DetailPane::connectWidgets()");
     //qDebug()<<"DetailPane::connectWidgets() ... ";
     connected=true;
     this->datastore=datastore;
@@ -254,6 +261,7 @@ void DetailPane::connectWidgets(LS3Datastore* datastore) {
 }
 
 void DetailPane::disconnectWidgets() {
+    LS3ElapsedAutoTimer timer("DetailPane::disconnectWidgets()");
     //qDebug()<<"DetailPane::disconnectWidgets()";
     disconnect(cmbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
     disconnect(datastore, SIGNAL(currentRecordChanged(int)), this, SLOT(databaseCurentChanged(int)));

@@ -323,7 +323,7 @@ CSLFile::CSLNode::~CSLNode()
 }
 
 
-QString CSLFile::CSLNode::produce(const QMap<QString, QVariant> &data, const CSLFormatState& currentFormat, CSLOutputFormat outf)
+QString CSLFile::CSLNode::produce(const QMap<QString, QVariant> &/*data*/, const CSLFormatState& /*currentFormat*/, CSLOutputFormat /*outf*/)
 {
     return QString();
 }
@@ -805,7 +805,7 @@ QString CSLLocale::formatDate(QDate date, const QString &form)
     }
 }
 
-QString CSLLocale::formatDate(CSLLocaleInterface* localeIntf, const QLocale& locale, const QList<CSLDateFormat>& m_dates, QDate date, const QString& form, bool yearOnly)
+QString CSLLocale::formatDate(CSLLocaleInterface* localeIntf, const QLocale& locale, const QList<CSLDateFormat>& m_dates, QDate date, const QString& /*form*/, bool yearOnly)
 {
 
     QList<CSLDateFormat> l=m_dates;
@@ -1453,7 +1453,7 @@ QString CSLFile::CSLLabelNode::produce(const QMap<QString, QVariant> &data, cons
     QString res="";
     QString dataf=getCSLField(variable, data, QString()).toString();
     bool isSingleNumber=false;
-    int dat=dataf.toInt(&isSingleNumber);
+    //int dat=dataf.toInt(&isSingleNumber);
 
     //qDebug()<<"CSLLabelNode: form="<<form<<"  plural="<<plural<<"  variable="<<variable;
     if (plural=="always") res=escapeString(outf, cslStripPeriods(applyTextCase(m_file->term(variable, false, form)), stripPeriods));

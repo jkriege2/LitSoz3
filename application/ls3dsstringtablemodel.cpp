@@ -35,6 +35,7 @@ LS3DSStringTableModel::~LS3DSStringTableModel()
 }
 
 void LS3DSStringTableModel::clear(){
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::clear()");
     m_data.clear();
     indexUUID.clear();
     largestNum=-1;
@@ -47,12 +48,14 @@ reset();
 }
 
 void LS3DSStringTableModel::newFile() {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::newFile()");
     clear();
     m_wasChanged=false;
     if (doEmitSignal) emit wasChangedChanged(m_wasChanged);
 }
 
 void LS3DSStringTableModel::loadFromXML(QDomElement n, QProgressBar* progress) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::loadFromXML()");
     clear();
 
     if (!n.isNull()) {
@@ -123,6 +126,7 @@ reset();
 }
 
 void LS3DSStringTableModel::saveToXML(QXmlStreamWriter* writer, QProgressBar* progress) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::saveToXML()");
     if (progress) {
         progress->setRange(0,m_data.size()/10);
         progress->setValue(0);
@@ -154,6 +158,7 @@ void LS3DSStringTableModel::saveToXML(QXmlStreamWriter* writer, QProgressBar* pr
 }
 
 QString LS3DSStringTableModel::newUUID() const {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::newUUID()");
     QString uu=QUuid::createUuid().toString();
     bool isOK=false;
     while (!isOK) {
@@ -170,11 +175,11 @@ QString LS3DSStringTableModel::newUUID() const {
 }
 
 
-int LS3DSStringTableModel::rowCount(const QModelIndex &parent) const {
+int LS3DSStringTableModel::rowCount(const QModelIndex &/*parent*/) const {
     return m_data.size();
 }
 
-int LS3DSStringTableModel::columnCount(const QModelIndex &parent) const {
+int LS3DSStringTableModel::columnCount(const QModelIndex &/*parent*/) const {
     return this->parent->getFieldDefinitionsCount();
 }
 
@@ -191,7 +196,7 @@ QVariant LS3DSStringTableModel::data(const QModelIndex &index, int role) const {
 
 QVariant LS3DSStringTableModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation==Qt::Horizontal) {
-        return parent->fieldName(section);
+        if (role == Qt::DisplayRole) return parent->fieldName(section);
     }
     return QVariant();
 }
@@ -214,6 +219,7 @@ static bool variantsEqual(const QVariant& v1, const QVariant& v2) {
 }
 
 bool LS3DSStringTableModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::setData("+QString::number(index.row())+", "+QString::number(index.column())+", "+value.toString()+", "+QString::number(role)+")");
     if (role != Qt::EditRole) return false;
 
     int row=index.row();
@@ -282,6 +288,7 @@ QMimeData* LS3DSStringTableModel::mimeData(const QModelIndexList &indexes) const
 }
 
 void LS3DSStringTableModel::setDoEmitSignals(bool emitSignals) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::setDoEmitSignals("+boolToString(emitSignals)+")");
     doEmitSignal=emitSignals;
 }
 
@@ -291,6 +298,7 @@ bool LS3DSStringTableModel::getDoEmitSignals() const
 }
 
 bool LS3DSStringTableModel::setRecord(int row, const QMap<QString, QVariant> &data) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::setRecord("+QString::number(row)+", map)");
     if ((row<0) || (row>=m_data.size())) return false;
 
 
@@ -309,6 +317,7 @@ bool LS3DSStringTableModel::setRecord(int row, const QMap<QString, QVariant> &da
 }
 
 bool LS3DSStringTableModel::setField(int row, QString field, QVariant data) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::setField("+QString::number(row)+", "+field+", "+data.toString()+")");
     if ((row<0) || (row>=m_data.size())) return false;
     bool datachanged=(!m_data[row].contains(field)) || (!variantsEqual(m_data[row].value(field, data), data));
 
@@ -341,6 +350,7 @@ QVariant LS3DSStringTableModel::getField(int idx, QString field) const {
 }
 
 int LS3DSStringTableModel::insertRecord(const QMap<QString, QVariant> &data) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::insertRecord(map)");
     beginInsertRows(QModelIndex(), m_data.size(), m_data.size());
     QMap<QString, QVariant> d=data;
     largestNum++;
@@ -355,6 +365,7 @@ int LS3DSStringTableModel::insertRecord(const QMap<QString, QVariant> &data) {
 }
 
 void LS3DSStringTableModel::removeRecord(int idx) {
+    LS3ElapsedAutoTimer timer("LS3DSStringTableModel::removeRecord("+QString::number(idx)+")");
     if ((idx<0)||(idx>=m_data.size())) return ;
     bool oldc=m_wasChanged;
     beginRemoveRows(QModelIndex(), idx, idx);

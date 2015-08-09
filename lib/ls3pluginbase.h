@@ -40,13 +40,13 @@ class LS3LIB_EXPORT LS3PluginBase: public QObject, public LS3Plugin {
         virtual void openData(LS3Datastore* datastore) { m_currentDatastore=datastore; };
 
         /** \copydoc LS3Plugin::closeData() */
-        virtual void closeData(LS3Datastore* datastore) { m_currentDatastore=NULL; };
+        virtual void closeData(LS3Datastore* datastore) { m_currentDatastore=NULL; Q_UNUSED(datastore)};
 
         /** \brief initialize the plugin (create buttons, menu entries, register import/export objects ...) */
         virtual void init(LS3PluginServices* pluginServices) { m_pluginServices=pluginServices; };
 
         /** \brief de-initialize the plugin (clean up when program is closed) */
-        virtual void deinit(LS3PluginServices* pluginServices)  {};
+        virtual void deinit(LS3PluginServices* pluginServices)  {Q_UNUSED(pluginServices)};
 
         /** \brief return the datastore last opened with openData() */
         LS3Datastore* datastore() const { return m_currentDatastore; }

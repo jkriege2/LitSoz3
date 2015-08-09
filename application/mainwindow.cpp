@@ -83,9 +83,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::showEvent(QShowEvent *event) {
+    QMainWindow::showEvent(event);
     exportDlg->init(this);
     importDlg->init(this);
-
 }
 
 
@@ -393,6 +393,7 @@ void MainWindow::disconnecttvMain() {
 
 
 void MainWindow::connectWidgets() {
+    LS3ElapsedAutoTimer timer("MainWindow::connectWidgets()");
     //std::cout<<"\n>>>> connecting widgets ... \n";
     tvMain->setEditTriggers(QAbstractItemView::NoEditTriggers);
     //tvMain->setEditTriggers(QAbstractItemView::SelectedClicked);
@@ -445,6 +446,7 @@ void MainWindow::connectWidgets() {
 }
 
 void MainWindow::disconnectWidgets() {
+    LS3ElapsedAutoTimer timer("MainWindow::disconnectWidgets()");
     //std::cout<<"\n>>>> disconnecting widgets ... \n";
     for (int i=0; i<m_plugins.size(); i++) {
         m_plugins[i]->closeData(datastore);
@@ -1012,7 +1014,7 @@ void MainWindow::currentRecordChanged(int row) {
     connecttvMain();
 }
 
-void MainWindow::tableRowChanged(const QModelIndex& current, const QModelIndex& previous) {
+void MainWindow::tableRowChanged(const QModelIndex& current, const QModelIndex& /*previous*/) {
     datastore->dbMoveUUID(tvMain->model()->data(tvMain->model()->index(current.row(), LS3SUMMARYPROXYMODEL_COLUMN_UUID)).toString());
 }
 
@@ -1036,7 +1038,7 @@ void MainWindow::tableRowDoubleClicked(const QModelIndex & current) {
     }
 }
 
-void MainWindow::tableDataChanged(int firstRow, int lastRow) {
+void MainWindow::tableDataChanged(int /*firstRow*/, int /*lastRow*/) {
 }
 
 

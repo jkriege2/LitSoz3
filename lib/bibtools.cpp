@@ -651,6 +651,7 @@ int extractNumber(const QString& data) {
     QRegExp rxYear("(\\d+)");
     if (rxYear.indexIn(data)!=-1) {
         int y=rxYear.cap(1).toInt();
+        if (y>999) return y;
     }
     return 0;
 }

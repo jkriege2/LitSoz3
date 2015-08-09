@@ -44,6 +44,7 @@ LS3DatastoreXML::~LS3DatastoreXML()
 }
 
 bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbLoad");
     // if a database is opened: close it!
     dbClose();
 
@@ -59,7 +60,7 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
     }
     if (!doc.setContent(&file, &errorMessage, &errorLine, &errorColumn)) {
         file.close();
-        file.close();
+        //file.close();
         emit dbError(tr("Error parsing databse '%1': %2 (line %3, column %4).").arg(fileName).arg(errorMessage).arg(errorLine).arg(errorColumn));
         return m_databaseLoaded=false;
     }
@@ -73,6 +74,8 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
 
     QDomElement n = docElem.firstChildElement("records");
     data->loadFromXML(n, progress);
+
+    timer.showMessage("XML loaded");
 
     //if (keywordsdata) delete keywordsdata
     //keywordsdata = new QStringListModel(this);
@@ -111,6 +114,8 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
         }
     }
 
+    timer.showMessage("METADATA read");
+
 
     // read the list of selected records
     QDomElement selectedNode = docElem.firstChildElement("selection_list");
@@ -123,11 +128,14 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
             n=n.nextSiblingElement("item");
         }
     }
+    timer.showMessage("SELECTION read");
+
 
     // read the reference tree
 
     QDomElement reftreeNode = docElem.firstChildElement("litsoz3_reference_tree");
     getReferencTreeModel()->readFromXML(reftreeNode);
+    timer.showMessage("REFTREE read");
 
     // read the authorsdata completer list from a file in config dir
     //if (authorsdata) delete authorsdata;
@@ -140,19 +148,24 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
     }
 
     updateCompleters(0, recordCount()-1, false);
+    timer.showMessage("AUTHORS_COMPLETER read");
 
     m_currentFile=fileName;
     emit filenameChanged(m_currentFile);
     emit connectWidgets();
+    timer.showMessage("CONNECTED_WIDGETS");
     dbFirst();
+    timer.showMessage("MOVED FIRST");
 
     emit databaseLoaded(true);
     emit databaseClosed(false);
     emit massiveSelectionChange();
+    timer.showMessage("EMITED SIGNALS");
     return m_databaseLoaded=true;
 }
 
 bool LS3DatastoreXML::dbNew(const QString &fileName) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbNew");
     dbClose();
     data->newFile();
     dbSave(fileName);
@@ -161,6 +174,7 @@ bool LS3DatastoreXML::dbNew(const QString &fileName) {
 }
 
 bool LS3DatastoreXML::dbSave(const QString &fileName, QProgressBar* progress) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbSave");
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         emit dbError(tr("Error when writing database '%1': Could not open file!").arg(fileName));
@@ -229,6 +243,7 @@ bool LS3DatastoreXML::dbSave(const QString &fileName, QProgressBar* progress) {
 }
 
 void LS3DatastoreXML::dbClose(bool saveOnClose) {    
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbClose");
     QElapsedTimer time;
     time.restart();
     if (data!=NULL) {
@@ -270,6 +285,7 @@ void LS3DatastoreXML::dbClose(bool saveOnClose) {
 }
 
 bool LS3DatastoreXML::setField(int record, QString field, QVariant value) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::setField("+QString::number(record)+", "+field+" = "+value.toString()+")");
     if (dbIsLoaded()) {
         data->setField(record,field, value);
         return true;
@@ -283,6 +299,7 @@ QVariant LS3DatastoreXML::getField(int record, QString field) const {
 }
 
 void LS3DatastoreXML::dbMove(int current) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbMove("+QString::number(current)+")");
     if (current<0) return;
     if (dbIsLoaded()) {
         int oldidx=mapper->currentIndex();
@@ -310,6 +327,7 @@ void LS3DatastoreXML::dbMove(int current) {
 }
 
 void LS3DatastoreXML::dbInsert(const QMap<QString, QVariant>& indata) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbInsert(map)");
     int row=dbInsertNoMoveCursor(indata);
     if (row>=0) {
         mapper->setCurrentIndex(row);
@@ -318,6 +336,7 @@ void LS3DatastoreXML::dbInsert(const QMap<QString, QVariant>& indata) {
 }
 
 int LS3DatastoreXML::dbInsertNoMoveCursor(const QMap<QString, QVariant>& indata) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbInsertNoMoveCursor(map)");
     int row=-1;
     if (dbIsLoaded()) {
         mapper->submit();
@@ -353,6 +372,7 @@ int LS3DatastoreXML::dbInsertNoMoveCursor(const QMap<QString, QVariant>& indata)
 
 
 void LS3DatastoreXML::dbSubmit() {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::dbSubmit()");
     int idx=currentRecordNum();
     mapper->submit();
     mapper->setCurrentIndex(idx);
@@ -368,6 +388,7 @@ QString LS3DatastoreXML::currentFile() const {
 }
 
 bool LS3DatastoreXML::addRecord(const QMap<QString, QVariant>& data, bool moveToRecord, bool createIDD) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::addRecord(map, ...)");
     if (!dbIsLoaded()) return false;
     int row=dbInsertNoMoveCursor(data);
     if (row>=0) {
@@ -382,6 +403,7 @@ bool LS3DatastoreXML::addRecord(const QMap<QString, QVariant>& data, bool moveTo
 }
 
 bool LS3DatastoreXML::addRecord(const QMap<QString, QVariant> &data, QString &uuid, bool createIDD) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::addRecord(map, "+uuid+" ...)");
     if (!dbIsLoaded()) return false;
     int row=dbInsertNoMoveCursor(data);
     if (row>=0) {
@@ -394,6 +416,7 @@ bool LS3DatastoreXML::addRecord(const QMap<QString, QVariant> &data, QString &uu
 }
 
 bool LS3DatastoreXML::setRecord(int index, const QMap<QString, QVariant>& datam) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::setRecord("+QString::number(index)+", map)");
     if (!dbIsLoaded()) return false;
 
     QMap<QString, QVariant> data=datam;
@@ -452,6 +475,7 @@ QStringList LS3DatastoreXML::getKeywords() const {
 }
 
 void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::updateCompleters("+QString::number(r1)+", "+QString::number(r2)+", ...)");
     QString s="";
     QStringList slold=keywordsdata->stringList();
     for (int i=r1; i<=r2; i++) {
@@ -467,10 +491,14 @@ void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
     } else {
         sl1=sl;
     }
+    timer.showMessage("collected keywords");
     sl1.removeDuplicates();
+    timer.showMessage("removed duplicates");
     sl1.sort();
+    timer.showMessage("sorted");
     keywordsdata->setStringList(sl1);
     emit keywordsListChanged();
+    timer.showMessage("written back");
 
     // update topic completer model
     s="";
@@ -487,10 +515,14 @@ void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
     } else {
         sl1=sl;
     }
+    timer.showMessage("collected topics");
     sl1.removeDuplicates();
+    timer.showMessage("removed duplicates");
     sl1.sort();
+    timer.showMessage("sorted");
     topicsdata->setStringList(sl1);
     emit topicsListChanged();
+    timer.showMessage("written back");
 
     // update authors and editors completer model
     s="";
@@ -504,14 +536,18 @@ void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
         QString s=sl[i].trimmed();
         if (!sl1.contains(s)) sl1.append(s);
     }
+    timer.showMessage("collected authors");
     sl1.removeDuplicates();
+    timer.showMessage("removed duplicates");
     sl1.sort();
+    timer.showMessage("sorted");
     authorsdata->setStringList(sl1);
     emit authorsListChanged();
 }
 
 
 void LS3DatastoreXML::tableDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight) {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::tableDataChanged("+QString::number(topLeft.row())+", "+QString::number(topLeft.column())+" ... "+QString::number(bottomRight.row())+",  "+QString::number(bottomRight.column())+")");
     if (dbIsLoaded()) {
 
         // update keywords completer model
@@ -524,12 +560,14 @@ void LS3DatastoreXML::tableDataChanged(const QModelIndex& topLeft, const QModelI
 
 void LS3DatastoreXML::disableMapping()
 {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::disableMapping()");
     mappingEnabled=false;
     //qDebug()<<"disableMapping";
 }
 
 void LS3DatastoreXML::enableMapping()
 {
+    LS3ElapsedAutoTimer timer("LS3DatastoreXML::enableMapping()");
     mappingEnabled=true;
     //qDebug()<<"enableMapping .. ";
     for (int i=0; i<storedMapping.size(); i++) {

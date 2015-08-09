@@ -16,6 +16,7 @@
 #include "extendedpane.h"
 #include <iostream>
 #include <QToolButton>
+#include "ls3tools.h"
 
 ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     QWidget(parent)
@@ -343,6 +344,7 @@ void ExtendedPane::setAccessdate()
 
 
 void ExtendedPane::connectWidgets(LS3Datastore* datastore) {
+    LS3ElapsedAutoTimer timer("ExtendedPane::connectWidgets()");
     //std::cout<<"ExtendedPane::connectWidgets() ... ";
     connected=true;
     this->datastore=datastore;
@@ -371,6 +373,7 @@ void ExtendedPane::connectWidgets(LS3Datastore* datastore) {
 }
 
 void ExtendedPane::disconnectWidgets() {
+    LS3ElapsedAutoTimer timer("ExtendedPane::disconnectWidgets()");
     if (datastore) {
         datastore->removeMapping(cmbOrigin);
         datastore->removeMapping(edtOwner);

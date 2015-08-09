@@ -21,6 +21,7 @@
 #include <QtXml>
 #include <iostream>
 #include "bibtools.h"
+#include "ls3tools.h"
 
 LS3Datastore::LS3Datastore(LS3PluginServices* pservices, QObject* parent):
     QObject(parent)
@@ -133,6 +134,7 @@ int LS3Datastore::getRecordByUUID(const QString& uuid) const  {
 }
 
 void LS3Datastore::dbMoveUUID(QString uuid) {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbMoveUUID("+uuid+")");
     dbMove(getRecordByUUID(uuid));
 }
 
@@ -141,10 +143,12 @@ QMap<QString, QVariant> LS3Datastore::currentRecord() const {
 }
 
 void LS3Datastore::selectCurrent() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::selectCurrent()");
     select(getField("uuid").toString());
 }
 
 void LS3Datastore::select(QString uuid) {
+    LS3ElapsedAutoTimer timer("LS3Datastore::selectCurrent("+uuid+")");
     selection_set.insert(uuid);
     emit selectionChanged(getRecordByUUID(uuid), true);
     //std::cout<<"selecting "<<uuid.toStdString()<<std::endl;
@@ -152,6 +156,7 @@ void LS3Datastore::select(QString uuid) {
 }
 
 void LS3Datastore::select(QStringList uuid) {
+    LS3ElapsedAutoTimer timer("LS3Datastore::selectCurrent("+uuid.join(", ")+")");
     for (int i=0; i<uuid.size(); i++) {
         selection_set.insert(uuid[i]);
         //select(uuid[i]);
@@ -192,6 +197,7 @@ bool LS3Datastore::isSelected(int i) const {
 }
 
 void LS3Datastore::clearSelection() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::clearSelection()");
     QList<QString> sel=QList<QString>::fromSet(selection_set);
     selection_set.clear();
     for (int i=0; i<sel.size(); i++) {
@@ -326,18 +332,22 @@ QVariant LS3Datastore::getField(QString field) const  {
 }
 
 void LS3Datastore::dbFirst() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbFirst()");
     dbMove(0);
 };
 
 void LS3Datastore::dbLast() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbLast()");
     dbMove(recordCount()-1);
 }
 
 void LS3Datastore::dbNext() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbNext()");
     dbMove(currentRecordNum()+1);
 }
 
 void LS3Datastore::dbPrevious() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbPrevious()");
     dbMove(currentRecordNum()-1);
 }
 
@@ -353,6 +363,7 @@ QStringList LS3Datastore::getFieldNames() const {
 
 
  QString LS3Datastore::createID(int record, LS3Datastore::IDType type) {
+     LS3ElapsedAutoTimer timer("LS3Datastore::createID("+QString::number(record)+")");
     bool addLetterCode=true; // if this is false, no a, b, c,... letter code will be added
 
     // read and process information from database
@@ -447,10 +458,12 @@ LS3ReferenceTreeModel* LS3Datastore::getReferencTreeModel() const {
 }
 
 void LS3Datastore::dbDelete(const QString& recordUUID) {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbDelete("+recordUUID+")");
     dbDelete(getRecordByUUID(recordUUID));
 }
 
 void LS3Datastore::dbDelete() {
+    LS3ElapsedAutoTimer timer("LS3Datastore::dbDelete()");
     dbDelete(currentRecordNum());
 }
 
@@ -475,7 +488,7 @@ LS3PluginServices* LS3Datastore::getPluginServices() const {
     return m_pluginServices;
 }
 
-bool LS3Datastore::dbSave(const QString &fileName, QProgressBar *progress)
+bool LS3Datastore::dbSave(const QString &/*fileName*/, QProgressBar */*progress*/)
 {
     return false;
 }

@@ -53,7 +53,7 @@ LS3Datastore* LS3SelectionDisplayModel::datastore() const {
     return m_datastore;
 }
 
-int	LS3SelectionDisplayModel::rowCount(const QModelIndex & parent) const {
+int	LS3SelectionDisplayModel::rowCount(const QModelIndex & /*parent*/) const {
     return datalist.size();
 }
 
@@ -66,14 +66,16 @@ QVariant LS3SelectionDisplayModel::data(const QModelIndex & index, int role) con
     return QVariant();
 }
 
-int	LS3SelectionDisplayModel::columnCount(const QModelIndex & parent) const {
+int	LS3SelectionDisplayModel::columnCount(const QModelIndex & /*parent*/) const {
     return 2;
 }
 
 QVariant LS3SelectionDisplayModel::headerData(int section, Qt::Orientation orientation, int role) const {
-    if (role==Qt::DisplayRole) {
-        if (section==0) return tr("Reference");
-        if (section==1) return tr("UUID");
+    if (orientation==Qt::Horizontal)  {
+        if (role==Qt::DisplayRole) {
+            if (section==0) return tr("Reference");
+            if (section==1) return tr("UUID");
+        }
     }
     return QVariant();
 }
@@ -174,7 +176,7 @@ QMimeData* LS3SelectionDisplayModel::mimeData(const QModelIndexList &indexes) co
     return mimeData;
 }
 
-bool LS3SelectionDisplayModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
+bool LS3SelectionDisplayModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int /*row*/, int column, const QModelIndex &/*parent*/) {
     //std::cout<<"LS3SelectionDisplayModel::dropMimeData\n";
     if (action == Qt::IgnoreAction)
         return true;
@@ -269,7 +271,7 @@ QSize LS3SelectionDisplayModelDelegate::sizeHint(const QStyleOptionViewItem &opt
     return s;
 }
 
-QWidget *LS3SelectionDisplayModelDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QWidget *LS3SelectionDisplayModelDelegate::createEditor(QWidget */*parent*/, const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const {
     return NULL;
 }
 

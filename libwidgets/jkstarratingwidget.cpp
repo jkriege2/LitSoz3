@@ -92,7 +92,7 @@ void JKStarRatingWidget::paintEvent(QPaintEvent * event) {
 void JKStarRatingWidget::mouseReleaseEvent(QMouseEvent * event) {
     if (event->button()==Qt::LeftButton) {
         int n_rating=0;
-        int startx=2+frameWidth();
+        //int startx=2+frameWidth();
         int starty=2+frameWidth();
         //std::cout<<"button(x="<<event->x()<<", "<<event->y()<<")\n";
         if (event->x()<=noStarImage.width()+starty) n_rating=0;
