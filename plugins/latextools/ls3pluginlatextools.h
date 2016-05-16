@@ -76,6 +76,7 @@ class LS3PluginLatexTools : public LS3PluginBase {
         QAction* actCopyID;
         QAction* actCopyIDNoCite;
         QAction* actPasteBibtex;
+        QAction* actPasteBibtexCurrent;
         QAction* actCopyBibteX;
         QAction* actCopSelectedyBibteX;
         QToolBar* tbLatex;
@@ -88,6 +89,7 @@ class LS3PluginLatexTools : public LS3PluginBase {
         void pasteBibTex();
         void copyBibTex();
         void copySelectedBibTex();
+        void pasteBibTexCurrent();
     private:
 };
 

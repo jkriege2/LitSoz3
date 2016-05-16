@@ -45,6 +45,7 @@ void LS3PluginLatexTools::init(LS3PluginServices* pluginServices) {
     actCopyID=new QAction(QIcon(":/latextools/insertcite.png"), tr("Copy \\cite{ID} to Clipboard"), pluginServices->GetParentWidget());
     actCopyIDNoCite=new QAction(QIcon(":/latextools/insertids.png"), tr("Copy ID to Clipboard"), pluginServices->GetParentWidget());
     actPasteBibtex=new QAction(QIcon(":/latextools/pastebibtex.png"), tr("Paste BiBTeX"), pluginServices->GetParentWidget());
+    actPasteBibtexCurrent=new QAction(QIcon(":/latextools/pastebibtex.png"), tr("Paste BiBTeX for Current Record"), pluginServices->GetParentWidget());
     actCopyBibteX=new QAction(QIcon(":/latextools/copybibtex.png"), tr("Copy current record as BibTeX"), pluginServices->GetParentWidget());
     actCopSelectedyBibteX=new QAction(QIcon(":/latextools/copyselectedbibtex.png"), tr("Copy selected records as BibTeX"), pluginServices->GetParentWidget());
 
@@ -67,6 +68,7 @@ void LS3PluginLatexTools::init(LS3PluginServices* pluginServices) {
     mLatex->addAction(actCopSelectedyBibteX);
     mLatex->addSeparator();
     mLatex->addAction(actPasteBibtex);
+    mLatex->addAction(actPasteBibtexCurrent);
     pluginServices->getMenu(LS3PluginServices::ToolsMenu)->addMenu(mLatex);
     pluginServices->getMenu(LS3PluginServices::EditMenu)->addMenu(mLatex);
 
@@ -77,6 +79,7 @@ void LS3PluginLatexTools::init(LS3PluginServices* pluginServices) {
     connect(actCopyID, SIGNAL(triggered()), this, SLOT(copyID()));
     connect(actCopyIDNoCite, SIGNAL(triggered()), this, SLOT(copyIDNoCite()));
     connect(actPasteBibtex, SIGNAL(triggered()), this, SLOT(pasteBibTex()));
+    connect(actPasteBibtexCurrent, SIGNAL(triggered()), this, SLOT(pasteBibTexCurrent()));
     connect(actCopyBibteX, SIGNAL(triggered()), this, SLOT(copyBibTex()));
     connect(actCopSelectedyBibteX, SIGNAL(triggered()), this, SLOT(copySelectedBibTex()));
 
@@ -122,6 +125,18 @@ void LS3PluginLatexTools::pasteBibTex() {
         QVector<QMap<QString, QVariant> > data=bibteximport->importText(text, pluginServices());
         for (int i=0; i<data.size(); i++) {
             datastore()->addRecord(data[i]);
+        }
+    }
+}
+
+void LS3PluginLatexTools::pasteBibTexCurrent() {
+    if (datastore()) {
+        QClipboard *clipboard = QApplication::clipboard();
+        QString text=clipboard->text();
+
+        QVector<QMap<QString, QVariant> > data=bibteximport->importText(text, pluginServices());
+        if (data.size()>0) {
+            datastore()->setCurrentRecord(data[0]);
         }
     }
 }

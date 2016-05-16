@@ -149,7 +149,7 @@ QList<QPair<QString, int> > LanguageRecognizer::hashToList(const QHash<QString, 
         if (minOccurence<0 || it.value()>=minOccurence) l.append(qMakePair(it.key(), it.value()));
     }
 
-    qSort(l.begin(), l.end(), LanguageRecognizer_notLessThan);
+    if (l.size()>0) qSort(l.begin(), l.end(), LanguageRecognizer_notLessThan);
 
     return l;
 }
@@ -192,6 +192,11 @@ double LanguageRecognizer::LangDB::getMaxUseDist(int firstNNgrams) const
 
 QString recognizeLanguage(const QString& text, double* distance) {
     QString lang="";
+    QString sample_text=text.simplified().trimmed();
+    if (sample_text.size()>3*2048) {
+        QString nsample_text=sample_text.left(2048)+"\n"+sample_text.right(2048)+"\n"+sample_text.mid(sample_text.size()/2-1024,2048);
+        sample_text=nsample_text;
+    }
 
     if (!___LanguageRecognizerGlobalInstance___LS3.isInitialize()) {
         QStringList dirs;
@@ -201,11 +206,11 @@ QString recognizeLanguage(const QString& text, double* distance) {
     }
 
     /*QHash<QString, int> hash;
-    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 1);
-    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 2);
-    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 3);
-    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 4);
-    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, text, 5);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, sample_text, 1);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, sample_text, 2);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, sample_text, 3);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, sample_text, 4);
+    ___LanguageRecognizerGlobalInstance___LS3.splitNGrams(hash, sample_text, 5);
     QList<QPair<QString, int> > ngramlist=___LanguageRecognizerGlobalInstance___LS3.hashToList(hash);
     //qDebug()<<"## reg NGRAMS size="<<ngramlist.size();
     QString xml;
@@ -217,13 +222,13 @@ QString recognizeLanguage(const QString& text, double* distance) {
     QFile f("./langrec.txt");
     if (f.open(QFile::Append)) {
         f.write(QByteArray("\n\n\n\n\n"));
-        f.write(text.left(100).simplified().trimmed().toUtf8());
+        f.write(sample_text.left(100).simplified().trimmed().toUtf8());
         f.write(QByteArray("\n\n"));
         f.write(xml.toUtf8());
         f.close();
     }*/
 
-    lang=___LanguageRecognizerGlobalInstance___LS3.recognizeLanguage(text, distance);
+    lang=___LanguageRecognizerGlobalInstance___LS3.recognizeLanguage(sample_text, distance);
 
     return lang;
 }
