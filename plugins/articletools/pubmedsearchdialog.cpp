@@ -20,8 +20,9 @@
 
 #define ADDFIELD(name, id) {ui->cmbFields1->addItem(name, id); ui->cmbFields2->addItem(name, id);}
 
-PubmedSearchDialog::PubmedSearchDialog(LS3PluginServices *services, QWidget *parent) :
+PubmedSearchDialog::PubmedSearchDialog(LS3PluginServices *services, QWidget *parent, bool oneRecOnly) :
     QDialog(parent),
+    m_oneRecOnly(oneRecOnly),
     ui(new Ui::PubmedSearchDialog)
 {
     this->services=services;
@@ -65,6 +66,10 @@ PubmedSearchDialog::PubmedSearchDialog(LS3PluginServices *services, QWidget *par
     ui->cmbFields1->setCurrentIndex(0);
     ui->cmbFields2->setCurrentIndex(0);
 
+    if (m_oneRecOnly) {
+        connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(selectRecord(QModelIndex)));
+    }
+
 
 }
 
@@ -88,6 +93,23 @@ QList<QMap<QString, QVariant> > PubmedSearchDialog::getDataToImport()
         if (isImported(i)) d<<data[i];
     }
     return d;
+}
+
+void PubmedSearchDialog::setPhrase(const QString &title, const QString &author)
+{
+    if (!title.isEmpty() && author.isEmpty()) {
+        ui->cmbFields1->setCurrentIndex(11);
+        ui->edtPhrase1->setText(title);
+    } else if (title.isEmpty() && !author.isEmpty()) {
+        ui->cmbFields1->setCurrentIndex(1);
+        ui->edtPhrase1->setText(author);
+    } else if (!title.isEmpty() && !author.isEmpty()) {
+        ui->cmbFields1->setCurrentIndex(11);
+        ui->edtPhrase1->setText(title);
+        ui->cmbFields2->setCurrentIndex(1);
+        ui->edtPhrase2->setText(author);
+    }
+
 }
 
 void PubmedSearchDialog::setRecord(int i, const QMap<QString, QVariant>& data) {
@@ -280,4 +302,10 @@ void PubmedSearchDialog::setError(const QString &message)
 {
     ui->lstLog->addItem(tr("ERROR> %1").arg(message));
     ui->lstLog->setCurrentRow(ui->lstLog->count()-1);
+}
+
+void PubmedSearchDialog::selectRecord(const QModelIndex &idx)
+{
+    list->unCheckAll();
+    list->setChecked(idx.row());
 }

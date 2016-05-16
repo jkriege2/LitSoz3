@@ -48,11 +48,12 @@ class PubmedSearchDialog : public QDialog
         Q_OBJECT
         
     public:
-        explicit PubmedSearchDialog(LS3PluginServices* services, QWidget *parent = 0);
+        explicit PubmedSearchDialog(LS3PluginServices* services, QWidget *parent = 0, bool oneRecOnly=false);
         ~PubmedSearchDialog();
         
         bool isImported(int i);
         QList<QMap<QString, QVariant> > getDataToImport();
+        void setPhrase(const QString& title=QString(), const QString& author=QString());
 
     protected slots:
         void on_cmbAND1_currentIndexChanged(int idx);
@@ -64,6 +65,7 @@ class PubmedSearchDialog : public QDialog
         void storeInRecord(QString record, QMap<QString, QVariant> data);
         void setMessage(const QString& message);
         void setError(const QString& message);
+        void selectRecord(const QModelIndex& idx);
 
     protected:
         void setRecord(int i, const QMap<QString, QVariant>& data);
@@ -73,6 +75,7 @@ class PubmedSearchDialog : public QDialog
         LS3PluginServices* services;
         QCheckableStringListModel* list;
         QStringList items;
+        bool m_oneRecOnly;
 
         QList<QMap<QString, QVariant> > data;
 

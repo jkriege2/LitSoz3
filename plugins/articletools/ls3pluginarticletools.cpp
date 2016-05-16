@@ -37,6 +37,7 @@
 #else
 #include <QtGui>
 #endif
+#include <QDesktopServices>
 #include <iostream>
 #include <QtXml>
 #include "bibtools.h"
@@ -124,6 +125,13 @@ void LS3PluginArticleTools::init(LS3PluginServices* pluginServices) {
     actPubmedSearch=new QAction(QIcon(":/articletools/pubmedsearch.png"), tr("Search Pubmed ..."), this);
     connect(actPubmedSearch, SIGNAL(triggered()), this, SLOT(searchPubmed()));
 
+
+    actPubmedSearchCurrent=new QAction(QIcon(":/articletools/pubmedsearchcurrent.png"), tr("Search Current Record in Pubmed ..."), this);
+    connect(actPubmedSearchCurrent, SIGNAL(triggered()), this, SLOT(searchPubmedCurrent()));
+
+    actGoogleSearchCurrent=new QAction(QIcon(":/articletools/google.png"), tr("Search Current Record in Google Scholar ..."), this);
+    connect(actGoogleSearchCurrent, SIGNAL(triggered()), this, SLOT(searchGoogleScholarCurrent()));
+
     actFillFromDoi=new QAction(QIcon(":/articletools/insert.png"), tr("fill missing fields from &DOI ..."), this);
     connect(actFillFromDoi, SIGNAL(triggered()), this, SLOT(fillFromDoi()));
     pluginServices->addEditButton(LS3PluginServices::EditDOI, actFillFromDoi);
@@ -181,9 +189,14 @@ void LS3PluginArticleTools::init(LS3PluginServices* pluginServices) {
     menuArticleTools->addAction(actInsertePDFFromURL);
     menuArticleTools->addSeparator();
     menuArticleTools->addAction(actPubmedSearch);
+    menuArticleTools->addAction(actPubmedSearchCurrent);
+    menuArticleTools->addSeparator();
+    menuArticleTools->addAction(actGoogleSearchCurrent);
 
     tbTools=pluginServices->getToolbar(LS3PluginServices::ToolsToolbar);
     tbTools->addAction(actPubmedSearch);
+    tbTools->addAction(actPubmedSearchCurrent);
+    tbTools->addAction(actGoogleSearchCurrent);
 
 
     QMenu* editMenu=pluginServices->getMenu(LS3PluginServices::EditMenu);
@@ -240,6 +253,8 @@ void LS3PluginArticleTools::openData(LS3Datastore* datastore) {
     actPastePDFFromURL->setEnabled(true);
     actInsertePDFFromURL->setEnabled(true);
     actPubmedSearch->setEnabled(true);
+    actPubmedSearchCurrent->setEnabled(true);
+    actGoogleSearchCurrent->setEnabled(true);
     actDownloadPDFFromArxiv->setEnabled(true);
     actDownloadPDFFromPMCID->setEnabled(true);
     actFillFromPMCID->setEnabled(true);
@@ -260,6 +275,8 @@ void LS3PluginArticleTools::closeData(LS3Datastore* datastore) {
     actPastePDFFromURL->setEnabled(false);
     actInsertePDFFromURL->setEnabled(false);
     actPubmedSearch->setEnabled(false);
+    actPubmedSearchCurrent->setEnabled(false);
+    actGoogleSearchCurrent->setEnabled(false);
     actDownloadPDFFromArxiv->setEnabled(false);
     actDownloadPDFFromPMCID->setEnabled(false);
     actFillFromPMCID->setEnabled(false);
@@ -284,6 +301,50 @@ void LS3PluginArticleTools::searchPubmed()
         }
         QApplication::restoreOverrideCursor();
     }
+}
+
+void LS3PluginArticleTools::searchPubmedCurrent()
+{
+    PubmedSearchDialog* dlg=new PubmedSearchDialog(pluginServices(), pluginServices()->GetParentWidget(), true);
+    QMap<QString, QVariant> c=m_currentDatastore->currentRecord();
+    QString a=c["authors"].toString();
+    if (c["editors"].toString().size()>0) {
+        a+="; ";
+        a+=c["editors"].toString();
+    }
+    QString uuid=c["uuid"].toString();
+    dlg->setPhrase(c["title"].toString(), a);
+    if (dlg->exec()) {
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        QList<QMap<QString, QVariant> > data=dlg->getDataToImport();
+        if (data.size()>0) {
+            QMap<QString, QVariant> mrec=data[0];
+            if (mrec["type"].toString().isEmpty()) mrec["type"]="misc";
+            m_currentDatastore->setCurrentRecord(mrec);
+            //int recN=m_currentDatastore->getRecordByUUID(uuid);
+            QString DOI=mrec["doi"].toString().trimmed();
+            if (!DOI.isEmpty()) {
+                insertDOI(DOI, uuid);
+            }
+        }
+        QApplication::restoreOverrideCursor();
+    }
+}
+
+void LS3PluginArticleTools::searchGoogleScholarCurrent()
+{
+    QMap<QString, QVariant> c=m_currentDatastore->currentRecord();
+    QString p;
+    if (c["title"].toString().size()>0) p+=("\""+c["title"].toString()+"\"");
+    if (c["authors"].toString().size()>0) {
+        if (p.size()>0) p+=" + ";
+        p+=c["authors"].toString();
+    } else if (c["editors"].toString().size()>0) {
+        if (p.size()>0) p+=" + ";
+        p+=c["editors"].toString();
+    }
+    QUrl url=QUrl(QByteArray("https://scholar.google.de/scholar?q=")+QUrl::toPercentEncoding(p));
+    QDesktopServices::openUrl(url);
 }
 
 void LS3PluginArticleTools::clipboardDataChanged() {

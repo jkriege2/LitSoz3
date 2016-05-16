@@ -93,6 +93,8 @@ class LS3PluginArticleTools : public LS3PluginBase {
         QAction* actInsertFilesArticle;
         QAction* actDockDisplay;
         QAction* actPubmedSearch;
+        QAction* actPubmedSearchCurrent;
+        QAction* actGoogleSearchCurrent;
         QComboBox* cmbDropType;
         /** \brief dock widget holding the article search tools window */
         QDockWidget* docArticleTools;
@@ -107,6 +109,9 @@ class LS3PluginArticleTools : public LS3PluginBase {
         QModernProgressDialog* dlgProgress;
     public slots:
         void searchPubmed();
+        void searchPubmedCurrent();
+        void searchGoogleScholarCurrent();
+
 
         void clipboardDataChanged();
         void pasteDoi();

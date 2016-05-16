@@ -16,5 +16,7 @@
         <file alias="doilogo.png">images/doilogo.png</file>
         <file alias="pubmedlogo.png">images/pubmedlogo.png</file>
         <file alias="pubmedsearch.png">images/pubmedsearch.png</file>
+        <file alias="pubmedsearchcurrent.png">images/pubmedsearchcurrent.png</file>
+        <file alias="google.png">images/google.png</file>
     </qresource>
 </RCC>
