@@ -82,11 +82,13 @@ class LS3PluginArticleTools : public LS3PluginBase {
         QAction* actDownloadPDFFromArxiv;
         QAction* actDownloadPDFFromDoi;
         QAction* actPasteDoi;
+        QAction* actPasteDoiCurrent;
         QAction* actPasteWebpage;
         QAction* actPasteFromWebpage;
         QAction* actPastePDFFromURL;
         QAction* actInsertePDFFromURL;
         QAction* actPastePMID;
+        QAction* actPastePMIDCurrent;
         QAction* actShowArticleToolWindow;
         QAction* actRenameFiles;
         QAction* actRenameFilesCurrentrecord;
@@ -116,6 +118,8 @@ class LS3PluginArticleTools : public LS3PluginBase {
         void clipboardDataChanged();
         void pasteDoi();
         void pastePMID();
+        void pasteDoiCurrent();
+        void pastePMIDCurrent();
         void articleInsert();
         void fillFromDoi();
         void fillFromPMID();

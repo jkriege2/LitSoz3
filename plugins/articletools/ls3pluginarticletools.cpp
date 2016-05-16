@@ -162,6 +162,12 @@ void LS3PluginArticleTools::init(LS3PluginServices* pluginServices) {
     actPastePMID=new QAction(QIcon(":/articletools/paste.png"), tr("paste P&ubMed ID ..."), this);
     connect(actPastePMID, SIGNAL(triggered()), this, SLOT(pastePMID()));
 
+    actPasteDoiCurrent=new QAction(QIcon(":/articletools/paste.png"), tr("paste&& search DOI for current record..."), this);
+    connect(actPasteDoiCurrent, SIGNAL(triggered()), this, SLOT(pasteDoiCurrent()));
+
+    actPastePMIDCurrent=new QAction(QIcon(":/articletools/paste.png"), tr("paste && search PubMed ID for current record ..."), this);
+    connect(actPastePMIDCurrent, SIGNAL(triggered()), this, SLOT(pastePMIDCurrent()));
+
     actPasteWebpage=new QAction(QIcon(":/articletools/pastewebpage.png"), tr("paste URL as &Webpage ..."), this);
     connect(actPasteWebpage, SIGNAL(triggered()), this, SLOT(pasteWebpage()));
 
@@ -179,9 +185,11 @@ void LS3PluginArticleTools::init(LS3PluginServices* pluginServices) {
     menuArticleTools->addSeparator();
     menuArticleTools->addAction(actFillFromDoi);
     menuArticleTools->addAction(actPasteDoi);
+    menuArticleTools->addAction(actPasteDoiCurrent);
     menuArticleTools->addSeparator();
     menuArticleTools->addAction(actFillFromPMID);
     menuArticleTools->addAction(actPastePMID);
+    menuArticleTools->addAction(actPastePMIDCurrent);
     menuArticleTools->addSeparator();
     menuArticleTools->addAction(actPasteWebpage);
     menuArticleTools->addAction(actPasteFromWebpage);
@@ -202,6 +210,8 @@ void LS3PluginArticleTools::init(LS3PluginServices* pluginServices) {
     QMenu* editMenu=pluginServices->getMenu(LS3PluginServices::EditMenu);
     editMenu->addAction(actPasteDoi);
     editMenu->addAction(actPastePMID);
+    editMenu->addAction(actPasteDoiCurrent);
+    editMenu->addAction(actPastePMIDCurrent);
     editMenu->addAction(actPasteWebpage);
     editMenu->addAction(actPasteFromWebpage);
     editMenu->addAction(actPastePDFFromURL);
@@ -396,6 +406,21 @@ void LS3PluginArticleTools::pastePMID() {
     }
 }
 
+void LS3PluginArticleTools::pasteDoiCurrent() {
+    if (!m_currentDatastore) return;
+    QStringList sl=QApplication::clipboard()->text().split('\n');
+    if (sl.size()>0) {
+        insertDOI(sl[0].trimmed(), m_currentDatastore->currentRecord().operator []("uuid").toString());
+    }
+}
+
+void LS3PluginArticleTools::pastePMIDCurrent() {
+    if (!m_currentDatastore) return;
+    QStringList sl=QApplication::clipboard()->text().split('\n');
+    if (sl.size()>0) {
+        insertPubmed(sl[0].trimmed(), m_currentDatastore->currentRecord().operator []("uuid").toString());
+    }
+}
 
 void LS3PluginArticleTools::fillFromDoi() {
     if (!m_currentDatastore) return;
