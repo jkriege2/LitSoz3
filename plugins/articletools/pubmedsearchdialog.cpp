@@ -68,6 +68,8 @@ PubmedSearchDialog::PubmedSearchDialog(LS3PluginServices *services, QWidget *par
 
     if (m_oneRecOnly) {
         connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(selectRecord(QModelIndex)));
+        connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(selectRecord(QModelIndex)));
+        connect(ui->listView, SIGNAL(entered(QModelIndex)), this, SLOT(selectRecord(QModelIndex)));
     }
 
 

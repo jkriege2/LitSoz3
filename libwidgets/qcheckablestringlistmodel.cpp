@@ -24,15 +24,18 @@ QCheckableStringListModel::QCheckableStringListModel(QObject *parent) :
 
 void QCheckableStringListModel::setChecked(int i) {
     m_check.insert(i);
+    emit dataChanged(index(i, 0), index(i, 0));
 }
 
 void QCheckableStringListModel::setChecked(int i, bool c) {
     if (c) m_check.insert(i);
     else m_check.remove(i);
+    emit dataChanged(index(i, 0), index(i, 0));
 }
 
 void QCheckableStringListModel::setUnChecked(int i) {
     m_check.remove(i);
+    emit dataChanged(index(i, 0), index(i, 0));
 }
 
 bool QCheckableStringListModel::isChecked(int i) const {
@@ -42,12 +45,17 @@ bool QCheckableStringListModel::isChecked(int i) const {
 
 void QCheckableStringListModel::unCheckAll() {
     m_check.clear();
+    int cnt=rowCount();
+    for (int i=0; i<cnt; i++) {
+        emit dataChanged(index(i, 0), index(i, 0));
+    }
 }
 
 void QCheckableStringListModel::checkAll() {
     m_check.clear();
     for (int i=0; i<stringList().size(); i++) {
         m_check.insert(i);
+        emit dataChanged(index(i, 0), index(i, 0));
     }
 }
 

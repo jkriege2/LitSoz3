@@ -45,7 +45,7 @@ void LS3PluginLatexTools::init(LS3PluginServices* pluginServices) {
     actCopyID=new QAction(QIcon(":/latextools/insertcite.png"), tr("Copy \\cite{ID} to Clipboard"), pluginServices->GetParentWidget());
     actCopyIDNoCite=new QAction(QIcon(":/latextools/insertids.png"), tr("Copy ID to Clipboard"), pluginServices->GetParentWidget());
     actPasteBibtex=new QAction(QIcon(":/latextools/pastebibtex.png"), tr("Paste BiBTeX"), pluginServices->GetParentWidget());
-    actPasteBibtexCurrent=new QAction(QIcon(":/latextools/pastebibtex.png"), tr("Paste BiBTeX for Current Record"), pluginServices->GetParentWidget());
+    actPasteBibtexCurrent=new QAction(QIcon(":/latextools/pastebibtexcur.png"), tr("Paste BiBTeX for Current Record"), pluginServices->GetParentWidget());
     actCopyBibteX=new QAction(QIcon(":/latextools/copybibtex.png"), tr("Copy current record as BibTeX"), pluginServices->GetParentWidget());
     actCopSelectedyBibteX=new QAction(QIcon(":/latextools/copyselectedbibtex.png"), tr("Copy selected records as BibTeX"), pluginServices->GetParentWidget());
 
@@ -57,6 +57,7 @@ void LS3PluginLatexTools::init(LS3PluginServices* pluginServices) {
     tbLatex->addAction(actCopSelectedyBibteX);
     tbLatex->addSeparator();
     tbLatex->addAction(actPasteBibtex);
+    tbLatex->addAction(actPasteBibtexCurrent);
     tbLatex->setObjectName("toolbar_plugin_latextools");
     pluginServices->insertToolBar(tbLatex);
 

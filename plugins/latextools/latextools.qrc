@@ -6,6 +6,7 @@
         <file alias="latextools/bibteximporter.png">images/bibteximporter.png</file>
         <file alias="latextools/bibtexexporter.png">images/bibtexexporter.png</file>
         <file alias="latextools/pastebibtex.png">images/pastebibtex.png</file>
+        <file alias="latextools/pastebibtexcur.png">images/pastebibtexcur.png</file>
         <file alias="latextools/copybibtex.png">images/copybibtex.png</file>
         <file alias="latextools/copyselectedbibtex.png">images/copybibtex_all.png</file>
     </qresource>
