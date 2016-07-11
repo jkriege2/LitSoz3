@@ -28,14 +28,25 @@
 #include <QPainter>
 int main(int argc, char * argv[])
 {
+#ifdef Q_OS_WIN
+    qDebug()<<"setting Qt lib paths: "<<"./qtplugins"<<(QFileInfo(argv[0]).absolutePath()+"/qtplugins");
+    QCoreApplication::addLibraryPath("./qtplugins");
+    QCoreApplication::addLibraryPath(QFileInfo(argv[0]).absolutePath()+"/qtplugins");
+#endif
+
     Q_INIT_RESOURCE(litsoz3);
 
     QApplication app(argc, argv);
+
+#ifdef Q_OS_WIN
+    QApplication::addLibraryPath(QCoreApplication::applicationDirPath()+"/qtplugins");
+#endif
     app.setOrganizationName("");
     app.setApplicationName(QString("LitSoz %1").arg(VERSION_FULL));
     app.setOrganizationDomain(QString(LS3_WEBLINK));
     app.setApplicationVersion(QString("%1 (DATE %2)").arg(VERSION_FULL).arg(COMPILEDATE));
     app.setWindowIcon(QIcon(":/ls3icon.png"));
+
 
 
     QPixmap pixmap(":/splash.png");
@@ -55,10 +66,6 @@ int main(int argc, char * argv[])
     app.processEvents();
     app.processEvents();
     app.processEvents();
-
-    #ifdef __WINDOWS__
-      app.addLibraryPath(QCoreApplication::applicationDirPath()+"/qtplugins");
-    #endif
     app.processEvents();
 
     ProgramOptions* settings=new ProgramOptions("", &app, &app);
