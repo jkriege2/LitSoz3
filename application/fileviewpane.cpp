@@ -81,8 +81,10 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     actZoomOut=new QAction(QIcon(":/pdf_zoomout.png"), tr("zoom one step out"), this);
     actFindDown=new QAction(QIcon(":/pdf_finddown.png"), tr("find downwards"), this);
     actFindUp=new QAction(QIcon(":/pdf_findup.png"), tr("find upwards"), this);
+
     actCopySel=new QAction(QIcon(":/copy.png"), tr("copy selected text"), this);
     actCopySel->setShortcut(QKeySequence::Copy);
+    connect(actCopySel, SIGNAL(triggered()), this, SLOT(copySelection()));
 
     QAction* act;
     menuSetAsField=new QMenu(tr("set field value from selection ..."), this);
