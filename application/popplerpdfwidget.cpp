@@ -373,7 +373,7 @@ QRectF PopplerPDFWidget::searchBackwards(const QString &text)
         double b=searchLocation.bottom();
 
         while (doc->page(page)->search(text, l,t,r,b,
-            Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            Poppler::Page::NextResult, Poppler::Page::IgnoreCase)) {
             searchLocation.setLeft(l);
             searchLocation.setRight(r);
             searchLocation.setBottom(b);
@@ -418,7 +418,7 @@ QRectF PopplerPDFWidget::searchBackwards(const QString &text)
         double b=searchLocation.bottom();
 
         while (doc->page(page)->search(text, l,t,r,b,
-            Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            Poppler::Page::NextResult, Poppler::Page::IgnoreCase)) {
             searchLocation.setLeft(l);
             searchLocation.setRight(r);
             searchLocation.setBottom(b);
@@ -454,7 +454,7 @@ QRectF PopplerPDFWidget::searchForwards(const QString &text)
         double b=searchLocation.bottom();
 
         if (doc->page(page)->search(text, l,t,r,b,
-            Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            Poppler::Page::NextResult, Poppler::Page::IgnoreCase)) {
             searchLocation.setLeft(l);
             searchLocation.setRight(r);
             searchLocation.setBottom(b);
@@ -479,7 +479,7 @@ QRectF PopplerPDFWidget::searchForwards(const QString &text)
         double b=searchLocation.bottom();
 
         if (doc->page(page)->search(text, l,t,r,b,
-            Poppler::Page::NextResult, Poppler::Page::CaseInsensitive)) {
+            Poppler::Page::NextResult, Poppler::Page::IgnoreCase)) {
             searchLocation.setLeft(l);
             searchLocation.setRight(r);
             searchLocation.setBottom(b);
