@@ -414,8 +414,8 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	
 	
 	
-	tar xvf poppler-0.31.0.tar.gz -C ./build3/
-	cd build3/poppler-0.31.0
+	tar xvf poppler-0.45.0.tar.gz -C ./build3/
+	cd build3/poppler-0.45.0
 	
 	
 	#POPPLER_QT4_CFLAGS="-c -g -frtti -fexceptions -mthreads -Wall -I${QTDIR}/include/QtCore -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtXml -I${QTDIR}/include -I${QTDIR}/mkspecs/default"
@@ -456,7 +456,7 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	echo "${PKG_CONFIG_PATH}"
 	pkg-config --list-all
 
-	./configure --disable-libopenjpeg --disable-silent-rules --enable-shared --disable-static --enable-poppler-cpp --disable-poppler-glib --disable-gtk-test --disable-poppler-qt4 --enable-poppler-qt5 --disable-cms --enable-zlib --prefix=${CURRENTDIR}/poppler CFLAGS=" -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/  -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " CXXFLAGS=" -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/ -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " LDFLAGS=" -L${CURRENTDIR}/libtiff/lib/ -L${CURRENTDIR}/libjpeg/lib/ -L${CURRENTDIR}/libpng/lib/ -L${CURRENTDIR}/freetype/lib/ -L${CURRENTDIR}/zlib/lib/ " LIBS="-lz -ltiff -ljpeg -lpng -lfreetype"
+	./configure --disable-libopenjpeg --disable-silent-rules --enable-shared --disable-static --enable-poppler-cpp --disable-poppler-glib --disable-gtk-test --disable-poppler-qt4 --enable-poppler-qt5 --disable-cms --enable-zlib --prefix=${CURRENTDIR}/poppler CFLAGS=" -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/  -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " CXXFLAGS="-std=c++11 -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/ -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " LDFLAGS="-std=c++11 -L${CURRENTDIR}/libtiff/lib/ -L${CURRENTDIR}/libjpeg/lib/ -L${CURRENTDIR}/libpng/lib/ -L${CURRENTDIR}/freetype/lib/ -L${CURRENTDIR}/zlib/lib/ " LIBS="-lz -ltiff -ljpeg -lpng -lfreetype"
 	#LIBTIFF_CFLAGS=" -I${CURRENTDIR}/libtiff/include/ " LIBTIFF_LIBS=" -L${CURRENTDIR}/libtiff/lib/ -ltiff " LIBJPEG_CFLAGS=" -I${CURRENTDIR}/libjpeg/include/ " LIBJPEG_LIBS=" -L${CURRENTDIR}/libjpeg/lib/ -ljpeg " LIBPNG_CFLAGS=" -I${CURRENTDIR}/libpng/include/ " LIBPNG_LIBS=" -L${CURRENTDIR}/libpng/lib/ -lpng " FREETYPE_CFLAGS=" -I${CURRENTDIR}/freetype/include/ " FREETYPE_CFLAGS=" -I${CURRENTDIR}/freetype/include/freetype2/ " FREETYPE_LIBS=" -L${CURRENTDIR}/freetype/lib/ -lfreetype "
 #	POPPLER_QT4_CFLAGS="${POPPLER_QT4_CFLAGS}" POPPLER_QT4_LIBS="${POPPLER_QT4_LIBS}" POPPLER_QT4_TEST_CFLAGS="${POPPLER_QT4_TEST_CFLAGS}" POPPLER_QT4_TEST_LIBS="${POPPLER_QT4_TEST_LIBS}"
 	libOK=$?
