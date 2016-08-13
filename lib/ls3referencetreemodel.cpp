@@ -17,7 +17,7 @@
 #include "ls3datastore.h"
 #include <QDebug>
 #include <QtXml>
-
+#include "bibtools.h"
 #include "ls3referencetreemodel.h"
 
 LS3ReferenceTreeModel::LS3ReferenceTreeModel(LS3Datastore* datastore, QObject *parent) :
@@ -44,9 +44,13 @@ LS3ReferenceTreeModel::LS3ReferenceTreeModel(LS3Datastore* datastore, QObject *p
         itemNewReferences->appendChild(itemSubNewReferences);
     itemFolderRoot=new LS3ReferenceTreeItem("User Folders", NULL, LS3ReferenceTreeItem::FolderUserBase, datastore);
     itemTypeFilters=new LS3ReferenceTreeItem("Filter: Type", NULL, LS3ReferenceTreeItem::FolderBasicFilter, datastore);
+    itemTypeFilters->setCaseSecitivity(Qt::CaseInsensitive);
     itemTopicFilters=new LS3ReferenceTreeItem("Filter: Topic", NULL, LS3ReferenceTreeItem::FolderBasicFilter, datastore);
+    itemTopicFilters->setCaseSecitivity(Qt::CaseInsensitive);
     itemAuthorFilters=new LS3ReferenceTreeItem("Filter: Author/Editor", NULL, LS3ReferenceTreeItem::FolderBasicFilter, datastore);
+    itemAuthorFilters->setCaseSecitivity(Qt::CaseInsensitive);
     itemKeywordFilters=new LS3ReferenceTreeItem("Filter: Keywords", NULL, LS3ReferenceTreeItem::FolderBasicFilter, datastore);
+    itemKeywordFilters->setCaseSecitivity(Qt::CaseInsensitive);
 
     //qDebug()<<datastore;
     //qDebug()<<datastore->getPluginServices();
@@ -336,6 +340,7 @@ void LS3ReferenceTreeModel::topicsChanged() {
     //qDebug()<<"topicsChanged()";
     //qDebug()<<"topicsChanged()"<<m_datastore->getField(0,"topic");
     QStringList sl=m_datastore->getTopicsModel()->stringList();
+    removeDuplicatesCaseInseitive(sl);
 
     //qDebug()<<"topicsChanged(): 1. remove all unused children";
     // 1. remove all unused children
@@ -372,6 +377,7 @@ void LS3ReferenceTreeModel::topicsChanged() {
 void LS3ReferenceTreeModel::keywordsChanged() {
     //return;
     QStringList sl=m_datastore->getKeywords();
+    removeDuplicatesCaseInseitive(sl);
 
     // 1. remove all unused children
     for (int i=itemKeywordFilters->childCount()-1; i>=0; i--) {
@@ -407,6 +413,7 @@ void LS3ReferenceTreeModel::keywordsChanged() {
 void LS3ReferenceTreeModel::authorsChanged() {
     //return;
     QStringList sl=m_datastore->getAuthors();
+    removeDuplicatesCaseInseitive(sl);
 
     // 1. remove all unused children
     for (int i=itemAuthorFilters->childCount()-1; i>=0; i--) {

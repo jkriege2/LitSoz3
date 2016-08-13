@@ -18,9 +18,11 @@
 #include <QDate>
 #include <QDebug>
 #include "ls3datastore.h"
+#include "bibtools.h"
 
 LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString uuid, QString name, LS3ReferenceTreeItem* parent, LS3ReferenceTreeItem::Type type, LS3Datastore* datastore):
-    QObject(parent)
+    QObject(parent),
+    m_caseSensitivity(Qt::CaseSensitive)
 {
     m_parent=parent;
     m_type=type;
@@ -38,7 +40,8 @@ LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString uuid, QString name, LS3Refere
 }
 
 LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString name, QString filterField, QString filter, LS3ReferenceTreeItem* parent, LS3Datastore* datastore, LS3ReferenceTreeItem::Type type):
-    QObject(parent)
+    QObject(parent),
+    m_caseSensitivity(Qt::CaseSensitive)
 {
     m_parent=parent;
     m_datastore=datastore;
@@ -50,7 +53,10 @@ LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString name, QString filterField, QS
     m_type=type;
 }
 
-LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString name, LS3ReferenceTreeItem* parent, LS3ReferenceTreeItem::Type type, LS3Datastore* datastore) {
+LS3ReferenceTreeItem::LS3ReferenceTreeItem(QString name, LS3ReferenceTreeItem* parent, LS3ReferenceTreeItem::Type type, LS3Datastore* datastore):
+    QObject(parent),
+    m_caseSensitivity(Qt::CaseSensitive)
+{
     m_parent=parent;
     m_type=type;
     m_datastore=datastore;
@@ -217,13 +223,13 @@ bool LS3ReferenceTreeItem::containsReference(QString uuid) const {
     } else if (m_type==LS3ReferenceTreeItem::FolderAllItems) {
         return true;
     } else if (m_type==LS3ReferenceTreeItem::FolderFilterExact) {
-        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), m_filterField).toString()==m_filter;
+        return isEqual(m_datastore->getField(m_datastore->getRecordByUUID(uuid), m_filterField).toString(), m_filter, m_caseSensitivity==Qt::CaseInsensitive);
     } else if (m_type==LS3ReferenceTreeItem::FolderFilterContains) {
-        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), m_filterField).toString().contains(m_filter);
+        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), m_filterField).toString().contains(m_filter, m_caseSensitivity);
     } else if (m_type==LS3ReferenceTreeItem::FolderFilterStartsWith) {
-        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), m_filterField).toString().startsWith(m_filter);
+        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), m_filterField).toString().startsWith(m_filter, m_caseSensitivity);
     } else if (m_type==LS3ReferenceTreeItem::FolderFilterName) {
-        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), "authors").toString().contains(m_filter) || m_datastore->getField(m_datastore->getRecordByUUID(uuid), "editors").toString().contains(m_filter) ;
+        return m_datastore->getField(m_datastore->getRecordByUUID(uuid), "authors").toString().contains(m_filter, m_caseSensitivity) || m_datastore->getField(m_datastore->getRecordByUUID(uuid), "editors").toString().contains(m_filter, m_caseSensitivity) ;
     } else if (m_type==LS3ReferenceTreeItem::FolderNewItems) {
         return abs(m_datastore->getField(m_datastore->getRecordByUUID(uuid), "addeddate").toDate().daysTo(QDate::currentDate()))<=m_days;
     }
@@ -300,6 +306,11 @@ QString LS3ReferenceTreeItem::filter() const {
     return m_filter;
 }
 
+Qt::CaseSensitivity LS3ReferenceTreeItem::caseSensitivity() const
+{
+    return m_caseSensitivity;
+}
+
 void LS3ReferenceTreeItem::setFilter(QString filterField, QString filter) {
     m_filterField=filterField;
     m_filter=filter;
@@ -311,6 +322,11 @@ void LS3ReferenceTreeItem::setFilter(QString filter) {
 
 void LS3ReferenceTreeItem::setFilterField(QString filterField) {
     m_filterField=filterField;
+}
+
+void LS3ReferenceTreeItem::setCaseSecitivity(Qt::CaseSensitivity sens)
+{
+    m_caseSensitivity=sens;
 }
 
 

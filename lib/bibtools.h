@@ -186,4 +186,6 @@ inline QString replaceStart(QString s1, QString start, QString newstart, bool ig
     }
 }
 
+void removeDuplicatesCaseInseitive(QStringList& sl);
+
 #endif // BIBTOOLS_H

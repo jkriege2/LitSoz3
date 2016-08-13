@@ -702,3 +702,18 @@ void countLetterCase(const QString& string, int &upperCase, int &lowerCase)
         else if (string[i].isLower()) lowerCase++;
     }
 }
+
+void removeDuplicatesCaseInseitive(QStringList &sl)
+{
+    QStringList old=sl;
+    QSet<QString> used;
+    sl.clear();
+    for (int i=0; i<old.size(); i++) {
+        const QString uc=old[i].toUpper();
+        if (!used.contains(uc)) {
+            used.insert(uc);
+            sl.append(old[i]);
+        }
+    }
+
+}

@@ -95,9 +95,11 @@ class LS3LIB_EXPORT LS3ReferenceTreeItem: public QObject {
 
         QString filterField() const;
         QString filter() const;
+        Qt::CaseSensitivity caseSensitivity() const;
         void setFilter(QString filterField, QString filter);
         void setFilter(QString filter);
         void setFilterField(QString filterField);
+        void setCaseSecitivity(Qt::CaseSensitivity sens);
 
         QString toXml();
         void writeToXML(QXmlStreamWriter& writer);
@@ -115,6 +117,7 @@ class LS3LIB_EXPORT LS3ReferenceTreeItem: public QObject {
         QString m_filterField;
         QString m_filter;
         int m_days;
+        Qt::CaseSensitivity m_caseSensitivity;
 
 
 
