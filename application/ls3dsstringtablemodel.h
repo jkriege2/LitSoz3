@@ -95,6 +95,7 @@ class LS3DSStringTableModel: public QAbstractTableModel {
 
         void setDoEmitSignals(bool emitSignals);
         bool getDoEmitSignals() const;
+        void resetModel();
 
     signals:
         void wasChangedChanged(bool wasChange);

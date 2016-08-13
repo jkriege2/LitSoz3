@@ -22,6 +22,7 @@
 #include <QImage>
 #include <QDialog>
 #include <QLabel>
+#include <QTextEdit>
 #include <QPushButton>
 #include "lib_imexport.h"
 
@@ -185,30 +186,39 @@ class LIB_EXPORT QModernProgressDialog: public QDialog {
         virtual ~QModernProgressDialog();
 
         /** \brief text in the label of the dialog */
-        QString labelText() { return label->text(); };
+        inline QString labelText() { return label->text(); }
         /** \brief text on the "Cancel" button of the dialog */
-        QString cancelButtonText() { return cancel->text(); }
+        inline QString cancelButtonText() { return cancel->text(); }
 
         /** \brief text in the label of the dialog */
-        void setLabelText(const QString& t) { label->setText(t); };
+        inline void setLabelText(const QString& t) { label->setText(t); }
+        inline void addLongTextLine(const QString& t) {
+            longmessage->setVisible(true);
+            QTextCursor c=longmessage->textCursor();
+            c.movePosition(QTextCursor::End);
+            c.insertText("\n"+t);
+        }
+
         /** \brief text on the "Cancel" button of the dialog */
-        void setCancelButtonText(const QString& t) { cancel->setText(t); }
+        inline void setCancelButtonText(const QString& t) { cancel->setText(t); }
         /** \brief indicate whetehr the dialog has a Cancel button (default: \c true )*/
-        void setHasCancel(bool has=true) { cancel->setVisible(has); }
+        inline void setHasCancel(bool has=true) { cancel->setVisible(has); }
+
         /*! \brief display the progress dialog after a delay of \a minimumDuration milliseconds
 
             If the dialog has beend closed before the delay runs out, it is never displayed.
          */
         void openDelayed(int minimumDuration=2500);
         /** \brief returns \c true if the "Cancel" button has been clicked */
-        bool wasCanceled() { return m_wasCancel; }
-        double value() const { return progress->value(); }
-        double minimum() const { return progress->minimum(); }
-        double maximum() const { return progress->maximum(); }
-        bool spin() const { return progress->spin(); }
-        QModernProgressWidget* progressWidget() const { return progress; }
-        QLabel* textLabel() const { return label; }
-        QPushButton* cancelButton() const { return cancel; }
+        inline bool wasCanceled() { return m_wasCancel; }
+        inline double value() const { return progress->value(); }
+        inline double minimum() const { return progress->minimum(); }
+        inline double maximum() const { return progress->maximum(); }
+        inline bool spin() const { return progress->spin(); }
+        inline QModernProgressWidget* progressWidget() const { return progress; }
+        inline QLabel* textLabel() const { return label; }
+        inline QPushButton* cancelButton() const { return cancel; }
+        inline QTextEdit* longTextWidth() const { return longmessage; }
         /** \brief en-/disable spin and progress mode */
         void setMode(bool enabledSpin=true, bool enabledProgress=true);
     public slots:
@@ -225,6 +235,7 @@ class LIB_EXPORT QModernProgressDialog: public QDialog {
          void canceled();
     private:
         QLabel* label;
+        QTextEdit* longmessage;
         QModernProgressWidget* progress;
         QPushButton* cancel;
         int m_minimumDuration;

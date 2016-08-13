@@ -123,11 +123,21 @@ LS3LIB_EXPORT void addToFieldIfNotContained(QMap<QString, QVariant>& data, const
 */
 LS3LIB_EXPORT QString decodeLanguage(const QString& lang);
 
+/*! \brief counts the upper-case and the lower-case letters in a string
+
+*/
+LS3LIB_EXPORT void countLetterCase(const QString& string, int& upperCase, int& lowerCase);
+
+
 #define LS3_SET_IF_NOT_EMPTY(set_var, value) {\
     QString v=value; \
     if (!v.trimmed().simplified().isEmpty()) { \
         set_var = v; \
     } \
+}
+
+inline uint qHash(const QStringList& v) {
+  return qHash(v.join(""));
 }
 
 #endif // BIBTOOLS_H

@@ -161,6 +161,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         void wasChanged(bool changed);
 
         void createMissingIDs();
+        void cleanupTopics();
 
         QString copyCSL(CSLOutputFormat format, const QString linetemplate=QString("  <li><b>[%2]:</b>%1</li>\n"));
         void copyCSLHTMLTags();
@@ -252,6 +253,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         QAction* separatorAct;
         QAction* optionsAct;
         QAction* createMissingIDsAct;
+        QAction* actCleanupTopics;
 
 
         /** \brief this label is used to display database status information in the toolbar */

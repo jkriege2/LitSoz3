@@ -297,6 +297,16 @@ bool LS3DSStringTableModel::getDoEmitSignals() const
     return doEmitSignal;
 }
 
+void LS3DSStringTableModel::resetModel()
+{
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    beginResetModel();
+    endResetModel();
+    #else
+    reset();
+    #endif
+}
+
 bool LS3DSStringTableModel::setRecord(int row, const QMap<QString, QVariant> &data) {
     LS3ElapsedAutoTimer timer("LS3DSStringTableModel::setRecord("+QString::number(row)+", map)");
     if ((row<0) || (row>=m_data.size())) return false;

@@ -340,6 +340,8 @@ void QModernProgressDialog::createWidgets() {
     setWindowIcon(QIcon());
     m_wasCancel=false;
     label=new QLabel(this);
+    longmessage=new QTextEdit(this);
+    longmessage->setVisible(false);
     progress=new QModernProgressWidget(this);
     progress->setMinimumSize(QSize(48,48));
     cancel=new QPushButton(tr("Cancel"), this);
@@ -352,6 +354,7 @@ void QModernProgressDialog::createWidgets() {
     hbl->addWidget(label);
     hbl->addStretch();
     vbl->addLayout(hbl);
+    vbl->addWidget(longmessage);
     hbl=new QHBoxLayout;
     hbl->addStretch();
     hbl->addWidget(cancel);

@@ -682,6 +682,12 @@ void MainWindow::createActions()
     connect(datastore, SIGNAL(databaseLoaded(bool)), createMissingIDsAct, SLOT(setEnabled(bool)));
     createMissingIDsAct->setEnabled(false);
 
+    actCleanupTopics = new QAction(tr("Clean-Up Topics ..."), this);
+    actCleanupTopics->setStatusTip(tr("Clean-up the topic entries in the database"));
+    connect(actCleanupTopics, SIGNAL(triggered()), this, SLOT(cleanupTopics()));
+    connect(datastore, SIGNAL(databaseLoaded(bool)), actCleanupTopics, SLOT(setEnabled(bool)));
+    actCleanupTopics->setEnabled(false);
+
 
     actCopyFormatted=new QAction(QIcon(":/csl_copyformated.png"), tr("copy formatted"), this);
     connect(actCopyFormatted, SIGNAL(triggered()), this, SLOT(copyCSLFormatted()));
@@ -729,6 +735,7 @@ void MainWindow::createMenus()
 
     toolsMenu = menuBar()->addMenu(tr("&Tools"));
     toolsMenu->addAction(createMissingIDsAct);
+    toolsMenu->addAction(actCleanupTopics);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
     viewToolbarsMenu=viewMenu->addMenu(tr("&Toolbars"));
@@ -1545,6 +1552,107 @@ void MainWindow::createMissingIDs() {
             QString id=datastore->createID(record, GetIDType());
             datastore->setField(record, "id", id);
         }
+    }
+    QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::cleanupTopics() {
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QStringList uuids=tvMainSortProxy->getUUIDs();
+
+    bool preferUpper=QMessageBox::question(this, tr("Clean-Up Topics"), tr("Do you prefer Topics with lower-case letters?\n  [Yes]: Words with a first letter upper-case will be converted to lower-case\n  [No]: Words with a first letter upper-case will be prefered over lower-case"), QMessageBox::Yes | QMessageBox::No, QMessageBox::No)==QMessageBox::No;
+
+
+    QModernProgressDialog pdlg;
+    pdlg.setLabelText(tr("collecting all topics in database ..."));
+    pdlg.setRange(0, uuids.size()*2);
+    pdlg.setCancelButtonText(tr("&Cancel"));
+    pdlg.progressWidget()->setPercentageMode(QModernProgressWidget::Percent);
+    pdlg.progressWidget()->setMinimumSize(QSize(64,64));
+    pdlg.setMode(true, true);
+    pdlg.open();
+    progress->setRange(0, uuids.size()*2);
+    statusbarShowMessage(tr("collecting all topics in database ..."));
+
+    QHash<QStringList,QStringList> topics; // split by "/", "\" and uppercase-lowercase
+    QHash<int, QStringList> topicUCForRecord;
+    for (int i=0; i<uuids.size(); i++) {
+        int record=datastore->getRecordByUUID(uuids[i]);
+        QString topic=datastore->getField(record, "topic").toString();
+        QStringList topicsplit=topic.split(QRegExp("[\\\\\\/]"));
+        QStringList topicsplitUC;
+        for (int j=0; j<topicsplit.size(); j++) {
+            topicsplit[j]=topicsplit[j].trimmed().simplified();
+            topicsplitUC.append(topicsplit[j].toUpper());
+        }
+
+        QHash<QStringList,QStringList>::const_iterator it=topics.find(topicsplitUC);
+        if (it==topics.end()) {
+            topics[topicsplitUC]=topicsplit;
+        } else {
+            QStringList oldtopics=it.value();
+            for (int j=0; j<qMin(oldtopics.size(), topicsplit.size()); j++) {
+                int oldUC=0, oldLC=0, newUC=0, newLC=0;
+                countLetterCase(oldtopics[j], oldUC, oldLC);
+                countLetterCase(topicsplit[j], newUC, newLC);
+                if (newUC>1 && newUC>oldUC) {
+                    oldtopics[j]=topicsplit[j];
+                } else if (oldUC<=1) {
+                    if (preferUpper) {
+                        if (newUC>oldUC) {
+                            oldtopics[j]=topicsplit[j];
+                        }
+                    } else {
+                        if (newUC<oldUC) {
+                            oldtopics[j]=topicsplit[j];
+                        }
+                    }
+                }
+            }
+            topics[topicsplitUC]=oldtopics;
+        }
+        topicUCForRecord[record]=topicsplitUC;
+
+
+        if (i%10==0) {
+            progress->setValue(i);
+            pdlg.setValue(i);
+            QApplication::processEvents();
+        }
+        if (pdlg.wasCanceled()) break;
+    }
+    statusbarShowMessage(tr("cleaning-up topics in database ..."));
+    pdlg.setLabelText(tr("cleaning-up topics in database ..."));
+
+    if (!pdlg.wasCanceled()) {
+        bool wasEmit=datastore->getDoEmitSignals();
+        datastore->setDoEmitSignals(false);
+        int i=0;
+        for (QHash<int, QStringList>::const_iterator it= topicUCForRecord.begin(); it!=topicUCForRecord.end(); ++it) {
+            const int record=it.key();
+            QString topic=datastore->getField(record, "topic").toString();
+            QHash<QStringList,QStringList>::const_iterator itt=topics.find(it.value());
+            if (itt!=topics.end()) {
+                QString newTopic=itt->join("/");
+                if (newTopic!=topic) {
+                    datastore->setField(record, "topic", newTopic);
+                    pdlg.addLongTextLine(tr("#%3: Replacing '%1' by '%2'!").arg(topic).arg(newTopic).arg(record));
+                }
+            }
+
+            if (i%10==0) {
+                progress->setValue(uuids.size()+i);
+                pdlg.setValue(uuids.size()+i);
+            }
+            QApplication::processEvents();
+            if (pdlg.wasCanceled()) break;
+            i++;
+        }
+        datastore->setDoEmitSignals(wasEmit);
+        datastore->resetModel();
+        pdlg.setCancelButtonText(tr("&Close"));
+        pdlg.connect(&pdlg, SIGNAL(cancelClicked()), &pdlg, SLOT(accept()));
+        pdlg.exec();
     }
     QApplication::restoreOverrideCursor();
 }

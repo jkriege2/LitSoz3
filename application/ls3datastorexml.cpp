@@ -624,6 +624,21 @@ void LS3DatastoreXML::ensureMappedWidgetsPopulated()
     }
 }
 
+void LS3DatastoreXML::setDoEmitSignals(bool emitSignals)
+{
+    data->setDoEmitSignals(emitSignals);
+}
+
+bool LS3DatastoreXML::getDoEmitSignals() const
+{
+    return data->getDoEmitSignals();
+}
+
+void LS3DatastoreXML::resetModel()
+{
+    data->resetModel();
+}
+
 void LS3DatastoreXML::invalidateModels() {
 }
 

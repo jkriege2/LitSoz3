@@ -148,6 +148,10 @@ class LS3DatastoreXML : public LS3Datastore {
         virtual bool hasDbSave() const { return true; }
         virtual void ensureMappedWidgetsPopulated();
 
+        void setDoEmitSignals(bool emitSignals);
+
+        bool getDoEmitSignals() const;
+        void resetModel();
 
 public slots:
         /*! \brief load an existing database and bind it to the data-aware widget

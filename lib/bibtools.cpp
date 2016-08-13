@@ -692,3 +692,13 @@ QString cleanText(const QString& data, bool simplify, const QString& specialChar
     return s.trimmed();
 
 }
+
+void countLetterCase(const QString& string, int &upperCase, int &lowerCase)
+{
+    upperCase=0;
+    lowerCase=0;
+    for (int i=0; i<string.size(); i++) {
+        if (string[i].isUpper()) upperCase++;
+        else if (string[i].isLower()) lowerCase++;
+    }
+}
