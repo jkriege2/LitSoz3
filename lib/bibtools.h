@@ -140,4 +140,50 @@ inline uint qHash(const QStringList& v) {
   return qHash(v.join(""));
 }
 
+inline bool isEqual(QString s1, QString s2, bool ignorecase=false, bool trimm=false, bool simplify=false) {
+    if (simplify) {
+        s1=s1.simplified();
+        s2=s2.simplified();
+    }
+    if (trimm) {
+        s1=s1.trimmed();
+        s2=s2.trimmed();
+    }
+    if (ignorecase) {
+        return s1.toLower()==s2.toLower();
+    } else {
+        return s1==s2;
+    }
+}
+
+
+inline bool startsWith(QString s1, QString start, bool ignorecase=false, bool trimm=false, bool simplify=false) {
+    if (simplify) {
+        s1=s1.simplified();
+        start=start.simplified();
+    }
+    if (trimm) {
+        s1=s1.trimmed();
+        start=start.trimmed();
+    }
+    return s1.startsWith(start, ignorecase?Qt::CaseInsensitive:Qt::CaseSensitive);
+}
+
+
+inline QString replaceStart(QString s1, QString start, QString newstart, bool ignorecase=false, bool trimm=false, bool simplify=false) {
+    if (simplify) {
+        s1=s1.simplified();
+        start=start.simplified();
+    }
+    if (trimm) {
+        s1=s1.trimmed();
+        start=start.trimmed();
+    }
+    if (s1.startsWith(start, ignorecase?Qt::CaseInsensitive:Qt::CaseSensitive)) {
+        return newstart+s1.right(s1.size()-start.size());
+    } else {
+        return s1;
+    }
+}
+
 #endif // BIBTOOLS_H

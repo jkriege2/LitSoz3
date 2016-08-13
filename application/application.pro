@@ -53,7 +53,8 @@ HEADERS     = mainwindow.h \
     threadoverview.h \
     ls3progressthreadwidget.h \
     fileviewpane.h \
-    popplerpdfwidget.h
+    popplerpdfwidget.h \
+    dlgeditcategory.h
 
 
 
@@ -84,7 +85,8 @@ SOURCES     = main.cpp \
     threadoverview.cpp \
     ls3progressthreadwidget.cpp \
     fileviewpane.cpp \
-    popplerpdfwidget.cpp
+    popplerpdfwidget.cpp \
+    dlgeditcategory.cpp
 
 FORMS       = optionsdialog.ui \
               about.ui \
@@ -95,7 +97,8 @@ FORMS       = optionsdialog.ui \
               exportdialog.ui \
               importdialog.ui \
               referencetreedockwidget.ui \
-    ls3progressthreadwidget.ui
+    ls3progressthreadwidget.ui \
+    dlgeditcategory.ui
 
 TRANSLATIONS= $$LS3OUTPUT/translations/de.litsoz3.ts
 

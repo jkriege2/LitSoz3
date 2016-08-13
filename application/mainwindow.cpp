@@ -18,6 +18,7 @@
 #include "ui_about.h"
 #include "ui_aboutplugins.h"
 #include "../version.h"
+#include "dlgeditcategory.h"
 
 #include <iostream>
 
@@ -688,6 +689,12 @@ void MainWindow::createActions()
     connect(datastore, SIGNAL(databaseLoaded(bool)), actCleanupTopics, SLOT(setEnabled(bool)));
     actCleanupTopics->setEnabled(false);
 
+    actEditTopics = new QAction(tr("Edit Topics ..."), this);
+    actEditTopics->setStatusTip(tr("Edit the topic entries in the database"));
+    connect(actEditTopics, SIGNAL(triggered()), this, SLOT(editTopics()));
+    connect(datastore, SIGNAL(databaseLoaded(bool)), actEditTopics, SLOT(setEnabled(bool)));
+    actEditTopics->setEnabled(false);
+
 
     actCopyFormatted=new QAction(QIcon(":/csl_copyformated.png"), tr("copy formatted"), this);
     connect(actCopyFormatted, SIGNAL(triggered()), this, SLOT(copyCSLFormatted()));
@@ -735,6 +742,7 @@ void MainWindow::createMenus()
 
     toolsMenu = menuBar()->addMenu(tr("&Tools"));
     toolsMenu->addAction(createMissingIDsAct);
+    toolsMenu->addAction(actEditTopics);
     toolsMenu->addAction(actCleanupTopics);
 
     viewMenu = menuBar()->addMenu(tr("&View"));
@@ -1651,9 +1659,98 @@ void MainWindow::cleanupTopics() {
         datastore->setDoEmitSignals(wasEmit);
         datastore->resetModel();
         pdlg.setCancelButtonText(tr("&Close"));
-        pdlg.connect(&pdlg, SIGNAL(cancelClicked()), &pdlg, SLOT(accept()));
+        connect(pdlg.cancelButton(), SIGNAL(clicked()), &pdlg, SLOT(accept()));
+        connect(pdlg.cancelButton(), SIGNAL(clicked()), &pdlg, SLOT(close()));
+        connect(pdlg.cancelButton(), SIGNAL(clicked()), &pdlg, SLOT(reject()));
         pdlg.exec();
     }
+    QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::editTopics()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QStringList uuids=tvMainSortProxy->getUUIDs();
+
+
+    QSet<QString> topicForRecord;
+    {
+        QModernProgressDialog pdlg;
+        pdlg.setLabelText(tr("collecting all topics in database ..."));
+        pdlg.setRange(0, uuids.size());
+        pdlg.setCancelButtonText(tr("&Cancel"));
+        pdlg.progressWidget()->setPercentageMode(QModernProgressWidget::Percent);
+        pdlg.progressWidget()->setMinimumSize(QSize(64,64));
+        pdlg.setMode(true, true);
+        pdlg.open();
+        progress->setRange(0, uuids.size());
+        statusbarShowMessage(tr("collecting all topics in database ..."));
+
+        for (int i=0; i<uuids.size(); i++) {
+            int record=datastore->getRecordByUUID(uuids[i]);
+            topicForRecord.insert(datastore->getField(record, "topic").toString());
+            if (i%10==0) {
+                progress->setValue(i);
+                pdlg.setValue(i);
+                QApplication::processEvents();
+            }
+            if (pdlg.wasCanceled()) return;
+        }
+    }
+
+    DlgEditCategory* dlg=new DlgEditCategory(this, topicForRecord.toList(), datastore->getField(datastore->currentRecordNum(), "topic").toString());
+    if (dlg->exec()) {
+        if (dlg->getNew()!=dlg->getOld() || dlg->getIgnoreCase()) {
+            QModernProgressDialog pdlg;
+            pdlg.setLabelText(tr("altiering topic in database ..."));
+            pdlg.setRange(0, uuids.size());
+            pdlg.setCancelButtonText(tr("&Cancel"));
+            pdlg.progressWidget()->setPercentageMode(QModernProgressWidget::Percent);
+            pdlg.progressWidget()->setMinimumSize(QSize(64,64));
+            pdlg.setMode(true, true);
+            pdlg.open();
+            progress->setRange(0, uuids.size());
+            statusbarShowMessage(tr("altering topic in database ..."));
+
+            bool wasEmit=datastore->getDoEmitSignals();
+            datastore->setDoEmitSignals(false);
+            for (int i=0; i<uuids.size(); i++) {
+                int record=datastore->getRecordByUUID(uuids[i]);
+                QString topic=datastore->getField(record, "topic").toString();
+                QString newT=topic;
+
+                if (dlg->getChangeSub()) {
+                    newT=replaceStart(topic, dlg->getOld(), dlg->getNew(), dlg->getIgnoreCase(), true, true);
+                } else {
+                    if (isEqual(topic, dlg->getOld(), dlg->getIgnoreCase(), true, true)) {
+                        newT=dlg->getNew();
+                    }
+                }
+                if (topic!=newT) {
+                    datastore->setField(record, "topic", newT);
+                    pdlg.addLongTextLine(tr("#%3: Replacing '%1' by '%2'!").arg(topic).arg(newT).arg(record));
+                }
+
+
+                if (i%10==0) {
+                    progress->setValue(i);
+                    pdlg.setValue(i);
+                    QApplication::processEvents();
+                }
+                if (pdlg.wasCanceled()) return;
+            }
+            datastore->setDoEmitSignals(wasEmit);
+            datastore->resetModel();
+            pdlg.setCancelButtonText(tr("&Close"));
+            connect(pdlg.cancelButton(), SIGNAL(clicked()), &pdlg, SLOT(accept()));
+            connect(pdlg.cancelButton(), SIGNAL(clicked()), &pdlg, SLOT(close()));
+            connect(pdlg.cancelButton(), SIGNAL(clicked()), &pdlg, SLOT(reject()));
+            pdlg.exec();
+        }
+
+    }
+    delete dlg;
+
     QApplication::restoreOverrideCursor();
 }
 
