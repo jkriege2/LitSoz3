@@ -574,9 +574,14 @@ void LS3PluginArticleTools::downloadPDFFromDoi()
         //PLoS one
         if (id.contains("journal.pone")) wwwl=QString("http://dx.plos.org/%1.pdf").arg(id);
 
-        // Optics Express
-        if (id.contains("/OE.")) wwwl=QString("http://www.opticsinfobase.org/oe/viewmedia.cfm?uri=oe-%1-%2-%3&seq=0").arg(vol).arg(issue).arg(page1);
+        // APS:
+        else if (id.contains("10.1103")) wwwl=QString("http://journals.aps.org/rmp/pdf/%1").arg(id);
 
+        // ACS:
+        else if (id.contains("10.1021")) wwwl=QString("http://pubs.acs.org/doi/pdf/%1").arg(id);
+
+        // Optics Express
+        else if (id.contains("/OE.")) wwwl=QString("http://www.opticsinfobase.org/oe/viewmedia.cfm?uri=oe-%1-%2-%3&seq=0").arg(vol).arg(issue).arg(page1);
 
         // http://www.opticsinfobase.org/oe/viewmedia.cfm?uri=oe-22-3-2358&seq=0
         //http://dx.doi.org/10.1364/OE.22.002358
@@ -588,7 +593,7 @@ void LS3PluginArticleTools::downloadPDFFromDoi()
             QUrl url=QUrl(wwwl);
             QString ext="pdf";
             ext=QFileInfo(url.path()).suffix();
-            if (ext.isEmpty() || ext.size()>3) ext="pdf";
+            if (ext.isEmpty() || ext.size()>3 || ext!="pdf" || ext!="ps" || ext!="txt" || ext!="doc") ext="pdf";
             QString filename=id+"."+ext;
             //qDebug()<<wwwl<<url<<ext<<id<<filename;
             int i=1;
@@ -862,7 +867,7 @@ void LS3PluginArticleTools::clearAndRestoreFocus() {
     }
 }
 
-void LS3PluginArticleTools::scanPDFAndInsert(QString record, QString filename) {
+void LS3PluginArticleTools::scanPDFAndInsert(QString /*record*/, QString filename) {
     //qDebug()<<"scanPDFAndInsert("<<record<<filename<<")";
     insertFile(filename, "article");
 }

@@ -82,7 +82,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
         QString type=record.value("type", "misc").toString().toLower();
         QString outType=type;
         QString subtype=record.value("subtype", "").toString().toLower();
-        bool writeSubtype=false;
+        //bool writeSubtype=false;
         if ( (type=="anthology") || (type=="compendium") || (type=="textbook") ) outType="book";
         if ( (type=="techmanual") ) outType="manual";
         if ( (type=="www") || (type=="webpage") ) {
@@ -109,7 +109,7 @@ bool LS3BibTeXExporter::exportBibTeX(QTextStream& out, const QVector<QMap<QStrin
                 outType="mastersthesis";
             } else {
                 outType="misc";
-                writeSubtype=true;
+                //writeSubtype=true;
             }
         }
         QString id=record.value("id", "").toString();

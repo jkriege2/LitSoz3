@@ -71,11 +71,11 @@ class PubmedSearchDialog : public QDialog
         void setRecord(int i, const QMap<QString, QVariant>& data);
         void clear();
     private:
+        bool m_oneRecOnly;
         Ui::PubmedSearchDialog *ui;
         LS3PluginServices* services;
         QCheckableStringListModel* list;
         QStringList items;
-        bool m_oneRecOnly;
 
         QList<QMap<QString, QVariant> > data;
 

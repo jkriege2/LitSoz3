@@ -290,7 +290,7 @@ void PubmedSearchDialog::insertRecord(QMap<QString, QVariant> data) {
     }
 }
 
-void PubmedSearchDialog::storeInRecord(QString record, QMap<QString, QVariant> data) {
+void PubmedSearchDialog::storeInRecord(QString /*record*/, QMap<QString, QVariant> data) {
     insertRecord(data);
 }
 
