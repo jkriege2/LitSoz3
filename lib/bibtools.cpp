@@ -28,14 +28,16 @@ QString escapeHTMLString(const QString& input) {
 #endif
 }
 
-QString cleanStringForFilename(const QString& text, bool cleanStrongly) {
+QString cleanStringForFilename(const QString& text, bool cleanStrongly, bool removeSlashBackslash) {
     QString t=text.simplified();
     QString regexp="";
     t=t.remove(QRegExp(regexp+"[^\\w\\d \\_\\(\\)\\.\\/]"));
     t=t.remove(" ");
     t=t.remove('.');
-    t.remove('\\');
-    t.remove('/');
+    if (removeSlashBackslash) {
+        t.remove('\\');
+        t.remove('/');
+    }
     QString tt;
     QString tl=t.toLatin1();
     for (int i=0; i<t.size(); i++) {

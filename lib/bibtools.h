@@ -23,7 +23,7 @@
 #include <QVariant>
 #include "lib_imexport.h"
 /** \brief clean a string of whitesaces, special characters ... */
-LS3LIB_EXPORT QString cleanStringForFilename(const QString& input, bool cleanStrongly=false);
+LS3LIB_EXPORT QString cleanStringForFilename(const QString& input, bool cleanStrongly=false, bool removeSlashBackslash=true);
 
 /** \brief escape HTML character*/
 LS3LIB_EXPORT QString escapeHTMLString(const QString& input);

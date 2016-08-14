@@ -1,0 +1,3 @@
+[submodule "libJKMathParser"]
+	path = libJKMathParser
+	url = https://github.com/jkriege2/JKMathParser
