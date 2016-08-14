@@ -106,7 +106,7 @@ void ReferenceTreeDockWidget::clicked(const QModelIndex& index) {
     }
 }
 
-void ReferenceTreeDockWidget::currentChanged(const QModelIndex& current, const QModelIndex& previous) {
+void ReferenceTreeDockWidget::currentChanged(const QModelIndex& current, const QModelIndex& /*previous*/) {
     clicked(current);
 }
 

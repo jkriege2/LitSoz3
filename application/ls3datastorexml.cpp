@@ -287,7 +287,8 @@ void LS3DatastoreXML::dbClose(bool saveOnClose) {
 bool LS3DatastoreXML::setField(int record, QString field, QVariant value) {
     LS3ElapsedAutoTimer timer("LS3DatastoreXML::setField("+QString::number(record)+", "+field+" = "+value.toString()+")");
     if (dbIsLoaded()) {
-        data->setField(record,field, value);
+        cleanFieldContents(field, value);
+        data->setField(record,field,value);
         return true;
     } else return false;
 }
@@ -344,6 +345,7 @@ int LS3DatastoreXML::dbInsertNoMoveCursor(const QMap<QString, QVariant>& indata)
 
 
         QMap<QString, QVariant> idata=indata;
+        cleanFieldContents(idata);
         idata["owner"]=settings->GetUsername();
         idata["viewdate"]=QDate::currentDate();
         idata["addeddate"]=QDate::currentDate();
@@ -420,6 +422,7 @@ bool LS3DatastoreXML::setRecord(int index, const QMap<QString, QVariant>& datam)
     if (!dbIsLoaded()) return false;
 
     QMap<QString, QVariant> data=datam;
+    cleanFieldContents(data);
 
     if (data.value("language").toString().isEmpty()) {
         QString langtest;

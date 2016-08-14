@@ -85,7 +85,7 @@ void SelectionList::on_btnSave_clicked() {
     }
 }
 
-void SelectionList::selectionChanged(int recordNum, bool newSel) {
+void SelectionList::selectionChanged(int /*recordNum*/, bool /*newSel*/) {
     labStatus->setText(tr("selected: %1").arg(model->rowCount()));
 }
 

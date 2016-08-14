@@ -190,7 +190,7 @@ ExtendedPane::ExtendedPane(ProgramOptions* settings, QWidget* parent):
     li->setContentsMargins (0,0,0,0);
     edtPubmed=new QEnhancedLineEdit(this);
     btnPubmed=new JKStyledButton(JKStyledButton::OpenPrependedURL, edtPubmed, this);
-    btnPubmed->setPrependURL("http://www.pubmed.org/");
+    btnPubmed->setPrependURL("http://www.ncbi.nlm.nih.gov/pubmed/");
     dicon=QIcon(":/pubmed/search.png");
     dicon.addFile(":/pubmed/search_disabled.png", QSize(), QIcon::Disabled);
     dicon.addFile(":/pubmed/search_hover.png", QSize(), QIcon::Selected);

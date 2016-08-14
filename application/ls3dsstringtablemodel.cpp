@@ -218,7 +218,8 @@ static bool variantsEqual(const QVariant& v1, const QVariant& v2) {
     return datachanged;
 }
 
-bool LS3DSStringTableModel::setData(const QModelIndex& index, const QVariant& value, int role) {
+bool LS3DSStringTableModel::setData(const QModelIndex& index, const QVariant& value_in, int role) {
+    QVariant value=value_in;
     LS3ElapsedAutoTimer timer("LS3DSStringTableModel::setData("+QString::number(index.row())+", "+QString::number(index.column())+", "+value.toString()+", "+QString::number(role)+")");
     if (role != Qt::EditRole) return false;
 
@@ -228,6 +229,7 @@ bool LS3DSStringTableModel::setData(const QModelIndex& index, const QVariant& va
     if ((col<0) || (col>=parent->getFieldDefinitionsCount())) return false;
 
     QString f=parent->fieldName(col);
+    parent->cleanFieldContents(f, value);
     if ((f=="num") || (f=="uuid")) return false;
     bool datachanged = (!m_data[row].contains(f))&&(!(value.isNull() || (value.type()==QVariant::String && value.toString().isEmpty())));
     //qDebug()<<"LS3DSStringTableModel::setData("<<row<<col<<f<<value<<m_data[row].value(f, value)<<"   contains: "<<datachanged<<m_data[row].contains(f)<<m_data[row].keys();

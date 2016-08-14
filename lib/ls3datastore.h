@@ -311,6 +311,18 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
 
         LS3PluginServices* getPluginServices() const;
 
+        /** \brief reformats the contents of \a data for a given \a fieldname
+         *
+         *  This e.g. formats author/editor names properly, or formats a DOI properly.
+         */
+        virtual void cleanFieldContents(const QString& fieldname, QVariant& data);
+        /** \brief reformats the contents of \a data for a given \a fieldname
+         *
+         *  This e.g. formats author/editor names properly, or formats a DOI properly.
+         */
+        virtual void cleanFieldContents(QMap<QString, QVariant>& data);
+
+
     public slots:
         /*! \brief load an existing database and bind it to the data-aware widget
 
@@ -429,7 +441,7 @@ class LS3LIB_EXPORT LS3Datastore : public QObject {
         /*! \brief this may be used to invalidate/reset access models that include information
                    like the selection which is not directly stored in the database.
          */
-        virtual void invalidateModels() ;
+        virtual void invalidateModels();
 };
 
 

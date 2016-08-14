@@ -485,7 +485,7 @@ void FileViewPane::copySelection()
     QApplication::clipboard()->setText(selectedText.simplified());
 }
 
-void FileViewPane::tocItemActivated(QTreeWidgetItem *item, int column) {
+void FileViewPane::tocItemActivated(QTreeWidgetItem *item, int /*column*/) {
     //qDebug()<<"goto "<<item->data(0, PageRole).toDouble();
     pdf->setPage(trunc(item->data(1, PageRole).toDouble()));
 }

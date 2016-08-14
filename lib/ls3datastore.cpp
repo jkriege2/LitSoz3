@@ -287,6 +287,102 @@ void LS3Datastore::invalidateModels()
 
 }
 
+void LS3Datastore::cleanFieldContents(const QString &fieldname, QVariant &data)
+{
+    const QString fn=fieldname.toLower().trimmed().simplified();
+    //qDebug()<<"\n===================================================================\nCLEANING "<<fieldname<<" = '"<<data<<"'\n===================================================================\n";
+    if (fn=="doi") {
+        QString doi=data.toString().trimmed().simplified();
+        QStringList removeStart;
+
+        removeStart<<"dx.doi.org/";
+        removeStart<<"http://dx.doi.org/";
+        removeStart<<"https://dx.doi.org/";
+        removeStart<<"http://pubs.acs.org/doi/abs/";
+        removeStart<<"https://pubs.acs.org/doi/abs/";
+        removeStart<<"http://link.aps.org/doi/";
+        removeStart<<"https://link.aps.org/doi/";
+        removeStart<<"doi: ";
+        removeStart<<"doi:";
+        removeStart<<"doi ";
+        for (int i=0; i<removeStart.size(); i++) {
+            if (doi.startsWith(removeStart[i])) {
+                data=doi.right(doi.size()-removeStart[i].size()).trimmed().simplified();
+                //qDebug()<<"cleaned DOI: '"<<doi<<"'  ==>  '"<<data.toString()<<"'";
+                return;
+            }
+        }
+        data=doi;
+    } else if (fn=="authors" || fn=="editors") {
+        const QString olda=data.toString().simplified().trimmed();
+        data=reformatAuthors(olda, m_pluginServices->GetNamePrefixes(), m_pluginServices->GetNameAdditions(), m_pluginServices->GetAndWords());
+        //qDebug()<<"cleaned "<<fn<<": '"<<olda<<"'  ==>  '"<<data.toString()<<"'";
+    } else if (fn=="edition") {
+        const QString olda=data.toString().simplified().trimmed();
+        data=olda;
+        if (olda=="0") data=QVariant();
+        //qDebug()<<"cleaned "<<fn<<": '"<<olda<<"'  ==>  '"<<data.toString()<<"'";
+    } else if (fn=="url" || fn=="citeseer") {
+        const QString olda=data.toString().simplified().trimmed();
+        //qDebug()<<"cleaned "<<fn<<": '"<<olda<<"'  ==>  '"<<data.toString()<<"'";
+    } else if (fn=="arxiv") {
+        QString doi=data.toString().trimmed().simplified();
+        QStringList removeStart;
+
+        removeStart<<"http://arxiv.org/abs/";
+        removeStart<<"https://arxiv.org/abs/";
+        removeStart<<"arxiv: ";
+        removeStart<<"arxiv:";
+        removeStart<<"arxiv ";
+        for (int i=0; i<removeStart.size(); i++) {
+            if (doi.startsWith(removeStart[i])) {
+                data=doi.right(doi.size()-removeStart[i].size()).trimmed().simplified();
+                //qDebug()<<"cleaned "<<fn<<": '"<<doi<<"'  ==>  '"<<data.toString()<<"'";
+                return;
+            }
+        }
+        data=doi;
+    } else if (fn=="pubmed" || fn=="pmcid") {
+        QString doi=data.toString().trimmed().simplified();
+        QStringList removeStart;
+
+        removeStart<<"www.pubmed.org/";
+        removeStart<<"https://www.pubmed.org/";
+        removeStart<<"http://www.pubmed.org/";
+        removeStart<<"www.ncbi.nlm.nih.gov/pubmed/";
+        removeStart<<"http://www.ncbi.nlm.nih.gov/pubmed/";
+        removeStart<<"https://www.ncbi.nlm.nih.gov/pubmed/";
+        removeStart<<"www.ncbi.nlm.nih.gov/pmc/articles/";
+        removeStart<<"http://www.ncbi.nlm.nih.gov/pmc/articles/";
+        removeStart<<"https://www.ncbi.nlm.nih.gov/pmc/articles/";
+        removeStart<<"pmid: ";
+        removeStart<<"pmid:";
+        removeStart<<"pmid ";
+        removeStart<<"pubmed: ";
+        removeStart<<"pubmed:";
+        removeStart<<"pubmed ";
+        removeStart<<"pmcid: ";
+        removeStart<<"pmcid:";
+        removeStart<<"pmcid ";
+        for (int i=0; i<removeStart.size(); i++) {
+            if (doi.startsWith(removeStart[i])) {
+                data=doi.right(doi.size()-removeStart[i].size()).trimmed().simplified();
+                //qDebug()<<"cleaned "<<fn<<": '"<<doi<<"'  ==>  '"<<data.toString()<<"'";
+                return;
+            }
+        }
+        data=doi;
+    }
+
+}
+
+void LS3Datastore::cleanFieldContents(QMap<QString, QVariant> &data)
+{
+    for (QMap<QString, QVariant>::iterator it=data.begin(); it!=data.end(); ++it) {
+        cleanFieldContents(it.key(), it.value());
+    }
+}
+
 void LS3Datastore::resetFieldDefinitions() {
     for (int i=fields.size()-1; i>=0; i--) {
         if (!fields[i].basic) fields.removeAt(i);

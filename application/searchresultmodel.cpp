@@ -51,7 +51,7 @@ LS3Datastore* SearchResultModel::datastore() const {
     return m_datastore;
 }
 
-int	SearchResultModel::rowCount(const QModelIndex & parent) const {
+int	SearchResultModel::rowCount(const QModelIndex & /*parent*/) const {
     return datalist.size();
 }
 
@@ -64,11 +64,11 @@ QVariant SearchResultModel::data(const QModelIndex & index, int role) const {
     return QVariant();
 }
 
-int	SearchResultModel::columnCount(const QModelIndex & parent) const {
+int	SearchResultModel::columnCount(const QModelIndex & /*parent*/) const {
     return 2;
 }
 
-QVariant SearchResultModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant SearchResultModel::headerData(int section, Qt::Orientation /*orientation*/, int role) const {
     if (role==Qt::DisplayRole) {
         if (section==0) return tr("Reference");
         if (section==1) return tr("UUID");

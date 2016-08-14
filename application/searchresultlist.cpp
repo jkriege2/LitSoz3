@@ -71,7 +71,7 @@ void SearchResultList::on_btnSelectAll_clicked() {
 }
 
 
-void SearchResultList::selectionChanged(int recordNum, bool newSel) {
+void SearchResultList::selectionChanged(int /*recordNum*/, bool /*newSel*/) {
     labStatus->setText(tr("found: %1").arg(model->rowCount()));
 }
 

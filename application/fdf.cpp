@@ -57,7 +57,7 @@ void fdfManager::normalizeAuthors()
     }
 }
 
-void fdfManager::showCustomContextmenu(const QPoint & pos)
+void fdfManager::showCustomContextmenu(const QPoint & /*pos*/)
 {
     {
         QPlainTextEdit* w=qobject_cast<QPlainTextEdit*>(sender());

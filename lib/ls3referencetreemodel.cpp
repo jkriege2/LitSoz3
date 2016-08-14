@@ -279,14 +279,15 @@ bool LS3ReferenceTreeModel::dropMimeData(const QMimeData *data,  Qt::DropAction 
 
      if (column > 0)
          return false;
-     int beginRow=0;
+     /*int beginRow=0;
 
-     if (row != -1)
+     if (row != -1) {
          beginRow = row;
-     else if (parent.isValid())
+     } else if (parent.isValid()) {
          beginRow = parent.row();
-     else
+     } else {
          beginRow = rowCount(QModelIndex());
+     }*/
      if (data->hasFormat("litsoz3/list.uuid")) {
          QByteArray encodedData = data->data("litsoz3/list.uuid");
          QDataStream stream(&encodedData, QIODevice::ReadOnly);

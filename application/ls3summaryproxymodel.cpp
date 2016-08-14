@@ -119,12 +119,12 @@ QModelIndex LS3SummaryProxyModel::mapToSource ( const QModelIndex & proxyIndex )
     return sourceModel()->index(proxyIndex.row(), 0);
 }
 
-int LS3SummaryProxyModel::rowCount(const QModelIndex &index) const{
+int LS3SummaryProxyModel::rowCount(const QModelIndex &/*index*/) const{
     if (sourceModel()) return sourceModel()->rowCount();
     return 0;
 }
 
-int LS3SummaryProxyModel::columnCount(const QModelIndex &index) const{
+int LS3SummaryProxyModel::columnCount(const QModelIndex &/*index*/) const{
     // one additional empty column for stretching space
     return LS3SUMMARYPROXYMODEL_MAX_COLUMN+2;
 }
@@ -182,7 +182,7 @@ QVariant LS3SummaryProxyModel::data(const QModelIndex &ind, int role) const {
             if (role==Qt::DecorationRole) {
                 if (!url.isEmpty()) return QIcon(":/pubmedlogo.png");
             } else if (role==Qt::ToolTipRole) {
-                if (!url.isEmpty()) return QString("http://www.pubmed.org/")+url;
+                if (!url.isEmpty()) return QString("http://www.ncbi.nlm.nih.gov/pubmed/")+url;
             }
         } else if (col==LS3SUMMARYPROXYMODEL_COLUMN_URL_DOI) {
             QString url=(sourceModel()->data(sourceModel()->index(row, datastore->fieldColumn("doi")), Qt::DisplayRole).toString());
@@ -300,7 +300,7 @@ QVariant LS3SummaryProxyModel::headerData(int section, Qt::Orientation orientati
     return QVariant();
 }
 
-QModelIndex LS3SummaryProxyModel::index(int r, int c, const QModelIndex &parent) const {
+QModelIndex LS3SummaryProxyModel::index(int r, int c, const QModelIndex &/*parent*/) const {
     return createIndex(r, c);
 }
 
@@ -439,7 +439,7 @@ void LS3SummaryProxyModel::_rowsRemoved ( const QModelIndex & /*parent*/, int st
 
 }
 
-void LS3SummaryProxyModel::selectionChanged(int recordNum, bool newSelectionState) {
+void LS3SummaryProxyModel::selectionChanged(int recordNum, bool /*newSelectionState*/) {
     emit dataChanged(index(recordNum, LS3SUMMARYPROXYMODEL_COLUMN_SELECTION), index(recordNum, LS3SUMMARYPROXYMODEL_COLUMN_SELECTION));
 }
 
@@ -590,7 +590,7 @@ QSize LS3SummaryProxyModelDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QItemDelegate::sizeHint(option, index);
 }
 
-QWidget *LS3SummaryProxyModelDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QWidget *LS3SummaryProxyModelDelegate::createEditor(QWidget */*parent*/, const QStyleOptionViewItem &/*option*/, const QModelIndex &/*index*/) const {
     return NULL; //QItemDelegate::createEditor(parent, option, index);
 }
 
