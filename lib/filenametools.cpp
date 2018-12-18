@@ -41,7 +41,10 @@ QString cleanFilename(const QString& text, int maxLen, bool removeDot, bool remo
 }
 
 #define REPLACE_FROM_DATA(newName, partName, fieldName) \
-    newName=newName.replace(partName, cleanFilename(cleanStringForFilename(data.value(fieldName, "").toString())));
+    newName=newName.replace(partName, cleanFilename(cleanStringForFilename(data.value(fieldName, "").toString(), true, true)));
+
+#define REPLACE_FROM_DATA_NOCLEANSLASH(newName, partName, fieldName) \
+    newName=newName.replace(partName, cleanFilename(cleanStringForFilename(data.value(fieldName, "").toString(), true, false)));
 
 QString createFileName(const QString& scheme, const QMap<QString, QVariant>& data, const QString& filename, int maxLength) {
     QString originalName=QFileInfo(filename).baseName();
@@ -52,7 +55,8 @@ QString createFileName(const QString& scheme, const QMap<QString, QVariant>& dat
     QString authorsFN=cleanFilename(formatEtalAuthorsFamilyNames(authors, 3, "etal", "_", "_", ""));
     QString editors=data.value("editors", "").toString();
     QString editorsFN=cleanFilename(formatEtalAuthorsFamilyNames(editors, 3, "etal", "_", "_", ""));;
-    QString names=cleanFilename(formatEtalAuthorsFamilyNames(authors+"; "+editors, 3, "etal", "_", "_", ""));;
+    QString names=cleanFilename(formatEtalAuthorsFamilyNames(authors+"; "+editors, 3, "etal", "_", "_", ""));
+    QRegExp rxIf("\\%if\\:");
     if (scheme.isEmpty()) return filename;
     newName=newName.replace("%original_name%", originalName);
     newName=newName.replace("%extension%", extension);
@@ -61,6 +65,7 @@ QString createFileName(const QString& scheme, const QMap<QString, QVariant>& dat
     newName=newName.replace("%editors%", cleanStringForFilename(editorsFN));
     newName=newName.replace("%names%", cleanStringForFilename(names));
     REPLACE_FROM_DATA(newName, "%topic%", "topic");
+    REPLACE_FROM_DATA_NOCLEANSLASH(newName, "%topic/%", "topic");
     REPLACE_FROM_DATA(newName, "%title%", "title");
     REPLACE_FROM_DATA(newName, "%year%", "year");
     REPLACE_FROM_DATA(newName, "%publisher%", "publisher");
