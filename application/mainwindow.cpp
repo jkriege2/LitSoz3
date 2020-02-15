@@ -235,6 +235,7 @@ void MainWindow::about() {
                             "<li>LibJpeg</li>"
                             "<li>LibPNG</li>"
                             "<li>LibTIFF</li>"
+                            "<li>LibOpenJPEG</li>"
                             "</ul>").arg(QT_VERSION_STR).arg(LS3_COPYRIGHT).arg(QApplication::applicationName()));
     widget->exec();
     delete widget;
@@ -499,16 +500,16 @@ void MainWindow::createWidgets() {
 
     tabPreview=new QTabWidget(this);
 
-    txtPreview=new QWebView(this);
+    txtPreview=new QTextBrowser(this);
 //    qDebug()<<txtPreview->textSizeMultiplier();
-    txtPreview->setTextSizeMultiplier(0.75);
+    //txtPreview->setTextSizeMultiplier(0.75);
 
     //txtPreview->setOpenLinks(false);
     //txtPreview->setOpenExternalLinks(false);
     //txtPreview->setReadOnly(true);
     tabPreview->addTab(txtPreview, tr("&Preview"));
-    //connect(txtPreview, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(previewAnchorClicked(const QUrl&)));
-    connect(txtPreview, SIGNAL(linkClicked(QUrl)), this, SLOT(previewAnchorClicked(const QUrl&)));
+    connect(txtPreview, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(previewAnchorClicked(const QUrl&)));
+    //connect(txtPreview, SIGNAL(linkClicked(QUrl)), this, SLOT(previewAnchorClicked(const QUrl&)));
 
     splitter->addWidget(tvMain);
     splitter->addWidget(tabPreview);
@@ -1019,8 +1020,9 @@ void MainWindow::currentRecordChanged(int row) {
         .arg(settings->GetPreviewStyleManager()->styles().value(settings->GetCurrentPreviewStyle2()))
         .arg(settings->GetPreviewStyleManager()->createPreview(settings->GetCurrentPreviewStyle2(), datastore->currentRecord(), settings->GetCurrentPreviewLocale2()));
     txtPreview->setHtml(txt);
-    txtPreview->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    txtPreview->page()->setContentEditable(false);
+    txtPreview->setReadOnly(true);
+    //txtPreview->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    //txtPreview->page()->setContentEditable(false);
 
     disconnecttvMain();
     tvMain->selectionModel()->clear();

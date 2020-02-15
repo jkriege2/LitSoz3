@@ -62,15 +62,24 @@ void extractMetaDataWithRegExp(const QString& regex, const QString& data, QMap<Q
     while ((pos = rxDCItem.indexIn(data, pos)) != -1) {
         QString dcitem=rxDCItem.cap(capItem).toLower();
         QString value=rxDCItem.cap(capValue);
+        QString complete_match=rxDCItem.cap(0);
 
        //qDebug()<<pos<<dcitem<<value;
         if (!value.isEmpty()) {
             if ((dcitem=="dc.creator")||(dcitem=="dc.contributor")||(dcitem=="citation_author")) {
                 QString oldA=output["authors"].toString();
+                QString oldI=output["institution"].toString();
                 QString name=reformatAuthors(value, name_prefixes, name_additions, ands);
-                if (!oldA.contains(name)) {
-                    if (oldA.size()>0) output["authors"]=oldA+"; "+name;
-                    else output["authors"]=name;
+                if (complete_match.toLower().contains("\"assignee\"")) {
+                    if (!oldI.contains(name)) {
+                        if (oldI.size()>0) output["institution"]=oldI+"; "+name;
+                        else output["institution"]=name;
+                    }
+                } else {
+                    if (!oldA.contains(name)) {
+                        if (oldA.size()>0) output["authors"]=oldA+"; "+name;
+                        else output["authors"]=name;
+                    }
                 }
             } else if ((dcitem=="dc.description")|(dcitem=="description")) {
                 output["contents"]=output["contents"].toString()+value+"\n";
@@ -148,6 +157,11 @@ void extractMetaDataWithRegExp(const QString& regex, const QString& data, QMap<Q
             } else if ((dcitem=="citation_title")) {
                 //output["title"]=value;
                 output["title"]=value;
+            } else if ((dcitem=="citation_patent_publication_number")) {
+                output["number"]=value;
+                output["type"]="patent";
+            } else if ((dcitem=="dc.type")) {
+                if (value.toLower()=="patent") output["type"]="patent";
             //} else if ((dcitem=="")) {
             //    output[""]=value;
 

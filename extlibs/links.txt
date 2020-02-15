@@ -3,3 +3,5 @@ HMAC:   http://www.ouah.org/ogay/hmac/
 PxLib:  http://pxlib.sourceforge.net/
 
 PxTools: http://jan.kneschke.de/projects/pxtools/
+
+Poppler: https://gitlab.freedesktop.org/poppler/poppler

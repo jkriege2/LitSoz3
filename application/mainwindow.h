@@ -59,7 +59,7 @@
 #include "qrecentfilesmenu.h"
 #include "threadoverview.h"
 #include "fileviewpane.h"
-#include <QWebView>
+
 
 
 
@@ -335,7 +335,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
         SearchResultList* lstSearchResults;
 
         /** \brief preview of current dataset */
-        QWebView* txtPreview;
+        QTextBrowser* txtPreview;
 
         /** \brief reference data dock widget */
         QDockWidget* dockReferenceData;

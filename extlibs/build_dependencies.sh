@@ -42,15 +42,15 @@ echo -e "=======================================================================
 "don't interfere with your system-libraries. The .pri-files in this di-\n"\
 "rectory include the libraries in a way that preferences these libraries \n"\
 "here!\n\nBefore running, please make sure that QTDIR points to Qt!!! using\n"\
-"  export QTDIR=/c/development/Qt5/5.3/mingw482_32/\n"\
-"  export PATH=/c/development/Qt5/5.3/mingw482_32/bin/:\$PATH \n"\
+"  export QTDIR=/c/development/Qt/5.13.2/mingw73_64/\n"\
+"  export PATH=/c/development/Qt/Tools/mingw730_64/bin/:/C/development/CMake/bin/:$PATH \n"\
 "\n\nFinally this script will copy all generated dynamic link libraries into\n"\
 "the LitSoz output folder, so they are found by the program at runtime."\
 "\n\nFirst we need to set some basics for the builds:"\
 
 read -p "Do you want to build keep the build directories (y/n)? " -n 1 KEEP_BUILD_DIR
 echo -e  "\n"
-read -p "how many parallel builds do you want to use in make (1/2/3/...)? " -n 1  MAKE_PARALLEL_BUILDS
+read -p "how many parallel builds do you want to use in make (1/2/3/.../9)? " -n 1  MAKE_PARALLEL_BUILDS
 echo -e  "\n"
 
 CURRENTDIR=${PWD}
@@ -77,8 +77,8 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	cd zlib
 	mkdir build
 	mkdir bin
-	tar xvf zlib-1.2.8.tar.gz -C ./build/
-	cd build/zlib-1.2.8
+	tar xvf zlib-1.2.11.tar.gz -C ./build/
+	cd build/zlib-1.2.11
 	ISMSYS=`uname -o`
 	echo $ISMSYS
 	if [ "$ISMSYS" != "${string/Msys/}" ] ; then
@@ -127,29 +127,13 @@ C_INCLUDE_PATH="${C_INCLUDE_PATH}:${CURRENTDIR}/zlib/include/"
 CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${CURRENTDIR}/zlib/include/"
 LIBRARY_PATH="${LIBRARY_PATH}:${CURRENTDIR}/zlib/lib/"
 LIBS="${LIBS} -lz"
+ZLIB_LIB="${CURRENTDIR}/zlib/lib/libz.a"
+ZLIB_INC="${CURRENTDIR}/zlib/include/"
 export C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH
 export LIBRARY_PATH
 PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${CURRENTDIR}/zlib/lib/pkgconfig"
-export PKG_CONFIG_PATH 
-
-
-
-lzma_CFLAGS=
-#lzma_LDFLAGS="-llzma"
-lzma_LDFLAGS=
-if [ -e ${CURRENTDIR}/lzma/lib/liblzma.a ] ; then
-	lzma_CFLAGS="-I${CURRENTDIR}/lzma/include"
-	lzma_LDFLAGS="-L${CURRENTDIR}/lzma/lib -llzma"
-fi
-echo -e "\n\n\n USING THESE lzma compiler commands:\nCFLAGS="
-echo $lzma_CFLAGS
-echo -e "\nLDFLAGS="
-echo $lzma_LDFLAGS
-echo -e "\n\n\n"
-
-
-
+export
 
 
 
@@ -168,8 +152,8 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	mkdir include/freetype2
 	mkdir include/freetype2/freetype
 	mkdir include/freetype2/freetype/config
-	tar xvf freetype-2.5.5.tar.gz -C ./build/
-	cd build/freetype-2.5.5
+	tar xvf freetype-2.10.1.tar.gz -C ./build/
+	cd build/freetype-2.10.1
 	
 	./configure --enable-shared --disable-static  --prefix=${CURRENTDIR}/freetype
 	libOK=$?
@@ -205,10 +189,13 @@ copy_sharedlibs ./freetype/bin/
 
 FREETYPE_CFLAGS="-I${CURRENTDIR}/freetype/include/ -I${CURRENTDIR}/freetype/include/freetype2/"
 FREETYPE_LIBS="-L${CURRENTDIR}/freetype/lib/ -lfreetype"
+FREETYPE_DIR="${CURRENTDIR}/freetype"
 
 C_INCLUDE_PATH="${C_INCLUDE_PATH}:${CURRENTDIR}/freetype/include/:${CURRENTDIR}/freetype/include/freetype2/"
 CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${CURRENTDIR}/freetype/include/:${CURRENTDIR}/freetype/include/freetype2/"
 LIBRARY_PATH="${LIBRARY_PATH}:${CURRENTDIR}/freetype/lib/"
+FREETYPE_LIB="${CURRENTDIR}/freetype/lib/libfreetype.dll.a"
+FREETYPE_INC="${CURRENTDIR}/freetype/include/"
 export C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH
 export LIBRARY_PATH
@@ -272,6 +259,8 @@ CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${CURRENTDIR}/libpng/include/"
 LIBRARY_PATH="${LIBRARY_PATH}:${CURRENTDIR}/libpng/lib/"
 LIBPNG_CFLAGS="-I${CURRENTDIR}/libpng/include/"
 LIBPNG_LIBS="-L${CURRENTDIR}/libpng/lib/ -lpng"
+PNG_LIB="${CURRENTDIR}/libpng/lib/libpng.dll.a"
+PNG_INC="${CURRENTDIR}/libpng/include/"
 export C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH
 export LIBRARY_PATH
@@ -329,6 +318,8 @@ copy_sharedlibs ./libjpeg/bin/
 C_INCLUDE_PATH="${C_INCLUDE_PATH}:${CURRENTDIR}/libjpeg/include/"
 CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${CURRENTDIR}/libjpeg/include/"
 LIBRARY_PATH="${LIBRARY_PATH}:${CURRENTDIR}/libjpeg/lib/"
+JPEG_LIB="${CURRENTDIR}/libjpeg/lib/libjpeg.dll.a"
+JPEG_INC="${CURRENTDIR}/libjpeg/include/"
 export C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH
 export LIBRARY_PATH
@@ -389,6 +380,8 @@ copy_sharedlibs ./libtiff/bin/
 C_INCLUDE_PATH="${C_INCLUDE_PATH}:${CURRENTDIR}/libtiff/include/"
 CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${CURRENTDIR}/libtiff/include/"
 LIBRARY_PATH="${LIBRARY_PATH}:${CURRENTDIR}/libtiff/lib/"
+TIFF_LIB="${CURRENTDIR}/libtiff/lib/libtiff.dll.a"
+TIFF_INC="${CURRENTDIR}/libtiff/include/"
 export C_INCLUDE_PATH
 export CPLUS_INCLUDE_PATH
 export LIBRARY_PATH
@@ -396,6 +389,72 @@ PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${CURRENTDIR}/libtiff/lib/pkgconfig"
 export PKG_CONFIG_PATH 
 
 
+
+
+
+
+libopenjpegOK=-1
+read -p "Do you want to build 'openjpeg' (y/n)? " -n 1 INSTALL_ANSWER
+echo -e  "\n"
+if [ $INSTALL_ANSWER == "y" ] ; then
+	echo -e  "\n------------------------------------------------------------------------\n"\
+	"-- BUILDING: openjpeg                                                  --\n"\
+	"------------------------------------------------------------------------\n\n"\
+
+	cd libopenjpeg
+	mkdir build
+
+	
+	tar xvf openjpeg-2.3.1.tar.gz -C ./build/
+	cd build/openjpeg-2.3.1
+	
+	mkdir build
+	cd build
+	cmake -G "MSYS Makefiles" -DCMAKE_PREFIX_PATH="${QTDIR}" -DCMAKE_INSTALL_PREFIX="${CURRENTDIR}/libopenjpeg" -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+
+	libOK=$?
+	if [ $libOK -eq 0 ] ; then
+		cmake --build . -j${MAKE_PARALLEL_BUILDS}
+		
+		libOK=$?
+		if [ $libOK -eq 0 ] ; then		
+			cmake --install .
+			libOK=$?
+			if [ $libOK -ne 0 ] ; then		
+				libOK=-4
+			fi
+		else
+			libOK=-3
+		fi
+	else
+	    libOK=-2
+	fi
+	
+
+	cd ../../
+	if [ $KEEP_BUILD_DIR == "n" ] ; then
+		rm -rf build
+	fi
+	cd ${CURRENTDIR}
+	
+	libopenjpegOK=$libOK
+
+fi
+
+
+copy_sharedlibs ./libopenjpeg/bin/
+
+C_INCLUDE_PATH="${C_INCLUDE_PATH}:${CURRENTDIR}/libopenjpeg/include/"
+CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH}:${CURRENTDIR}/libopenjpeg/include/"
+LIBRARY_PATH="${LIBRARY_PATH}:${CURRENTDIR}/libopenjpeg/lib/"
+OPENJPEG_LIB="${CURRENTDIR}/libopenjpeg/lib/libopenjp2.dll.a"
+OPENJPEG_INC="${CURRENTDIR}/libopenjpeg/include/"
+OPENJPEG_CMAKE="${CURRENTDIR}/libopenjpeg/lib/openjpeg-2.3/"
+export C_INCLUDE_PATH
+export CPLUS_INCLUDE_PATH
+export LIBRARY_PATH
+PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${CURRENTDIR}/libopenjpeg/lib/pkgconfig"
+export PKG_CONFIG_PATH 
 
 
 
@@ -412,60 +471,26 @@ if [ $INSTALL_ANSWER == "y" ] ; then
 	cd poppler
 	mkdir build3
 	
-	
-	
-	tar xvf poppler-0.45.0.tar.gz -C ./build3/
-	cd build3/poppler-0.45.0
-	
-	
-	#POPPLER_QT4_CFLAGS="-c -g -frtti -fexceptions -mthreads -Wall -I${QTDIR}/include/QtCore -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtXml -I${QTDIR}/include -I${QTDIR}/mkspecs/default"
-	#POPPLER_QT4_LIBS="-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,console -mthreads -Wl -L${QTDIR}/lib -lQtXml4 -lQtGui4 -lQtCore4"
-	#POPPLER_QT4_TEST_CFLAGS="-c -g -frtti -fexceptions -mthreads -Wall -I${QTDIR}/include/QtTest -I${QTDIR}/include  -I${QTDIR}/include/QtCore -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtXml -I${QTDIR}/include -I${QTDIR}/mkspecs/default"
-	#POPPLER_QT4_TEST_LIBS="-enable-stdcall-fixup -Wl,-enable-auto-import -Wl,-enable-runtime-pseudo-reloc -Wl,-subsystem,console -mthreads -Wl -L${QTDIR}/lib -lQtTest4 -lQtXml4 -lQtGui4 -lQtCore4"
-	POPPLER_QT5_CFLAGS="-c -pipe -fno-keep-inline-dllexport -frtti -fexceptions -mthreads -Wall -Wextra -DUNICODE -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I${QTDIR}/include/ -I${QTDIR}/include/QtWidgets -I${QTDIR}/include/QtXml -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtCore -I${QTDIR}/mkspecs/win32-g++"
-	POPPLER_QT5_LIBS="-shared -mthreads  -lgdi32 -luser32  -lopengl32 -lglu32 -L${QTDIR} -L${QTDIR}/lib  -lQt5Widgets -lQt5Gui -lQt5Core -lQt5Xml"
-	POPPLER_QT5_TEST_CFLAGS="-c -pipe -fno-keep-inline-dllexport -frtti -fexceptions -mthreads -Wall -Wextra -DUNICODE -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I${QTDIR}/include/ -I${QTDIR}/include/QtWidgets -I${QTDIR}/include/QtXml -I${QTDIR}/include/QtGui -I${QTDIR}/include/QtCore -I${QTDIR}/mkspecs/win32-g++"
-	POPPLER_QT5_TEST_LIBS="-shared -mthreads  -lgdi32 -luser32  -lopengl32 -lglu32 -L${QTDIR} -L${QTDIR}/lib  -lQt5Widgets -lQt5Gui -lQt5Core -lQt5Xml"
-	#ISMSYS=`uname -o`
-	#echo $ISMSYS
-	#if [ "$ISMSYS" != "${string/Msys/}" ] ; then
-	#    POPPLER_QT4_CFLAGS="${POPPLER_QT4_CFLAGS} -D_WIN32"
-	#    POPPLER_QT4_TEST_CFLAGS="${POPPLER_QT4_TEST_CFLAGS} -D_WIN32"
-	#fi
-
-	#export LIBS
-	#export POPPLER_QT4_CFLAGS
-	#export POPPLER_QT4_LIBS
-	#export POPPLER_QT4_TEST_CFLAGS
-	#export POPPLER_QT4_TEST_LIBS
-	export POPPLER_QT5_CFLAGS
-	export POPPLER_QT5_LIBS
-	export POPPLER_QT5_TEST_CFLAGS
-	export POPPLER_QT5_TEST_LIBS
-	PATH="${PATH}:${CURRENTDIR}/pkg_config/bin/"
-	export PATH
-	PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${QT_INFO_LIBS}/pkgconfig/"
+	PKG_CONFIG_PATH=""
 	export PKG_CONFIG_PATH 
 	
+	tar xvf poppler-0.85.0.tar.gz -C ./build3/
+	cd build3/poppler-poppler-0.85.0
 	
+	cp -rf ../../FindNSS3.cmake.patch ./cmake/modules/FindNSS3.cmake
+	
+	mkdir build
+	cd build
+	cmake -G "MSYS Makefiles" -DCMAKE_PREFIX_PATH="${QTDIR}" -DOpenJPEG_DIR="${OPENJPEG_CMAKE}" -DFREETYPE_LIBRARY="${FREETYPE_LIB}" -DFREETYPE_INCLUDE_DIRS="${ZLIB_INC}" -DJPEG_LIBRARY="${JPEG_LIB}" -DJPEG_INCLUDE_DIR="${JPEG_INC}" -DZLIB_LIBRARY="${ZLIB_LIB}" -DZLIB_INCLUDE_DIR="${ZLIB_INC}" -DPNG_LIBRARY="${PNG_LIB}" -DPNG_PNG_INCLUDE_DIR="${PNG_INC}" -DTIFF_LIBRARY="${TIFF_LIB}" -DTIFF_INCLUDE_DIR="${TIFF_INC}" -DENABLE_CMS="none" -DENABLE_NSS3=OFF -DENABLE_GOBJECT_INTROSPECTION=OFF -DDISABLE_NSS3=ON -DENABLE_CPP=OFF -DENABLE_GLIB=OFF -DENABLE_SPLASH=ON -DBUILD_CPP_TESTS=OFF -DBUILD_QT5_TESTS=OFF -DBUILD_GTK_TESTS=OFF -DENABLE_LIBCURL=OFF -DCMAKE_PREFIX_PATH="${QTDIR}" -DCMAKE_INSTALL_PREFIX="${CURRENTDIR}/poppler" -DENABLE_LIBOPENJPEG=openjpeg2 -DENABLE_QT5=ON ..
+	# -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
-	echo ${C_INCLUDE_PATH}
-	echo ${CPLUS_INCLUDE_PATH}
-	echo ${LIBRARY_PATH}
-	echo ${PKG_CONFIG_PATH}
-	echo "${PKG_CONFIG_PATH}"
-	pkg-config --list-all
-
-	./configure --disable-libopenjpeg --disable-silent-rules --enable-shared --disable-static --enable-poppler-cpp --disable-poppler-glib --disable-gtk-test --disable-poppler-qt4 --enable-poppler-qt5 --disable-cms --enable-zlib --prefix=${CURRENTDIR}/poppler CFLAGS=" -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/  -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " CXXFLAGS="-std=c++11 -I${CURRENTDIR}/libtiff/include/ -I${CURRENTDIR}/libjpeg/include/ -I${CURRENTDIR}/libpng/include/ -I${CURRENTDIR}/freetype/include/ -I${CURRENTDIR}/freetype/include/freetype2/ -I${CURRENTDIR}/zlib/include/ " LDFLAGS="-std=c++11 -L${CURRENTDIR}/libtiff/lib/ -L${CURRENTDIR}/libjpeg/lib/ -L${CURRENTDIR}/libpng/lib/ -L${CURRENTDIR}/freetype/lib/ -L${CURRENTDIR}/zlib/lib/ " LIBS="-lz -ltiff -ljpeg -lpng -lfreetype"
-	#LIBTIFF_CFLAGS=" -I${CURRENTDIR}/libtiff/include/ " LIBTIFF_LIBS=" -L${CURRENTDIR}/libtiff/lib/ -ltiff " LIBJPEG_CFLAGS=" -I${CURRENTDIR}/libjpeg/include/ " LIBJPEG_LIBS=" -L${CURRENTDIR}/libjpeg/lib/ -ljpeg " LIBPNG_CFLAGS=" -I${CURRENTDIR}/libpng/include/ " LIBPNG_LIBS=" -L${CURRENTDIR}/libpng/lib/ -lpng " FREETYPE_CFLAGS=" -I${CURRENTDIR}/freetype/include/ " FREETYPE_CFLAGS=" -I${CURRENTDIR}/freetype/include/freetype2/ " FREETYPE_LIBS=" -L${CURRENTDIR}/freetype/lib/ -lfreetype "
-#	POPPLER_QT4_CFLAGS="${POPPLER_QT4_CFLAGS}" POPPLER_QT4_LIBS="${POPPLER_QT4_LIBS}" POPPLER_QT4_TEST_CFLAGS="${POPPLER_QT4_TEST_CFLAGS}" POPPLER_QT4_TEST_LIBS="${POPPLER_QT4_TEST_LIBS}"
 	libOK=$?
 	if [ $libOK -eq 0 ] ; then
-		#make -j${MAKE_PARALLEL_BUILDS}
+		cmake --build . -j${MAKE_PARALLEL_BUILDS}
 		
 		libOK=$?
 		if [ $libOK -eq 0 ] ; then		
-			make -j${MAKE_PARALLEL_BUILDS} install
+			cmake --install .
 			libOK=$?
 			if [ $libOK -ne 0 ] ; then		
 				libOK=-4
@@ -503,8 +528,9 @@ echo -e  "\n--------------------------------------------------------------------
 print_result "zlib" $zlibOK
 print_result "freetype" $libfreetypeOK
 print_result "libpng" $libpngOK
-print_result "libjpeg" $libjpegOK
+print_result "libjpeg" $libJPEGOK
 print_result "libtiff" $libtiffOK
+print_result "libopenjpeg" $libopenjpegOK
 print_result "poppler" $libpopplerOK
 
 
