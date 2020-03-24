@@ -101,6 +101,7 @@ class FileViewPane : public QWidget
         void pageChanged(int page, int pages);
         void dataChanged(int firstRow, int lastRow);
         void setAsFieldActionTriggered();
+        void setAsDOIActionTriggered();
         void setAsYearFieldActionTriggered();
         void appendToFieldCommaActionTriggered();
         void appendToFieldLinebreakActionTriggered();

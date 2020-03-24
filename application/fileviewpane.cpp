@@ -98,7 +98,12 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
     actsSetAsField[act]="title";
 
-    menuSetAsField->addAction(act=new QAction(tr("... AUTHORS"), this));
+    menuSetAsField->addAction(act=new QAction(tr("... SUBTITLE"), this));
+    act->setShortcut(QKeySequence("Ctrl+t"));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    actsSetAsField[act]="subtitle";
+
+    menuSetAsField->addAction(act=new QAction(tr("... AUTHORS/INVENTORS"), this));
     act->setShortcut(QKeySequence("Ctrl+a"));
     connect(act, SIGNAL(triggered()), this, SLOT(appendToAuthorFieldActionTriggered()));
     actsSetAsField[act]="authors";
@@ -123,7 +128,7 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
     actsSetAsField[act]="volume";
 
-    menuSetAsField->addAction(act=new QAction(tr("... NUMBER/ISSUE"), this));
+    menuSetAsField->addAction(act=new QAction(tr("... NUMBER/ISSUE/PATENT NUMBER"), this));
     act->setShortcut(QKeySequence("Ctrl+i"));
     connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
     actsSetAsField[act]="number";
@@ -133,12 +138,12 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
     actsSetAsField[act]="pages";
 
-    menuSetAsField->addAction(act=new QAction(tr("... PUBLISHER"), this));
+    menuSetAsField->addAction(act=new QAction(tr("... PUBLISHER/PUBLISHING ORGANIZATION"), this));
     //act->setShortcut(QKeySequence("Ctrl+d"));
     connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
     actsSetAsField[act]="publisher";
 
-    menuSetAsField->addAction(act=new QAction(tr("... INSTITUTION"), this));
+    menuSetAsField->addAction(act=new QAction(tr("... INSTITUTION/ASSIGNEE"), this));
     //act->setShortcut(QKeySequence("Ctrl+d"));
     connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
     actsSetAsField[act]="institution";
@@ -185,7 +190,7 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
 
     menuSetAsField->addAction(act=new QAction(tr("... DOI"), this));
     act->setShortcut(QKeySequence("Ctrl+d"));
-    connect(act, SIGNAL(triggered()), this, SLOT(setAsFieldActionTriggered()));
+    connect(act, SIGNAL(triggered()), this, SLOT(setAsDOIActionTriggered()));
     actsSetAsField[act]="doi";
 
     menuSetAsField->addAction(act=new QAction(tr("... ISBN"), this));
@@ -427,6 +432,21 @@ void FileViewPane::setAsFieldActionTriggered()
     QAction* act=qobject_cast<QAction*>(sender());
     if (act && actsSetAsField.contains(act)) {
         datastore->setField(actsSetAsField[act], cleanText(selectedText.simplified()));
+    }
+    QApplication::restoreOverrideCursor();
+}
+
+void FileViewPane::setAsDOIActionTriggered()
+{
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QAction* act=qobject_cast<QAction*>(sender());
+    if (act && actsSetAsField.contains(act)) {
+        QString txt=cleanText(selectedText.simplified());
+        txt=txt.remove("http://dx.doi.org/", Qt::CaseInsensitive);
+        txt=txt.remove("https://dx.doi.org/", Qt::CaseInsensitive);
+        txt=txt.remove("http://doi.org/", Qt::CaseInsensitive);
+        txt=txt.remove("https://doi.org/", Qt::CaseInsensitive);
+        datastore->setField(actsSetAsField[act], txt);
     }
     QApplication::restoreOverrideCursor();
 }

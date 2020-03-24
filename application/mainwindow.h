@@ -64,7 +64,7 @@
 
 
 // TODO: Autorendatenbank mit Kontaktdaten
-// TODO: Zeitschriftendatenbank: Links (aktuelle Ausgabe, Archiv, Authors-Guidelines), Abkürzung, Name, Adresse (?), Editoren, ...
+// TODO: Zeitschriftendatenbank: Links (aktuelle Ausgabe, Archiv, Authors-Guidelines), Abk?rzung, Name, Adresse (?), Editoren, ...
 
 /*! \brief main window
 
