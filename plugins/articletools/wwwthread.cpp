@@ -217,7 +217,7 @@ QString WWWThread::networkErrorToString(QNetworkReply::NetworkError err) {
         case QNetworkReply::UnknownProxyError: return tr("unknown proxy"); break;
         case QNetworkReply::UnknownContentError: return tr("unknown content"); break;
         case QNetworkReply::ProtocolFailure: return tr("protocol failure"); break;
-        default : return tr("unknown error"); break;
+        default : return tr("unknown error %1").arg(static_cast<int>(err)); break;
     }
     return QString("");
 
@@ -236,7 +236,7 @@ void WWWThread::WWWReplyComplete (QNetworkReply *reply_in) {
         done();
         return;
     }
-    //qDebug()<<resp->error()<<resp->readAll();
+    qDebug()<<"WWWReplyComplete\n"<<resp->error()<<resp->readAll();
     if (!resp->attribute(QNetworkRequest::RedirectionTargetAttribute).toString().isEmpty()) {
         if (redirectCount<WWWTHREAD_MAX_REDIRECTS) {
             QUrl newUrl=resp->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
@@ -250,7 +250,7 @@ void WWWThread::WWWReplyComplete (QNetworkReply *reply_in) {
             resp->abort();
             resp->deleteLater();
             redirectCount++;
-            //qDebug()<<newUrl;
+            qDebug()<<newUrl;
             setMessage(tr("following new URL: %1 ...").arg(lastWWW).arg(newUrl.toString()));
         } else {
             setError("too many redirects");
@@ -308,7 +308,7 @@ void WWWThread::UrlStoreReplyComplete (QNetworkReply* reply_in) {
         quit();
         return;
     }
-    //qDebug()<<resp->error()<<resp->readAll();
+    qDebug()<<"UrlStoreReplyComplete\n"<<resp->error()<<resp->readAll();
     if (!resp->attribute(QNetworkRequest::RedirectionTargetAttribute).toString().isEmpty()) {
         if (redirectCount<WWWTHREAD_MAX_REDIRECTS) {
             QUrl newUrl=resp->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
@@ -323,7 +323,7 @@ void WWWThread::UrlStoreReplyComplete (QNetworkReply* reply_in) {
             resp->abort();
             resp->deleteLater();
             redirectCount++;
-            //qDebug()<<newUrl;
+            qDebug()<<newUrl;
             setMessage(tr("following new URL: %1 ...").arg(newUrl.toString()));
         } else {
 
@@ -371,7 +371,8 @@ void WWWThread::fromWWWReplyComplete (QNetworkReply *reply_in) {
         return;
     }
 
-    //qDebug()<<resp->error()<<resp->readAll();
+    qDebug()<<"fromWWWReplyComplete\n"<<resp->isFinished()<<resp->isRunning()<<resp->error()<<resp->readAll();
+    qDebug()<< "SSL-support: "<< QSslSocket::supportsSsl()<<" libBuildVersion: " << QSslSocket::sslLibraryBuildVersionString()<<" libVersion: " << QSslSocket::sslLibraryVersionString();
     if (!resp->attribute(QNetworkRequest::RedirectionTargetAttribute).toString().isEmpty()) {
         if (redirectCount<WWWTHREAD_MAX_REDIRECTS) {
             QUrl newUrl=resp->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
@@ -386,7 +387,7 @@ void WWWThread::fromWWWReplyComplete (QNetworkReply *reply_in) {
             resp->abort();
             resp->deleteLater();
             redirectCount++;
-            //qDebug()<<newUrl;
+            qDebug()<<newUrl;
             setMessage(tr("following new URL: %1 ...").arg(newUrl.toString()));
         } else {
 
@@ -400,9 +401,10 @@ void WWWThread::fromWWWReplyComplete (QNetworkReply *reply_in) {
 
                 QByteArray databa=resp->readAll();
                 QByteArray encoding=guessEncoding(resp->rawHeader("Content-Encoding"), databa);
-                //qDebug()<<encoding;
-                //qDebug()<<databa;
+                qDebug()<<encoding;
+                qDebug()<<databa;
                 QString data=QTextCodec::codecForName(encoding)->toUnicode(databa);
+                qDebug()<<data;
 
                 setMessage(tr("retrieving metadata from HTML ..."));
 
@@ -411,7 +413,7 @@ void WWWThread::fromWWWReplyComplete (QNetworkReply *reply_in) {
 
                     QMap<QString, QVariant> dc=extractHTMLMetadata(data, namePrefixes, nameAdditions, andWords);
                     QList<QMap<QString, QVariant> >coins=extractCoins(data, namePrefixes, nameAdditions, andWords);
-                    //qDebug()<<dc;
+                    qDebug()<<dc;
 
                     if (!newRecord.contains("url")) newRecord["url"]=resp->url().toString();
 

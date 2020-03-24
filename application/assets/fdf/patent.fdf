@@ -10,9 +10,11 @@
   </options>
   <authors caption="Inventors" caption.de="Erfinder" completer="authors" datafield="authors" />
   <edit caption="Assignee" caption.de="Anmelder" datafield="institution" />
-  <edit caption="Number" caption.de="Nummer" datafield="number" widgetwidth="250" />
+  <edit caption="Publication Number" caption.de="Publikationsnummer" datafield="number" widgetwidth="250" />
+  <edit caption="Application Number" caption.de="" datafield="volume" widgetwidth="250" />
   <edit caption="Title" caption.de="Titel" datafield="title" />
   <memo caption="Subtitle" caption.de="Untertitel" datafield="subtitle" />
   <intedit caption="Year" caption.de="Jahr" datafield="year" widgetwidth="100" />
   <combobox caption="Publishing organization" caption.de="Patentamt" datafield="publisher" completer="patentorganization" widgetwidth="250" />
+  <edit caption="State" caption.de="Status" datafield="subtype" />
 </fdf>
