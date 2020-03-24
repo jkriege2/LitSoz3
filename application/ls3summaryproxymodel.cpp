@@ -343,7 +343,7 @@ reset();
 }
 
 void  LS3SummaryProxyModel::_modelReset(){
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_modelReset()");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_modelReset()");
     //std::cout<<">>>>   LS3SummaryProxyModel::_modelReset()\n";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 beginResetModel();
@@ -354,7 +354,7 @@ reset();
 }
 
 void LS3SummaryProxyModel::_columnsInserted ( const QModelIndex & /*parent*/, int start, int end ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_columnsInserted("+QString::number(start)+", "+QString::number(end)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_columnsInserted("+QString::number(start)+", "+QString::number(end)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_columnsInserted\n";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 beginResetModel();
@@ -364,7 +364,7 @@ reset();
 #endif
 }
 void LS3SummaryProxyModel::_columnsMoved ( const QModelIndex & /*sourceParent*/, int sourceStart, int sourceEnd, const QModelIndex & /*destinationParent*/, int destinationColumn ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_columnsMoved("+QString::number(sourceStart)+", "+QString::number(sourceEnd)+", "+QString::number(destinationColumn)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_columnsMoved("+QString::number(sourceStart)+", "+QString::number(sourceEnd)+", "+QString::number(destinationColumn)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_columnsMoved\n";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 beginResetModel();
@@ -375,7 +375,7 @@ reset();
 }
 void LS3SummaryProxyModel::_columnsRemoved ( const QModelIndex & /*parent*/, int start, int end ) {
 
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_columnsRemoved("+QString::number(start)+", "+QString::number(end)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_columnsRemoved("+QString::number(start)+", "+QString::number(end)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_columnsRemoved\n";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 beginResetModel();
@@ -385,13 +385,13 @@ reset();
 #endif
 }
 void LS3SummaryProxyModel::_dataChanged ( const QModelIndex & topLeft, const QModelIndex & bottomRight ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_dataChanged("+QString::number(topLeft.row())+", "+QString::number(topLeft.column())+", "+QString::number(bottomRight.row())+", "+QString::number(bottomRight.column())+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_dataChanged("+QString::number(topLeft.row())+", "+QString::number(topLeft.column())+", "+QString::number(bottomRight.row())+", "+QString::number(bottomRight.column())+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_dataChanged\n";
     //reset();
     emit dataChanged(mapFromSource(topLeft), mapFromSource(bottomRight));
 }
 void LS3SummaryProxyModel::_headerDataChanged ( Qt::Orientation orientation, int first, int last ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_headerDataChanged("+QString::number(orientation)+", "+QString::number(first)+", "+QString::number(last)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_headerDataChanged("+QString::number(orientation)+", "+QString::number(first)+", "+QString::number(last)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_headerDataChanged\n";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 beginResetModel();
@@ -401,13 +401,13 @@ reset();
 #endif
 }
 void LS3SummaryProxyModel::_layoutChanged () {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_layoutChanged()");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_layoutChanged()");
     //reset();
     //std::cout<<">>>>   LS3SummaryProxyModel::_layoutChanged\n";
     emit layoutChanged();
 }
 void LS3SummaryProxyModel::_rowsInserted ( const QModelIndex & /*parent*/, int start, int end ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_rowsInserted("+QString::number(start)+", "+QString::number(end)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_rowsInserted("+QString::number(start)+", "+QString::number(end)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsInserted\n";
     beginInsertRows(QModelIndex(), start, end);
     endInsertRows();
@@ -416,7 +416,7 @@ void LS3SummaryProxyModel::_rowsInserted ( const QModelIndex & /*parent*/, int s
     //endInsertRows();
 }
 void LS3SummaryProxyModel::_rowsMoved ( const QModelIndex & /*sourceParent*/, int sourceStart, int sourceEnd, const QModelIndex & /*destinationParent*/, int destinationRow ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_rowsMoved("+QString::number(sourceStart)+", "+QString::number(sourceEnd)+", "+QString::number(destinationRow)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_rowsMoved("+QString::number(sourceStart)+", "+QString::number(sourceEnd)+", "+QString::number(destinationRow)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsMoved\n";
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 beginResetModel();
@@ -426,7 +426,7 @@ reset();
 #endif
 }
 void LS3SummaryProxyModel::_rowsRemoved ( const QModelIndex & /*parent*/, int start, int end ) {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_rowsRemoved("+QString::number(start)+", "+QString::number(end)+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModel::_rowsRemoved("+QString::number(start)+", "+QString::number(end)+")");
     //std::cout<<">>>>   LS3SummaryProxyModel::_rowsRemoved\n";
    // beginRemoveRows(QModelIndex(), start, end);
    // endInsertRows();
@@ -496,7 +496,7 @@ LS3SummaryProxyModelDelegate::~LS3SummaryProxyModelDelegate() {
 
 
 void LS3SummaryProxyModelDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const {
-    LS3ElapsedAutoTimer timer("LS3SummaryProxyModelDelegate::paint("+QString::number(index.row())+", "+QString::number(index.column())+")");
+    //LS3ElapsedAutoTimer timer("LS3SummaryProxyModelDelegate::paint("+QString::number(index.row())+", "+QString::number(index.column())+")");
     drawBackground(painter, option, index);
 
     if (index.column()==LS3SUMMARYPROXYMODEL_COLUMN_SUMMARY) {
