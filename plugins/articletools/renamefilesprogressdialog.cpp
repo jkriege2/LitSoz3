@@ -65,13 +65,13 @@ void RenameFilesProgressDialog::addFilesPair(const QString& oldName, const QStri
 void RenameFilesProgressDialog::setCurrentStatus(const QString& status, bool isOK) {
     if (ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0)) {
         if (isOK) {
-            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0)->setTextColor(QColor("darkblue"));
-            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 1)->setTextColor(QColor("darkblue"));
-            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 2)->setTextColor(QColor("darkblue"));
+            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0)->setForeground(QColor("darkblue"));
+            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 1)->setForeground(QColor("darkblue"));
+            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 2)->setForeground(QColor("darkblue"));
         } else {
-            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0)->setTextColor(QColor("red"));
-            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 1)->setTextColor(QColor("red"));
-            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 2)->setTextColor(QColor("red"));
+            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0)->setForeground(QColor("red"));
+            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 1)->setForeground(QColor("red"));
+            ui->tableWidget->item(ui->tableWidget->rowCount()-1, 2)->setForeground(QColor("red"));
         }
         ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0)->setText(status);
         ui->tableWidget->scrollToItem(ui->tableWidget->item(ui->tableWidget->rowCount()-1, 0));

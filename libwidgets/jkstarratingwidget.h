@@ -21,11 +21,11 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QFrame>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 /*! \brief a rating widget which displays five stars where the user may select how many are selected
 
 */
-class LIB_EXPORT JKStarRatingWidget : public QFrame {
+class LITSOZ3WIDGETS_EXPORT JKStarRatingWidget : public QFrame {
         Q_OBJECT
         Q_PROPERTY(int data READ rating WRITE setRating )
         Q_PROPERTY(int rating READ rating WRITE setRating USER true)

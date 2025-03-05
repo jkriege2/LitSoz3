@@ -125,7 +125,7 @@ QVariant LS3ReferenceTreeModel::data(const QModelIndex &index, int role) const {
 Qt::ItemFlags LS3ReferenceTreeModel::flags(const QModelIndex &index) const {
     Qt::ItemFlags f=Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     if (!index.isValid())
-         return 0;
+         return Qt::NoItemFlags;
     LS3ReferenceTreeItem *item = static_cast<LS3ReferenceTreeItem*>(index.internalPointer());
     if (!item) return f;
     if (item->isUserEditable()) f = f | Qt::ItemIsEditable;

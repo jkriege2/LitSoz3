@@ -18,9 +18,9 @@
 
 #include <QStringListModel>
 #include <QSet>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
-class LIB_EXPORT QCheckableStringListModel : public QStringListModel {
+class LITSOZ3WIDGETS_EXPORT QCheckableStringListModel : public QStringListModel {
     Q_OBJECT
 public:
     explicit QCheckableStringListModel(QObject *parent = 0);

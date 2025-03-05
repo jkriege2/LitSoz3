@@ -23,8 +23,8 @@
 #include <QtGui>
 #endif
 #include "programoptions.h"
-#include "../lib/bibtools.h"
-#include "../lib/ls3datastore.h"
+#include "bibtools.h"
+#include "ls3datastore.h"
 #include "qmappablecombobox.h"
 #include "jkstyledbutton.h"
 #include "ls3pluginservices.h"

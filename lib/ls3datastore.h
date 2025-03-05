@@ -23,7 +23,7 @@
 #include <QString>
 #include <QProgressBar>
 #include "ls3pluginservices.h"
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 class LS3ReferenceTreeModel;
 class LS3ReferenceTreeItem;
@@ -36,12 +36,12 @@ class LS3ReferenceTreeItem;
     basic fields are in the fields list, call resetFieldDefinitions(), which will remove all non-basic defintions.
 
 */
-class LS3LIB_EXPORT LS3Datastore : public QObject {
+class LITSOZ3TOOLS_EXPORT LS3Datastore : public QObject {
         Q_OBJECT
     public:
         enum FieldType { FTString, FTInt, FTFloat, FTNone};
         /** \brief database field description */
-        struct LS3LIB_EXPORT FieldDescription {
+        struct LITSOZ3TOOLS_EXPORT FieldDescription {
             QString name;
             FieldType type;
             bool basic;

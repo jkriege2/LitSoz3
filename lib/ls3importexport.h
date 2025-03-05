@@ -23,7 +23,7 @@
 #include <QVariant>
 #include "ls3datastore.h"
 #include "ls3pluginservices.h"
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 
 /*! \brief LitSoz 3 importer class

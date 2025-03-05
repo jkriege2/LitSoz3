@@ -81,11 +81,11 @@ void LS3SummarySortFilterProxyModel::setFilterTerm(const QString &term, bool reg
     this->m_regexp=regexp;
     this->m_fields=fields.split(";");
     if (regexp) {
-        m_rxTerm=QRegExp(term, Qt::CaseInsensitive, QRegExp::RegExp);
-        m_rxTerm.setMinimal(false);
+        m_rxTerm=QRegularExpression(term, QRegularExpression::CaseInsensitiveOption);
+        //m_rxTerm.setMinimal(false);
     } else {
-        m_rxTerm=QRegExp(term, Qt::CaseInsensitive, QRegExp::WildcardUnix);
-        m_rxTerm.setMinimal(false);
+        m_rxTerm=QRegularExpression::fromWildcard(term, Qt::CaseInsensitive);
+        //m_rxTerm.setMinimal(false);
     }
     invalidateFilter();
 

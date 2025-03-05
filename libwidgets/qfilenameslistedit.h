@@ -24,7 +24,7 @@
 #include <QItemDelegate>
 #include <QPixmap>
 #include <QAbstractButton>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 #include <QVBoxLayout>
 #include <QMimeData>
 #include <QUrl>
@@ -36,7 +36,7 @@ class QFilenamesListEdit;
     entries in this model are treated as files, relative to a given baseDir!
     The items are decorated with a file icon, extracted from a QFileIconProvider
 */
-class LS3LIBWIDGETS_EXPORT QFilenamesListEditModel: public QStringListModel {
+class LITSOZ3WIDGETS_EXPORT QFilenamesListEditModel: public QStringListModel {
         Q_OBJECT
     public:
         QFilenamesListEditModel( QObject *parent = 0 );
@@ -65,7 +65,7 @@ protected:
     add new files, select a new file and open the files. URLs (starting with http:// ...) are also
     recognized and treated separately.
 */
-class QFilenamesListEditDelegate : public QItemDelegate {
+class LITSOZ3WIDGETS_EXPORT QFilenamesListEditDelegate : public QItemDelegate {
         Q_OBJECT
     public:
         /** Default constructor */
@@ -115,7 +115,7 @@ protected:
     \note an event filter on the QListView is used to catch focusOut events. For each such event the
     widget itself gets and looses the focus, so data is stored by QDataMapper.
 */
-class LS3LIBWIDGETS_EXPORT QFilenamesListEdit : public QWidget {
+class LITSOZ3WIDGETS_EXPORT QFilenamesListEdit : public QWidget {
         Q_OBJECT
         Q_PROPERTY(QStringList data READ getFiles WRITE setFiles USER true)
         Q_PROPERTY(QString filesAsString READ getFilesAsString WRITE setFilesFromString)
@@ -146,7 +146,7 @@ class LS3LIBWIDGETS_EXPORT QFilenamesListEdit : public QWidget {
 
 };
 
-class QFilenamesListEditEventFilter : public QObject {
+class LITSOZ3WIDGETS_EXPORT QFilenamesListEditEventFilter : public QObject {
         Q_OBJECT
     public:
         QFilenamesListEditEventFilter(QFilenamesListEdit* parent=NULL);

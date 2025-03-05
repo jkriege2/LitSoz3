@@ -39,7 +39,6 @@
 #endif
 #include <QDesktopServices>
 #include <iostream>
-#include <QtXml>
 #include "bibtools.h"
 #include "htmltools.h"
 #include "crossreftools.h"
@@ -688,10 +687,11 @@ void LS3PluginArticleTools::pasteFromWebpage() {
         bool gotPMID=false;
         bool gotDOI=false;
 
-        QRegExp rxPubmed("http://www\\.ncbi\\.nlm\\.nih\\.gov/(pmc/articles|pubmed)/(\\d*)", Qt::CaseInsensitive);
-        if (rxPubmed.indexIn(www)>=0) {
+        QRegularExpression rxPubmed("http://www\\.ncbi\\.nlm\\.nih\\.gov/(pmc/articles|pubmed)/(\\d*)", QRegularExpression::CaseInsensitiveOption);
+        QRegularExpressionMatch rmatch;
+        if (www.contains(rxPubmed, &rmatch)) {
             // this is the result of a PubMed search, so we just have to request info from the PMID in the URL
-            lastPMID=rxPubmed.cap(2);
+            lastPMID=rmatch.captured(2);
             gotPMID=true;
         }
 

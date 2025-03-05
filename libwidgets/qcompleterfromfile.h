@@ -21,10 +21,10 @@
 #include <QString>
 #include <QStringList>
 #include <QFile>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 /** \brief completer class that reads and writes the completer list to and from a file */
-class LIB_EXPORT QCompleterFromFile : public QCompleter {
+class LITSOZ3WIDGETS_EXPORT QCompleterFromFile : public QCompleter {
     Q_OBJECT
 public:
     /** Default constructor */

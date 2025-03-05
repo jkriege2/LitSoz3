@@ -17,6 +17,7 @@
 #include "ui_pubmedsearchdialog.h"
 #include "bibtools.h"
 #include "ls3pluginarticletools.h"
+#include <QtCore5Compat/QTextCodec>
 
 #define ADDFIELD(name, id) {ui->cmbFields1->addItem(name, id); ui->cmbFields2->addItem(name, id);}
 

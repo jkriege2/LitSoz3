@@ -149,3 +149,7 @@ Makefile*
 /compiler.h
 /gitversion.h
 /plugins/articletools/images/Sicherungskopie_von_google.png
+/build/*
+/dist/*
+
+*.bak

@@ -17,9 +17,9 @@
 #define LS3PROGRESSTHREAD_H
 
 #include <QThread>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
-class LS3LIB_EXPORT LS3ProgressThread : public QThread {
+class LITSOZ3TOOLS_EXPORT LS3ProgressThread : public QThread {
         Q_OBJECT
     public:
         explicit LS3ProgressThread(QObject *parent = 0);

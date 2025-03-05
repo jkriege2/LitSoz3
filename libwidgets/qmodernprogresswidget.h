@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QTextEdit>
 #include <QPushButton>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 /*! \brief a progress indicator widget
     \ingroup tools_qt
@@ -33,7 +33,7 @@
     a mode where a colored circle/stroke wanders around the widget to indicate that something is going on, but not giving
     a real progress.
 */
-class LIB_EXPORT QModernProgressWidget : public QWidget {
+class LITSOZ3WIDGETS_EXPORT QModernProgressWidget : public QWidget {
         Q_OBJECT
     public:
          /** \brief modes of the progress widget */
@@ -178,10 +178,10 @@ class LIB_EXPORT QModernProgressWidget : public QWidget {
 
     The dialog is displayed at the screen center if setCentered() is set \c true.
 */
-class LIB_EXPORT QModernProgressDialog: public QDialog {
+class LITSOZ3WIDGETS_EXPORT QModernProgressDialog: public QDialog {
         Q_OBJECT
     public:
-        QModernProgressDialog(QWidget* parent=NULL, Qt::WindowFlags f = 0);
+        QModernProgressDialog(QWidget* parent=NULL, Qt::WindowFlags f = Qt::WindowType::Window);
         QModernProgressDialog(const QString & labelText, const QString & cancelButtonText, QWidget* parent=NULL, Qt::WindowFlags f = Qt::Window|Qt::WindowTitleHint);
         virtual ~QModernProgressDialog();
 

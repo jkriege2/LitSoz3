@@ -66,7 +66,7 @@ void QMappableComboBox::setFilename(QString fn) {
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             //std::cout<<"OK\n";
             QString s=QString::fromUtf8(f.readAll());
-            QStringList sl=s.split('\n', QString::SkipEmptyParts);
+            QStringList sl=s.split('\n', Qt::SkipEmptyParts);
             clear();
             addItems(sl);
             for (int i=0; i<count(); i++) {
@@ -115,7 +115,7 @@ void QMappableComboBox::setTranslationFilename(QString fn) {
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             //std::cout<<"OK\n";
             QString s=QString::fromUtf8(f.readAll());
-            QStringList sl=s.split('\n', QString::SkipEmptyParts);
+            QStringList sl=s.split('\n', Qt::SkipEmptyParts);
             for (int i=0; i<sl.size(); i++) {
                 QStringList sl1=sl[i].split(";");
                 if (sl1.size()>=2) {

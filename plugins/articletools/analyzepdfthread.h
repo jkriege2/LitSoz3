@@ -26,7 +26,8 @@
 #include <QList>
 #include <QDebug>
 #include <iostream>
-#include <QtXml>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomDocument>
 #include "bibtools.h"
 #include "htmltools.h"
 #include "crossreftools.h"

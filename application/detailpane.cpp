@@ -143,7 +143,7 @@ DetailPane::DetailPane(ProgramOptions* settings, QWidget* parent):
     //connect(completeKeywords, SIGNAL(textChanged()), this, SLOT(keywordsChanged()));
 
     labKeywords->setBuddy(pedKeywords);
-    flTopic->addWidget(labKeywords,0,0,0);
+    flTopic->addWidget(labKeywords,0,0);
     flTopic->addWidget(pedKeywords,0,1,3,1);
 
 
@@ -394,7 +394,7 @@ void DetailPane::changeLayout(bool small) {
         flTopic->addWidget(pedKeywords,2,1,1,3);
         //flTopic->addItem(flTopicSpacer,0,4);
     } else {
-        flTopic->addWidget(labKeywords,0,0,0);
+        flTopic->addWidget(labKeywords,0,0);
         flTopic->addWidget(pedKeywords,0,1,3,1);
         flTopic->addWidget(labTopic, 0, 2);
         flTopic->addWidget(cmbTopic, 0, 3);

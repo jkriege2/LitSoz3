@@ -14,6 +14,7 @@
 */
 
 #include "pubmedthread.h"
+#include <QtCore5Compat/QTextCodec>
 
 /*
 
@@ -205,7 +206,7 @@ QNetworkRequest PubmedThread::createPMIDBooksRequest(QString PMID) {
 QNetworkRequest PubmedThread::createPubmedSearchRequest(QString phrase, int maxresults, const QString& catalog) {
     QString urlstr="http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=%3&rettype=uilist&term=%1&retmax=%2";
     QString phraset=QUrl::toPercentEncoding(phrase, "[] ");
-    phraset=phraset.replace(QRegExp("\\s"), "+");
+    phraset=phraset.replace(QRegularExpression("\\s"), "+");
     QUrl PMIDUrl=QUrl(urlstr.arg(phraset).arg(maxresults).arg(catalog));
 
     QNetworkRequest request;

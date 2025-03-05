@@ -18,8 +18,9 @@
 
 #include <QAbstractItemModel>
 #include <QObject>
-#include <QtXml>
-#include "lib_imexport.h"
+#include <QtXml/QDomNode>
+#include <QXmlStreamWriter>
+#include "litsoz3tools_export.h"
 
 class LS3ReferenceTreeItem; // forward
 class LS3Datastore; // forward
@@ -27,7 +28,7 @@ class LS3Datastore; // forward
 /*! \brief item model class for LitSoz 3 reference trees
 
 */
-class LS3LIB_EXPORT LS3ReferenceTreeModel : public QAbstractItemModel {
+class LITSOZ3TOOLS_EXPORT LS3ReferenceTreeModel : public QAbstractItemModel {
         Q_OBJECT
     public:
         LS3ReferenceTreeModel(LS3Datastore* datastore, QObject *parent = 0);

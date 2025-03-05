@@ -34,7 +34,6 @@
 #include <QList>
 #include <QDebug>
 #include <iostream>
-#include <QtXml>
 #include "bibtools.h"
 
 class LS3PluginArticleTools;

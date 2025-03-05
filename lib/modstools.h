@@ -20,7 +20,7 @@
 #include <QString>
 #include <QMap>
 #include <QVariant>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 /*! \brief parse a MODS+XML record
 
@@ -28,6 +28,6 @@
 
     example query for isbn: <a href="http://copac.ac.uk/search?isn=9783527403103&format=XML+-+MODS">http://copac.ac.uk/search?isn=9783527403103&format=XML+-+MODS</a>
 */
-LS3LIB_EXPORT QMap<QString, QVariant> extractMODSXMLMetadata(const QString& data, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions, const QList<QString>& ands);
+LITSOZ3TOOLS_EXPORT QMap<QString, QVariant> extractMODSXMLMetadata(const QString& data, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions, const QList<QString>& ands);
 
 #endif // MODSTOOLS_H

@@ -25,7 +25,7 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QDockWidget>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 #include <QNetworkProxy>
 
 // FORWARD DECLARATIONS:

@@ -20,7 +20,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QVariant>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 /*! \brief create a new filename, based on given record and old filename, as well as a scheme
 
@@ -47,7 +47,7 @@
       * \c %uuid% - uuid
     .
  */
-LS3LIB_EXPORT QString createFileName(const QString& scheme, const QMap<QString, QVariant>& data, const QString& filename, int maxLength=200);
+LITSOZ3TOOLS_EXPORT QString createFileName(const QString& scheme, const QMap<QString, QVariant>& data, const QString& filename, int maxLength=200);
 
 /*! \brief create a new file directory, based on given record and old directory name, as well as a scheme
 
@@ -73,9 +73,9 @@ LS3LIB_EXPORT QString createFileName(const QString& scheme, const QMap<QString, 
       * \c %uuid% - uuid
     .
  */
-LS3LIB_EXPORT QString createFileDir(const QString& scheme, const QMap<QString, QVariant>& data, const QString& dirname, int maxLength=200);
+LITSOZ3TOOLS_EXPORT QString createFileDir(const QString& scheme, const QMap<QString, QVariant>& data, const QString& dirname, int maxLength=200);
 
 /** \brief convert the given string to a string suitable for use in filenames */
-LS3LIB_EXPORT QString cleanFilename(const QString& text, int maxLen=127, bool removeDot=true, bool removeSlash=true);
+LITSOZ3TOOLS_EXPORT QString cleanFilename(const QString& text, int maxLen=127, bool removeDot=true, bool removeSlash=true);
 
 #endif // FILENAMETOOLS_H

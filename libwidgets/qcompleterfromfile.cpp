@@ -41,7 +41,7 @@ void QCompleterFromFile::setFilename(QString val) {
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             //std::cout<<"OK\n";
             QString s=QString::fromUtf8(f.readAll());
-            QStringList sl=s.split('\n', QString::SkipEmptyParts);
+            QStringList sl=s.split('\n', Qt::SkipEmptyParts);
             m_stringlist->setStringList(sl);
         } //else std::cout<<"ERROR\n";
         connect(model(), SIGNAL(dataChanged ( const QModelIndex & , const QModelIndex &  )), this, SLOT(modelDataChanged ( const QModelIndex & , const QModelIndex &  )));
@@ -63,7 +63,7 @@ void QCompleterFromFile::modelDataChanged ( const QModelIndex & /*topLeft*/, con
             if (f1.open(QIODevice::ReadOnly|QIODevice::Text)) {
                 //std::cout<<"OK\n";
                 QString s=QString::fromUtf8(f1.readAll());
-                sl.append(s.split('\n', QString::SkipEmptyParts));
+                sl.append(s.split('\n', Qt::SkipEmptyParts));
             } //else std::cout<<"ERROR\n";
             sl.removeDuplicates();
             sl.sort();

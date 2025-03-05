@@ -14,7 +14,7 @@
 */
 
 #include "optionsdialog.h"
-#include <iostream>
+
 OptionsDialog::OptionsDialog(QWidget* parent):
     QDialog(parent)
 {
@@ -89,7 +89,7 @@ void OptionsDialog::on_btnDefaultAND_clicked()
 void OptionsDialog::on_btnDefaultSC_clicked()
 {
     QString sc=edtSpecialCharacters->text();
-    QString dsc=QString("ÀàÁáÂâÃãÄäÅåÆæÇçÈèÉéÊêËëÌìÍíÎîÏïĞğÑñÒòÓóÔôÕõÖöØøÙùÚúÛûÜüİıŞşßÿµ¿¡€¢£¤¥«»‘’·×÷¶±");
+    QString dsc=QString::fromUtf8("\u00C0\u00E0\u00C1\u00E1\u00C2\u00E2\u00C3\u00E3\u00C4\u00E4\u00C5\u00E5\u00C6\u00E6\u00C7\u00E7\u00C8\u00E8\u00C9\u00E9\u00CA\u00EA\u00CB\u00EB\u00CC\u00EC\u00CD\u00ED\u00CE\u00EE\u00CF\u00EF\u00D0\u00F0\u00D1\u00F1\u00D2\u00F2\u00D3\u00F3\u00D4\u00F4\u00D5\u00F5\u00D6\u00F6\u00D8\u00F8\u00D9\u00F9\u00DA\u00FA\u00DB\u00FB\u00DC\u00FC\u00DD\u00FD\u00DE\u00FE\u00DF\u00FF\u00B5\u00BF\u00A1\u20AC\u00A2\u00A3\u00A4\u00A5\u00AB\u00BB\u2018\u2019\u00B7\u00D7\u00F7\u00B6\u00B1");
     for (int i=0; i<dsc.size(); i++) {
         if (!sc.contains(dsc[i])) sc+=dsc[i];
     }

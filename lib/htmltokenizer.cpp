@@ -38,7 +38,7 @@ void HtmlTokenizer::Token::parse() {
     int pos=tagName.size();
     QString pName="";
     QString pValue="";
-    QChar pDelim=0;
+    QChar pDelim='\0';
     bool isPropName=true;
     bool isPropValue=false;
     while (pos<contents.size()) {
@@ -65,7 +65,7 @@ void HtmlTokenizer::Token::parse() {
                 properties.append(qMakePair(pName.trimmed(), QString("")));
                 pName="";
                 pValue="";
-                pDelim=0;
+                pDelim='\0';
             }
         } else if (!isPropName && isPropValue) {
             if (c=='\'') {
@@ -78,7 +78,7 @@ void HtmlTokenizer::Token::parse() {
                         properties.append(qMakePair(pName.trimmed(), pValue));
                         pName="";
                         pValue="";
-                        pDelim=0;
+                        pDelim='\0';
                         isPropName=true;
                         isPropValue=false;
                     }
@@ -93,7 +93,7 @@ void HtmlTokenizer::Token::parse() {
                         properties.append(qMakePair(pName.trimmed(), pValue));
                         pName="";
                         pValue="";
-                        pDelim=0;
+                        pDelim='\0';
                         isPropName=true;
                         isPropValue=false;
                     }
@@ -103,7 +103,7 @@ void HtmlTokenizer::Token::parse() {
                     properties.append(qMakePair(pName.trimmed(), pValue.trimmed()));
                     pName="";
                     pValue="";
-                    pDelim=0;
+                    pDelim='\0';
                     isPropName=true;
                     isPropValue=false;
                 } else if (pDelim==0 && !c.isSpace() && (c!='\'') && (c!='\"')) {
@@ -197,7 +197,7 @@ HtmlTokenizer::Token HtmlTokenizer::getNextToken() {
                 endTag="?>";
             }
             bool isProperty=false;
-            QChar endProperty=0;
+            QChar endProperty='\0';
             pos=contentsStart;
             bool isTagName=true;
             token.tagName="";

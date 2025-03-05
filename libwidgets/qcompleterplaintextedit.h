@@ -24,9 +24,9 @@
 #else
 #include <QtGui>
 #endif
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
-class LIB_EXPORT QCompleterPlainTextEdit : public QPlainTextEdit {
+class LITSOZ3WIDGETS_EXPORT QCompleterPlainTextEdit : public QPlainTextEdit {
     Q_OBJECT
 public:
     /** Default constructor */

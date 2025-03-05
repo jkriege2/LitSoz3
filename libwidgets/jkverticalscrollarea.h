@@ -16,7 +16,7 @@
 #ifndef JKVERTICALSCROLLAREA_H
 #define JKVERTICALSCROLLAREA_H
 
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 #include <QScrollArea>
 
 /*! \brief a scrollarea which shows only vertical scrollbars whenever possible (minimum widget size) and otherwise tries
@@ -25,7 +25,7 @@
 
 
  */
-class LIB_EXPORT JKVerticalScrollArea : public QScrollArea {
+class LITSOZ3WIDGETS_EXPORT JKVerticalScrollArea : public QScrollArea {
         Q_OBJECT
     public:
         JKVerticalScrollArea(QWidget* parent);

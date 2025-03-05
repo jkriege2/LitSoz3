@@ -40,7 +40,7 @@
 #include "detailpane.h"
 #include "extendedpane.h"
 #include "contentspane.h"
-#include "../lib/ls3pluginservices.h"
+#include "ls3pluginservices.h"
 #include "ls3datastorexml.h"
 #include "jkcharacterscreenkeyboard.h"
 #include "selectionlist.h"
@@ -180,7 +180,7 @@ class MainWindow : public QMainWindow, public LS3PluginServices {
 
 
         /** \brief search for plugins */
-        void searchPlugins(QString directory);
+        void searchPlugins(QString directory, bool clearExistingPlugins=true, int logIndent=0);
 
         /** \brief initialize all plugins */
         void initPlugins();

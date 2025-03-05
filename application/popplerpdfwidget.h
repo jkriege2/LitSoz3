@@ -18,17 +18,22 @@
 
 #include <QtGlobal>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    #include <poppler/qt5/poppler-qt5.h>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    #include <poppler/qt6/poppler-qt6.h>
 #else
-    #include <poppler/qt4/poppler-qt4.h>
+    #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+        #include <poppler/qt5/poppler-qt5.h>
+    #else
+        #include <poppler/qt4/poppler-qt4.h>
+    #endif
 #endif
 
 #include <QApplication>
 #include <QLabel>
 #include <QRectF>
 #include <QRubberBand>
-#include <QRegExp>
+#include <QTransform>
+#include <QRegularExpression>
 
 class PopplerPDFWidget : public QLabel {
         Q_OBJECT
@@ -42,8 +47,9 @@ class PopplerPDFWidget : public QLabel {
         explicit PopplerPDFWidget(QWidget *parent = 0);
         ~PopplerPDFWidget();
 
-        Poppler::Document *document();
-        QMatrix matrix() const;
+        const Poppler::Document& document() const;
+        bool hasDocument() const;
+        QTransform matrix() const;
         qreal scale() const;
         int getCurrentPage() const;
         SelectionMode getSelectionMode() const;
@@ -87,7 +93,7 @@ class PopplerPDFWidget : public QLabel {
         void clearTextSelection();
         void updateTextSelection();
 
-        Poppler::Document *doc;
+        std::unique_ptr<Poppler::Document> doc;
         int currentPage;
         QPoint dragPosition;
         QRubberBand *rubberBand;

@@ -29,7 +29,7 @@
 #endif
 #include <QtXml>
 
-#include "../lib/ls3datastore.h"
+#include "ls3datastore.h"
 
 
 class fdfManager: public QObject {

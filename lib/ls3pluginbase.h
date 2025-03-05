@@ -19,14 +19,14 @@
 
 #include <QtGlobal>
 #include "ls3plugin.h"
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 
 
 /*! \brief LitSoz 3 Plugin base class which implements some features over LS3Plugin
 
 */
-class LS3LIB_EXPORT LS3PluginBase: public QObject, public LS3Plugin {
+class LITSOZ3TOOLS_EXPORT LS3PluginBase: public QObject, public LS3Plugin {
         Q_OBJECT
         Q_INTERFACES(LS3Plugin)
     public:

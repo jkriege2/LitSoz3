@@ -22,11 +22,11 @@
 #include <QMap>
 #include <QSet>
 #include <QVariant>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 #include <QPair>
 #include <QHash>
 
-class LS3LIB_EXPORT LanguageRecognizer {
+class LITSOZ3TOOLS_EXPORT LanguageRecognizer {
     public:
         LanguageRecognizer();
         void init(const QStringList& datafiles);
@@ -53,6 +53,6 @@ class LS3LIB_EXPORT LanguageRecognizer {
 
 
 /** \brief tries to recognize the language of the given text and returns its ID, or an empty string if the language could not be recognized */
-LS3LIB_EXPORT QString recognizeLanguage(const QString& text, double* distance=NULL);
+LITSOZ3TOOLS_EXPORT QString recognizeLanguage(const QString& text, double* distance=NULL);
 
 #endif // LANGUAGETOOLS_H

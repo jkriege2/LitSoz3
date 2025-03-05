@@ -30,7 +30,7 @@ LS3SelectionDisplayModel::LS3SelectionDisplayModel(LS3Datastore* datastore, QObj
 {
     m_datastore=datastore;
     loadData();
-    connect(datastore, SIGNAL(selectionChanged(int, bool)), this, SLOT(resetModel()));
+    connect(datastore, SIGNAL(selectionChanged(int,bool)), this, SLOT(resetModel()));
     connect(datastore, SIGNAL(massiveSelectionChange()), this, SLOT(resetModel()));
 }
 
@@ -135,7 +135,7 @@ void LS3SelectionDisplayModel::loadData() {
         }
         datalist.append(it);
     }
-    qSort(datalist);
+    std::sort(datalist.begin(), datalist.end());
 }
 
 bool LS3SelectionDisplayModel::ListItem::operator<(const ListItem& b) const {

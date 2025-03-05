@@ -24,18 +24,20 @@
 /////////////////////////////////////////////////////////
 bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxOSA("(\\d\\d\\d\\d)\\s*Optical\\sSociety", Qt::CaseInsensitive);
-    QRegExp rxOSA2("journal\\s*of\\s*the\\s*\\s*optical\\s*society\\s*of\\s*america", Qt::CaseInsensitive);
-    if (rxOSA.indexIn(data)>=0 || rxOSA2.indexIn(data)>=0) {
-        props["year"]=rxOSA.cap(1);
+    QRegularExpressionMatch rxOSAMatch;
+    static const QRegularExpression rxOSA("(\\d\\d\\d\\d)\\s*Optical\\sSociety", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch rxOSA2Match;
+    static const QRegularExpression rxOSA2("journal\\s*of\\s*the\\s*\\s*optical\\s*society\\s*of\\s*america", QRegularExpression::CaseInsensitiveOption);
+    if (data.indexOf(rxOSA,0,&rxOSAMatch)>=0 || data.indexOf(rxOSA2,0,&rxOSA2Match)>=0) {
+        props["year"]=rxOSAMatch.captured(1);
 
-       /* QRegExp rxTitle("([ \\d\\w\\-\\:\\;\\,\\.\\?\\(\\)\\[\\]\\%\\&\\\"\\']*)\\n", Qt::CaseInsensitive);
-        rxTitle.setMinimal(true);
-        if (rxTitle.indexIn(data) != -1) {
-            props["title"]=rxTitle.cap(1);
+       /* QRegularExpressionMatch rxTitleMatch;
+       static const QRegularExpression rxTitle("([ \\d\\w\\-\\:\\;\\,\\.\\?\\(\\)\\[\\]\\%\\&\\\"\\']*)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        if (data.indexOf(rxTitle,0,&rxTitleMatch) != -1) {
+            props["title"]=rxTitleMatch.captured(1);
         }*/
 
-        if (rxOSA2.indexIn(data)>0) props["journal"]="Journal of the Optical Society of America";
+        if (data.indexOf(rxOSA2,0,&rxOSA2Match)>0) props["journal"]="Journal of the Optical Society of America";
 
         int i=0;
         while ((i<lines.size()) && (lines[i].simplified().isEmpty())) {
@@ -48,24 +50,24 @@ bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QStr
         }
         if (i<lines.size()) {
             QString auth=lines[i].simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+            auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
             QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
             props["authors"]=a;
         }
 
-        QRegExp rxJournal("Vol[\\.\\:\\s]*(\\d+).*No[\\.\\:\\s]*(\\d+)\\s*\\/\\s*([ a-zA-Z]*)\\s*(\\d*)\\s*\\n", Qt::CaseInsensitive);
-        rxJournal.setMinimal(true);
+        static const QRegularExpression rxJournal("Vol[\\.\\:\\s]*(\\d+).*No[\\.\\:\\s]*(\\d+)\\s*\\/\\s*([ a-zA-Z]*)\\s*(\\d*)\\s*\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        QRegularExpressionMatch rxJournalMatch;
         int count = 0;
         int pos = 0;
         QString firstPages="", lastPages="";
-        while ((pos = rxJournal.indexIn(data, pos)) != -1) {
-            props["volume"]=rxJournal.cap(1);
-            props["issue"]=rxJournal.cap(2);
-            props["journal"]=rxJournal.cap(3);
-            if (firstPages.isEmpty()) firstPages=rxJournal.cap(4);
-            else lastPages=rxJournal.cap(4);
+        while ((pos = data.indexOf(rxJournal,pos,&rxJournalMatch)) != -1) {
+            props["volume"]=rxJournalMatch.captured(1);
+            props["issue"]=rxJournalMatch.captured(2);
+            props["journal"]=rxJournalMatch.captured(3);
+            if (firstPages.isEmpty()) firstPages=rxJournalMatch.captured(4);
+            else lastPages=rxJournalMatch.captured(4);
             ++count;
-            pos += rxJournal.matchedLength();
+            pos += rxJournalMatch.capturedLength();
         }
         if (!firstPages.isEmpty() && !lastPages.isEmpty()) {
             props["pages"]=firstPages+"-"+lastPages;
@@ -74,22 +76,25 @@ bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QStr
         }
 
         bool hasYear=false;
-        QRegExp rxYear("(jan|january|feb|february|march|mar|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)\\s*(\\d+)\\s*\\n", Qt::CaseInsensitive);
+        QRegularExpressionMatch rxYearMatch;
+        static const QRegularExpression rxYear("(jan|january|feb|february|march|mar|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)\\s*(\\d+)\\s*\\n", QRegularExpression::CaseInsensitiveOption);
         bool hasVol=false;
-        QRegExp rxVol("vol[^\\s]*\\s+(\\d+)\\s*", Qt::CaseInsensitive);
+        QRegularExpressionMatch rxVolMatch;
+        static const QRegularExpression rxVol("vol[^\\s]*\\s+(\\d+)\\s*", QRegularExpression::CaseInsensitiveOption);
         bool hasNumber=false;
-        QRegExp rxNumber("num[^\\s]*\\s+(\\d+)\\s*", Qt::CaseInsensitive);
+        QRegularExpressionMatch rxNumberMatch;
+        static const QRegularExpression rxNumber("num[^\\s]*\\s+(\\d+)\\s*", QRegularExpression::CaseInsensitiveOption);
         for (int i=0; i<lines.size(); i++) {
-            if (!hasYear && rxYear.indexIn(lines[i])>=0) {
-                props["year"]=rxYear.cap(2);
+            if (!hasYear && lines[i].indexOf(rxYear,0,&rxYearMatch)>=0) {
+                props["year"]=rxYearMatch.captured(2);
                 hasYear=true;
             }
-            if (!hasVol && rxVol.indexIn(lines[i])>=0) {
-                props["volume"]=rxVol.cap(1);
+            if (!hasVol && lines[i].indexOf(rxVol,0,&rxVolMatch)>=0) {
+                props["volume"]=rxVolMatch.captured(1);
                 hasVol=true;
             }
-            if (!hasNumber && rxNumber.indexIn(lines[i])>=0) {
-                props["issue"]=rxNumber.cap(1);
+            if (!hasNumber && lines[i].indexOf(rxNumber,0,&rxNumberMatch)>=0) {
+                props["issue"]=rxNumberMatch.captured(1);
                 hasNumber=true;
             }
             if (lines[i].toLower().contains("index") && lines[i].toLower().contains("head")) break;
@@ -110,13 +115,13 @@ bool recognizeOSA(const QString& data, QMap<QString, QString>& props, QList<QStr
 bool recognizeElsevier(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
     if (lines.size()<1) return false;
-    QRegExp rxElsevier("(.+)[\\s]+([\\d]+)[\\s]+\\((\\d\\d\\d\\d)\\)[\\s]+(.+).*www.elsevier.com", Qt::CaseInsensitive);
-    rxElsevier.setMinimal(true);
-    if (rxElsevier.indexIn(lines[0])>=0) {
-        props["journal"]=rxElsevier.cap(1);
-        props["volume"]=rxElsevier.cap(2);
-        props["year"]=rxElsevier.cap(3).toInt();
-        props["pages"]=rxElsevier.cap(4);
+    QRegularExpressionMatch rxElsevierMatch;
+    static const QRegularExpression rxElsevier("(.+)[\\s]+([\\d]+)[\\s]+\\((\\d\\d\\d\\d)\\)[\\s]+(.+).*www.elsevier.com", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+    if (lines[0].indexOf(rxElsevier,0,&rxElsevierMatch)>=0) {
+        props["journal"]=rxElsevierMatch.captured(1);
+        props["volume"]=rxElsevierMatch.captured(2);
+        props["year"]=QString::number(rxElsevierMatch.captured(3).toInt());
+        props["pages"]=rxElsevierMatch.captured(4);
         int i=1;
         while ((i<lines.size()) && (lines[i].simplified().isEmpty())) {
             i++;
@@ -128,7 +133,7 @@ bool recognizeElsevier(const QString& data, QMap<QString, QString>& props, QList
         }
         if (i<lines.size()) {
             QString auth=lines[i].simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+            auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
             QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
             props["authors"]=a;
         }
@@ -144,21 +149,23 @@ bool recognizeElsevier(const QString& data, QMap<QString, QString>& props, QList
 /////////////////////////////////////////////////////////
 bool recognizeBentham(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxBentham("\\s*(\\d\\d\\d\\d)\\s*Bentham\\sScience\\sPublishers", Qt::CaseInsensitive);
-    if (rxBentham.indexIn(data)>=0) {
-        props["year"]=rxBentham.cap(1);
+    QRegularExpressionMatch rxBenthamMatch;
+    static const QRegularExpression rxBentham("\\s*(\\d\\d\\d\\d)\\s*Bentham\\sScience\\sPublishers", QRegularExpression::CaseInsensitiveOption);
+    if (data.indexOf(rxBentham,0,&rxBenthamMatch)>=0) {
+        props["year"]=rxBenthamMatch.captured(1);
 
         int i=0;
         bool isTitle=false;
-        QRegExp rxJournal("(.+)\\s*,\\s+(\\d\\d\\d\\d)\\s*,\\s+(\\d+)\\s*,\\s+(.+)", Qt::CaseInsensitive);
+        QRegularExpressionMatch rxJournalMatch;
+        static const QRegularExpression rxJournal("(.+)\\s*,\\s+(\\d\\d\\d\\d)\\s*,\\s+(\\d+)\\s*,\\s+(.+)", QRegularExpression::CaseInsensitiveOption);
         while ((i<lines.size()) && (lines[i].simplified().isEmpty()) && (!isTitle)) {
-            if (rxJournal.indexIn(lines[i])>=0) {
-                props["pages"]=rxJournal.cap(4);
-                props["volume"]=rxJournal.cap(3);
-                props["year"]=rxJournal.cap(2);
-                props["journal"]=rxJournal.cap(1);
+            if (lines[i].indexOf(rxJournal,0,&rxJournalMatch)>=0) {
+                props["pages"]=rxJournalMatch.captured(4);
+                props["volume"]=rxJournalMatch.captured(3);
+                props["year"]=rxJournalMatch.captured(2);
+                props["journal"]=rxJournalMatch.captured(1);
             } else {
-                if (lines[i].simplified().contains(QRegExp("[A-Za-z]",Qt::CaseInsensitive))) isTitle=true;
+                if (lines[i].simplified().contains(QRegularExpression("[A-Za-z]",QRegularExpression::CaseInsensitiveOption))) isTitle=true;
             }
             if (!isTitle) i++;
         }
@@ -169,7 +176,7 @@ bool recognizeBentham(const QString& data, QMap<QString, QString>& props, QList<
         }
         if (i<lines.size()) {
             QString auth=lines[i].simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+            auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
             QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
             props["authors"]=a;
         }
@@ -186,36 +193,37 @@ bool recognizeBentham(const QString& data, QMap<QString, QString>& props, QList<
 /////////////////////////////////////////////////////////
 bool recognizeSPIE(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxProcSPIEFull("Proceedings\\s+of\\s+SPIE\\s+Vol.\\s*(\\d+)\\s+(.+),\\s+edited\\s+by\\s+(.*)\\s+\\(.+,\\s+(\\d\\d\\d\\d)\\)[^\\d]*([a-z\\d]{4,4}-[a-z\\d]{4,4}).*(\\d)+\\n", Qt::CaseInsensitive);
-    QRegExp rxProcSPIESmall("Proceedings\\s+of\\s+SPIE\\s+Vol.\\s*(\\d+)\\s+(.+),\\s+edited\\s+by\\s+(.*)\\s+\\(.+,\\s+(\\d\\d\\d\\d)\\)[^\\d]*([a-z\\d]{4,4}-[a-z\\d]{4,4}).*(\\d)+\\n", Qt::CaseInsensitive);
-    QRegExp& spieUse=rxProcSPIEFull;
+    static const QRegularExpression rxProcSPIEFull("Proceedings\\s+of\\s+SPIE\\s+Vol.\\s*(\\d+)\\s+(.+),\\s+edited\\s+by\\s+(.*)\\s+\\(.+,\\s+(\\d\\d\\d\\d)\\)[^\\d]*([a-z\\d]{4,4}-[a-z\\d]{4,4}).*(\\d)+\\n", QRegularExpression::CaseInsensitiveOption);
+    static const QRegularExpression rxProcSPIESmall("Proceedings\\s+of\\s+SPIE\\s+Vol.\\s*(\\d+)\\s+(.+),\\s+edited\\s+by\\s+(.*)\\s+\\(.+,\\s+(\\d\\d\\d\\d)\\)[^\\d]*([a-z\\d]{4,4}-[a-z\\d]{4,4}).*(\\d)+\\n", QRegularExpression::CaseInsensitiveOption);
+    const QRegularExpression* spieUse=&rxProcSPIEFull;
+    QRegularExpressionMatch spieUseMatch;
     bool ok=false;
     int start=-1;
-    if ((start=rxProcSPIEFull.indexIn(data))<0) {
-        spieUse=rxProcSPIESmall;
-        if ((start=rxProcSPIESmall.indexIn(data))<0) {
+    if ((start=data.indexOf(rxProcSPIEFull,0,&spieUseMatch))<0) {
+        spieUse=&rxProcSPIESmall;
+        if ((start=data.indexOf(rxProcSPIESmall,0,&spieUseMatch))<0) {
 
         } else ok=true;
     } else ok=true;
 
     if (ok) {
-        start+=spieUse.matchedLength();
+        start+=spieUseMatch.capturedLength();
         props["title"]=lines[0];
-        props["year"]=spieUse.cap(4);
-        props["issn"]=spieUse.cap(5);
+        props["year"]=spieUseMatch.captured(4);
+        props["issn"]=spieUseMatch.captured(5);
         props["type"]="inproceedings";
-        props["volume"]=spieUse.cap(1);
+        props["volume"]=spieUseMatch.captured(1);
         props["places"]="Bellingham";
         props["series"]="Proceedings of the SPIE";
         props["institution"]="SPIE";
-        props["booktitle"]=spieUse.cap(2);
-        props["editors"]=reformatAuthors(spieUse.cap(3), namePrefixes, nameAdditions, andWords);
-        QString firstpage=spieUse.cap(6);
+        props["booktitle"]=spieUseMatch.captured(2);
+        props["editors"]=reformatAuthors(spieUseMatch.captured(3), namePrefixes, nameAdditions, andWords);
+        QString firstpage=spieUseMatch.captured(6);
         QString lastPage="";
         if (!firstpage.isEmpty()) {
-            while ((start=spieUse.indexIn(data, start))!=-1) {
-                lastPage=spieUse.cap(6);
-                start+=spieUse.matchedLength();
+            while ((start=data.indexOf(*spieUse, start, &spieUseMatch))!=-1) {
+                lastPage=spieUseMatch.captured(6);
+                start+=spieUseMatch.capturedLength();
             }
         }
         if (!firstpage.isEmpty()) {
@@ -237,26 +245,21 @@ bool recognizeSPIE(const QString& data, QMap<QString, QString>& props, QList<QSt
 /////////////////////////////////////////////////////////
 bool recognizeBiophysJ(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxFull("Biophysical\\s+Journal\\s+Volume\\s+(\\d+).+(\\d\\d\\d\\d)\\s+(\\d+)[^\\d]+(\\d+)\\s+.*([a-z]+.*)\\s*\\n\\s*([a-z]+.*)\\n", Qt::CaseInsensitive);
-    rxFull.setMinimal(true);
-    QRegExp& rxUse=rxFull;
+    QRegularExpressionMatch rxFullMatch;
+    static const QRegularExpression rxFull("Biophysical\\s+Journal\\s+Volume\\s+(\\d+).+(\\d\\d\\d\\d)\\s+(\\d+)[^\\d]+(\\d+)\\s+.*([a-z]+.*)\\s*\\n\\s*([a-z]+.*)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
     bool ok=false;
     int start=-1;
-    if ((start=rxUse.indexIn(data))<0) {
-        /*rxUse=rxProcSPIESmall;
-        if ((start=rxUse.indexIn(data))<0) {
-
-        } else ok=true;*/
+    if ((start=data.indexOf(rxFull,0,&rxFullMatch))<0) {
     } else ok=true;
 
     if (ok) {
-        start+=rxUse.matchedLength();
+        start+=rxFullMatch.capturedLength();
         props["journal"]="Biophysical Journal";
-        props["volume"]=rxUse.cap(1);
-        props["year"]=rxUse.cap(2);
-        props["pages"]=rxUse.cap(3)+"-"+rxUse.cap(4);
-        props["title"]=rxUse.cap(5);
-        props["authors"]=reformatAuthors(rxUse.cap(6), namePrefixes, nameAdditions, andWords);
+        props["volume"]=rxFullMatch.captured(1);
+        props["year"]=rxFullMatch.captured(2);
+        props["pages"]=rxFullMatch.captured(3)+"-"+rxFullMatch.captured(4);
+        props["title"]=rxFullMatch.captured(5);
+        props["authors"]=reformatAuthors(rxFullMatch.captured(6), namePrefixes, nameAdditions, andWords);
         return true;
     }
     return false;
@@ -269,27 +272,29 @@ bool recognizeBiophysJ(const QString& data, QMap<QString, QString>& props, QList
 /////////////////////////////////////////////////////////
 bool recognizePNAS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("\\s+(\\d\\d\\d\\d)\\s+by\\s+The\\s+National\\s+Academy\\s+of\\s+Sciences\\s+of\\s+the\\s+USA", Qt::CaseInsensitive);
-    QRegExp rxCheck2("PNAS\\s+.+\\s+(\\d\\d\\d\\d)[^\\d].+vol.+(\\d+)[^\\d].+no.+(\\d+)[^\\d].*(\\d+)", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("\\s+(\\d\\d\\d\\d)\\s+by\\s+The\\s+National\\s+Academy\\s+of\\s+Sciences\\s+of\\s+the\\s+USA", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch rxCheck2Match;
+    static const QRegularExpression rxCheck2("PNAS\\s+.+\\s+(\\d\\d\\d\\d)[^\\d].+vol.+(\\d+)[^\\d].+no.+(\\d+)[^\\d].*(\\d+)", QRegularExpression::CaseInsensitiveOption);
 
-    if (rxCheck.indexIn(data)>=0 || rxCheck2.indexIn(data)>=0) {
-        if (rxCheck.cap(1).size()>0) props["year"]=rxCheck.cap(1);
-        if (rxCheck2.cap(1).size()>0) props["year"]=rxCheck2.cap(1);
+    if (data.indexOf(rxCheck,0,&rxCheckMatch)>=0 || data.indexOf(rxCheck2,0,&rxCheck2Match)>=0) {
+        if (rxCheckMatch.captured(1).size()>0) props["year"]=rxCheckMatch.captured(1);
+        if (rxCheck2Match.captured(1).size()>0) props["year"]=rxCheck2Match.captured(1);
         props["journal"]="Proceedings of the National Academy of Sciences of the USA";
 
-        QRegExp rxPNAS=QRegExp("PNAS\\s+.+\\s+(\\d\\d\\d\\d)[^\\d].+vol.+(\\d+)[^\\d].+no.+(\\d+)[^\\d].*(\\d+)", Qt::CaseInsensitive);
-        rxPNAS.setMinimal(true);
+        QRegularExpressionMatch rxPNASMatch;
+        static const QRegularExpression rxPNAS=QRegularExpression("PNAS\\s+.+\\s+(\\d\\d\\d\\d)[^\\d].+vol.+(\\d+)[^\\d].+no.+(\\d+)[^\\d].*(\\d+)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
         int start=-1;
-        if ((start=rxPNAS.indexIn(data))>=0) {
-            props["year"]=rxPNAS.cap(1);
-            props["volume"]=rxPNAS.cap(2);
-            props["issue"]=rxPNAS.cap(3);
-            QString firstpage=rxPNAS.cap(4);
+        if ((start=data.indexOf(rxPNAS,0,&rxPNASMatch))>=0) {
+            props["year"]=rxPNASMatch.captured(1);
+            props["volume"]=rxPNASMatch.captured(2);
+            props["issue"]=rxPNASMatch.captured(3);
+            QString firstpage=rxPNASMatch.captured(4);
             QString lastPage="";
             if (!firstpage.isEmpty()) {
-                while ((start=rxPNAS.indexIn(data, start))!=-1) {
-                    lastPage=rxPNAS.cap(4);
-                    start+=rxPNAS.matchedLength();
+                while ((start=data.indexOf(rxPNAS, start,&rxPNASMatch))!=-1) {
+                    lastPage=rxPNASMatch.captured(4);
+                    start+=rxPNASMatch.capturedLength();
                 }
             }
             if (!firstpage.isEmpty()) {
@@ -299,22 +304,20 @@ bool recognizePNAS(const QString& data, QMap<QString, QString>& props, QList<QSt
                 }
             }
         }
-        QRegExp rxDOI=QRegExp("doi\\s*(10\\..*)\\n", Qt::CaseInsensitive);
-        rxDOI.setMinimal(true);
-        if (rxDOI.indexIn(data)>=0) {
-            props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
+        QRegularExpressionMatch rxDOIMatch;
+        QRegularExpression rxDOI=QRegularExpression("doi\\s*(10\\..*)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        if (data.indexOf(rxDOI,0,&rxDOIMatch)>=0) {
+            props["doi"]=rxDOIMatch.captured(1).simplified().replace(' ', '/');
         } else {
             QString data1=data;
             data1=data1.replace('?', '/');
-            rxDOI=QRegExp("doi\\s*(10\\..*)\\n", Qt::CaseInsensitive);
-            rxDOI.setMinimal(true);
-            if (rxDOI.indexIn(data)>=0) {
-                props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
+            rxDOI=QRegularExpression("doi\\s*(10\\..*)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+            if (data.indexOf(rxDOI,0,&rxDOIMatch)>=0) {
+                props["doi"]=rxDOIMatch.captured(1).simplified().replace(' ', '/');
             } else {
-                rxDOI=QRegExp("www.pnas.orgcgi[?\\/]doi[?\\/](10\\..*)\\n", Qt::CaseInsensitive);
-                rxDOI.setMinimal(true);
-                if (rxDOI.indexIn(data)>=0) {
-                    props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
+                rxDOI=QRegularExpression("www.pnas.orgcgi[?\\/]doi[?\\/](10\\..*)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+                if (data.indexOf(rxDOI,0,&rxDOIMatch)>=0) {
+                    props["doi"]=rxDOIMatch.captured(1).simplified().replace(' ', '/');
                 } else {
                     if (lines.size()>0) props["title"]=lines[0];
                     if (lines.size()>1) {
@@ -333,7 +336,7 @@ bool recognizePNAS(const QString& data, QMap<QString, QString>& props, QList<QSt
                             aline=lines.value(2, "");
                         }
                         QString auth=aline.simplified();
-                        auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+                        auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
                         QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
                         props["authors"]=a;
                     }
@@ -355,25 +358,26 @@ bool recognizePNAS(const QString& data, QMap<QString, QString>& props, QList<QSt
 /////////////////////////////////////////////////////////
 bool recognizeIEEE(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("(IEEE[^,]*).+vol.+(\\d+).+no.+(\\d+).+(\\d\\d\\d\\d)\\s+(\\d+)\\s+([a-z]+.*)\\n.+([a-z]+.*)\\n", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("(IEEE[^,]*).+vol.+(\\d+).+no.+(\\d+).+(\\d\\d\\d\\d)\\s+(\\d+)\\s+([a-z]+.*)\\n.+([a-z]+.*)\\n", QRegularExpression::CaseInsensitiveOption);
 
-    if (rxCheck.indexIn(data)>=0) {
-        props["journal"]=rxCheck.cap(1);
-        props["volume"]=rxCheck.cap(2);
-        props["issue"]=rxCheck.cap(3);
-        props["year"]=rxCheck.cap(4);
-        props["pages"]=rxCheck.cap(5)+"ff";
-        props["title"]=rxCheck.cap(6);
+    if (data.indexOf(rxCheck,0,&rxCheckMatch)>=0) {
+        props["journal"]=rxCheckMatch.captured(1);
+        props["volume"]=rxCheckMatch.captured(2);
+        props["issue"]=rxCheckMatch.captured(3);
+        props["year"]=rxCheckMatch.captured(4);
+        props["pages"]=rxCheckMatch.captured(5)+"ff";
+        props["title"]=rxCheckMatch.captured(6);
 
-        QString auth=rxCheck.cap(7).simplified();
-        auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+        QString auth=rxCheckMatch.captured(7).simplified();
+        auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
         QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
         props["authors"]=a;
 
-        QRegExp rxDOI=QRegExp("doi\\s+(10\\..*)\\n", Qt::CaseInsensitive);
-        rxDOI.setMinimal(true);
-        if (rxDOI.indexIn(data)>=0) {
-            props["doi"]=rxDOI.cap(1).simplified().replace(' ', '/');
+        QRegularExpressionMatch rxDOIMatch;
+        static const QRegularExpression rxDOI=QRegularExpression("doi\\s+(10\\..*)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        if (data.indexOf(rxDOI,0,&rxDOIMatch)>=0) {
+            props["doi"]=rxDOIMatch.captured(1).simplified().replace(' ', '/');
         }
         return true;
     }
@@ -390,23 +394,24 @@ bool recognizeIEEE(const QString& data, QMap<QString, QString>& props, QList<QSt
 /////////////////////////////////////////////////////////
 bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     //QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("(\\d\\d\\d\\d).*\\sAmerican\\s*Physical\\s*Society", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("(\\d\\d\\d\\d).*\\sAmerican\\s*Physical\\s*Society", QRegularExpression::CaseInsensitiveOption);
 
-    if (rxCheck.indexIn(data)>=0) {
-        props["year"]=rxCheck.cap(1);
+    if (data.indexOf(rxCheck,0,&rxCheckMatch)>=0) {
+        props["year"]=rxCheckMatch.captured(1);
 
-        QRegExp rxAPS("(.+)\\s+vol(ume)?[\\.\\:\\,]?\\s*(\\d+).+(no|number)[\\.\\:\\,]?\\s*(\\d+).+(\\d\\d\\d\\d)\\s+([a-z]+.+)\\n([a-z]+.+)\\n", Qt::CaseInsensitive);
-        rxAPS.setMinimal(true);
+        QRegularExpressionMatch rxAPSMatch;
+        static const QRegularExpression rxAPS("(.+)\\s+vol(ume)?[\\.\\:\\,]?\\s*(\\d+).+(no|number)[\\.\\:\\,]?\\s*(\\d+).+(\\d\\d\\d\\d)\\s+([a-z]+.+)\\n([a-z]+.+)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
 
-        if (rxAPS.indexIn(data)>=0) {
-            props["journal"]=rxAPS.cap(1);
-            props["volume"]=rxAPS.cap(3);
-            props["issue"]=rxAPS.cap(5);
-            props["year"]=rxAPS.cap(6);
-            props["title"]=rxAPS.cap(7);
-            QString auth=rxCheck.cap(8).simplified();
+        if (data.indexOf(rxAPS,0,&rxAPSMatch)>=0) {
+            props["journal"]=rxAPSMatch.captured(1);
+            props["volume"]=rxAPSMatch.captured(3);
+            props["issue"]=rxAPSMatch.captured(5);
+            props["year"]=rxAPSMatch.captured(6);
+            props["title"]=rxAPSMatch.captured(7);
+            QString auth=rxCheckMatch.captured(8).simplified();
             if (auth.size()<8192) {
-                auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+                auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
                 QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
                 props["authors"]=a;
             }
@@ -424,19 +429,19 @@ bool recognizeAPS(const QString& data, QMap<QString, QString>& props, QList<QStr
 /////////////////////////////////////////////////////////
 bool recognizeACS(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("(\\d\\d\\d\\d).*\\sAmerican\\s*Chemical\\s*Society", Qt::CaseInsensitive);
-    rxCheck.setMinimal(true);
-    if (rxCheck.indexIn(data)>=0) {
-        props["year"]=rxCheck.cap(1);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("(\\d\\d\\d\\d).*\\sAmerican\\s*Chemical\\s*Society", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+    if (data.indexOf(rxCheck,0,&rxCheckMatch)>=0) {
+        props["year"]=rxCheckMatch.captured(1);
 
-        QRegExp rxAPS("(.+)\\s+vol(ume)?[\\.\\:\\,]?\\s*(\\d+).+(no|number)[\\.\\:\\,]?\\s*(\\d+).+(\\d\\d\\d\\d)\\n", Qt::CaseInsensitive);
-        rxAPS.setMinimal(true);
+        QRegularExpressionMatch rxAPSMatch;
+        static const QRegularExpression rxAPS("(.+)\\s+vol(ume)?[\\.\\:\\,]?\\s*(\\d+).+(no|number)[\\.\\:\\,]?\\s*(\\d+).+(\\d\\d\\d\\d)\\n", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
 
-        if (rxAPS.indexIn(data)>=0) {
-            props["journal"]=rxAPS.cap(1);
-            props["volume"]=rxAPS.cap(3);
-            props["issue"]=rxAPS.cap(5);
-            props["year"]=rxAPS.cap(6);
+        if (data.indexOf(rxAPS,0,&rxAPSMatch)>=0) {
+            props["journal"]=rxAPSMatch.captured(1);
+            props["volume"]=rxAPSMatch.captured(3);
+            props["issue"]=rxAPSMatch.captured(5);
+            props["year"]=rxAPSMatch.captured(6);
 
             for (int i=0; i<lines.size(); i++) {
                 if (lines.size()>0) props["title"]=lines[0];
@@ -453,16 +458,16 @@ bool recognizeACS(const QString& data, QMap<QString, QString>& props, QList<QStr
                     QString aline=lines[i];
                     if (spcnt>1) {
                         QString auth=aline.simplified();
-                        auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+                        auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
                         QString a=reformatAuthors(auth, namePrefixes, nameAdditions, andWords);
                         props["authors"]=a;
                         break;
                     }
                 }
             }
-            props["title"]=rxAPS.cap(7);
-            QString auth=rxCheck.cap(8).simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+            props["title"]=rxAPSMatch.captured(7);
+            QString auth=rxCheckMatch.captured(8).simplified();
+            auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
             QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
             props["authors"]=a;
         }
@@ -478,30 +483,30 @@ bool recognizeACS(const QString& data, QMap<QString, QString>& props, QList<QStr
 /////////////////////////////////////////////////////////
 bool recognizeKluwer(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", QRegularExpression::CaseInsensitiveOption);
 
-    if (rxCheck.indexIn(data)>=0) {
-        props["year"]=rxCheck.cap(1);
+    if (data.indexOf(rxCheck,0,&rxCheckMatch)>=0) {
+        props["year"]=rxCheckMatch.captured(1);
 
-        QRegExp rxData("([a-z\\s]+)\\s+(\\d+)\\((\\d+)\\)[,;]?\\s+(\\d+)[^\\d]+(\\d+)[,;]?\\s+(\\d\\d\\d\\d)", Qt::CaseInsensitive);
-        rxData.setMinimal(true);
-        if (rxData.indexIn(data)>=0) {
-            props["journal"]=rxData.cap(1);
-            props["volume"]=rxData.cap(2);
-            props["issue"]=rxData.cap(3);
-            props["pages"]=rxData.cap(4)+"-"+rxData.cap(5);
+        QRegularExpressionMatch rxDataMatch;
+        QRegularExpression rxData("([a-z\\s]+)\\s+(\\d+)\\((\\d+)\\)[,;]?\\s+(\\d+)[^\\d]+(\\d+)[,;]?\\s+(\\d\\d\\d\\d)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        if (data.indexOf(rxData,0,&rxDataMatch)>=0) {
+            props["journal"]=rxDataMatch.captured(1);
+            props["volume"]=rxDataMatch.captured(2);
+            props["issue"]=rxDataMatch.captured(3);
+            props["pages"]=rxDataMatch.captured(4)+"-"+rxDataMatch.captured(5);
 
         }
 
 
-        rxData=QRegExp("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
-        rxData.setMinimal(true);
+        rxData=QRegularExpression("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
 
-        if (rxData.indexIn(data)>=0) {
-            props["year"]=rxCheck.cap(1);
+        if (data.indexOf(rxData,0,&rxDataMatch)>=0) {
+            props["year"]=rxCheckMatch.captured(1);
 
-            QString auth=rxCheck.cap(8).simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+            QString auth=rxCheckMatch.captured(8).simplified();
+            auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
             QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
             props["authors"]=a;
         }
@@ -521,34 +526,34 @@ bool recognizeKluwer(const QString& data, QMap<QString, QString>& props, QList<Q
 /////////////////////////////////////////////////////////
 bool recognizeRockefeller(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
     QStringList lines=data.trimmed().split('\n');
-    QRegExp rxCheck("\\s*Rockefeller\\s*University\\s*Press\\s*", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("\\s*Rockefeller\\s*University\\s*Press\\s*", QRegularExpression::CaseInsensitiveOption);
 
-    if (rxCheck.indexIn(data)>=0) {
-        //props["year"]=rxCheck.cap(1);
+    if (data.indexOf(rxCheck,0,&rxCheckMatch)>=0) {
+        //props["year"]=rxCheckMatch.captured(1);
 
         //The Journal of Cell Biology, Volume 115, Number 1, October 1991 67-73
-        QRegExp rxData("([a-z\\s]+).*\\s*vol\\w*\\s*(\\d+).*num\\w*\\s*(\\d+).*\\w+\\s*(\\d\\d\\d\\d).* (\\d+)\\s*[\\-]*\\s*(\\d+)", Qt::CaseInsensitive);
-        rxData.setMinimal(true);
-        if (rxData.indexIn(data)>=0) {
-            props["journal"]=rxData.cap(1);
-            props["volume"]=rxData.cap(2);
-            props["issue"]=rxData.cap(3);
-            props["pages"]=rxData.cap(4)+"-"+rxData.cap(5);
+        QRegularExpressionMatch rxDataMatch;
+        QRegularExpression rxData("([a-z\\s]+).*\\s*vol\\w*\\s*(\\d+).*num\\w*\\s*(\\d+).*\\w+\\s*(\\d\\d\\d\\d).* (\\d+)\\s*[\\-]*\\s*(\\d+)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        if (data.indexOf(rxData,0,&rxDataMatch)>=0) {
+            props["journal"]=rxDataMatch.captured(1);
+            props["volume"]=rxDataMatch.captured(2);
+            props["issue"]=rxDataMatch.captured(3);
+            props["pages"]=rxDataMatch.captured(4)+"-"+rxDataMatch.captured(5);
 
         }
 
 
-        rxData=QRegExp("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", Qt::CaseInsensitive);
-        rxData.setMinimal(true);
+        rxData=QRegularExpression("\\s+(\\d\\d\\d\\d)\\s+Kluwer\\s+Academic\\s+Publisher", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
 
-        if (rxData.indexIn(data)>=0) {
-            props["journal"]=rxData.cap(1);
-            props["volume"]=rxData.cap(2);
-            props["issue"]=rxData.cap(3);
-            props["pages"]=rxData.cap(4)+"-"+rxData.cap(5);
+        if (data.indexOf(rxData,0,&rxDataMatch)>=0) {
+            props["journal"]=rxDataMatch.captured(1);
+            props["volume"]=rxDataMatch.captured(2);
+            props["issue"]=rxDataMatch.captured(3);
+            props["pages"]=rxDataMatch.captured(4)+"-"+rxDataMatch.captured(5);
 
-            QString auth=rxCheck.cap(8).simplified();
-            auth.remove(QRegExp("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
+            QString auth=rxCheckMatch.captured(8).simplified();
+            auth.remove(QRegularExpression("[\\d\\*\\#\\+\\~\\!\\$\\&\\\xA7\\?]"));
             QString a=reformatAuthors(auth.simplified(), namePrefixes, nameAdditions, andWords);
             props["authors"]=a;
         }
@@ -567,59 +572,61 @@ bool recognizeRockefeller(const QString& data, QMap<QString, QString>& props, QL
 // specially recognize data in a US Patent
 /////////////////////////////////////////////////////////
 bool recognizePatent(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
-    QRegExp rxCheck("\\s*(Patent\\s*Application|Patentet\\s*Application|Offenlegungsschrift|Patentschrift|United\\s*States\\s*Patent)\\s*", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheckMatch;
+    static const QRegularExpression rxCheck("\\s*(Patent\\s*Application|Patentet\\s*Application|Offenlegungsschrift|Patentschrift|United\\s*States\\s*Patent)\\s*", QRegularExpression::CaseInsensitiveOption);
 
     QString cleanData=data;
     cleanData=cleanData.replace("\n\n", "\n").simplified();
 
-    if (rxCheck.indexIn(cleanData)>=0) {
-        //props["year"]=rxCheck.cap(1);
+    if (cleanData.indexOf(rxCheck,0,&rxCheckMatch)>=0) {
+        //props["year"]=rxCheckMatch.captured(1);
         props["type"]="patent";
 
         QMap<int, QString> databook;
 
         //find (dd)TEXT, which occurs on the first page of the patent quite often!
-        //QRegExp rxData("\\n[\\t \\r]*\\(\\s*(\\d+)\\s*\\)\\s*([\\w\\d\\s]+[^\\s])(\\s+(\\n[\\t \\r]*)+)", Qt::CaseInsensitive);
+        //QRegularExpressionMatch rxDataMatch;
+        static const QRegularExpression rxData("\\n[\\t \\r]*\\(\\s*(\\d+)\\s*\\)\\s*([\\w\\d\\s]+[^\\s])(\\s+(\\n[\\t \\r]*)+)", QRegularExpression::CaseInsensitiveOption);
         if (false) {
-            QRegExp rxData("\\n[\\t \\r]*\\(\\s*(\\d\\d?)\\s*\\)\\s*([^(\\n\\n)]+[^\\s]{1})(\\s*(\\n[\\t \\r]*)+)", Qt::CaseInsensitive);
-            rxData.setMinimal(true);
+            QRegularExpressionMatch rxDataMatch;
+            static const QRegularExpression rxData("\\n[\\t \\r]*\\(\\s*(\\d\\d?)\\s*\\)\\s*([^(\\n\\n)]+[^\\s]{1})(\\s*(\\n[\\t \\r]*)+)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
             int pos=0;
             int iter=0;
-            while ((pos=rxData.indexIn(cleanData, pos))>=0 && iter<1000) {
-                int id=rxData.cap(1).toInt();
-                QString text=rxData.cap(2);
+            while ((pos=cleanData.indexOf(rxData,pos,&rxDataMatch))>=0 && iter<1000) {
+                int id=rxDataMatch.captured(1).toInt();
+                QString text=rxDataMatch.captured(2);
                 text=text.replace('\n', ' ');
                 text=text.replace('\r', ' ');
                 text=text.simplified().trimmed();
-                //qDebug()<<"PATENT: (1."<<id<<"): "<<text<<"\nPATENT:      match="<<rxData.cap(0)<<"\nPATENT:      cap3="<<rxData.cap(3);
+                //qDebug()<<"PATENT: (1."<<id<<"): "<<text<<"\nPATENT:      match="<<rxDataMatch.captured(0)<<"\nPATENT:      cap3="<<rxDataMatch.captured(3);
                 if (text.size()>0 && !databook.contains(id)) {
                     databook[id]=text;
                     //qDebug()<<"PATENT:      STORED!!!";
                 }
-                if (rxData.matchedLength()-rxData.cap(3).length()<=0) pos+=rxData.matchedLength();
-                else pos+=(rxData.matchedLength()-rxData.cap(3).length());
+                if (rxDataMatch.capturedLength()-rxDataMatch.captured(3).length()<=0) pos+=rxDataMatch.capturedLength();
+                else pos+=(rxDataMatch.capturedLength()-rxDataMatch.captured(3).length());
                 iter++;
             }
         }
 
         if (true) {
-            QRegExp rxData("\\s*\\(\\s*(\\d\\d?)\\s*\\)\\s*(.*)(\\s*\\(\\s*\\d\\d?\\s*\\))", Qt::CaseInsensitive);
-            rxData.setMinimal(true);
+            QRegularExpressionMatch rxDataMatch;
+            static const QRegularExpression rxData("\\s*\\(\\s*(\\d\\d?)\\s*\\)\\s*(.*)(\\s*\\(\\s*\\d\\d?\\s*\\))", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
             int pos=0;
             int iter=0;
-            while ((pos=rxData.indexIn(cleanData, pos))>=0 && iter<1000) {
-                int id=rxData.cap(1).toInt();
-                QString text=rxData.cap(2);
+            while ((pos=cleanData.indexOf(rxData, pos,&rxDataMatch))>=0 && iter<1000) {
+                int id=rxDataMatch.captured(1).toInt();
+                QString text=rxDataMatch.captured(2);
                 text=text.replace('\n', ' ');
                 text=text.replace('\r', ' ');
                 text=text.simplified().trimmed();
-                //qDebug()<<"PATENT: (2."<<id<<"): "<<text<<"\nPATENT:      match="<<rxData.cap(0)<<"\nPATENT:      cap3="<<rxData.cap(3);
+                //qDebug()<<"PATENT: (2."<<id<<"): "<<text<<"\nPATENT:      match="<<rxDataMatch.captured(0)<<"\nPATENT:      cap3="<<rxDataMatch.captured(3);
                 if (text.size()>0 && !databook.contains(id)) {
                     databook[id]=text;
                     //qDebug()<<"PATENT:      STORED!!!";
                 }
-                if (rxData.matchedLength()-rxData.cap(3).length()<=0) pos+=rxData.matchedLength();
-                else pos+=(rxData.matchedLength()-rxData.cap(3).length());
+                if (rxDataMatch.capturedLength()-rxDataMatch.captured(3).length()<=0) pos+=rxDataMatch.capturedLength();
+                else pos+=(rxDataMatch.capturedLength()-rxDataMatch.captured(3).length());
                 iter++;
             }
         }
@@ -629,7 +636,7 @@ bool recognizePatent(const QString& data, QMap<QString, QString>& props, QList<Q
             QString text=it.value();
             if (id==54 && props["title"].isEmpty()) {
                 //qDebug()<<"PATENT: TITLE.before = "<<text;
-                text=text.remove(QRegExp("\\s*(Title|Bezeichnung)\\s*\\:?\\s*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\s*(Title|Bezeichnung)\\s*\\:?\\s*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: TITLE.after = "<<text;
                 props["title"]=text;
             }
@@ -638,25 +645,25 @@ bool recognizePatent(const QString& data, QMap<QString, QString>& props, QList<Q
                 //qDebug()<<"PATENT: NUMBER.before = "<<text;
                 {
                     QString datalocal=text;
-                    //datalocal.remove(QRegExp("\\s"));
-                    QRegExp rxData("[A-Z]{2}[\\d\\,\\.]+[A-Z]\\s*\\d", Qt::CaseInsensitive);
-                    rxData.setMinimal(true);
-                    if (rxData.indexIn(datalocal)) {
-                        props["number"]=rxData.cap(0).simplified();
+                    //datalocal.remove(QRegularExpression("\\s"));
+                    QRegularExpressionMatch rxDataMatch;
+                    static const QRegularExpression rxData("[A-Z]{2}[\\d\\,\\.]+[A-Z]\\s*\\d", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+                    if (datalocal.indexOf(rxData,0,&rxDataMatch)) {
+                        props["number"]=rxDataMatch.captured(0).simplified();
                     }
                 }
                 if (props["number"].isEmpty()) {
                     QString datalocal=text;
-                    //datalocal.remove(QRegExp("\\s"));
-                    QRegExp rxData("[A-Z]{2}[\\d\\,\\. ]+[A-Z]\\s*\\d", Qt::CaseInsensitive);
-                    rxData.setMinimal(true);
-                    if (rxData.indexIn(datalocal)) {
-                        props["number"]=rxData.cap(0).simplified();
+                    //datalocal.remove(QRegularExpression("\\s"));
+                    QRegularExpressionMatch rxDataMatch;
+                    static const QRegularExpression rxData("[A-Z]{2}[\\d\\,\\. ]+[A-Z]\\s*\\d", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+                    if (datalocal.indexOf(rxData,0,&rxDataMatch)) {
+                        props["number"]=rxDataMatch.captured(0).simplified();
                     }
                 } else {
-                    text=text.remove(QRegExp("\\s*(Pub\\s*\\.?\\s*No\\s*\\.?|Appl\\s*\\.?\\s*No\\s*\\.?|Anmeldenummer|Aktenzeichen)\\s*\\:?\\s*", Qt::CaseInsensitive));
+                    text=text.remove(QRegularExpression("\\s*(Pub\\s*\\.?\\s*No\\s*\\.?|Appl\\s*\\.?\\s*No\\s*\\.?|Anmeldenummer|Aktenzeichen)\\s*\\:?\\s*", QRegularExpression::CaseInsensitiveOption));
                     //qDebug()<<"PATENT: NUMBER.after1 = "<<text;
-                    text=text.remove(QRegExp("\\s", Qt::CaseInsensitive));
+                    text=text.remove(QRegularExpression("\\s", QRegularExpression::CaseInsensitiveOption));
                     //qDebug()<<"PATENT: NUMBER.after3 = "<<text;
                     props["number"]=text.simplified();
                 }
@@ -664,66 +671,66 @@ bool recognizePatent(const QString& data, QMap<QString, QString>& props, QList<Q
             }
             else if (id==21 && props["volume"].isEmpty()) {
                 //qDebug()<<"PATENT: VOLUME.before = "<<text;
-                text=text.remove(QRegExp("\\s*(Pub\\s*\\.?\\s*No\\s*\\.?|Appl\\s*\\.?\\s*No\\s*\\.?|Anmeldenummer|Aktenzeichen)\\s*\\:?\\s*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\s*(Pub\\s*\\.?\\s*No\\s*\\.?|Appl\\s*\\.?\\s*No\\s*\\.?|Anmeldenummer|Aktenzeichen)\\s*\\:?\\s*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: VOLUME.after1 = "<<text;
-                text=text.remove(QRegExp("[^\\d\\.\\/\\\\\\,]{3,}", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("[^\\d\\.\\/\\\\\\,]{3,}", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: VOLUME.after2 = "<<text;
-                text=text.remove(QRegExp("\\s", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\s", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: VOLUME.after3 = "<<text;
                 props["volume"]=text;
             }
             else if (id==71 && props["institution"].isEmpty()) {
                 //qDebug()<<"PATENT: INSTITUTION.before = "<<text;
-                text=text.remove(QRegExp("\\s*(Assignee|Applicant|Anmelder|Erfinder|Patentinhaber|Vertreter|Inventors?)\\s*\\:?\\s*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\s*(Assignee|Applicant|Anmelder|Erfinder|Patentinhaber|Vertreter|Inventors?)\\s*\\:?\\s*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: INSTITUTION.after1 = "<<text;
-                text=text.remove(QRegExp("\\,.*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\,.*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: INSTITUTION.after2 = "<<text;
                 props["institution"]=text;
             }
             else if (id==73 && props["institution"].isEmpty())  {
                 //qDebug()<<"PATENT: INSTITUTION.before = "<<text;
-                text=text.remove(QRegExp("\\s*(Assignee|Applicant|Anmelder|Erfinder|Patentinhaber|Vertreter|Inventors?)\\s*\\:?\\s*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\s*(Assignee|Applicant|Anmelder|Erfinder|Patentinhaber|Vertreter|Inventors?)\\s*\\:?\\s*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: INSTITUTION.after1 = "<<text;
-                text=text.remove(QRegExp("\\,.*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\,.*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: INSTITUTION.after2 = "<<text;
                 props["institution"]=text;
             }
             else if (id==57 && props["abstract"].isEmpty()) {
                 //qDebug()<<"PATENT: ABSTRACT.before = "<<text;
-                text=text.remove(QRegExp("\\s*(Zusammenfassung|Summary)\\s*\\:?\\s*", Qt::CaseInsensitive));
+                text=text.remove(QRegularExpression("\\s*(Zusammenfassung|Summary)\\s*\\:?\\s*", QRegularExpression::CaseInsensitiveOption));
                 //qDebug()<<"PATENT: ABSTRACT.after = "<<text;
                 props["abstract"]=text;
             }
             else if (id==22 && props["year"].isEmpty()){
                 //qDebug()<<"PATENT: YEAR.before = "<<text;
-                props["year"]=extractYear(text);
+                props["year"]=QString::number(extractYear(text));
             }
             else if (id==72 && props["authors"].isEmpty()) {
                 //qDebug()<<"PATENT: AUTHORS.before = "<<text;
                 QString authors;
                 { // names listing type 1: Family, First, BLA,BLA...;Family, First, BLA,BLA...
-                    QRegExp rxData("([\\w\\s\\.]+,[\\w\\s\\.]+),[^;]+(;|$)", Qt::CaseInsensitive);
-                    rxData.setMinimal(true);
+                    QRegularExpressionMatch rxDataMatch;
+                    static const QRegularExpression rxData("([\\w\\s\\.]+,[\\w\\s\\.]+),[^;]+(;|$)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
                     int pos=0;
                     int iter=0;
-                    while ((pos=rxData.indexIn(text, pos))>=0 && iter<1000) {
+                    while ((pos=text.indexOf(rxData, pos,&rxDataMatch))>=0 && iter<1000) {
                         if (!authors.isEmpty()) authors+="; ";
-                        authors+=rxData.cap(1);
-                        //qDebug()<<"PATENT: AUTHOR: "<<rxData.cap(1);
-                        pos+=rxData.matchedLength();
+                        authors+=rxDataMatch.captured(1);
+                        //qDebug()<<"PATENT: AUTHOR: "<<rxDataMatch.captured(1);
+                        pos+=rxDataMatch.capturedLength();
                         iter++;
                     }
                 }
                 if (authors.isEmpty()){ // names listing type 1: First Family, BLA...;First Family, BLA...
-                    QRegExp rxData("([\\w\\s\\.]+),[^;]+(;|$)", Qt::CaseInsensitive);
-                    rxData.setMinimal(true);
+                    QRegularExpressionMatch rxDataMatch;
+                    static const QRegularExpression rxData("([\\w\\s\\.]+),[^;]+(;|$)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
                     int pos=0;
                     int iter=0;
-                    while ((pos=rxData.indexIn(text, pos))>=0 && iter<1000) {
+                    while ((pos=text.indexOf(rxData, pos,&rxDataMatch))>=0 && iter<1000) {
                         if (!authors.isEmpty()) authors+="; ";
-                        authors+=rxData.cap(1);
-                        //qDebug()<<"PATENT: AUTHOR: "<<rxData.cap(1);
-                        pos+=rxData.matchedLength();
+                        authors+=rxDataMatch.captured(1);
+                        //qDebug()<<"PATENT: AUTHOR: "<<rxDataMatch.captured(1);
+                        pos+=rxDataMatch.capturedLength();
                         iter++;
                     }
                 }
@@ -734,21 +741,21 @@ bool recognizePatent(const QString& data, QMap<QString, QString>& props, QList<Q
 
         if (props["number"].isEmpty()) {
             QString datalocal=data;
-            //datalocal.remove(QRegExp("\\s"));
-            QRegExp rxData("[A-Z]{2}[\\d\\,\\.\\s]+[A-Z]\\s*\\d+", Qt::CaseInsensitive);
-            rxData.setMinimal(true);
-            if (rxData.indexIn(datalocal)) {
-                props["number"]=rxData.cap(0);
+            //datalocal.remove(QRegularExpression("\\s"));
+            QRegularExpressionMatch rxDataMatch;
+            static const QRegularExpression rxData("[A-Z]{2}[\\d\\,\\.\\s]+[A-Z]\\s*\\d+", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+            if (datalocal.indexOf(rxData,0,&rxDataMatch)) {
+                props["number"]=rxDataMatch.captured(0);
                 //qDebug()<<"PATENT: NUMBER: "<<props["number"];
             }
         }
         if (props["number"].isEmpty()) {
             QString datalocal=data;
-            //datalocal.remove(QRegExp("\\s"));
-            QRegExp rxData("[A-Z]{2}[\\d\\,\\.\\s]+", Qt::CaseInsensitive);
-            rxData.setMinimal(true);
-            if (rxData.indexIn(datalocal)) {
-                props["number"]=rxData.cap(0);
+            //datalocal.remove(QRegularExpression("\\s"));
+            QRegularExpressionMatch rxDataMatch;
+            static const QRegularExpression rxData("[A-Z]{2}[\\d\\,\\.\\s]+", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+            if (datalocal.indexOf(rxData,0,&rxDataMatch)) {
+                props["number"]=rxDataMatch.captured(0);
                 //qDebug()<<"PATENT: NUMBER: "<<props["number"];
             }
         }
@@ -771,50 +778,52 @@ bool recognizePatent(const QString& data, QMap<QString, QString>& props, QList<Q
 // specially recognize data from Physik Journal
 /////////////////////////////////////////////////////////
 bool recognizePhysikJournal(const QString& data, QMap<QString, QString>& props, QList<QString> andWords, QSet<QString> nameAdditions, QSet<QString> namePrefixes, QString pluginDir) {
-    QRegExp rxCheck1("Physik\\s*Journal", Qt::CaseInsensitive);
-    QRegExp rxCheck2("Wiley\\s*\\-\\s*VCH\\s*Verlag\\s*GmbH", Qt::CaseInsensitive);
+    QRegularExpressionMatch rxCheck1Match;
+    static const QRegularExpression rxCheck1("Physik\\s*Journal", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch rxCheck2Match;
+    static const QRegularExpression rxCheck2("Wiley\\s*\\-\\s*VCH\\s*Verlag\\s*GmbH", QRegularExpression::CaseInsensitiveOption);
 
-    if (rxCheck1.indexIn(data)>=0 && rxCheck2.indexIn(data)>=0) {
+    if (data.indexOf(rxCheck1,0,&rxCheck1Match)>=0 && data.indexOf(rxCheck2,0,&rxCheck2Match)>=0) {
 
-        QRegExp rxData1("\\s+(\\d+)\\s+Physik\\s*Journal\\s+(\\d+)\\s+\\((\\d\\d\\d\\d)\\)\\s+Nr\\s*\\.\\s*(\\d+)", Qt::CaseInsensitive);
-        rxData1.setMinimal(true);
-        QRegExp rxData2("Physik\\s*Journal\\s+(\\d+)\\s+\\((\\d\\d\\d\\d)\\)\\s+Nr\\s*\\.\\s*(\\d+)\\s+(\\d+)\\s+", Qt::CaseInsensitive);
-        rxData2.setMinimal(true);
+        QRegularExpressionMatch rxData1Match;
+        static const QRegularExpression rxData1("\\s+(\\d+)\\s+Physik\\s*Journal\\s+(\\d+)\\s+\\((\\d\\d\\d\\d)\\)\\s+Nr\\s*\\.\\s*(\\d+)", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
+        QRegularExpressionMatch rxData2Match;
+        static const QRegularExpression rxData2("Physik\\s*Journal\\s+(\\d+)\\s+\\((\\d\\d\\d\\d)\\)\\s+Nr\\s*\\.\\s*(\\d+)\\s+(\\d+)\\s+", QRegularExpression::CaseInsensitiveOption|QRegularExpression::InvertedGreedinessOption);
         int pos1=0, pos2=0;
         int pmin=std::numeric_limits<int>::max(), pmax=-1;
         bool hasBasiscs=false;
         props["journal"]="Physik Journal";
 
-        while ((pos1=rxData1.indexIn(data, pos1))>=0) {
+        while ((pos1=data.indexOf(rxData1, pos1,&rxData1Match))>=0) {
             if (!hasBasiscs) {
-                props["volume"]=rxData1.cap(2);
-                props["issue"]=rxData1.cap(4);
-                props["year"]=rxData1.cap(3);
+                props["volume"]=rxData1Match.captured(2);
+                props["issue"]=rxData1Match.captured(4);
+                props["year"]=rxData1Match.captured(3);
                 hasBasiscs=true;
             }
             bool ok=false;
-            const int p=rxData1.cap(1).toInt(&ok);
+            const int p=rxData1Match.captured(1).toInt(&ok);
             if (ok && p>0) {
                 pmin=qMin(pmin, p);
                 pmax=qMax(pmax, p);
             }
-            pos1 += rxData1.matchedLength();
+            pos1 += rxData1Match.capturedLength();
         }
 
-        while ((pos2=rxData2.indexIn(data, pos2))>=0) {
+        while ((pos2=data.indexOf(rxData2, pos2,&rxData2Match))>=0) {
             if (!hasBasiscs) {
-                props["volume"]=rxData2.cap(1);
-                props["issue"]=rxData2.cap(3);
-                props["year"]=rxData2.cap(2);
+                props["volume"]=rxData2Match.captured(1);
+                props["issue"]=rxData2Match.captured(3);
+                props["year"]=rxData2Match.captured(2);
                 hasBasiscs=true;
             }
             bool ok=false;
-            const int p=rxData2.cap(4).toInt(&ok);
+            const int p=rxData2Match.captured(4).toInt(&ok);
             if (ok && p>0) {
                 pmin=qMin(pmin, p);
                 pmax=qMax(pmax, p);
             }
-            pos2 += rxData2.matchedLength();
+            pos2 += rxData2Match.capturedLength();
         }
 
         if (pmin>0 && pmax>0) {
@@ -897,9 +906,10 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
             /////////////////////////////////////////////////////////
             // common metadata:
             /////////////////////////////////////////////////////////
-            QRegExp rxDoi("doi[\\:]?\\s*(10.[a-zA-Z\\d\\.\\/\\(\\)\\-\\_]*)", Qt::CaseInsensitive);
-            if (rxDoi.indexIn(contents)>=0) {
-                QString doi=rxDoi.cap(1);
+            QRegularExpressionMatch rxDoiMatch;
+            static const QRegularExpression rxDoi("doi[\\:]?\\s*(10.[a-zA-Z\\d\\.\\/\\(\\)\\-\\_]*)", QRegularExpression::CaseInsensitiveOption);
+            if (contents.indexOf(rxDoi,0,&rxDoiMatch)>=0) {
+                QString doi=rxDoiMatch.captured(1);
                 QChar last=doi[doi.size()-1];
                 //qDebug()<<doi;
                 while ((doi.size()>4)&&(!(last.isLetterOrNumber() || QString("./()-_").contains(last)))) {
@@ -915,35 +925,36 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
             dbgtxt.flush();
             timerdbg.start();
             #endif
-            QRegExp rxYear;
+            QRegularExpression rxYear;
+            QRegularExpressionMatch rxYearMatch;
             bool hasYear=false;
-            rxYear=QRegExp("Available[^\\n]*\\s(\\d\\d\\d\\d)\\s");
-            if (!hasYear && rxYear.indexIn(contents)>=0) {
-                //qDebug()<<"found year @ "<<rxYear.indexIn(contents)<<"   ="<<rxYear.cap(0).trimmed();
+            rxYear=QRegularExpression("Available[^\\n]*\\s(\\d\\d\\d\\d)\\s");
+            if (!hasYear && contents.indexOf(rxYear,0,&rxYearMatch)>=0) {
+                //qDebug()<<"found year @ "<<contents.indexOf(rxYear,0,&rxYearMatch)<<"   ="<<rxYearMatch.captured(0).trimmed();
                 bool ok=true;
-                int y=rxYear.cap(1).toInt(&ok);
+                int y=rxYearMatch.captured(1).toInt(&ok);
                 if (ok && (y>1900) && (y<=QDate::currentDate().year()+100)) {
-                    props["year"]=rxYear.cap(1);
+                    props["year"]=rxYearMatch.captured(1);
                     hasYear=true;
                 }
             }
-            rxYear=QRegExp("accepted[^\\n]*\\s(\\d\\d\\d\\d)\\s");
-            if (!hasYear && rxYear.indexIn(contents)>=0) {
-                //qDebug()<<"found year @ "<<rxYear.indexIn(contents)<<"   ="<<rxYear.cap(0).trimmed();
+            rxYear=QRegularExpression("accepted[^\\n]*\\s(\\d\\d\\d\\d)\\s");
+            if (!hasYear && contents.indexOf(rxYear,0,&rxYearMatch)>=0) {
+                //qDebug()<<"found year @ "<<contents.indexOf(rxYear,0,&rxYearMatch)<<"   ="<<rxYearMatch.captured(0).trimmed();
                 bool ok=true;
-                int y=rxYear.cap(1).toInt(&ok);
+                int y=rxYearMatch.captured(1).toInt(&ok);
                 if (ok && (y>1900) && (y<=QDate::currentDate().year()+100)) {
-                    props["year"]=rxYear.cap(1);
+                    props["year"]=rxYearMatch.captured(1);
                     hasYear=true;
                 }
             }
-            rxYear=QRegExp("\\s(\\d\\d\\d\\d)\\s");
-            if (!hasYear && rxYear.indexIn(contents)>=0) {
-                //qDebug()<<"found year @ "<<rxYear.indexIn(contents)<<"   ="<<rxYear.cap(0).trimmed();
+            rxYear=QRegularExpression("\\s(\\d\\d\\d\\d)\\s");
+            if (!hasYear && contents.indexOf(rxYear,0,&rxYearMatch)>=0) {
+                //qDebug()<<"found year @ "<<contents.indexOf(rxYear,0,&rxYearMatch)<<"   ="<<rxYearMatch.captured(0).trimmed();
                 bool ok=true;
-                int y=rxYear.cap(1).toInt(&ok);
+                int y=rxYearMatch.captured(1).toInt(&ok);
                 if (ok && (y>1900) && (y<=QDate::currentDate().year()+100)) {
-                    props["year"]=rxYear.cap(1);
+                    props["year"]=rxYearMatch.captured(1);
                     hasYear=true;
                 }
             }
@@ -955,28 +966,31 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
 
             #endif
             bool hasAbstract=false;
-            QRegExp rxIntro("a\\s*b\\s*s\\s*t\\s*r\\s*a\\s*c\\s*t\\s([\xA9]*)\\n\\n", Qt::CaseInsensitive);
-            if (rxIntro.indexIn(contents)>=0) {
-                if (rxIntro.cap(1).size()<=contents.size()/10){
-                    props["abstract"]=rxIntro.cap(1);
+            QRegularExpressionMatch rxIntroMatch;
+            static const QRegularExpression rxIntro("a\\s*b\\s*s\\s*t\\s*r\\s*a\\s*c\\s*t\\s([\xA9]*)\\n\\n", QRegularExpression::CaseInsensitiveOption);
+            if (contents.indexOf(rxIntro,0,&rxIntroMatch)>=0) {
+                if (rxIntroMatch.captured(1).size()<=contents.size()/10){
+                    props["abstract"]=rxIntroMatch.captured(1);
                     hasAbstract=true;
                 }
             }
             if (!hasAbstract) {
-                QRegExp rxIntro("i\\s*n\\s*t\\s*r\\s*o\\s*d\\s*u\\s*c\\s*t\\s*i\\s*o\\s*n\\s([^\xA9]*)\\n\\n", Qt::CaseInsensitive);
-                if (rxIntro.indexIn(contents)>=0) {
-                    if (rxIntro.cap(1).size()<=contents.size()/10){
-                        props["abstract"]=rxIntro.cap(1);
+                QRegularExpressionMatch rxIntroMatch;
+                static const QRegularExpression rxIntro("i\\s*n\\s*t\\s*r\\s*o\\s*d\\s*u\\s*c\\s*t\\s*i\\s*o\\s*n\\s([^\xA9]*)\\n\\n", QRegularExpression::CaseInsensitiveOption);
+                if (contents.indexOf(rxIntro,0,&rxIntroMatch)>=0) {
+                    if (rxIntroMatch.captured(1).size()<=contents.size()/10){
+                        props["abstract"]=rxIntroMatch.captured(1);
                         hasAbstract=true;
                     }
                 }
 
             }
             if (!hasAbstract) {
-                QRegExp rxIntro("i\\s*n\\s*t\\s*r\\s*o\\s*d\\s*u\\s*c\\s*t\\s*i\\s*o\\s*n\\s([^\xA9\\n]*)\\n", Qt::CaseInsensitive);
-                if (rxIntro.indexIn(contents)>=0) {
-                    if (rxIntro.cap(1).size()<=contents.size()/10){
-                        props["abstract"]=rxIntro.cap(1);
+                QRegularExpressionMatch rxIntroMatch;
+                static const QRegularExpression rxIntro("i\\s*n\\s*t\\s*r\\s*o\\s*d\\s*u\\s*c\\s*t\\s*i\\s*o\\s*n\\s([^\xA9\\n]*)\\n", QRegularExpression::CaseInsensitiveOption);
+                if (contents.indexOf(rxIntro,0,&rxIntroMatch)>=0) {
+                    if (rxIntroMatch.captured(1).size()<=contents.size()/10){
+                        props["abstract"]=rxIntroMatch.captured(1);
                         hasAbstract=true;
                     }
                 }
@@ -990,10 +1004,11 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
             #endif
 
             bool haskeywords=false;
-            QRegExp rxkw;
-            rxkw=QRegExp("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-\xD0]?[\\s]*(.*)\\n\\n", Qt::CaseInsensitive);
-            if (!haskeywords && rxkw.indexIn(contents)>=0) {
-                QString kw=rxkw.cap(2).simplified();
+            QRegularExpression rxkw;
+            QRegularExpressionMatch rxkwMatch;
+            rxkw=QRegularExpression("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-\xD0]?[\\s]*(.*)\\n\\n", QRegularExpression::CaseInsensitiveOption);
+            if (!haskeywords && contents.indexOf(rxkw,0,&rxkwMatch)>=0) {
+                QString kw=rxkwMatch.captured(2).simplified();
                 if (kw.size()<contents.size()/20) {
                     if (kw.contains(",") && kw.contains(";")) {
                         kw.replace("; ", "\n");
@@ -1011,9 +1026,9 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
                     }
                 }
             }
-            rxkw=QRegExp("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-\xD0]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
-            if (!haskeywords && rxkw.indexIn(contents)>=0) {
-                QString kw=rxkw.cap(2).simplified();
+            rxkw=QRegularExpression("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-\xD0]?[\\s]*([^\\n]*)\\n", QRegularExpression::CaseInsensitiveOption);
+            if (!haskeywords && contents.indexOf(rxkw,0,&rxkwMatch)>=0) {
+                QString kw=rxkwMatch.captured(2).simplified();
                 if (kw.contains(",") && kw.contains(";")) {
                     kw.replace("; ", "\n");
                     kw.replace(";", "\n");
@@ -1029,9 +1044,9 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
                     haskeywords=true;
                 }
             }
-            rxkw=QRegExp("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-\xD0]?[\\s]*([^\\n]*)\\n", Qt::CaseInsensitive);
-            if (!haskeywords && rxkw.indexIn(contents)>=0) {
-                QString kw=rxkw.cap(2).simplified();
+            rxkw=QRegularExpression("(k\\s*e\\s*y\\s*w\\s*o\\s*r\\s*d\\s*s|o\\s*c\\s*i\\s*s\\s*c\\s*o\\s*d\\s*e\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*t\\s*e\\s*r\\s*m\\s*s|i\\s*n\\s*d\\s*e\\s*x\\s*h\\s*e\\s*a\\s*d\\s*i\\s*n\\s*g\\s*s)[\\:\\-\xD0]?[\\s]*([^\\n]*)\\n", QRegularExpression::CaseInsensitiveOption);
+            if (!haskeywords && contents.indexOf(rxkw,0,&rxkwMatch)>=0) {
+                QString kw=rxkwMatch.captured(2).simplified();
                 if (kw.contains(",") && kw.contains(";")) {
                     kw.replace("; ", "\n");
                     kw.replace(";", "\n");

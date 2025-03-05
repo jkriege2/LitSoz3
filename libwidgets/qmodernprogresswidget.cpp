@@ -23,6 +23,7 @@
 #include <QtGui>
 #endif
 #include <QDebug>
+#include <QGuiApplication>
 #include <iostream>
 
 QModernProgressWidget::QModernProgressWidget(QWidget* parent):
@@ -44,7 +45,7 @@ QModernProgressWidget::QModernProgressWidget(QWidget* parent):
     m_precision=0;
     m_percentageMode=QModernProgressWidget::Percent;
 
-    m_backgroundColor=parent->palette().background().color().darker(150);//  QColor("lightgrey");
+    m_backgroundColor=parent->palette().window().color().darker(150);//  QColor("lightgrey");
     m_startColor=m_backgroundColor;//QColor("lightgrey");;
     m_stopColor=QColor("darkslateblue");
     m_indicatorColor=QColor("darkslateblue");
@@ -361,8 +362,7 @@ void QModernProgressDialog::createWidgets() {
     vbl->addLayout(hbl);
     connect(&timerDelay, SIGNAL(timeout()), this, SLOT(open()));
 
-    QDesktopWidget desktopWidget;
-    QRect desktopRect(desktopWidget.availableGeometry(desktopWidget.primaryScreen()));
+    QRect desktopRect(qGuiApp->primaryScreen()->availableGeometry());
     QRect widgetRect=rect();
     move(desktopRect.center() - widgetRect.center());
 }

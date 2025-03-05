@@ -14,10 +14,11 @@
 */
 
 #include "languagetools.h"
-#include <QDomDocument>
+#include <QtXml/QDomDocument>
 #include <QFile>
 #include <QDebug>
 #include <QDir>
+#include <algorithm>
 static LanguageRecognizer ___LanguageRecognizerGlobalInstance___LS3;
 
 
@@ -149,7 +150,7 @@ QList<QPair<QString, int> > LanguageRecognizer::hashToList(const QHash<QString, 
         if (minOccurence<0 || it.value()>=minOccurence) l.append(qMakePair(it.key(), it.value()));
     }
 
-    if (l.size()>0) qSort(l.begin(), l.end(), LanguageRecognizer_notLessThan);
+    if (l.size()>0) std::sort(l.begin(), l.end(), LanguageRecognizer_notLessThan);
 
     return l;
 }

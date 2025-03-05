@@ -23,7 +23,7 @@
 #include <QtGui>
 #endif
 #include "programoptions.h"
-#include "../lib/ls3datastore.h"
+#include "ls3datastore.h"
 
 
 class ContentsPane : public QWidget {

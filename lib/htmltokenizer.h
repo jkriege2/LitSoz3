@@ -21,7 +21,7 @@
 #include <QDebug>
 #include <QList>
 #include <QPair>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 
 
@@ -30,7 +30,7 @@
     This class takes a string representing an HTML document or a part thereof and splits it up into tokens,
     stored as HtmlTokenizer::Token
 */
-class LS3LIB_EXPORT HtmlTokenizer : public QObject {
+class LITSOZ3TOOLS_EXPORT HtmlTokenizer : public QObject {
         Q_OBJECT
     public:
 
@@ -47,7 +47,7 @@ class LS3LIB_EXPORT HtmlTokenizer : public QObject {
             UNKNOWN=9
         };
 
-        struct LS3LIB_EXPORT Token {
+        struct LITSOZ3TOOLS_EXPORT Token {
             TokenType type;
             /** \brief in all kinds of tags: everything without the surrounding delimiters */
             QString contents;
@@ -79,6 +79,6 @@ class LS3LIB_EXPORT HtmlTokenizer : public QObject {
         int pos;
 };
 
-LS3LIB_EXPORT QDebug operator<<(QDebug dbg, const HtmlTokenizer::TokenType &c);
+LITSOZ3TOOLS_EXPORT QDebug operator<<(QDebug dbg, const HtmlTokenizer::TokenType &c);
 
 #endif // HTMLTOKENIZER_H

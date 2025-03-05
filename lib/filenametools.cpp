@@ -21,7 +21,7 @@
 QString cleanFilename(const QString& text, int maxLen, bool removeDot, bool removeSlash) {
     QString t=text.simplified();
     QString regexp="";
-    t=t.remove(QRegExp(regexp+"[^\\w\\d \\_\\(\\)\\.\\/]"));
+    t=t.remove(QRegularExpression(regexp+"[^\\w\\d \\_\\(\\)\\.\\/]"));
     t=t.replace(" ", "_");
     if (removeDot) t=t.remove('.');
     if (removeSlash) {
@@ -56,7 +56,7 @@ QString createFileName(const QString& scheme, const QMap<QString, QVariant>& dat
     QString editors=data.value("editors", "").toString();
     QString editorsFN=cleanFilename(formatEtalAuthorsFamilyNames(editors, 3, "etal", "_", "_", ""));;
     QString names=cleanFilename(formatEtalAuthorsFamilyNames(authors+"; "+editors, 3, "etal", "_", "_", ""));
-    QRegExp rxIf("\\%if\\:");
+    //QRegExp rxIf("\\%if\\:");
     if (scheme.isEmpty()) return filename;
     newName=newName.replace("%original_name%", originalName);
     newName=newName.replace("%extension%", extension);

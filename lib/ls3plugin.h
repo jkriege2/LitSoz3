@@ -24,7 +24,7 @@
 
 #include "ls3pluginservices.h"
 #include "ls3datastore.h"
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 
 

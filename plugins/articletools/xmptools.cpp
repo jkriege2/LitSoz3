@@ -16,7 +16,8 @@
 #include "xmptools.h"
 
 #include <QtCore>
-#include <QtXml>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomDocument>
 #include <QtDebug>
 
 

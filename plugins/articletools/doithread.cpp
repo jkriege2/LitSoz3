@@ -14,6 +14,7 @@
 */
 
 #include "doithread.h"
+#include <QtCore5Compat/QTextCodec>
 
 DoiThread::DoiThread(QObject *parent) :
     WWWThread(parent)

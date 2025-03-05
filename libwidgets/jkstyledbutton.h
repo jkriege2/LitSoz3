@@ -17,7 +17,7 @@
 #define JKSTYLEDBUTTON_H
 
 #include <QAbstractButton>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 #include <QIcon>
 #include <QItemEditorCreator>
 
@@ -43,7 +43,7 @@
     You can reset this behaviour by calling \code setBuddy(NULL, JKStyledButton::None) \endcode .
 
  */
-class LIB_EXPORT JKStyledButton : public QAbstractButton {
+class LITSOZ3WIDGETS_EXPORT JKStyledButton : public QAbstractButton {
         Q_OBJECT
     public:
         enum ActionMode { None=0, OpenURL=1, ExecuteFile=2, SelectFile=3, OpenPrependedURL=4, ClearLineEdit=5, OpenFile=6 };
@@ -84,9 +84,9 @@ class LIB_EXPORT JKStyledButton : public QAbstractButton {
     signals:
         void clicked(QString buddyContents);
     protected:
-        virtual void paintEvent(QPaintEvent* e);
-        virtual void enterEvent(QEvent* e);
-        virtual void leaveEvent(QEvent* e);
+        virtual void paintEvent(QPaintEvent* e) override;
+        virtual void enterEvent(QEnterEvent* e) override;
+        virtual void leaveEvent(QEvent* e) override;
         QIcon image;
         QWidget* m_buddy;
         QString m_basepath;

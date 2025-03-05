@@ -20,8 +20,8 @@
 #include <QTextDocument>
 #include <QPainter>
 #include <QTextEdit>
-#include "../lib/bibtools.h"
-#include "../lib/ls3datastore.h"
+#include "bibtools.h"
+#include "ls3datastore.h"
 #include <QCheckBox>
 #include <QEvent>
 #include <QMouseEvent>

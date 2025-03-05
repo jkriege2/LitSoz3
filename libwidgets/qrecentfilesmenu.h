@@ -23,12 +23,12 @@
 #include <QMap>
 #include <QFileInfo>
 #include <QFileIconProvider>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 /*! \brief a special QMenu that allows to manage a list of recently loaded files
     \ingroup tools_qt
  */
-class LIB_EXPORT QRecentFilesMenu : public QMenu {
+class LITSOZ3WIDGETS_EXPORT QRecentFilesMenu : public QMenu {
         Q_OBJECT
     public:
         explicit QRecentFilesMenu(QWidget *parent = 0);

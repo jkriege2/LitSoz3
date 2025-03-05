@@ -21,11 +21,10 @@
 #include <QMap>
 #include <QSet>
 #include <QVariant>
-#include "lib_imexport.h"
-#include <QDomDocument>
-#include <QDomElement>
+#include "litsoz3tools_export.h"
+#include <QtXml/QDomElement>
 #include <QLocale>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QDebug>
 
 enum CSLOutputFormat {
@@ -77,9 +76,9 @@ enum CSLTextDisplay {
     tdiRight=tdiIndent
 };
 
-LS3LIB_EXPORT QString applyTextCase(const QString& text, CSLTextCase tcase);
+LITSOZ3TOOLS_EXPORT QString applyTextCase(const QString& text, CSLTextCase tcase);
 
-struct LS3LIB_EXPORT CSLFormatState {
+struct LITSOZ3TOOLS_EXPORT CSLFormatState {
     CSLFormatState() {
         fstyle=fsNormal;
         fvariant=fvNormal;
@@ -133,8 +132,8 @@ class CSLBasicProps {
 };
 
 /** \brief read the metadata from a CSL file */
-LS3LIB_EXPORT bool cslReadMetadata(const QString& filename, QString* name=NULL, QString* dependentFilename=NULL, bool* isDependent=NULL);
-class LS3LIB_EXPORT CSLLocaleInterface {
+LITSOZ3TOOLS_EXPORT bool cslReadMetadata(const QString& filename, QString* name=NULL, QString* dependentFilename=NULL, bool* isDependent=NULL);
+class LITSOZ3TOOLS_EXPORT CSLLocaleInterface {
     public:
         struct CSLLocaleValue {
             inline QString single() const { return m_single; }
@@ -156,7 +155,7 @@ class LS3LIB_EXPORT CSLLocaleInterface {
 
 };
 
-class LS3LIB_EXPORT CSLLocale: public CSLLocaleInterface {
+class LITSOZ3TOOLS_EXPORT CSLLocale: public CSLLocaleInterface {
     public:
 
         class CSLDateFormat: public CSLBasicProps {
@@ -222,7 +221,7 @@ class LS3LIB_EXPORT CSLLocale: public CSLLocaleInterface {
 
 };
 
-class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
+class LITSOZ3TOOLS_EXPORT CSLFile: public CSLLocaleInterface {
     public:
 
 
@@ -264,7 +263,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
     protected:
 
 
-        class LS3LIB_EXPORT CSLNode: public CSLBasicProps {
+        class LITSOZ3TOOLS_EXPORT CSLNode: public CSLBasicProps {
             public:                
                 explicit CSLNode(CSLNode* parent,CSLFile* file);
                 virtual ~CSLNode();
@@ -279,7 +278,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 CSLFile* m_file;
         };
 
-        class LS3LIB_EXPORT CSLListNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLListNode: public CSLNode {
             public:
                 explicit CSLListNode(const QString& tagName, CSLNode* parent, CSLFile* file);
                 virtual ~CSLListNode();
@@ -291,7 +290,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 QString tagName;
         };
 
-        class LS3LIB_EXPORT CSLTextNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLTextNode: public CSLNode {
             public:
                 explicit CSLTextNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLTextNode();
@@ -308,7 +307,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 bool stripPeriods;
         };
 
-        class LS3LIB_EXPORT CSLNumberNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLNumberNode: public CSLNode {
             public:
                 explicit CSLNumberNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLNumberNode();
@@ -319,7 +318,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 QString form;
         };
 
-        class LS3LIB_EXPORT CSLLabelNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLLabelNode: public CSLNode {
             public:
                 explicit CSLLabelNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLLabelNode();
@@ -336,7 +335,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 bool stripPeriods;
         };
 
-        class LS3LIB_EXPORT CSLDateNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLDateNode: public CSLNode {
             public:
                 explicit CSLDateNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLDateNode();
@@ -349,7 +348,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
                 QList<CSLLocale::CSLDateFormat> dateParts;
         };
 
-        class LS3LIB_EXPORT CSLNamesNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLNamesNode: public CSLNode {
             public:
                 explicit CSLNamesNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLNamesNode();
@@ -390,7 +389,7 @@ class LS3LIB_EXPORT CSLFile: public CSLLocaleInterface {
 
         };
 
-        class LS3LIB_EXPORT CSLChooseNode: public CSLNode {
+        class LITSOZ3TOOLS_EXPORT CSLChooseNode: public CSLNode {
             public:
                 explicit CSLChooseNode(CSLNode* parent, CSLFile* file);
                 virtual ~CSLChooseNode();

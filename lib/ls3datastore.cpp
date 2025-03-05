@@ -198,7 +198,7 @@ bool LS3Datastore::isSelected(int i) const {
 
 void LS3Datastore::clearSelection() {
     LS3ElapsedAutoTimer timer("LS3Datastore::clearSelection()");
-    QList<QString> sel=QList<QString>::fromSet(selection_set);
+    QList<QString> sel=QList<QString>(selection_set.begin(), selection_set.end());
     selection_set.clear();
     for (int i=0; i<sel.size(); i++) {
         emit selectionChanged(getRecordByUUID(sel[i]), false);

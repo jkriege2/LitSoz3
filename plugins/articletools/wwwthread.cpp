@@ -14,6 +14,7 @@
 */
 
 #include "wwwthread.h"
+#include <QtCore5Compat/QTextCodec>
 
 WWWThread::WWWThread(QObject *parent) :
     LS3ProgressThread(parent)

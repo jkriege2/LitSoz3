@@ -21,17 +21,17 @@
 #include <QMap>
 #include <QObject>
 #include <iostream>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
 
 /** \brief tries to remove all LaTeX markup from a string, also replaces known special characters */
-LS3LIB_EXPORT QString removeLaTeX(const QString& input);
+LITSOZ3TOOLS_EXPORT QString removeLaTeX(const QString& input);
 /** \brief LaTeX-ifies the \a input and replaces all known special characters by LaTeX markup */
-LS3LIB_EXPORT QString laTeXify(const QString& input, bool brackedDoubleUppercase=false);
+LITSOZ3TOOLS_EXPORT QString laTeXify(const QString& input, bool brackedDoubleUppercase=false);
 
 /*! \brief a parser for BiBTeX files
   */
-class LS3LIB_EXPORT BiBTeXParser {
+class LITSOZ3TOOLS_EXPORT BiBTeXParser {
     public:
         struct Record {
             QString type;

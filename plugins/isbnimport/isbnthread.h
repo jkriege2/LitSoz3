@@ -26,7 +26,6 @@
 #include <QList>
 #include <QDebug>
 #include <iostream>
-#include <QtXml>
 #include "htmltools.h"
 #include "bibtools.h"
 

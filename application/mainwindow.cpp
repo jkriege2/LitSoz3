@@ -304,20 +304,32 @@ void MainWindow::clearPlugins() {
     m_exporters.clear();
 }
 
-void MainWindow::searchPlugins(QString directory) {
-    clearPlugins();
-    QDir pluginsDir = QDir(directory);
-    foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+void MainWindow::searchPlugins(QString directory, bool clearExistingPlugins, int logIndent) {
+    const QDir pluginsDir = QDir(directory);
+    if (clearExistingPlugins) {
+        qDebug()<<QString(logIndent,' ')<<"searching for plugins in "<<pluginsDir.absolutePath()<<", clearExistingPlugins="<<clearExistingPlugins;
+        clearPlugins();
+    }
+    bool firstFound=false;
+    foreach (QString fileName, pluginsDir.entryList(QDir::Files|QDir::NoDotAndDotDot)) {
         QPluginLoader loader(pluginsDir.absoluteFilePath(fileName));
         QObject *plugin = loader.instance();
         if (plugin) {
             LS3Plugin* iRecord = qobject_cast<LS3Plugin*>(plugin);
             if (iRecord) {
+                if (!firstFound) {
+                    qDebug()<<QString(logIndent,' ')<<"searching for plugins in "<<QDir(getPluginDirectory()).relativeFilePath(directory)<<":";
+                    firstFound=false;
+                }
+                qDebug()<<QString(logIndent+3,' ')<<"loading plugin "<<iRecord->getName()<<" from "<<QDir(getPluginDirectory()).relativeFilePath(fileName)<<"";
                 m_plugins.append(iRecord);
                 m_pluginFilenames.append(pluginsDir.relativeFilePath(fileName));
                 emit showSplashMessage(tr("loaded plugin '%2' (%1) ...").arg(fileName).arg(iRecord->getName()));
             }
         }
+    }
+    foreach (QString dirName, pluginsDir.entryList(QDir::Dirs|QDir::NoDotAndDotDot)) {
+        searchPlugins(pluginsDir.absolutePath()+"/"+dirName, false, logIndent+1);
     }
 }
 
@@ -1345,22 +1357,13 @@ void MainWindow::search() {
 
         Qt::CaseSensitivity caseSense=Qt::CaseInsensitive;
 
-        QRegExp rx1(p1);
-        rx1.setCaseSensitivity(caseSense);
-        rx1.setPatternSyntax(QRegExp::Wildcard);
-        QRegExp rx2(p2);
-        rx2.setCaseSensitivity(caseSense);
-        rx2.setPatternSyntax(QRegExp::Wildcard);
-        QRegExp rx3(p3);
-        rx3.setCaseSensitivity(caseSense);
-        rx3.setPatternSyntax(QRegExp::Wildcard);
+        QRegularExpression rx1=QRegularExpression::fromWildcard(p1,caseSense);
+        QRegularExpression rx2=QRegularExpression::fromWildcard(p2,caseSense);
+        QRegularExpression rx3=QRegularExpression::fromWildcard(p2,caseSense);
 
-        QRegExp reg1(p1);
-        reg1.setPatternSyntax(QRegExp::RegExp);
-        QRegExp reg2(p2);
-        reg2.setPatternSyntax(QRegExp::RegExp);
-        QRegExp reg3(p3);
-        reg3.setPatternSyntax(QRegExp::RegExp);
+        QRegularExpression reg1(p1);
+        QRegularExpression reg2(p2);
+        QRegularExpression reg3(p3);
 
         const QStringList& fts1=fieldToSearch[searchDlg->getFields1()];
         const QStringList& fts2=fieldToSearch[searchDlg->getFields2()];
@@ -1393,38 +1396,38 @@ void MainWindow::search() {
 
             } else if (searchDlg->getSearchMode()==SearchDialog::Wildcards) {
                 if (!p1.isEmpty()) for (int f=0; f<fts1.size(); f++) {
-                    if (rx1.indexIn(datastore->getField(fidx, fts1[f]).toString())>-1) {
+                    if (datastore->getField(fidx, fts1[f]).toString().contains(rx1)) {
                         r1=true;
                         break;
                     }
                 }
                 if (!p2.isEmpty()) for (int f=0; f<fts2.size(); f++) {
-                    if (rx2.indexIn(datastore->getField(fidx, fts2[f]).toString())>-1) {
+                        if (datastore->getField(fidx, fts2[f]).toString().contains(rx2)) {
                         r2=true;
                         break;
                     }
                 }
                 if (!p3.isEmpty()) for (int f=0; f<fts3.size(); f++) {
-                    if (rx3.indexIn(datastore->getField(fidx, fts3[f]).toString())>-1) {
+                    if (datastore->getField(fidx, fts3[f]).toString().contains(rx3)) {
                         r3=true;
                         break;
                     }
                 }
             } else if (searchDlg->getSearchMode()==SearchDialog::RegExp) {
                 if (!p1.isEmpty()) for (int f=0; f<fts1.size(); f++) {
-                    if (reg1.indexIn(datastore->getField(fidx, fts1[f]).toString())>-1) {
+                    if (datastore->getField(fidx, fts1[f]).toString().contains(reg1)) {
                         r1=true;
                         break;
                     }
                 }
                 if (!p2.isEmpty()) for (int f=0; f<fts2.size(); f++) {
-                    if (reg2.indexIn(datastore->getField(fidx, fts2[f]).toString())>-1) {
+                    if (datastore->getField(fidx, fts2[f]).toString().contains(reg2)) {
                         r2=true;
                         break;
                     }
                 }
                 if (!p3.isEmpty()) for (int f=0; f<fts3.size(); f++) {
-                    if (reg3.indexIn(datastore->getField(fidx, fts3[f]).toString())>-1) {
+                    if (datastore->getField(fidx, fts3[f]).toString().contains(reg3)) {
                         r3=true;
                         break;
                     }
@@ -1589,7 +1592,7 @@ void MainWindow::cleanupTopics() {
     for (int i=0; i<uuids.size(); i++) {
         int record=datastore->getRecordByUUID(uuids[i]);
         QString topic=datastore->getField(record, "topic").toString();
-        QStringList topicsplit=topic.split(QRegExp("[\\\\\\/]"));
+        QStringList topicsplit=topic.split(QRegularExpression("[\\\\\\/]"));
         QStringList topicsplitUC;
         for (int j=0; j<topicsplit.size(); j++) {
             topicsplit[j]=topicsplit[j].trimmed().simplified();
@@ -1700,7 +1703,7 @@ void MainWindow::editTopics()
         }
     }
 
-    DlgEditCategory* dlg=new DlgEditCategory(this, topicForRecord.toList(), datastore->getField(datastore->currentRecordNum(), "topic").toString());
+    DlgEditCategory* dlg=new DlgEditCategory(this, QStringList(topicForRecord.begin(),topicForRecord.end()), datastore->getField(datastore->currentRecordNum(), "topic").toString());
     if (dlg->exec()) {
         if (dlg->getNew()!=dlg->getOld() || dlg->getIgnoreCase()) {
             QModernProgressDialog pdlg;

@@ -22,8 +22,10 @@
 #include <QUuid>
 #include <QSet>
 #include <QPointer>
-#include <QtXml>
-#include "lib_imexport.h"
+#include <QXmlStreamWriter>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomDocument>
+#include "litsoz3tools_export.h"
 
 class LS3Datastore; // forward
 
@@ -32,7 +34,7 @@ class LS3Datastore; // forward
     This class stores the structure of a tree where references may be stored in folders.
 
 */
-class LS3LIB_EXPORT LS3ReferenceTreeItem: public QObject {
+class LITSOZ3TOOLS_EXPORT LS3ReferenceTreeItem: public QObject {
         Q_OBJECT
     public:
         enum Type {

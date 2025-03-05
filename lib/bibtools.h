@@ -21,15 +21,15 @@
 #include <QMap>
 #include <QSet>
 #include <QVariant>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 /** \brief clean a string of whitesaces, special characters ... */
-LS3LIB_EXPORT QString cleanStringForFilename(const QString& input, bool cleanStrongly=false, bool removeSlashBackslash=true);
+LITSOZ3TOOLS_EXPORT QString cleanStringForFilename(const QString& input, bool cleanStrongly=false, bool removeSlashBackslash=true);
 
 /** \brief escape HTML character*/
-LS3LIB_EXPORT QString escapeHTMLString(const QString& input);
+LITSOZ3TOOLS_EXPORT QString escapeHTMLString(const QString& input);
 
 /** \brief parse the given author string and return two list, one with the given and one with the family name */
-LS3LIB_EXPORT void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* familyNames);
+LITSOZ3TOOLS_EXPORT void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* familyNames);
 /*! \brief parse a given authors firld (format Family, Given; Family, Given; ...) and output at max. \a maxAuthors names.
            if there are more, output \a etal
 
@@ -44,16 +44,16 @@ LS3LIB_EXPORT void parseAuthors(const QString& authors, QStringList* givenNames,
     \return the reformated authors
 
  */
-LS3LIB_EXPORT QString formatEtalAuthors(const QString& authors, int maxAuthors=3, QString etal=QString(" et al."), bool shortGivenName=true, QString separator=QString("; "), QString lastSeparator=QString(" & "), QString nameSeparator=QString(", "), QString nameAddition=QString(""));
+LITSOZ3TOOLS_EXPORT QString formatEtalAuthors(const QString& authors, int maxAuthors=3, QString etal=QString(" et al."), bool shortGivenName=true, QString separator=QString("; "), QString lastSeparator=QString(" & "), QString nameSeparator=QString(", "), QString nameAddition=QString(""));
 /*! \brief same as formatEtalAuthors(), but does not output given names */
-LS3LIB_EXPORT QString formatEtalAuthorsFamilyNames(const QString& authors, int maxAuthors=3, QString etal=QString(" et al."),QString separator=QString("; "), QString lastSeparator=QString(" & "), QString nameAddition=QString(""));
+LITSOZ3TOOLS_EXPORT QString formatEtalAuthorsFamilyNames(const QString& authors, int maxAuthors=3, QString etal=QString(" et al."),QString separator=QString("; "), QString lastSeparator=QString(" & "), QString nameAddition=QString(""));
 
 
 /** \brief converts an integer into a letter code 0: "", 1: a, 2: b, ..., 26: z, 27: aa, 28: ab, ... */
-LS3LIB_EXPORT QString intToLetterCode(unsigned int n);
+LITSOZ3TOOLS_EXPORT QString intToLetterCode(unsigned int n);
 
 /** \brief shorten names  (e.g. "Jan Wolfgang" to "J. W.") */
-LS3LIB_EXPORT QString shortenGivenName(const QString& names, const QString& shortenWith=QString(". "));
+LITSOZ3TOOLS_EXPORT QString shortenGivenName(const QString& names, const QString& shortenWith=QString(". "));
 
 /** \brief reformats lists of authors to the default LitSoz format
  *
@@ -67,21 +67,21 @@ LS3LIB_EXPORT QString shortenGivenName(const QString& names, const QString& shor
  *  An example name_prefixes could be: \code name_prefixes<<"da"<<"de"<<"dal"<<"del"<<"der"<<"di"<<"do"<<"du"<<"dos"<<"la"<<"le"<<"van"<<"vande"<<"von"<<"den" \endcode
  *  An example ands could be: \code ands<<"and"<<"und"<<"&"<<"et" \endcode
  */
-LS3LIB_EXPORT QString reformatAuthors(const QString& auth, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions, const QList<QString>& ands, QString separators=QString(",;/\\\n\r"));
+LITSOZ3TOOLS_EXPORT QString reformatAuthors(const QString& auth, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions, const QList<QString>& ands, QString separators=QString(",;/\\\n\r"));
 
 /*! \brief output the reference stored in database format in data, as summary with HTML markup
 
     \param data contains the current dataset as a QMap<QString, QVariant> The keys are the available database field names
                 and the QVariant contains the value stored in the database
 */
-LS3LIB_EXPORT QString formatReferenceSummary(const QMap<QString, QVariant>& data);
+LITSOZ3TOOLS_EXPORT QString formatReferenceSummary(const QMap<QString, QVariant>& data);
 
 /*! \brief output the reference stored in database format in data, as summary with HTML markup in the form "Authors (Year): Title"
 
     \param data contains the current dataset as a QMap<QString, QVariant> The keys are the available database field names
                 and the QVariant contains the value stored in the database
 */
-LS3LIB_EXPORT QString formatShortReferenceSummary(const QMap<QString, QVariant>& data);
+LITSOZ3TOOLS_EXPORT QString formatShortReferenceSummary(const QMap<QString, QVariant>& data);
 
 /*! \brief reformat a name without any separators (e.g. "Jan Wolfgang Krieger") to the standard format "Krieger, Jan Wolfgang"
  *
@@ -92,41 +92,41 @@ LS3LIB_EXPORT QString formatShortReferenceSummary(const QMap<QString, QVariant>&
  *  An example name_additions could be: \code name_additions<<"jr"<<"sen"<<"i"<<"ii"<<"iii"<<"jun"; \endcode
  *  An example name_prefixes could be: \code name_prefixes<<"da"<<"de"<<"dal"<<"del"<<"der"<<"di"<<"do"<<"du"<<"dos"<<"la"<<"le"<<"van"<<"vande"<<"von"<<"den" \endcode
  */
-LS3LIB_EXPORT QString reformatSingleName(const QString& auth, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions);
+LITSOZ3TOOLS_EXPORT QString reformatSingleName(const QString& auth, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions);
 
 /** \brief return a path to an icon (PNG file) that represents the supplied filename */
-LS3LIB_EXPORT QString filenameToIconFile(const QString& file);
+LITSOZ3TOOLS_EXPORT QString filenameToIconFile(const QString& file);
 
 /*! \brief search the supplied string for a value describing a year
 
     \return 0 if failed and the year else
 */
-LS3LIB_EXPORT int extractYear(const QString& data);
+LITSOZ3TOOLS_EXPORT int extractYear(const QString& data);
 
 
 /*! \brief clean stray characters from text
 
 */
-LS3LIB_EXPORT QString cleanText(const QString& data, bool simplify=true, const QString& specialChars=QLatin1String(",;-#+~*&%$§/\\"));
+LITSOZ3TOOLS_EXPORT QString cleanText(const QString& data, bool simplify=true, const QString& specialChars=QString::fromUtf8(",;-#+~*&%$\u00A7/\\"));
 
 /*! \brief search the supplied string for the first integer number
 
     \return 0 if failed and the year else
 */
-LS3LIB_EXPORT int extractNumber(const QString& data);
+LITSOZ3TOOLS_EXPORT int extractNumber(const QString& data);
 /*! \brief add a substring to a field with the given separator (if the field does not yet contain the substring!
 
 */
-LS3LIB_EXPORT void addToFieldIfNotContained(QMap<QString, QVariant>& data, const QString& field, const QString& newdata, const QString& separator="\n");
+LITSOZ3TOOLS_EXPORT void addToFieldIfNotContained(QMap<QString, QVariant>& data, const QString& field, const QString& newdata, const QString& separator="\n");
 /*! \brief returns the standardized language name
 
 */
-LS3LIB_EXPORT QString decodeLanguage(const QString& lang);
+LITSOZ3TOOLS_EXPORT QString decodeLanguage(const QString& lang);
 
 /*! \brief counts the upper-case and the lower-case letters in a string
 
 */
-LS3LIB_EXPORT void countLetterCase(const QString& string, int& upperCase, int& lowerCase);
+LITSOZ3TOOLS_EXPORT void countLetterCase(const QString& string, int& upperCase, int& lowerCase);
 
 
 #define LS3_SET_IF_NOT_EMPTY(set_var, value) {\

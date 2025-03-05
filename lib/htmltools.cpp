@@ -16,53 +16,54 @@
 #include "htmltools.h"
 #include "bibtools.h"
 #include "htmltokenizer.h"
-
+#include <QtCore5Compat/QTextCodec>
 #include <QtCore>
 
 QString removeHTMLComments(const QString& data) {
-     QRegExp rxComments("<!--(.*)-->", Qt::CaseInsensitive);
-     rxComments.setMinimal(true);
+     static const QRegularExpression rxComments("<!--(.*)-->", QRegularExpression::InvertedGreedinessOption | QRegularExpression::CaseInsensitiveOption);
      QString data1=data;
      data1.remove(rxComments);
      return data1;
 }
 QString removeHTML(const QString& data) {
-    QRegExp rxMarkup("<[^>]*>", Qt::CaseInsensitive);
-    QRegExp rxBR("<\\s*br\\s*[\\/]\\s*>", Qt::CaseInsensitive);
-     rxMarkup.setMinimal(true);
-     QString data1=data;
-     data1=data1.replace(rxBR, "\n");
-     data1=data1.remove(rxMarkup);
-     return data1;
+    static const QRegularExpression rxMarkup("<[^>]*>", QRegularExpression::InvertedGreedinessOption | QRegularExpression::CaseInsensitiveOption);
+    static const QRegularExpression rxBR("<\\s*br\\s*[\\/]\\s*>", QRegularExpression::CaseInsensitiveOption);
+    QString data1=data;
+    data1=data1.replace(rxBR, "\n");
+    data1=data1.remove(rxMarkup);
+    return data1;
 }
 
 void extractMetaDataWithRegExp(const QString& regex, const QString& data, QMap<QString, QVariant>& output, const QString& field, int capValue, bool minimal=true, bool append=false, const QString& separator=QString("\n"), bool removeHTML=true) {
-    QRegExp rx(regex);
-    rx.setMinimal(minimal);
-    if (rx.indexIn(data)>=0 && !rx.cap(capValue).isEmpty()) {
-        QString datacap=rx.cap(capValue);
-        if (removeHTML) datacap=datacap.remove(QRegExp("<[^>]*>"));
-        if (!append) {
-            output[field]=datacap;
-        } else if (!output[field].toString().contains(datacap)){
-            QString old=output.value(field).toString();
-            if (!old.isEmpty()) old=old+separator;
-            old=old+datacap;
-            output[field]=old;
+    QRegularExpression rx(regex, (minimal)?QRegularExpression::InvertedGreedinessOption:QRegularExpression::NoPatternOption);
+    QRegularExpressionMatch rmatch;
+    if (data.indexOf(rx)>=0 ) {
+        if (!rmatch.captured(capValue).isEmpty()) {
+            QString datacap=rmatch.captured(capValue);
+            static const QRegularExpression rxRem("<[^>]*>");
+            if (removeHTML) datacap=datacap.remove(rxRem);
+            if (!append) {
+                output[field]=datacap;
+            } else if (!output[field].toString().contains(datacap)){
+                QString old=output.value(field).toString();
+                if (!old.isEmpty()) old=old+separator;
+                old=old+datacap;
+                output[field]=old;
+            }
         }
     }
 }
 
 void extractMetaDataWithRegExp(const QString& regex, const QString& data, QMap<QString, QVariant>& output, int capItem, int capValue, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions, const QList<QString>& ands) {
 
-    QRegExp rxDCItem(regex, Qt::CaseInsensitive);
+    static const QRegularExpression rxDCItem(regex, QRegularExpression::CaseInsensitiveOption);
 
     int pos = 0;
-
-    while ((pos = rxDCItem.indexIn(data, pos)) != -1) {
-        QString dcitem=rxDCItem.cap(capItem).toLower();
-        QString value=rxDCItem.cap(capValue);
-        QString complete_match=rxDCItem.cap(0);
+    QRegularExpressionMatch rmatch;
+    while ((pos = data.indexOf(rxDCItem, pos, &rmatch)) != -1) {
+        QString dcitem=rmatch.captured(capItem).toLower();
+        QString value=rmatch.captured(capValue);
+        QString complete_match=rmatch.captured(0);
 
        //qDebug()<<pos<<dcitem<<value;
         if (!value.isEmpty()) {
@@ -168,7 +169,7 @@ void extractMetaDataWithRegExp(const QString& regex, const QString& data, QMap<Q
             }
         }
 
-        pos += rxDCItem.matchedLength();
+        pos += rmatch.capturedLength();
     }
 
     if (output.contains("chapter") && output.contains("booktitle")) {
@@ -379,8 +380,9 @@ QMap<QString, QVariant> extractHTMLMetadata(const QString& data, const QSet<QStr
     // remove all HTML comments from input data
     QString data_no_comments=removeHTMLComments(data);
     // try to extract <title> tag
-    QRegExp rxTitle("<title>(.*)</title>", Qt::CaseInsensitive);
-    if (rxTitle.indexIn(data) != -1) output["title"]=rxTitle.cap(1);
+    static const QRegularExpression rxTitle("<title>(.*)</title>", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch rmatch;
+    if (data.contains(rxTitle, &rmatch)) output["title"]=rmatch.captured(1);
 
 
     // this regexp should extract any substring of the form <meta ... name="111" ... content="222" ...>
@@ -406,11 +408,11 @@ QByteArray guessEncoding(const QByteArray& encodingFromReply, const QByteArray& 
         if (QTextCodec::codecForName(encodingFromReply)) return QTextCodec::codecForName(encodingFromReply)->name();
     }
     // test for XML contents:
-    QRegExp rxXML("<?xml[^>]*encoding=\"([^\"]*)\"[^>]*\?>");
-    rxXML.setCaseSensitivity(Qt::CaseInsensitive);
+    static const QRegularExpression rxXML("<?xml[^>]*encoding=\"([^\"]*)\"[^>]*\?>", QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch rmatch;
     QByteArray encoding="";
-    if (rxXML.indexIn(QString(data))>=0) {
-        QString en=rxXML.cap(1);
+    if (QString(data).indexOf(rxXML, 0, &rmatch)>=0) {
+        QString en=rmatch.captured(1);
         QTextCodec* cod=QTextCodec::codecForName(en.toLocal8Bit());
         if (cod) {
             encoding=cod->name();

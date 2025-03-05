@@ -18,7 +18,7 @@
 
 #include <QComboBox>
 #include <QFile>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 /*! \brief this combobox may be mapped by a QDataWidgetMapper to a model
 
@@ -28,7 +28,7 @@
       - load images associated with the current text, by searching in "<images_dir>/<text.toLower()>.png"
     .
 */
-class LIB_EXPORT QMappableComboBox : public QComboBox {
+class LITSOZ3WIDGETS_EXPORT QMappableComboBox : public QComboBox {
     Q_OBJECT
     Q_PROPERTY(QString text READ text WRITE setText USER true)
     Q_PROPERTY(QVariant data READ data WRITE setData)

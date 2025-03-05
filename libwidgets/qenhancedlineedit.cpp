@@ -70,7 +70,7 @@ void QEnhancedLineEdit::invalidateButtons() {
     QPalette pal = palette();
     QMargins m=textMargins();
 
-    QStyleOptionFrameV2 panel;
+    QStyleOptionFrame panel;
     initStyleOption(&panel);
     r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
     setTextMargins(m.left(), m.top(), m.left()+getButtonsWidth(buttons.size()), m.bottom());
@@ -95,7 +95,7 @@ void QEnhancedLineEdit::moveButtons() {
     //QPalette pal = palette();
     //QMargins m=textMargins();
 
-    QStyleOptionFrameV2 panel;
+    QStyleOptionFrame panel;
     initStyleOption(&panel);
     r = style()->subElementRect(QStyle::SE_LineEditContents, &panel, this);
 

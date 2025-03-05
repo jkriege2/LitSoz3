@@ -20,13 +20,13 @@
    <string>Form</string>
   </property>
   <property name="layoutDirection">
-   <enum>Qt::LeftToRight</enum>
+   <enum>Qt::LayoutDirection::LeftToRight</enum>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,0">
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="margin" stdset="0">
     <number>0</number>
    </property>
    <item>
@@ -59,7 +59,6 @@
         <widget class="QLabel" name="labName">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -67,10 +66,10 @@
           <string/>
          </property>
          <property name="textFormat">
-          <enum>Qt::RichText</enum>
+          <enum>Qt::TextFormat::RichText</enum>
          </property>
          <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -80,7 +79,7 @@
           <string/>
          </property>
          <property name="textFormat">
-          <enum>Qt::RichText</enum>
+          <enum>Qt::TextFormat::RichText</enum>
          </property>
         </widget>
        </item>
@@ -100,7 +99,7 @@
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="litsoz3.qrc">
+          <iconset resource="litsoz3app.qrc">
            <normaloff>:/reject.png</normaloff>:/reject.png</iconset>
          </property>
         </widget>
@@ -108,7 +107,7 @@
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -125,10 +124,10 @@
    <item>
     <widget class="Line" name="line">
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Shadow::Plain</enum>
      </property>
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -143,7 +142,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="litsoz3.qrc"/>
+  <include location="litsoz3app.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013-2015 Jan W. Krieger (<jan@jkrieger.de>)
+    Copyright (c) 2013-2025 Jan W. Krieger (<jan@jkrieger.de>)
 
     This software is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License (GPL) as published by
@@ -18,11 +18,10 @@
 
 static const int PageRole = Qt::UserRole + 1;
 
-static void fillToc(Poppler::Document *doc, const QDomNode &parent, QTreeWidget *tree, QTreeWidgetItem *parentItem)
+static void fillToc(const Poppler::Document& doc, const QVector<Poppler::OutlineItem> &parent, QTreeWidget *tree, QTreeWidgetItem *parentItem)
 {
     QTreeWidgetItem *newitem = 0;
-    for (QDomNode node = parent.firstChild(); !node.isNull(); node = node.nextSibling()) {
-        QDomElement e = node.toElement();
+    for (const auto& outl: parent) {
 
         if (!parentItem) {
             newitem = new QTreeWidgetItem(tree, newitem);
@@ -30,28 +29,20 @@ static void fillToc(Poppler::Document *doc, const QDomNode &parent, QTreeWidget 
             newitem = new QTreeWidgetItem(parentItem, newitem);
         }
         double pageNumber =0 ;
-        if (e.hasAttribute("Destination")) {
-            pageNumber=Poppler::LinkDestination(e.attribute(QString::fromLatin1("Destination"))).pageNumber();
+        if (outl.destination()) {
+            pageNumber=outl.destination()->pageNumber();
         }
 
-        Poppler::LinkDestination *dest = doc->linkDestination(e.attribute(QString::fromLatin1("DestinationName")));
-        pageNumber = dest->pageNumber();// + dest->top();
-        delete dest;
 
-
-        newitem->setText(0, e.tagName());
+        newitem->setText(0, outl.name());
         newitem->setData(0, PageRole, pageNumber+1.0);
 
-        bool isOpen = false;
-        if (e.hasAttribute(QString::fromLatin1("Open"))) {
-            isOpen = QVariant(e.attribute(QString::fromLatin1("Open"))).toBool();
-        }
-        if (isOpen) {
+        if (outl.isOpen()) {
             tree->expandItem(newitem);
         }
 
-        if (e.hasChildNodes()) {
-            fillToc(doc, node, tree, newitem);
+        if (outl.hasChildren()) {
+            fillToc(doc, outl.children(), tree, newitem);
         }
     }
 }
@@ -227,7 +218,7 @@ FileViewPane::FileViewPane(ProgramOptions* settings, QWidget *parent) :
     toolbar->addSeparator();
 
     cmbScale=new QComboBox(this);
-    cmbScale->setValidator(new QRegExpValidator(QRegExp("\\d+ \\%"), this));
+    cmbScale->setValidator(new QRegularExpressionValidator(QRegularExpression("\\d+ \\%"), this));
     cmbScale->addItem("10 %");
     cmbScale->addItem("25 %");
     cmbScale->addItem("50 %");
@@ -523,11 +514,11 @@ void FileViewPane::zoomOut() {
 }
 
 void FileViewPane::fillInfoWidgets() {
-    const QDomDocument *tocD = NULL;
-    if (pdf->document()) tocD=pdf->document()->toc();
+    QVector<Poppler::OutlineItem> tocD;
+    if (pdf->hasDocument()) tocD=pdf->document().outline();
     toc->clear();
-    if (tocD) {
-        fillToc(pdf->document(), *tocD, toc, 0);
+    if (tocD.size()>0) {
+        fillToc(pdf->document(), tocD, toc, 0);
         fillThumbnails();
     } else {
         QTreeWidgetItem *item = new QTreeWidgetItem();
@@ -573,7 +564,9 @@ void FileViewPane::docComboChanged(int index) {
         if (pdf->setDocument(file)) {
             fillInfoWidgets();
             setEnabled(true);
-            spinPage->setRange(1, pdf->document()->numPages());
+            int pages=1;
+            if (pdf->hasDocument()) pages=pdf->document().numPages();
+            spinPage->setRange(1, pages);
             bool ok=true;
             int page=datastore->getField("pdf_lastpage").toInt(&ok);
             if (!ok) page=1;
@@ -583,21 +576,25 @@ void FileViewPane::docComboChanged(int index) {
 }
 
 void FileViewPane::fillThumbnails() {
-    const int num = pdf->document()->numPages();
+    const int num = [&]() {
+        if (pdf->hasDocument()) return  pdf->document().numPages();
+        return 0;
+    }();
     QSize maxSize;
     for (int i = 0; i < num; ++i) {
-        const Poppler::Page *page = pdf->document()->page(i);
-        const QImage image = page->thumbnail();
-        if (!image.isNull()) {
-            QListWidgetItem *item = new QListWidgetItem();
-            item->setText(QString::number(i + 1));
-            item->setData(Qt::DecorationRole, QPixmap::fromImage(image));
-            item->setData(PageRole, i+1);
-            thumbnails->addItem(item);
-            maxSize.setWidth(qMax(maxSize.width(), image.width()));
-            maxSize.setHeight(qMax(maxSize.height(), image.height()));
+        if (pdf->hasDocument()) {
+            const auto page = pdf->document().page(i);
+            const QImage image = page->thumbnail();
+            if (!image.isNull()) {
+                QListWidgetItem *item = new QListWidgetItem();
+                item->setText(QString::number(i + 1));
+                item->setData(Qt::DecorationRole, QPixmap::fromImage(image));
+                item->setData(PageRole, i+1);
+                thumbnails->addItem(item);
+                maxSize.setWidth(qMax(maxSize.width(), image.width()));
+                maxSize.setHeight(qMax(maxSize.height(), image.height()));
+            }
         }
-        delete page;
     }
     if (num > 0) {
         thumbnails->setGridSize(maxSize);

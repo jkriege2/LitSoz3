@@ -22,7 +22,7 @@
 #include <QList>
 #include <QSize>
 #include "flowlayout.h"
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 /*! \brief displays a set of buttons that allow to insert special characters
 
@@ -30,7 +30,7 @@
     where \c w is the main window of your application. If generateFocusEvent is set \c true (default)
     this widget will post a QKeyEvent message to the focusWidget obtained from KBFocusWidget() .
 */
-class LIB_EXPORT JKCharacterScreenKeyboard : public QWidget {
+class LITSOZ3WIDGETS_EXPORT JKCharacterScreenKeyboard : public QWidget {
         Q_OBJECT
     public:
         JKCharacterScreenKeyboard(QWidget* parent=NULL);

@@ -75,10 +75,10 @@ void QEnhancedTableView::copySelectionToExcel() {
             if (r<rowmin) rowmin=r;
         }
     }
-    QList<int> rowlist=QList<int>::fromSet(rows);
-    qSort(rowlist.begin(), rowlist.end());
-    QList<int> collist=QList<int>::fromSet(cols);
-    qSort(collist.begin(), collist.end());
+    QList<int> rowlist=QList<int>(rows.begin(), rows.end());
+    std::sort(rowlist.begin(), rowlist.end());
+    QList<int> collist=QList<int>(cols.begin(), cols.end());
+    std::sort(collist.begin(), collist.end());
     int rowcnt=rowlist.size();
     int colcnt=collist.size();
     QList<QStringList> data;
@@ -177,9 +177,9 @@ void QEnhancedTableView::print(QPrinter *printer, bool onePageWide, bool onePage
      //p->setPageMargins(10,10,10,10,QPrinter::Millimeter);
 
      if (width()>height()) {
-         p->setOrientation(QPrinter::Landscape);
+         p->setPageOrientation(QPageLayout::Orientation::Landscape);
      } else {
-         p->setOrientation(QPrinter::Portrait);
+         p->setPageOrientation(QPageLayout::Orientation::Portrait);
      }
 
      clearSelection();
@@ -213,13 +213,13 @@ void QEnhancedTableView::print(QPrinter *printer, bool onePageWide, bool onePage
      }
      double scale=1.0;
      // adjust scale, so the widest/highest column fits on one page
-     /*if (maxWidth*scale>p->pageRect().width()) scale=p->pageRect().width()/maxWidth;
-     if (maxHeight*scale>p->pageRect().height()) scale=p->pageRect().height()/maxHeight;*/
+     /*if (maxWidth*scale>p->pageRect(QPrinter::DevicePixel).width()) scale=p->pageRect(QPrinter::DevicePixel).width()/maxWidth;
+     if (maxHeight*scale>p->pageRect(QPrinter::DevicePixel).height()) scale=p->pageRect(QPrinter::DevicePixel).height()/maxHeight;*/
      if (onePageWide) {
-         if (totalWidth>p->pageRect().width()) scale=p->pageRect().width()/totalWidth;
+         if (totalWidth>p->pageRect(QPrinter::DevicePixel).width()) scale=p->pageRect(QPrinter::DevicePixel).width()/totalWidth;
      }
      if (onePageHigh) {
-         if (totalHeight>p->pageRect().height()) scale=qMin(scale, p->pageRect().height()/totalHeight);
+         if (totalHeight>p->pageRect(QPrinter::DevicePixel).height()) scale=qMin(scale, p->pageRect(QPrinter::DevicePixel).height()/totalHeight);
      }
 
      //qDebug()<<scale;
@@ -236,7 +236,7 @@ void QEnhancedTableView::print(QPrinter *printer, bool onePageWide, bool onePage
          if (!onePageWide) {
              for (int c=0; c<cols; c++) {
                  double cw=columnWidth(c);
-                 if (x+cw>p->pageRect().width()/scale) {
+                 if (x+cw>p->pageRect(QPrinter::DevicePixel).width()/scale) {
                      pagesWide++;
                      x=0;
                      pageCols<<c;
@@ -252,7 +252,7 @@ void QEnhancedTableView::print(QPrinter *printer, bool onePageWide, bool onePage
          if (!onePageHigh) {
              for (int r=0; r<rows; r++) {
                  double rh=rowHeight(r);
-                 if (y+rh>p->pageRect().height()/scale) {
+                 if (y+rh>p->pageRect(QPrinter::DevicePixel).height()/scale) {
                      pagesHigh++;
                      pageRows<<r;
                      y=hhh;
@@ -318,7 +318,7 @@ QSizeF QEnhancedTableView::getTotalSize() const
 void QEnhancedTableView::paint(QPainter &painter, double scale, int page, double hhh, double vhw, const QList<int>& pageCols, const QList<int>& pageRows, QPrinter* p)
 {
     painter.save();
-    QStyleOptionViewItem option = viewOptions();
+    QStyleOptionViewItem option; initViewItemOption(&option);
     painter.scale(scale, scale);
     QPen headerPen("black");
     headerPen.setWidth(2);
@@ -328,13 +328,13 @@ void QEnhancedTableView::paint(QPainter &painter, double scale, int page, double
     headerFont.setBold(true);
     int pagesWide=pageCols.size()-1;
     int pagesHigh=pageRows.size()-1;
-    //painter.translate(p->pageRect().topLeft());
+    //painter.translate(p->pageRect(QPrinter::DevicePixel).topLeft());
     int pageCnt=0;
     for (int ph=0; ph<pageRows.size()-1; ph++) {
         for (int pw=0; pw<pageCols.size()-1; pw++) {
             if (page<0 || page==pageCnt) {
                 //qDebug()<<"print page "<<ph<<"/"<<pageRows.size()<<pagesHigh<<"    "<<pw<<"/"<<pageCols.size()<<pagesWide;
-                //painter.drawPicture(p->pageRect().topLeft(), pic);
+                //painter.drawPicture(p->pageRect(QPrinter::DevicePixel).topLeft(), pic);
                 double y=0;
                 if (ph==0) {
                     y=hhh;
@@ -374,7 +374,7 @@ void QEnhancedTableView::paint(QPainter &painter, double scale, int page, double
                         painter.setPen(headerPen);
                         painter.drawText(QRect(rec.x()+4, rec.y()+4, rec.width()-8, rec.height()-8), model()->headerData(c, Qt::Horizontal).toString());
                         painter.drawRect(rec);
-                        //if (x==vhw &&) painter.drawLine(rec.topLeft(), QPoint(rec.left(), p->pageRect().height()));
+                        //if (x==vhw &&) painter.drawLine(rec.topLeft(), QPoint(rec.left(), p->pageRect(QPrinter::DevicePixel).height()));
                         x=x+columnWidth(c);
                     }
 
@@ -390,7 +390,7 @@ void QEnhancedTableView::paint(QPainter &painter, double scale, int page, double
                         painter.setFont(headerFont);
                         painter.drawText(QRect(rec.x()+4, rec.y()+4, rec.width()-8, rec.height()-8), model()->headerData(r, Qt::Vertical).toString());
                         painter.drawRect(rec);
-                        //if (x==vhw &&) painter.drawLine(rec.topLeft(), QPoint(rec.left(), p->pageRect().height()));
+                        //if (x==vhw &&) painter.drawLine(rec.topLeft(), QPoint(rec.left(), p->pageRect(QPrinter::DevicePixel).height()));
                         y=y+rowHeight(r);
                     }
 

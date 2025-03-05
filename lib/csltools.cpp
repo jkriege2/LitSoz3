@@ -15,7 +15,7 @@
 
 #include "csltools.h"
 #include <QFile>
-#include <QDomDocument>
+#include <QtXml/QDomDocument>
 #include <QDebug>
 #include "bibtools.h"
 #include <QChar>
@@ -1000,7 +1000,7 @@ QString CSLFile::CSLChooseNode::produce(const QMap<QString, QVariant> &data, con
         switch(ifs[i].ifType) {
             case iftType:{
                     QString type=getCSLField("type", data, QString()).toString();
-                    QStringList types=ifs[i].type.split(QRegExp("\\s"));
+                    QStringList types=ifs[i].type.split(QRegularExpression("\\s"));
                     bool ok=(ifs[i].match=="any" && types.contains(type))
                             ||(ifs[i].match=="none" && !types.contains(type))
                             ||(ifs[i].match=="" && ifs[i].type==type);
@@ -1013,12 +1013,12 @@ QString CSLFile::CSLChooseNode::produce(const QMap<QString, QVariant> &data, con
                 break;
             case iftIsNumeric:{
                     QStringList vars=ifs[i].variable.split(' ');
-                    QRegExp rx("[^\\d]*(\\d)+([^\\d]|[\\-\\&\\s\\,])*");
+                    static const QRegularExpression rx("[^\\d]*(\\d)+([^\\d]|[\\-\\&\\s\\,])*");
                     bool matchAny=false;
                     bool matchAll=true;
                     for (int ii=0; ii<vars.size(); ii++) {
                         QString field=getCSLField(vars[ii], data, QString()).toString();
-                        bool found=rx.indexIn(field)>=0;                        
+                        const bool found=field.contains(rx);
                         matchAny=matchAny||(found);
                         matchAll=matchAll&&(found);
                         //qDebug()<<"  "<<vars[ii]<<field<<found<<matchAny<<matchAll;

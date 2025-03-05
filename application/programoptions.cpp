@@ -18,6 +18,7 @@
 #include "fdf.h"
 #include <QNetworkProxy>
 #include "languagetools.h"
+#include "regextools.h"
 
 ProgramOptions *ProgramOptions::m_instance=NULL;
 
@@ -59,7 +60,26 @@ ProgramOptions::ProgramOptions( QString ini, QObject * parent, QApplication* app
 
 
 
-    assetsDirectory=QCoreApplication::applicationDirPath()+"/assets/";
+    QStringList assetCandidates=QStringList()
+        <<QCoreApplication::applicationDirPath()+"/assets/"
+        <<QDir::currentPath()+"/assets/"
+        ;
+    QDir appDir=QCoreApplication::applicationDirPath();
+    while (appDir.cdUp()) {
+        assetCandidates<<appDir.absolutePath()+"/assets/";
+        assetCandidates<<appDir.absolutePath()+"/dist/assets/";
+        assetCandidates<<appDir.absolutePath()+"/application/assets/";
+    }
+
+    for (const auto& assetCand: assetCandidates) {
+        assetsDirectory=assetCand;
+        if (QDir(assetsDirectory+"/fdf").exists()) {
+            qDebug()<<"found assets in "<<assetsDirectory;
+            break;
+        } else {
+            qDebug()<<"did not find assets in "<<assetsDirectory<<" --> trying next candidate ...";
+        }
+    }
 
     LanguageRecognizer::globalInstance()->clearInit();
     QStringList langDirs;
@@ -133,8 +153,8 @@ void ProgramOptions::openSettingsDialog() {
     settingsDlg->edtInitialFile->setText(startupFile);
     settingsDlg->edtSpecialCharacters->setText(specialCharacters);
     settingsDlg->edtAndWords->setPlainText(QStringList(andWords).join("\n"));
-    settingsDlg->edtNameAdditions->setPlainText(QStringList(nameAdditions.toList()).join("\n"));
-    settingsDlg->edtNamePrefixes->setPlainText(QStringList(namePrefixes.toList()).join("\n"));
+    settingsDlg->edtNameAdditions->setPlainText(QStringList(nameAdditions.begin(), nameAdditions.end()).join("\n"));
+    settingsDlg->edtNamePrefixes->setPlainText(QStringList(namePrefixes.begin(), namePrefixes.end()).join("\n"));
     settingsDlg->cmbPreviewStyles->clear();
     settingsDlg->cmbPreviewStyles2->clear();
     settingsDlg->cmbPreviewStyles->addItems(previewStyles->styles());
@@ -157,17 +177,21 @@ void ProgramOptions::openSettingsDialog() {
     QDir dir(QCoreApplication::applicationDirPath());
     dir.cd("translations");
     QStringList filters;
-    filters << "*.qm";
+    filters << "litsoz3app*.qm";
     settingsDlg->cmbLanguage->clear();
     settingsDlg->cmbLanguage->addItem("en");
     QStringList sl=dir.entryList(filters, QDir::Files);
     for (int i=0; i<sl.size(); i++) {
-        QString s=sl[i];
-        int idx=s.indexOf(".");
-        if (settingsDlg->cmbLanguage->findText(s.left(idx))<0) {
-            settingsDlg->cmbLanguage->addItem(s.left(idx), Qt::CaseInsensitive);
+        QStringList caps;
+        if (ls3_rxExactlyMatches(sl[i], "litsoz3app_(.+)\\.qm", &caps)) {
+            if (caps.size()>1) {
+                if (settingsDlg->cmbLanguage->findText(caps[1], Qt::MatchExactly)<0) {
+                    settingsDlg->cmbLanguage->addItem(caps[1]);
+                }
+            }
         }
         //settingsDlg->cmbLanguage->addItem(sl[i].remove(".qm"), Qt::CaseInsensitive);
+
     }
     settingsDlg->cmbLanguage->setCurrentIndex( settingsDlg->cmbLanguage->findText(languageID));
     settingsDlg->cmbStyle->addItems(QStyleFactory::keys());
@@ -179,7 +203,7 @@ void ProgramOptions::openSettingsDialog() {
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             //std::cout<<"OK\n";
             QString s=QString::fromUtf8(f.readAll());
-            QStringList sl=s.split('\n', QString::SkipEmptyParts);
+            QStringList sl=s.split('\n', Qt::SkipEmptyParts);
             settingsDlg->cmbDefaultCurrency->clear();
             settingsDlg->cmbDefaultCurrency->addItems(sl);
         } //else std::cout<<"ERROR\n";
@@ -196,7 +220,7 @@ void ProgramOptions::openSettingsDialog() {
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             //std::cout<<"OK\n";
             QString s=QString::fromUtf8(f.readAll());
-            QStringList sl=s.split('\n', QString::SkipEmptyParts);
+            QStringList sl=s.split('\n', Qt::SkipEmptyParts);
             settingsDlg->cmbDefaultStatus->clear();
             settingsDlg->cmbDefaultStatus->addItems(sl);
         } //else std::cout<<"ERROR\n";
@@ -236,8 +260,10 @@ void ProgramOptions::openSettingsDialog() {
         specialCharacters=settingsDlg->edtSpecialCharacters->text();
         andWords=settingsDlg->edtAndWords->toPlainText().simplified().split(" ");
         for (int i=0; i<andWords.size(); i++) andWords[i]=andWords[i].toLower().trimmed();
-        nameAdditions=QSet<QString>::fromList(settingsDlg->edtNameAdditions->toPlainText().simplified().split(" "));
-        namePrefixes=QSet<QString>::fromList(settingsDlg->edtNamePrefixes->toPlainText().simplified().split(" "));
+        const auto nALst=settingsDlg->edtNameAdditions->toPlainText().simplified().split(" ");
+        nameAdditions=QSet<QString>(nALst.begin(), nALst.end());
+        const auto nPLst=settingsDlg->edtNamePrefixes->toPlainText().simplified().split(" ");
+        namePrefixes=QSet<QString>(nPLst.begin(),nPLst.end());
         currentPreviewStyle1=settingsDlg->cmbPreviewStyles->currentIndex();
         currentPreviewStyle2=settingsDlg->cmbPreviewStyles2->currentIndex();
         currentPreviewLocale1=settingsDlg->cmbPreviewLocales->currentText();
@@ -395,12 +421,12 @@ void ProgramOptions::saveConfigFiles() {
     }
     {   QFile f(cd.absoluteFilePath("name_prefix.txt"));
         if (f.open(QIODevice::WriteOnly|QIODevice::Text)) {
-            f.write(QStringList(namePrefixes.toList()).join("\n").toUtf8());
+            f.write(QStringList(namePrefixes.begin(),namePrefixes.end()).join("\n").toUtf8());
         }
     }
     {   QFile f(cd.absoluteFilePath("name_additions.txt"));
         if (f.open(QIODevice::WriteOnly|QIODevice::Text)) {
-            f.write(QStringList(nameAdditions.toList()).join("\n").toUtf8());
+            f.write(QStringList(nameAdditions.begin(),nameAdditions.end()).join("\n").toUtf8());
         }
     }
 }
@@ -412,23 +438,25 @@ void ProgramOptions::loadConfigFiles() {
         andWords.clear();
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
             QString s=QString::fromUtf8(f.readAll());
-            andWords=s.split('\n', QString::SkipEmptyParts);
+            andWords=s.split('\n', Qt::SkipEmptyParts);
         }
         f.close();
     }
     {   QFile f(cd.absoluteFilePath("name_prefix.txt"));
         namePrefixes.clear();
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
-            QString s=QString::fromUtf8(f.readAll());
-            namePrefixes=QSet<QString>::fromList(s.split('\n', QString::SkipEmptyParts));
+            const auto s=QString::fromUtf8(f.readAll());
+            const auto lst=s.split('\n', Qt::SkipEmptyParts);
+            namePrefixes=QSet<QString>(lst.begin(), lst.end());
         }
         f.close();
     }
     {   QFile f(cd.absoluteFilePath("name_additions.txt"));
         nameAdditions.clear();
         if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
-            QString s=QString::fromUtf8(f.readAll());
-            nameAdditions=QSet<QString>::fromList(s.split('\n', QString::SkipEmptyParts));
+            const auto s=QString::fromUtf8(f.readAll());
+            const auto lst=s.split('\n', Qt::SkipEmptyParts);
+            nameAdditions=QSet<QString>(lst.begin(),lst.end());
         }
         f.close();
     }

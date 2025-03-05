@@ -22,6 +22,7 @@
 #include "qcompleterplaintextedit.h"
 #include "bibtools.h"
 #include "programoptions.h"
+#include <QRegularExpression>
 #include <iostream>
 
 
@@ -333,9 +334,9 @@ QWidget* fdfManager::createWidgets(QString ID, QString language, QString configD
                 QLineEdit* e=new QEnhancedLineEdit(wret);
                 w=e;
                 if (wp->casesensitive) {
-                    e->setValidator(new QRegExpValidator(QRegExp(wp->regexp.value(language, wp->regexpDefault), Qt::CaseSensitive, QRegExp::RegExp2), e));
+                    e->setValidator(new QRegularExpressionValidator(QRegularExpression(wp->regexp.value(language, wp->regexpDefault), QRegularExpression::CaseInsensitiveOption), e));
                 } else {
-                    e->setValidator(new QRegExpValidator(QRegExp(wp->regexp.value(language, wp->regexpDefault), Qt::CaseInsensitive, QRegExp::RegExp2), e));
+                    e->setValidator(new QRegularExpressionValidator(QRegularExpression(wp->regexp.value(language, wp->regexpDefault), QRegularExpression::CaseInsensitiveOption), e));
                 }
                 if (wp->completerList.size()>0) {
                     QCompleterFromFile* c=new QCompleterFromFile(e);

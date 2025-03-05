@@ -16,12 +16,13 @@
 #ifndef LS3TOOLS_H
 #define LS3TOOLS_H
 
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 #include <QString>
 #include <QDebug>
 #include <QElapsedTimer>
+#include <QRegularExpression>
 
-class LS3LIB_EXPORT LS3ElapsedAutoTimer {
+class LITSOZ3TOOLS_EXPORT LS3ElapsedAutoTimer {
     public:
         explicit inline LS3ElapsedAutoTimer(const QString& startmessage, const QString& endmessage, double warnlevel=100) {
             qDebug()<<QString(3+level*2, ' ')<<"STARING msg="<<startmessage;
@@ -77,4 +78,8 @@ inline QString boolToString(bool data) {
     return "false";
 }
 
+template<typename T>
+inline T ls3_boundedRoundTo(T min, const double& v, T max) {
+    return qBound(min, static_cast<T>(round(v)), max);
+}
 #endif // LS3TOOLS_H

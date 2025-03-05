@@ -98,7 +98,7 @@ void PreviewStyleManager::searchCSL(const QString &dir)
             files.removeAt(i);
         }
     }
-    qSort(csls.begin(), csls.end(), PreviewStyleManager_isSmaller);
+    std::sort(csls.begin(), csls.end(), PreviewStyleManager_isSmaller);
 }
 
 

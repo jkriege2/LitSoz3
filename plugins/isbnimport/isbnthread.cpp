@@ -15,6 +15,10 @@
 
 #include "isbnthread.h"
 #include "modstools.h"
+#include <QTimer>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomNode>
+#include <QtCore5Compat/QTextCodec>
 
 ISBNThread::ISBNThread(QObject *parent) :
     LS3ProgressThread(parent)

@@ -19,9 +19,9 @@
 #include <QString>
 #include <QMap>
 #include <QVariant>
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 
-class LS3LIB_EXPORT LS3ExtractMetadataPlugin {
+class LITSOZ3TOOLS_EXPORT LS3ExtractMetadataPlugin {
     public:
         /** \brief retrieve metadata from a given DOI (waits until requests are complete */
         virtual QMap<QString, QVariant> getMetadataFromDoi(QString DOI)=0;

@@ -17,17 +17,17 @@
 #define QENHANCEDTABLEVIEW_H
 
 #include <QTableView>
-#include <QPrinter>
+#include <QtPrintSupport/QPrinter>
 #include <QLabel>
 #include <QCheckBox>
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 /*! \brief this class extends the QTableView
     \ingroup qf3lib_widgets
 
 */
 
-class LIB_EXPORT QEnhancedTableView : public QTableView
+class LITSOZ3WIDGETS_EXPORT QEnhancedTableView : public QTableView
 {
         Q_OBJECT
     public:

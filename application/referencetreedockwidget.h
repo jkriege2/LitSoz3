@@ -21,6 +21,7 @@
 #include "ls3summarysortfilterproxymodel.h"
 #include <QAction>
 #include <QMenu>
+#include <QItemSelectionModel>
 
 namespace Ui {
     class ReferenceTreeDockWidget;

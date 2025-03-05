@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
     QCoreApplication::addLibraryPath(QFileInfo(argv[0]).absolutePath()+"/qtplugins");
 #endif
 
-    Q_INIT_RESOURCE(litsoz3);
+    Q_INIT_RESOURCE(litsoz3app);
 
     QApplication app(argc, argv);
 

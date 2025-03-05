@@ -15,9 +15,10 @@
 
 #ifndef HTMLDELEGATE_H
 #define HTMLDELEGATE_H
-#include "lib_imexport.h"
+#include "litsoz3widgets_export.h"
 
 #include <QStyledItemDelegate>
+#include <QRegularExpression>
 
 /*! \brief subclass of QStyledItemDelegate which is able to display HTML markupped texts.
 
@@ -26,7 +27,7 @@
 
     \see <a href="http://www.qtwiki.de/wiki/%27HTML%27-Delegate">http://www.qtwiki.de/wiki/%27HTML%27-Delegate</a>
 */
-class LIB_EXPORT HTMLDelegate : public QStyledItemDelegate {
+class LITSOZ3WIDGETS_EXPORT HTMLDelegate : public QStyledItemDelegate {
         Q_OBJECT
     public:
         HTMLDelegate(QObject* parent=NULL);
@@ -43,7 +44,7 @@ class LIB_EXPORT HTMLDelegate : public QStyledItemDelegate {
         void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     private:
         bool m_displayRichTextEditor;
-        QRegExp rxHTML;
+        static const QRegularExpression rxHTML;
 
         void drawCheck(QPainter *painter,
                        const QStyleOptionViewItem &option,

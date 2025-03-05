@@ -218,7 +218,7 @@ QSize JKStyledButton::minimumSizeHint()const {
     return s; //icon().actualSize(QSize(16,16));
 }
 
-void JKStyledButton::enterEvent(QEvent* e) {
+void JKStyledButton::enterEvent(QEnterEvent* e) {
     hover=true;
     repaint();
     QAbstractButton::enterEvent(e);

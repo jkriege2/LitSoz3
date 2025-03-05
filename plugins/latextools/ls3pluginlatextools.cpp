@@ -22,7 +22,6 @@
 #include <QtGui>
 #endif
 #include <iostream>
-#include <QtXml>
 
 LS3PluginLatexTools::LS3PluginLatexTools():
     LS3PluginBase()

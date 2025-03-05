@@ -16,12 +16,9 @@
 #include "popplerpdfwidget.h"
 #include <QPainter>
 #include <QtGlobal>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets>
-#else
-#include <QtGui>
-#endif
 #include <QtCore>
+#include "regextools.h"
 
 PopplerPDFWidget::PopplerPDFWidget(QWidget *parent) :
     QLabel(parent)
@@ -38,15 +35,20 @@ PopplerPDFWidget::PopplerPDFWidget(QWidget *parent) :
 
 PopplerPDFWidget::~PopplerPDFWidget() {
     clearTextSelection();
-    delete doc;
 }
 
-Poppler::Document *PopplerPDFWidget::document() {
-    return doc;
+
+const Poppler::Document& PopplerPDFWidget::document() const {
+    return *doc;
 }
 
-QMatrix PopplerPDFWidget::matrix() const {
-    return QMatrix(scaleFactor * physicalDpiX() / 72.0, 0, 0, scaleFactor * physicalDpiY() / 72.0, 0, 0);
+bool PopplerPDFWidget::hasDocument() const
+{
+    return doc!=nullptr;
+}
+
+QTransform PopplerPDFWidget::matrix() const {
+    return QTransform(scaleFactor * physicalDpiX() / 72.0, 0, 0, scaleFactor * physicalDpiY() / 72.0, 0, 0);
 }
 
 qreal PopplerPDFWidget::scale() const {
@@ -68,7 +70,6 @@ bool PopplerPDFWidget::setDocument(const QString &fileName) {
 
     clear();
 
-    Poppler::Document *oldDocument = doc;
     QFile f(fileName);
     if (f.open( QIODevice::ReadOnly)) {
         QByteArray pdfdata=f.readAll();
@@ -76,7 +77,6 @@ bool PopplerPDFWidget::setDocument(const QString &fileName) {
         doc=Poppler::Document::loadFromData(pdfdata);
         //doc = Poppler::Document::load(fileName);
         if (doc) {
-            if (oldDocument) delete oldDocument;
             doc->setRenderHint(Poppler::Document::Antialiasing);
             doc->setRenderHint(Poppler::Document::TextAntialiasing);
             searchLocation = QRectF();
@@ -106,10 +106,10 @@ void PopplerPDFWidget::setScale(float scale) {
 
 void PopplerPDFWidget::setScale(QString scale) {
     QString d=scale.trimmed();
-    QRegExp rx("(\\d+)\\s*\\%");
-    int pos = rx.indexIn(d);
-    if (pos > -1) {
-        setScale(rx.cap(1).toDouble()/100.0);
+    QStringList caps;
+    qsizetype pos = ls3_rxIndexIn(d, "(\\d+)\\s*\\%", 0, &caps);
+    if (pos > -1 && caps.size()>1) {
+        setScale(caps[1].toDouble()/100.0);
     }
 }
 
@@ -200,8 +200,8 @@ void PopplerPDFWidget::mouseReleaseEvent(QMouseEvent *event) {
             if (!rubberBand->size().isEmpty()) {
                 // Correct for the margin around the image in the label.
                 QRectF rect = QRectF(rubberBand->pos(), rubberBand->size());
-                rect.moveLeft(rect.left() - (width() - pixmap()->width()) / 2.0);
-                rect.moveTop(rect.top() - (height() - pixmap()->height()) / 2.0);
+                rect.moveLeft(rect.left() - (width() - pixmap().width()) / 2.0);
+                rect.moveTop(rect.top() - (height() - pixmap().height()) / 2.0);
                 selectedText(rect);
             }
         } else if (selectionMode==PopplerPDFWidget::SelectText) {
@@ -232,7 +232,7 @@ void PopplerPDFWidget::showPage(int page) {
     dragPosition=QPoint();
     clearTextSelection();
 
-    Poppler::Page* ppage=doc->page(currentPage);
+    const auto ppage=doc->page(currentPage);
     QImage image;
     if (ppage) image= ppage->renderToImage(scaleFactor * physicalDpiX(), scaleFactor * physicalDpiY());
 
@@ -261,7 +261,7 @@ void PopplerPDFWidget::selectedText(const QRectF &rect) {
     QString text;
     bool hadSpace = false;
     QPointF center;
-    foreach (Poppler::TextBox *box, doc->page(currentPage)->textList()) {
+    foreach (const auto& box, doc->page(currentPage)->textList()) {
         if (belongsToTextSelection(selectedRect, box->boundingBox())) {
             if (hadSpace)
                 text += " ";
@@ -298,8 +298,8 @@ void PopplerPDFWidget::updateTextSelection()
 {
     //qDebug()<<"PopplerPDFWidget::updateTextSelection(): selectionRect="<<selectionRect<<"   dragPosition="<<dragPosition;
     QRectF rin=selectionRect;
-    rin.moveLeft(rin.left() - (width() - pixmap()->width()) / 2.0);
-    rin.moveTop(rin.top() - (height() - pixmap()->height()) / 2.0);
+    rin.moveLeft(rin.left() - (width() - pixmap().width()) / 2.0);
+    rin.moveTop(rin.top() - (height() - pixmap().height()) / 2.0);
 
     QRectF selectedRect = matrix().inverted().mapRect(rin);
     // QString text = doc->page(currentPage)->text(selectedRect);
@@ -310,7 +310,7 @@ void PopplerPDFWidget::updateTextSelection()
     bool upd=updatesEnabled();
     if (upd) setUpdatesEnabled(false);
     clearTextSelection();
-    foreach (Poppler::TextBox *box, doc->page(currentPage)->textList()) {
+    foreach (const auto& box, doc->page(currentPage)->textList()) {
         //if (selectedRect.right()>box->boundingBox().left() && selectedRect.bottom()>box->boundingBox().top()) {
         //qDebug()<<"  check rects: "<<box->boundingBox()<<selectedRect<<selectedRect.contains(box->boundingBox())<<selectedRect.intersects(box->boundingBox());
         if (belongsToTextSelection(selectedRect, box->boundingBox())) {
@@ -324,7 +324,7 @@ void PopplerPDFWidget::updateTextSelection()
 
             const QRectF popplerTextBoxRect = matrix().mapRect(box->boundingBox());
             QRubberBand* rb = new QRubberBand(QRubberBand::Rectangle, this);
-            rb->setGeometry(QRect(popplerTextBoxRect.left()+(width() - pixmap()->width()) / 2.0, popplerTextBoxRect.top()+(height() - pixmap()->height()) / 2.0,popplerTextBoxRect.width(), popplerTextBoxRect.height()));
+            rb->setGeometry(QRect(popplerTextBoxRect.left()+(width() - pixmap().width()) / 2.0, popplerTextBoxRect.top()+(height() - pixmap().height()) / 2.0,popplerTextBoxRect.width(), popplerTextBoxRect.height()));
             rb->show();
             textSelectionRectangles.append(rb);
 
@@ -339,10 +339,10 @@ void PopplerPDFWidget::updateTextSelection()
 
 
 void PopplerPDFWidget::wheelEvent(QWheelEvent *event) {
-    int numDegrees = event->delta() / 8;
+    int numDegrees = event->angleDelta().y() / 8;
     double numSteps = numDegrees / 15;
 
-    if (event->modifiers()==Qt::ControlModifier && event->orientation() == Qt::Vertical) {
+    if (event->modifiers()==Qt::ControlModifier) {
         if (numSteps>0) setScale(scale()*pow(1.3, numSteps));
         if (numSteps<0) setScale(scale()*pow(0.8, -numSteps));
         event->accept();

@@ -28,10 +28,10 @@
 #include "qmappablecombobox.h"
 #include "qcompleterplaintextedit.h"
 #include "qcompleterfromfile.h"
-#include "../lib/bibtools.h"
+#include "bibtools.h"
 #include "jkstarratingwidget.h"
 #include <time.h>
-#include "../lib/ls3datastore.h"
+#include "ls3datastore.h"
 
 /*! \brief this contains the contents of the second reference details tab
 

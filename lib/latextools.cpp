@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     Copyright (c) 2013-2015 Jan W. Krieger (<jan@jkrieger.de>)
 
     This software is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
 
 #include "latextools.h"
 #include <QDebug>
+#include <QRegularExpression>
 
 QString chartoprintablestr(QChar data){
   QString ost;
@@ -405,8 +406,8 @@ QString laTeXify(const QString& input, bool brackedDoubleUppercase) {
         QStringList sl=input.split(' ');
         for (int i=0; i<sl.size(); i++) {
             if (!out.isEmpty()) out.append(' ');
-
-            int cnt=sl[i].count(QRegExp("[A-ZÄÖÜ]"));
+            static const QRegularExpression rx("[A-ZÃ„Ã–Ãœ]");
+            const int cnt=sl[i].count(rx);
             if (cnt>1) {
                 out.append("{"+sl[i]+"}");
             } else {
@@ -729,7 +730,7 @@ QString removeLaTeX(const QString& input) {
     out.replace("\"`", QChar((int)0x0094));
     out.replace("\"<", QChar((int)0x00ab));
     out.replace("\">", QChar((int)0x00bb));
-    out.replace("\"´", QChar((int)0x0084));
+    out.replace("\"Â´", QChar((int)0x0084));
     out.replace("\"-", "");
     out.replace("\"\"", "");
     out.replace("\"=", "");
@@ -855,8 +856,8 @@ QString removeLaTeX(const QString& input) {
                     if (isMath) {
                         if (c=='_') { mayOutput=false; }
                         else if (c=='^') { mayOutput=false; }
-                        else if ((c=='2')&&(c_last=='^')) { mayOutput=false; out1+='²'; }
-                        else if ((c=='3')&&(c_last=='^')) { mayOutput=false; out1+='³'; }
+                        else if ((c=='2')&&(c_last=='^')) { mayOutput=false; out1+="Â²"; }
+                        else if ((c=='3')&&(c_last=='^')) { mayOutput=false; out1+="Â³"; }
                     }
                     if (c=='$') { isMath=!isMath; mayOutput=false; }
                     else if (c=='{') { mayOutput=false; }

@@ -94,7 +94,7 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
                 sdata=sdata.replace("\n\n", "\n");
                 sdata=sdata.replace("\n\n", "\n");
                 sdata=sdata.replace("\r\r", "");
-                QStringList sl=sdata.split("\n", QString::SkipEmptyParts);
+                QStringList sl=sdata.split("\n", Qt::SkipEmptyParts);
                 sl.removeDuplicates();
                 sl.sort();
                 keywordsdata->setStringList(sl);
@@ -105,7 +105,7 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
                 sdata=sdata.replace("\n\n", "\n");
                 sdata=sdata.replace("\n\n", "\n");
                 sdata=sdata.replace("\r\r", "");
-                QStringList sl=sdata.split("\n", QString::SkipEmptyParts);
+                QStringList sl=sdata.split("\n", Qt::SkipEmptyParts);
                 sl.removeDuplicates();
                 sl.sort();
                 topicsdata->setStringList(sl);
@@ -144,7 +144,7 @@ bool LS3DatastoreXML::dbLoad(const QString &fileName, QProgressBar* progress) {
     if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
         //std::cout<<"OK\n";
         QString s=QString::fromUtf8(f.readAll());
-        authorsdata->setStringList(s.split('\n', QString::SkipEmptyParts));
+        authorsdata->setStringList(s.split('\n', Qt::SkipEmptyParts));
     }
 
     updateCompleters(0, recordCount()-1, false);
@@ -226,7 +226,7 @@ bool LS3DatastoreXML::dbSave(const QString &fileName, QProgressBar* progress) {
         if (f1.open(QIODevice::ReadOnly|QIODevice::Text)) {
             //std::cout<<"OK\n";
             QString s=QString::fromUtf8(f1.readAll());
-            sl.append(s.split('\n', QString::SkipEmptyParts));
+            sl.append(s.split('\n', Qt::SkipEmptyParts));
         } //else std::cout<<"ERROR\n";
         sl.removeDuplicates();
         sl.sort();
@@ -484,7 +484,7 @@ void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
     for (int i=r1; i<=r2; i++) {
         s+=data->getField(i, "keywords").toString()+"\n";
     }
-    QStringList sl=s.split("\n", QString::SkipEmptyParts);
+    QStringList sl=s.split("\n", Qt::SkipEmptyParts);
     QStringList sl1;
     if (combine) {
         sl1=keywordsdata->stringList();
@@ -509,7 +509,7 @@ void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
     for (int i=r1; i<=r2; i++) {
         s+=data->getField(i, "topic").toString()+"\n";
     }
-    sl=s.split("\n", QString::SkipEmptyParts);
+    sl=s.split("\n", Qt::SkipEmptyParts);
     if (combine) {
         sl1=topicsdata->stringList();
         for (int i=0; i<sl.count(); i++) {
@@ -533,7 +533,7 @@ void LS3DatastoreXML::updateCompleters(int r1, int r2, bool combine) {
     for (int i=r1; i<=r2; i++) {
         s+=data->getField(i, "authors").toString()+"; "+data->getField(i, "editors").toString()+"; ";
     }
-    sl=s.split(";", QString::SkipEmptyParts);
+    sl=s.split(";", Qt::SkipEmptyParts);
     sl1=authorsdata->stringList();
     for (int i=0; i<sl.count(); i++) {
         QString s=sl[i].trimmed();

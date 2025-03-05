@@ -17,7 +17,7 @@
 #define LS3SUMMARYSORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include "ls3referencetreeitem.h"
 #include "ls3datastore.h"
@@ -51,7 +51,7 @@ class LS3SummarySortFilterProxyModel : public QSortFilterProxyModel {
         QString m_term;
         bool m_regexp;
         QStringList m_fields;
-        QRegExp m_rxTerm;
+        QRegularExpression m_rxTerm;
         QPointer<LS3Datastore> m_datastore;
 };
 

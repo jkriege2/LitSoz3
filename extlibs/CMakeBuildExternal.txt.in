@@ -1,0 +1,44 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(litsoz3_BuildEXTERNAL_${LIB_NAME} CXX )
+
+include(ExternalProject)
+
+message(STATUS "  ---------------------------------------------------------------------------------------")
+message(STATUS "  -- CONFIGURATION FOR ${LIB_NAME}")
+message(STATUS "  ---------------------------------------------------------------------------------------")
+message(STATUS "  ${LIB_NAME}: Source-Code from: ${LIB_URL}")
+message(STATUS "  ${LIB_NAME}: dependencies:     ${arg_DEPENDS}")
+message(STATUS "  ${LIB_NAME}: build-type:       ${LIB_BUILD_TYPE}")
+message(STATUS "  ${LIB_NAME}: build-shared:     ${LIB_BUILD_SHARED}")
+message(STATUS "  ${LIB_NAME}: build-static:     ${LIB_BUILD_STATIC}")
+message(STATUS "  ${LIB_NAME}: build-options:    ${arg_OPTIONS}")
+message(STATUS "  ${LIB_NAME}: PREFIX:           ${LIB_PREFIX_DIR}")
+message(STATUS "  ${LIB_NAME}: INSTALL:          ${LIB_INSTALL_DIR}")
+message(STATUS "  ${LIB_NAME}: CMAKE_C_COMPILER:             ${CMAKE_C_COMPILER}")
+message(STATUS "  ${LIB_NAME}: CMAKE_CXX_COMPILER:           ${CMAKE_CXX_COMPILER}")
+message(STATUS "  ${LIB_NAME}: CMAKE_CXX_FLAGS_INIT:         ${CMAKE_CXX_FLAGS_INIT}")
+message(STATUS "  ${LIB_NAME}: QT_QMAKE_EXECUTABLE:          ${QT_QMAKE_EXECUTABLE}")
+message(STATUS "  ${LIB_NAME}: CMAKE_PROJECT_INCLUDE_BEFORE: ${CMAKE_PROJECT_INCLUDE_BEFORE}")
+message(STATUS "  ${LIB_NAME}: CMAKE_GENERATOR:              ${CMAKE_GENERATOR}")
+message(STATUS "  ${LIB_NAME}: CMAKE_PREFIX_PATH:            ${CMAKE_PREFIX_PATH}")
+message(STATUS "  ${LIB_NAME}: CMAKE_MODULE_PATH:            ${CMAKE_MODULE_PATH}")
+
+# External project to unpack and build the library
+ExternalProject_Add(
+    ${LIB_NAME}
+    PREFIX "${LIB_PREFIX_DIR}"
+    SOURCE_DIR "${LIB_SOURCE_DIR}"
+    STAMP_DIR "${LIB_STAMP_DIR}"
+    LOG_DIR "${LIB_LOG_DIR}"
+    BINARY_DIR "${LIB_BIN_DIR}"
+    TMP_DIR "${LIB_TMP_DIR}"
+    URL "${LIB_URL}"
+    BUILD_ALWAYS true
+    CONFIGURE_COMMAND "${CMAKE_COMMAND}" -S "${LIB_SOURCE_DIR}" -B "${LIB_BUILD_DIR}" -D "CMAKE_PREFIX_PATH=${LIB_INSTALL_DIR}" -D "BUILD_SHARED_LIBS=${LIB_BUILD_SHARED}" -D "BUILD_STATIC_LIBS=${LIB_BUILD_STATIC}" -D "CMAKE_BUILD_TYPE=${LIB_BUILD_TYPE}" -D "CMAKE_INSTALL_PREFIX=${LIB_INSTALL_DIR}" -D "CMAKE_C_COMPILER=${CMAKE_C_COMPILER}" -D "CMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}" -D "CMAKE_CXX_FLAGS_INIT=${CMAKE_CXX_FLAGS_INIT}" -D "QT_QMAKE_EXECUTABLE=${QT_QMAKE_EXECUTABLE}" -D "CMAKE_PROJECT_INCLUDE_BEFORE=${CMAKE_PROJECT_INCLUDE_BEFORE}"  -D "CMAKE_GENERATOR=${CMAKE_GENERATOR}" -D "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}" -D "CMAKE_MODULE_PATH=${CMAKE_MODULE_PATH}" ${arg_OPTIONS}
+    BUILD_COMMAND "${CMAKE_COMMAND}" --build "${LIB_BUILD_DIR}" --config "${LIB_BUILD_TYPE}"
+    INSTALL_COMMAND "${CMAKE_COMMAND}" --install "${LIB_BUILD_DIR}" --config "${LIB_BUILD_TYPE}"
+    DOWNLOAD_EXTRACT_TIMESTAMP false
+)
+
+

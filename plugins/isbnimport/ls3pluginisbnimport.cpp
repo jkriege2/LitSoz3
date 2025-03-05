@@ -22,7 +22,8 @@
 #include <QtGui>
 #endif
 #include <iostream>
-#include <QtXml>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomDocument>
 
 LS3PluginISBNImport::LS3PluginISBNImport():
     LS3PluginBase()
@@ -122,7 +123,7 @@ void LS3PluginISBNImport::insertFromISBNdb(const QString &ISBN_in, const QString
     ISBN=ISBN.remove(',');
     ISBN=ISBN.remove('.');
     ISBN=ISBN.remove('_');
-    ISBN=ISBN.remove(QRegExp("[^\\d]"));
+    ISBN=ISBN.remove(QRegularExpression("[^\\d]"));
     ISBNThread* t=new ISBNThread(this);
     if (!recordUUID.isEmpty()) t->setStoreInRecord(recordUUID);
     QMap<QString, QVariant> newRecord;
@@ -142,7 +143,7 @@ void LS3PluginISBNImport::insertFromGoogleBooks(const QString &ISBN_in, const QS
     ISBN=ISBN.remove(',');
     ISBN=ISBN.remove('.');
     ISBN=ISBN.remove('_');
-    ISBN=ISBN.remove(QRegExp("[^\\d]"));
+    ISBN=ISBN.remove(QRegularExpression("[^\\d]"));
     ISBNThread* t=new ISBNThread(this);
     if (!recordUUID.isEmpty()) t->setStoreInRecord(recordUUID);
     QMap<QString, QVariant> newRecord;
@@ -162,7 +163,7 @@ void LS3PluginISBNImport::insertFromCOPAC(const QString &ISBN_in, const QString 
     ISBN=ISBN.remove(',');
     ISBN=ISBN.remove('.');
     ISBN=ISBN.remove('_');
-    ISBN=ISBN.remove(QRegExp("[^\\d]"));
+    ISBN=ISBN.remove(QRegularExpression("[^\\d]"));
     ISBNThread* t=new ISBNThread(this);
     if (!recordUUID.isEmpty()) t->setStoreInRecord(recordUUID);
     QMap<QString, QVariant> newRecord;

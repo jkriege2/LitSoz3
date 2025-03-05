@@ -22,7 +22,7 @@
 #include <QPair>
 #include <QStyledItemDelegate>
 #include "ls3datastore.h"
-#include "lib_imexport.h"
+#include "litsoz3tools_export.h"
 #include <QMimeData>
 /*! \brief list model to access a list of all currently selected database records
 
@@ -31,7 +31,7 @@
     LS3SelectionDisplayModelDelegate which is specially tailored for this type of models!
     Column 1 will contain the uuid of the dataset. So you may use it to navigate to a dataset.
 */
-class LS3LIB_EXPORT LS3SelectionDisplayModel : public QAbstractListModel {
+class LITSOZ3TOOLS_EXPORT LS3SelectionDisplayModel : public QAbstractListModel {
         Q_OBJECT
     public:
         LS3SelectionDisplayModel(LS3Datastore* datastore, QObject* parent=0);
@@ -68,7 +68,7 @@ class LS3LIB_EXPORT LS3SelectionDisplayModel : public QAbstractListModel {
     protected slots:
         void resetModel();
     protected:
-        struct ListItem {
+        struct LITSOZ3TOOLS_EXPORT ListItem {
             /*! \brief reference as HTML string for display, this is returned in column 0 of the model */
             QString reference;
             /*! \brief used for sorting, populated according to the sorting order given in setSortingOrder() */
@@ -92,7 +92,7 @@ class LS3LIB_EXPORT LS3SelectionDisplayModel : public QAbstractListModel {
 
     taken from <a href="http://www.qtwiki.de/wiki/%27HTML%27-Delegate">http://www.qtwiki.de/wiki/%27HTML%27-Delegate</a>
 */
-class LS3LIB_EXPORT LS3SelectionDisplayModelDelegate : public QStyledItemDelegate {
+class LITSOZ3TOOLS_EXPORT LS3SelectionDisplayModelDelegate : public QStyledItemDelegate {
         Q_OBJECT
     public:
         /** Default constructor */

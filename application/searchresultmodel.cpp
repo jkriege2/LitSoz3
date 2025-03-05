@@ -184,7 +184,7 @@ void SearchResultModel::loadData() {
             it.sort1=rec["num"].toString();
         }
     }
-    qSort(datalist);
+    std::sort(datalist.begin(), datalist.end());
 }
 
 bool SearchResultModel::ListItem::operator<(const ListItem& b) const {

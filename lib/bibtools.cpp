@@ -1,4 +1,4 @@
-/*
+ï»¿/*
     Copyright (c) 2013-2015 Jan W. Krieger (<jan@jkrieger.de>)
 
     This software is free software: you can redistribute it and/or modify
@@ -15,10 +15,11 @@
 
 #include "bibtools.h"
 #include <QtCore>
-#include <QRegExp>
-#include <iostream>
+#include <QRegularExpression>
 #include <QtGlobal>
 #include <QTextDocument>
+#include "ls3tools.h"
+#include "regextools.h"
 
 QString escapeHTMLString(const QString& input) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -31,7 +32,7 @@ QString escapeHTMLString(const QString& input) {
 QString cleanStringForFilename(const QString& text, bool cleanStrongly, bool removeSlashBackslash) {
     QString t=text.simplified();
     QString regexp="";
-    t=t.remove(QRegExp(regexp+"[^\\w\\d \\_\\(\\)\\.\\/]"));
+    t=t.remove(QRegularExpression(regexp+"[^\\w\\d \\_\\(\\)\\.\\/]"));
     t=t.remove(" ");
     t=t.remove('.');
     if (removeSlashBackslash) {
@@ -41,38 +42,38 @@ QString cleanStringForFilename(const QString& text, bool cleanStrongly, bool rem
     QString tt;
     QString tl=t.toLatin1();
     for (int i=0; i<t.size(); i++) {
-        if (t[i]=='ß') tt+="ss";
-        else if (QString::fromLatin1("äæ").contains(t[i])) tt+="ae";
-        else if (QString::fromLatin1("öœ").contains(t[i])) tt+="oe";
-        else if (QString::fromLatin1("ü").contains(t[i])) tt+="ue";
-        else if (QString::fromLatin1("ÄÆ").contains(t[i])) tt+="AE";
-        else if (QString::fromLatin1("ÖŒ").contains(t[i])) tt+="OE";
-        else if (QString::fromLatin1("Ü").contains(t[i])) tt+="UE";
-        else if (QString::fromLatin1("µ").contains(t[i])) tt+="mu";
-        else if (QString::fromLatin1("áàâãåaaa").contains(t[i])) tt+='a';
-        else if (QString::fromLatin1("éèêêëeeeee").contains(t[i])) tt+='e';
-        else if (QString::fromLatin1("íìîï").contains(t[i])) tt+='i';
-        else if (QString::fromLatin1("óòôõöø").contains(t[i])) tt+='o';
-        else if (QString::fromLatin1("úùû").contains(t[i])) tt+='u';
-        else if (QString::fromLatin1("ÄÁÀÂÃÄÅAAA").contains(t[i])) tt+='A';
-        else if (QString::fromLatin1("ÉÈÊÊËEEEEE").contains(t[i])) tt+='E';
-        else if (QString::fromLatin1("ÍÌÎÏ").contains(t[i])) tt+='I';
-        else if (QString::fromLatin1("ÓÒÔÕÖØ").contains(t[i])) tt+='O';
-        else if (QString::fromLatin1("ÚÙÛ").contains(t[i])) tt+='U';
-        else if (QString::fromLatin1("çccccc").contains(t[i])) tt+='c';
-        else if (QString::fromLatin1("ÇCCCC").contains(t[i])) tt+='C';
-        else if (QString::fromLatin1("ðdd").contains(t[i])) tt+='d';
-        else if (QString::fromLatin1("ÐDÐ").contains(t[i])) tt+='D';
-        else if (QString::fromLatin1("ñ").contains(t[i])) tt+='n';
-        else if (QString::fromLatin1("Ñ").contains(t[i])) tt+='N';
-        else if (QString::fromLatin1("ýÿý").contains(t[i])) tt+='y';
-        else if (QString::fromLatin1("Ý").contains(t[i])) tt+='Y';
+        if (QString::fromLatin1("ÃŸ").contains(t[i])) tt+="ss";
+        else if (QString::fromLatin1("Ã¤Ã¦").contains(t[i])) tt+="ae";
+        else if (QString::fromLatin1("Ã¶Å“").contains(t[i])) tt+="oe";
+        else if (QString::fromLatin1("Ã¼").contains(t[i])) tt+="ue";
+        else if (QString::fromLatin1("Ã„Ã†").contains(t[i])) tt+="AE";
+        else if (QString::fromLatin1("Ã–Å’").contains(t[i])) tt+="OE";
+        else if (QString::fromLatin1("Ãœ").contains(t[i])) tt+="UE";
+        else if (QString::fromLatin1("Âµ").contains(t[i])) tt+="mu";
+        else if (QString::fromLatin1("Ã¡Ã Ã¢Ã£Ã¥aaa").contains(t[i])) tt+='a';
+        else if (QString::fromLatin1("Ã©Ã¨ÃªÃªÃ«eeeee").contains(t[i])) tt+='e';
+        else if (QString::fromLatin1("Ã­Ã¬Ã®Ã¯").contains(t[i])) tt+='i';
+        else if (QString::fromLatin1("Ã³Ã²Ã´ÃµÃ¶Ã¸").contains(t[i])) tt+='o';
+        else if (QString::fromLatin1("ÃºÃ¹Ã»").contains(t[i])) tt+='u';
+        else if (QString::fromLatin1("Ã„ÃÃ€Ã‚ÃƒÃ„Ã…AAA").contains(t[i])) tt+='A';
+        else if (QString::fromLatin1("Ã‰ÃˆÃŠÃŠÃ‹EEEEE").contains(t[i])) tt+='E';
+        else if (QString::fromLatin1("ÃÃŒÃŽÃ").contains(t[i])) tt+='I';
+        else if (QString::fromLatin1("Ã“Ã’Ã”Ã•Ã–Ã˜").contains(t[i])) tt+='O';
+        else if (QString::fromLatin1("ÃšÃ™Ã›").contains(t[i])) tt+='U';
+        else if (QString::fromLatin1("Ã§ccccc").contains(t[i])) tt+='c';
+        else if (QString::fromLatin1("Ã‡CCCC").contains(t[i])) tt+='C';
+        else if (QString::fromLatin1("Ã°dd").contains(t[i])) tt+='d';
+        else if (QString::fromLatin1("ÃDÃ").contains(t[i])) tt+='D';
+        else if (QString::fromLatin1("Ã±").contains(t[i])) tt+='n';
+        else if (QString::fromLatin1("Ã‘").contains(t[i])) tt+='N';
+        else if (QString::fromLatin1("Ã½Ã¿Ã½").contains(t[i])) tt+='y';
+        else if (QString::fromLatin1("Ã").contains(t[i])) tt+='Y';
         else if (QString::fromLatin1("g").contains(t[i])) tt+='g';
         else if (QString::fromLatin1("G").contains(t[i])) tt+='G';
-        else if (QString::fromLatin1("š").contains(t[i])) tt+='s';
-        else if (QString::fromLatin1("Š").contains(t[i])) tt+='S';
+        else if (QString::fromLatin1("Å¡").contains(t[i])) tt+='s';
+        else if (QString::fromLatin1("Å ").contains(t[i])) tt+='S';
         else if (tl[i].isLetterOrNumber()) {
-            if (tl[i]<128 || !cleanStrongly) tt+=tl[i];
+            if (tl[i].unicode()<128 || !cleanStrongly) tt+=tl[i];
         }
     }
 
@@ -106,10 +107,8 @@ void parseAuthors(const QString& authors, QStringList* givenNames, QStringList* 
 
 QString shortenGivenName(const QString& names, const QString& shortenWith) {
     QString result=names;
-    QRegExp rx("[.,;:-]");
-    rx.setPatternSyntax(QRegExp::Wildcard);
-    result.remove(rx);
-    QStringList sl=result.split(QRegExp("\\s+"));
+    result.removeIf([](QChar c) { static QString remstr(".,;:-"); return remstr.contains(c);});
+    QStringList sl=result.split(QRegularExpression("\\s+"));
     result="";
     for (int i=0; i<sl.size(); i++) {
         QString s=sl[i];
@@ -171,13 +170,13 @@ QString formatEtalAuthors(const QString& authors, int maxAuthors, QString etal, 
 
 QString intToLetterCode(unsigned int n) {
     if (n==0) return "";
-    if (n<=26) return QString('a'+n-1);
-    return QString('a'+(n/26)-1)+QString('a'+(n%26)-1);
+    if (n<=26) return QString(QChar(int('a')+n-1));
+    return QString(QChar(int('a')+(n/26)-1))+QString(QChar(int('a')+(n%26)-1));
 }
 
 QString reformatSingleName(const QString& auth, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions) {
     // split string by whitespaces
-    QStringList list = auth.split(QRegExp("\\s+"));
+    QStringList list = auth.split(QRegularExpression("\\s+"));
     if (list.size()<=0) return "";
     //bool family_name=true;
     QString fname="", gname="", namea="", namep="";
@@ -188,12 +187,10 @@ QString reformatSingleName(const QString& auth, const QSet<QString>& name_prefix
                  // 3: given names
 
     for (int i=list.size()-1; i>=0; i--) {
-        QRegExp rx("[.,;:]");
-        rx.setPatternSyntax(QRegExp::Wildcard);
         QString s=list[i];        // the list entry
         QString st=s.trimmed();   // the trimmed list entry (without whitespaces around it)
         QString lower_nodots=s;   // the list entry converted to lowercase and with '.', ',', ':', ';' removed
-        lower_nodots=lower_nodots.remove(rx).trimmed().toLower();
+        lower_nodots=lower_nodots.removeIf([](QChar c) { static QString remstr(".,;:"); return remstr.contains(c);}).trimmed().toLower();
 
         //int next_state=state;     // which state should we be in next
 
@@ -218,9 +215,11 @@ QString reformatSingleName(const QString& auth, const QSet<QString>& name_prefix
         }
         //state=next_state;
     }
-    QRegExp rxAuthorParan(".*\\((.*)\\)\\s*");
-    if (rxAuthorParan.indexIn(gname)>=0 && !rxAuthorParan.cap(1).isEmpty()) {
-        gname=rxAuthorParan.cap(1);
+    static QRegularExpression rxAuthorParan(".*\\((.*)\\)\\s*");
+    QRegularExpressionMatch rxAuthorParanMatch = rxAuthorParan.match(gname);
+
+    if (rxAuthorParanMatch.hasMatch() && !rxAuthorParanMatch.captured(1).isEmpty()) {
+        gname=rxAuthorParanMatch.captured(1);
     }
 
     bool allfnameupper=true;
@@ -254,7 +253,7 @@ int reformatAuthors_calcAverageWordcount(const QString& auth, QChar separator1, 
     // count average number of words in each split item, thereby ignore name_additions and name_prefixes
     double average_wordcount=0;
     for (int i=0; i<split_by_sep.size(); i++) {
-        QStringList list = split_by_sep[i].split(QRegExp("\\s+"));
+        QStringList list = split_by_sep[i].split(QRegularExpression("\\s+"));
         //average_wordcount += list.size();
         for (int j=0; j<list.size(); j++) {
             QString item=list[j].toLower();
@@ -273,27 +272,28 @@ int reformatAuthors_calcAverageWordcount(const QString& auth, QChar separator1, 
 
 QString reformatAuthors(const QString& authin, const QSet<QString>& name_prefixes, const QSet<QString>& name_additions, const QList<QString>& ands, QString separatorlist) {
     QString auth=authin.simplified().trimmed();
-    QChar separator1=0; // first separator to appear
-    QChar separator2=0; // second separator to appear
+    QChar separator1='\0'; // first separator to appear
+    QChar separator2='\0'; // second separator to appear
     int separators=0;   // number of different separators
     int andcount=0;     // number of "and"s in the auth string
     bool sep_is_doubleuse=false; // if this is true, we have <fname>, <gname>, <fname>, <gname>, <fname>, <gname>, ...
     double average_wordcount=0;  // count average number of words in each split item, thereby ignore name_additions and name_prefixes
 
     //qDebug()<<auth;
-    QRegExp rxAuthorNumItem(QLatin1String("[\\,\\;\\s\\w]{1}[\\d\\#\\§\\$\\+\\~\\*\\?\\%\\!\\²\\³\\@]{1}[\\s\\,\\;]{1}"), Qt::CaseInsensitive);
+    static const QRegularExpression rxAuthorNumItem(QLatin1String("[\\,\\;\\s\\w]{1}[\\d\\#\\Â§\\$\\+\\~\\*\\?\\%\\!\\Â²\\Â³\\@]{1}[\\s\\,\\;]{1}"), QRegularExpression::CaseInsensitiveOption);
+    QRegularExpressionMatch rmatch;
     int pos=0;
-    while ((pos=rxAuthorNumItem.indexIn(auth, pos))>=0) {
+    while ((pos=auth.indexOf(rxAuthorNumItem, pos, &rmatch))>=0) {
         QString rep=" ";
-        if (rxAuthorNumItem.cap(0).contains(',')) rep=", ";
-        if (rxAuthorNumItem.cap(0).contains(';')) rep="; ";
-        if (rxAuthorNumItem.cap(0).contains('/')) rep="/";
-        if (rxAuthorNumItem.cap(0).contains('\\')) rep="\\";
+        if (rmatch.captured(0).contains(',')) rep=", ";
+        if (rmatch.captured(0).contains(';')) rep="; ";
+        if (rmatch.captured(0).contains('/')) rep="/";
+        if (rmatch.captured(0).contains('\\')) rep="\\";
         //qDebug()<<"  "<<pos<<rxAuthorNumItem.cap(0)<<rep;
-        auth=auth.replace(rxAuthorNumItem.pos(0), rxAuthorNumItem.matchedLength(), rep);
+        auth=auth.replace(rmatch.capturedStart(0), rmatch.capturedLength(0), rep);
         pos=pos+rep.size();//rxAuthorNumItem.matchedLength();
     }
-    while (auth.size()>0 && QString::fromLatin1("0123456789*+~#!§$%/?,;-_²³@").contains(auth[auth.size()-1])) {
+    while (auth.size()>0 && QString::fromLatin1("0123456789*+~#!Â§$%/?,;-_Â²Â³@").contains(auth[auth.size()-1])) {
         auth=auth.remove(auth.size()-1, 1);
     }
     auth=auth.simplified();
@@ -301,9 +301,9 @@ QString reformatAuthors(const QString& authin, const QSet<QString>& name_prefixe
     //qDebug()<<auth;
 
     QString authlc=auth.toLower();
-    QString rxSAndTemplate="[\\s\\,\\;\\/\\§\\$\\/\\)\\]\\}\\?\\+\\*\\~\\#\\-\\.\\:\\|\\<\\>]{1}%1[\\s\\,\\;\\/\\§\\$\\/\\)\\]\\}\\?\\+\\*\\~\\#\\-\\.\\:\\|\\<\\>]{1}";
+    static const QString rxSAndTemplate="[\\s\\,\\;\\/\\Â§\\$\\/\\)\\]\\}\\?\\+\\*\\~\\#\\-\\.\\:\\|\\<\\>]{1}%1[\\s\\,\\;\\/\\Â§\\$\\/\\)\\]\\}\\?\\+\\*\\~\\#\\-\\.\\:\\|\\<\\>]{1}";
     for (int i=0; i<ands.size(); i++) {
-        QRegExp rxAnd(rxSAndTemplate.arg(ands[i]), Qt::CaseInsensitive);
+        QRegularExpression rxAnd(rxSAndTemplate.arg(ands[i]), QRegularExpression::CaseInsensitiveOption);
         //QString a=" "+ands[i].toLower()+" ";
         //andcount+=authlc.count(a);
         andcount+=authlc.count(rxAnd);
@@ -381,13 +381,13 @@ QString reformatAuthors(const QString& authin, const QSet<QString>& name_prefixe
 
         if (separators==2) {
             for (int i=0; i<ands.size(); i++) {
-                QRegExp rxAnd(rxSAndTemplate.arg(ands[i]), Qt::CaseInsensitive);
+                QRegularExpression rxAnd(rxSAndTemplate.arg(ands[i]), QRegularExpression::CaseInsensitiveOption);
                 auth=auth.replace(rxAnd, QString(separator2));
                 //auth=auth.replace(" "+ands[i]+" ", QString(separator2), Qt::CaseInsensitive);
             }
         } else if (separators==0) {
             for (int i=0; i<ands.size(); i++) {
-                QRegExp rxAnd(rxSAndTemplate.arg(ands[i]), Qt::CaseInsensitive);
+                QRegularExpression rxAnd(rxSAndTemplate.arg(ands[i]), QRegularExpression::CaseInsensitiveOption);
                 auth=auth.replace(rxAnd, QString(";"));
                 //auth=auth.replace(" "+ands[i]+" ", QString(";"), Qt::CaseInsensitive);
             }
@@ -397,7 +397,7 @@ QString reformatAuthors(const QString& authin, const QSet<QString>& name_prefixe
         } else if (separators==1) {
             if (andcount>1) {
                 for (int i=0; i<ands.size(); i++) {
-                    QRegExp rxAnd(rxSAndTemplate.arg(ands[i]), Qt::CaseInsensitive);
+                    QRegularExpression rxAnd(rxSAndTemplate.arg(ands[i]), QRegularExpression::CaseInsensitiveOption);
                     auth=auth.replace(rxAnd, QString("%"));
                     //auth=auth.replace(" "+ands[i]+" ", QString("%"), Qt::CaseInsensitive);
                 }
@@ -409,16 +409,16 @@ QString reformatAuthors(const QString& authin, const QSet<QString>& name_prefixe
                 int lastandpos=-1;
                 //qDebug()<<"              auth="<<auth;
                 for (int i=0; i<ands.size(); i++) {
-                    QRegExp rxAnd(rxSAndTemplate.arg(ands[i]), Qt::CaseInsensitive);
-                    int p=rxAnd.indexIn(auth);
+                    QRegularExpression rxAnd(rxSAndTemplate.arg(ands[i]), QRegularExpression::CaseInsensitiveOption);
+                    int p=auth.indexOf(rxAnd);
                     //int p=auth.indexOf(" "+ands[i]+" ", Qt::CaseInsensitive);
                     //qDebug()<<"                found '"<<" "+ands[i]+" "<<"' at "<<p;
                     if (p>lastandpos) lastandpos=p;
                 }
                 for (int i=0; i<ands.size(); i++) {
-                    QRegExp rxAnd(rxSAndTemplate.arg(ands[i]));
+                    QRegularExpression rxAnd(rxSAndTemplate.arg(ands[i]));
                     auth=auth.replace(rxAnd, QString(separator1));
-                    //auth=auth.replace(ands[i], QString(separator1), Qt::CaseInsensitive);
+                    //auth=auth.replace(ands[i], QString(separator1), QRegularExpression::CaseInsensitiveOption);
                 }
                 sep_is_doubleuse=lastseppos>lastandpos;
                 //qDebug()<<"            lastseppos="<<lastseppos<<"  lastandpos="<<lastandpos;
@@ -470,9 +470,12 @@ QString reformatAuthors(const QString& authin, const QSet<QString>& name_prefixe
                     if (!result.isEmpty()) result+="; ";
                     result+=split_by_sep[i];
                 } else { // this is a given name
-                    QRegExp rxAuthorParan(".*\\((.*)\\)\\s*");
-                    if (rxAuthorParan.indexIn(split_by_sep[i])>=0 && !rxAuthorParan.cap(1).isEmpty()) {
-                        result+=", "+rxAuthorParan.cap(1);
+                    static const QRegularExpression rxAuthorParan(".*\\((.*)\\)\\s*");
+                    QRegularExpressionMatch rmatch;
+                    if (split_by_sep[i].indexOf(rxAuthorParan)>=0) {
+                        if (!rmatch.captured(1).isEmpty()) {
+                            result+=", "+rmatch.captured(1);
+                        }
                     } else {
                         result+=", "+split_by_sep[i];
                     }
@@ -641,19 +644,23 @@ QString filenameToIconFile(const QString& file) {
 
 
 int extractYear(const QString& data) {
-    QRegExp rxYear("(\\d\\d\\d\\d)");
-    if (rxYear.indexIn(data)!=-1) {
-        int y=rxYear.cap(1).toInt();
-        if ((y>999) && (y<QDate::currentDate().year()+10)) return y;
+    QStringList caps;
+    if (ls3_rxContains(data, "(\\d\\d\\d\\d)", 0, &caps)) {
+        if (caps.size()>1) {
+            const int y=caps[1].toInt();
+            if ((y>999) && (y<QDate::currentDate().year()+10)) return y;
+        }
     }
     return 0;
 }
 
 int extractNumber(const QString& data) {
-    QRegExp rxYear("(\\d+)");
-    if (rxYear.indexIn(data)!=-1) {
-        int y=rxYear.cap(1).toInt();
-        if (y>999) return y;
+    QStringList caps;
+    if (ls3_rxContains(data, "(\\d+)", 0, &caps)) {
+        if (caps.size()>1) {
+            const int y=caps[1].toInt();
+            if ((y>999) && (y<QDate::currentDate().year()+10)) return y;
+        }
     }
     return 0;
 }
@@ -670,11 +677,11 @@ void addToFieldIfNotContained(QMap<QString, QVariant>& data, const QString& fiel
     }
 }
 
-QString decodeLanguage(const QString& lang) {
-    QString l=lang.toLower();
+QString decodeLanguage(const QString& l) {
+    const QString lang=l.toLower();
     if (lang=="en" || lang=="english" || lang=="englicsh" || lang=="anglais") return QString("english");
     if (lang=="de" || lang=="german" || lang=="deutsch" || lang=="allemand") return QString("german");
-    if (lang=="fr" || lang=="french" || lang=="französisch" || lang=="francais") return QString("french");
+    if (lang=="fr" || lang=="french" || lang=="franzÃ¶sisch" || lang=="francais") return QString("french");
     if (lang=="es" || lang=="spanish" || lang=="spanisch") return QString("spanish");
     return lang;
 }

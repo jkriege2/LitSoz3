@@ -23,12 +23,12 @@
 #include <QBrush>
 #include <QPixmapCache>
 
+const QRegularExpression HTMLDelegate::rxHTML("(<\\s*\\w+.*>)|(<\\s*/\\s*\\w+\\s*>)|(\\&\\w+\\;)", QRegularExpression::InvertedGreedinessOption);
+
 HTMLDelegate::HTMLDelegate(QObject* parent):
     QStyledItemDelegate(parent)
 {
     m_displayRichTextEditor=true;
-    rxHTML=QRegExp("(<\\s*\\w+.*>)|(<\\s*/\\s*\\w+\\s*>)|(\\&\\w+\\;)");
-    rxHTML.setMinimal(true);
 
 }
 
@@ -69,7 +69,7 @@ void HTMLDelegate::drawCheck(QPainter *painter,
     }
 
     QStyle *style = QApplication::style();
-    style->drawPrimitive(QStyle::PE_IndicatorViewItemCheck, &opt, painter, NULL);
+    style->drawPrimitive(QStyle::PE_IndicatorItemViewItemCheck, &opt, painter, NULL); //PE_IndicatorViewItemCheck
 }
 
 

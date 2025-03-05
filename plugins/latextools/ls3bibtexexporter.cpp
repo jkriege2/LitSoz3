@@ -55,7 +55,7 @@ bool LS3BibTeXExporter::execute(const QVector<QMap<QString, QVariant> >& data, L
         if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             initDir=QFileInfo(fileName).absolutePath();
             QTextStream out(&file);
-            out.setCodec("ISO-8859-1");
+            out.setEncoding(QStringConverter::Latin1);
             ok=exportBibTeX(out, data, pluginServices);
             file.close();
 
