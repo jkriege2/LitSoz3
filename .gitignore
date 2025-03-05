@@ -153,3 +153,5 @@ Makefile*
 /dist/*
 
 *.bak
+/output
+/p
