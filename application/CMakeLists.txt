@@ -7,7 +7,7 @@ qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
 
 find_package(Poppler)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Xml Qt6::Gui Qt6::Pdf Qt6::PdfWidgets Qt6::Core5Compat Qt6::Widgets Qt6::PrintSupport Qt6::Network)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Xml Qt6::Gui Qt6::Core5Compat Qt6::Widgets Qt6::PrintSupport Qt6::Network)
 target_link_libraries(${PROJECT_NAME} PRIVATE litsoz3::litsoz3tools)
 target_link_libraries(${PROJECT_NAME} PRIVATE litsoz3::litsoz3widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Poppler::PopplerQt6)
@@ -37,7 +37,7 @@ target_sources(${PROJECT_NAME}
     threadoverview.h
     ls3progressthreadwidget.h
     fileviewpane.h
-    ls3pdfwidget.h
+    #ls3pdfwidget.h
     dlgeditcategory.h
     #zoomselector.h
     #qenhancedpdfview.h
@@ -69,7 +69,7 @@ target_sources(${PROJECT_NAME}
     threadoverview.cpp
     ls3progressthreadwidget.cpp
     fileviewpane.cpp
-    ls3pdfwidget.cpp
+    #ls3pdfwidget.cpp
     dlgeditcategory.cpp
     #zoomselector.cpp
     #qenhancedpdfview.cpp

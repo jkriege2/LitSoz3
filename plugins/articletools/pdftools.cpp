@@ -863,7 +863,7 @@ QMap<QString, QString> extractFromPDF(const QString& filename, QList<QString> an
     if (QFile::exists(tempFile)) QFile::remove(tempFile);
 
 
-    QString params=" \""+filename+"\" \""+tempFile+"\"";
+    const QString params=" -enc UTF-8 -layout \""+filename+"\" \""+tempFile+"\"";
     QDir pd(pluginDir);
     pd.cd("pdftools");
     if (!QFile::exists(pd.absoluteFilePath("pdftotext.exe"))) {
